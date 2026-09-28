@@ -12,7 +12,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   background: #f2f2f7;
   color: #111;
 }
@@ -20,13 +20,10 @@ body {
 header {
   background: #007aff;
   color: white;
-  padding: 20px 15px;
+  padding: 18px 16px;
   text-align: center;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 26px;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .container {
@@ -43,126 +40,140 @@ header h1 {
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
-.summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 15px;
+h2 {
+  margin-top: 0;
 }
 
-.summaryBox {
-  background: white;
-  border-radius: 14px;
-  padding: 12px 5px;
-  text-align: center;
-  box-shadow: 0 2px 7px rgba(0,0,0,.07);
-}
-
-.summaryBox span {
-  font-size: 13px;
-  color: #666;
-}
-
-.summaryBox strong {
-  display: block;
-  font-size: 17px;
-  margin-top: 5px;
-}
-
-input,
-button {
+input {
   width: 100%;
   padding: 13px;
-  margin-top: 8px;
-  border-radius: 10px;
+  margin: 6px 0 10px;
   border: 1px solid #ccc;
+  border-radius: 10px;
   font-size: 16px;
 }
 
 button {
-  border: none;
-  background: #007aff;
-  color: white;
-  font-weight: 600;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 15px;
   cursor: pointer;
 }
 
-button.secondary {
+.primary {
+  background: #007aff;
+  color: white;
+}
+
+.secondary {
   background: #e5e5ea;
   color: #111;
 }
 
-button.green {
-  background: #34c759;
+.danger {
+  background: #ff3b30;
+  color: white;
 }
 
-button.small {
-  width: auto;
-  padding: 9px 11px;
-  margin: 0;
-  font-size: 14px;
+.success {
+  background: #34c759;
+  color: white;
+}
+
+.warning {
+  background: #ff9500;
+  color: white;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.summaryBox {
+  background: #f5f5f7;
+  border-radius: 12px;
+  padding: 12px 6px;
+  text-align: center;
+}
+
+.summaryLabel {
+  font-size: 13px;
+  color: #666;
+}
+
+.summaryValue {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .tabs {
   display: flex;
-  background: #e5e5ea;
-  padding: 4px;
-  border-radius: 13px;
-  margin-bottom: 15px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .tab {
   flex: 1;
-  border: none;
-  margin: 0;
-  padding: 11px 5px;
-  background: transparent;
-  color: #555;
-  border-radius: 10px;
+  background: #e5e5ea;
+  padding: 12px;
+  border-radius: 12px;
   font-weight: 600;
 }
 
 .tab.active {
-  background: white;
-  color: #007aff;
-  box-shadow: 0 1px 4px rgba(0,0,0,.12);
-}
-
-.tabCount {
-  display: inline-block;
-  min-width: 22px;
-  padding: 2px 6px;
-  margin-left: 4px;
-  border-radius: 10px;
-  font-size: 12px;
-  background: #ddd;
-}
-
-.tab.active .tabCount {
   background: #007aff;
   color: white;
 }
 
+.tabCount {
+  opacity: .8;
+}
+
 .installment {
-  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
   padding: 13px;
-  border-radius: 12px;
-  background: #f2f2f7;
+  margin-bottom: 10px;
+  background: white;
 }
 
 .installment.paid {
-  background: #e9f9ed;
+  opacity: .75;
+  background: #f7fff8;
 }
 
 .installmentTop {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
   gap: 10px;
 }
 
-.paymentName {
+.checkbox {
+  width: 22px;
+  height: 22px;
+  margin: 2px 0 0;
+  flex-shrink: 0;
+}
+
+.installmentInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.beneficiary {
   font-size: 17px;
   font-weight: 700;
+}
+
+.installmentDetails {
+  color: #555;
+  font-size: 14px;
+  margin-top: 5px;
+  line-height: 1.5;
 }
 
 .amount {
@@ -171,225 +182,280 @@ button.small {
   white-space: nowrap;
 }
 
-.details {
-  margin-top: 7px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  margin-top: 10px;
+  margin-top: 12px;
+}
+
+.small {
+  font-size: 13px;
+  padding: 8px 10px;
 }
 
 .badge {
   display: inline-block;
-  padding: 3px 7px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  margin-left: 4px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #ff9500;
+  color: white;
 }
 
-.badge.paid {
-  background: #d9f7df;
-  color: #16863a;
+.badge.paidBadge {
+  background: #34c759;
 }
 
-.badge.unpaid {
-  background: #fff0d9;
-  color: #a85b00;
+.selectionBar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.selectionBar.visible {
+  display: flex;
+}
+
+.selectionLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.selectAll {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+.deleteButton {
+  background: #ff3b30;
+  color: white;
+  font-weight: 600;
 }
 
 .empty {
   text-align: center;
   color: #777;
-  padding: 25px 15px;
+  padding: 25px 10px;
 }
-
-/* MODALES */
 
 .modal {
   display: none;
   position: fixed;
-  inset: 0;
   z-index: 1000;
+  inset: 0;
   background: rgba(0,0,0,.45);
   padding: 20px;
-  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
 }
 
 .modalContent {
-  background: white;
+  width: 100%;
   max-width: 500px;
-  margin: 35px auto;
-  border-radius: 20px;
-  padding: 20px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
 }
 
 .modalContent h2 {
   margin-top: 0;
 }
 
-/* PAIEMENT MANUEL */
-
-.manualPaymentTitle {
-  font-size: 23px;
-  font-weight: 700;
-  margin-bottom: 5px;
+.modalButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
 }
 
-.manualPaymentSubtitle {
-  color: #666;
-  margin-bottom: 18px;
+.modalButtons button {
+  flex: 1;
+}
+
+.manualPaymentTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .bankField {
-  background: #f2f2f7;
-  border-radius: 13px;
-  padding: 12px;
-  margin-bottom: 10px;
+  margin-top: 14px;
 }
 
 .bankLabel {
   font-size: 13px;
   color: #666;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .bankRow {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .bankValue {
   flex: 1;
-  font-size: 16px;
-  font-weight: 600;
+  background: #f2f2f7;
+  border-radius: 10px;
+  padding: 12px;
   word-break: break-word;
+  font-weight: 600;
 }
 
 .copyButton {
-  width: auto;
-  min-width: 75px;
-  padding: 8px 10px;
-  margin: 0;
-  background: #007aff;
-  font-size: 13px;
+  background: #e5e5ea;
+  white-space: nowrap;
 }
 
 .copyButton.copied {
   background: #34c759;
+  color: white;
 }
 
 .bankHelp {
-  background: #fff7df;
-  border-radius: 13px;
-  padding: 13px;
-  margin-top: 15px;
+  background: #f2f2f7;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 16px;
   font-size: 14px;
   line-height: 1.5;
 }
 
-#app {
-  display: none;
-}
-
-.login {
-  max-width: 400px;
-  margin: 80px auto;
+#loginScreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
 }
 
-.error {
-  color: #ff3b30;
+.loginBox {
+  width: 100%;
+  max-width: 350px;
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
   text-align: center;
-  margin-top: 10px;
+}
+
+.loginIcon {
+  font-size: 45px;
+}
+
+#errorMessage {
+  color: #ff3b30;
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.fileButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.fileButtons button {
+  flex: 1;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 18px 0;
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     PIN
-========================= -->
-
-<div id="loginScreen" class="login">
-
-  <div class="card">
-
-    <h1>💳 Mes paiements</h1>
-
-    <p>Entrez votre code PIN</p>
+<!-- CONNEXION -->
+<div id="loginScreen">
+  <div class="loginBox">
+    <div class="loginIcon">🔐</div>
+    <h2>Mes paiements</h2>
+    <p>Entre ton code PIN</p>
 
     <input
-      type="password"
       id="pinInput"
+      type="password"
       inputmode="numeric"
       maxlength="4"
-      placeholder="Code PIN"
+      placeholder="••••"
     >
 
-    <button onclick="checkPin()">
-      Ouvrir
+    <button class="primary" style="width:100%;" onclick="checkPin()">
+      🔓 Ouvrir
     </button>
 
-    <div id="pinError" class="error"></div>
-
+    <div id="errorMessage"></div>
   </div>
-
 </div>
 
-
-<!-- =========================
-     APPLICATION
-========================= -->
-
-<div id="app">
+<!-- APPLICATION -->
+<div id="app" class="hidden">
 
 <header>
-  <h1>💳 Mes paiements</h1>
+  💳 Mes paiements
 </header>
 
 <div class="container">
 
-  <!-- TOTAL -->
+  <!-- RÉSUMÉ -->
+  <div class="card">
+    <div class="summary">
+      <div class="summaryBox">
+        <div class="summaryLabel">Total</div>
+        <div class="summaryValue" id="totalAmount">0,00 €</div>
+      </div>
 
-  <div class="summary">
+      <div class="summaryBox">
+        <div class="summaryLabel">Payé</div>
+        <div class="summaryValue" id="paidAmount">0,00 €</div>
+      </div>
 
-    <div class="summaryBox">
-      <span>Total</span>
-      <strong id="totalAmount">0,00 €</strong>
+      <div class="summaryBox">
+        <div class="summaryLabel">Reste</div>
+        <div class="summaryValue" id="remainingAmount">0,00 €</div>
+      </div>
     </div>
-
-    <div class="summaryBox">
-      <span>Payé</span>
-      <strong id="paidAmount">0,00 €</strong>
-    </div>
-
-    <div class="summaryBox">
-      <span>Reste</span>
-      <strong id="remainingAmount">0,00 €</strong>
-    </div>
-
   </div>
 
-
-  <!-- ONGLET -->
-
+  <!-- ONGLETS -->
   <div class="tabs">
-
     <button
       id="tabUnpaid"
       class="tab active"
       onclick="showTab('unpaid')"
     >
       🔴 À payer
-      <span id="unpaidCount" class="tabCount">0</span>
+      <span class="tabCount" id="unpaidCount">(0)</span>
     </button>
 
     <button
@@ -398,147 +464,186 @@ button.small {
       onclick="showTab('paid')"
     >
       🟢 Payé
-      <span id="paidCount" class="tabCount">0</span>
+      <span class="tabCount" id="paidCount">(0)</span>
+    </button>
+  </div>
+
+  <!-- BARRE DE SÉLECTION -->
+  <div id="selectionBar" class="selectionBar">
+
+    <div class="selectionLeft">
+      <input
+        type="checkbox"
+        id="selectAll"
+        class="selectAll"
+        onchange="toggleSelectAll()"
+      >
+      <span id="selectedText">0 sélectionné</span>
+    </div>
+
+    <button
+      class="deleteButton"
+      onclick="deleteSelected()"
+    >
+      🗑️ Supprimer (<span id="selectedCount">0</span>)
     </button>
 
   </div>
 
-
+  <!-- À PAYER -->
   <div id="unpaidSection">
+
     <div id="unpaidList"></div>
+
   </div>
 
-  <div id="paidSection" style="display:none">
+  <!-- PAYÉ -->
+  <div id="paidSection" class="hidden">
+
     <div id="paidList"></div>
+
   </div>
 
-
-  <!-- NOUVEAU PAIEMENT -->
-
+  <!-- AJOUT -->
   <div class="card">
 
-    <h2>➕ Nouveau paiement</h2>
+    <h2>➕ Ajouter un paiement</h2>
 
+    <label>Bénéficiaire</label>
     <input
       id="beneficiary"
-      placeholder="Bénéficiaire"
+      type="text"
+      placeholder="Ex : EDF"
     >
 
+    <label>IBAN</label>
     <input
       id="iban"
-      placeholder="IBAN"
-      autocomplete="off"
+      type="text"
+      placeholder="BE00 0000 0000 0000"
     >
 
+    <label>Montant total</label>
     <input
       id="totalInput"
       type="number"
       step="0.01"
-      placeholder="Montant total (€)"
+      min="0"
+      placeholder="1000"
     >
 
+    <label>Nombre d'échéances</label>
     <input
       id="installmentsInput"
       type="number"
       min="1"
-      placeholder="Nombre d'échéances"
+      step="1"
+      placeholder="12"
     >
 
+    <label>Première date</label>
     <input
       id="firstDate"
       type="date"
     >
 
+    <label>Communication</label>
     <input
       id="communication"
-      placeholder="Communication"
+      type="text"
+      placeholder="Ex : +++123/4567/89012+++"
     >
 
-    <button onclick="addPayment()">
-      Ajouter le paiement
+    <button
+      class="primary"
+      style="width:100%;"
+      onclick="addPayment()"
+    >
+      ➕ Ajouter le paiement
     </button>
 
   </div>
 
-
   <!-- SAUVEGARDE -->
-
   <div class="card">
 
     <h2>💾 Sauvegarde</h2>
 
-    <button onclick="exportData()">
-      📤 Exporter
-    </button>
+    <div class="fileButtons">
+
+      <button
+        class="secondary"
+        onclick="exportData()"
+      >
+        📤 Exporter
+      </button>
+
+      <button
+        class="secondary"
+        onclick="document.getElementById('importFile').click()"
+      >
+        📥 Importer
+      </button>
+
+    </div>
 
     <input
-      type="file"
       id="importFile"
+      type="file"
       accept=".json,application/json"
-      style="display:none"
+      class="hidden"
       onchange="importData(event)"
     >
-
-    <button
-      class="secondary"
-      onclick="document.getElementById('importFile').click()"
-    >
-      📥 Importer
-    </button>
 
   </div>
 
 </div>
 </div>
 
-
-<!-- =========================
-     MODALE MODIFIER
-========================= -->
-
+<!-- MODALE MODIFICATION -->
 <div id="editModal" class="modal">
 
   <div class="modalContent">
 
     <h2>✏️ Modifier l'échéance</h2>
 
-    <input
-      id="editDate"
-      type="date"
-    >
+    <label>Date</label>
+    <input id="editDate" type="date">
 
+    <label>Montant</label>
     <input
       id="editAmount"
       type="number"
       step="0.01"
-      placeholder="Montant"
+      min="0"
     >
 
-    <input
-      id="editCommunication"
-      placeholder="Communication"
-    >
+    <label>Communication</label>
+    <input id="editCommunication" type="text">
 
-    <button onclick="saveEdit()">
-      💾 Sauvegarder
-    </button>
+    <div class="modalButtons">
 
-    <button
-      class="secondary"
-      onclick="closeEdit()"
-    >
-      Annuler
-    </button>
+      <button
+        class="secondary"
+        onclick="closeEdit()"
+      >
+        Annuler
+      </button>
+
+      <button
+        class="primary"
+        onclick="saveEdit()"
+      >
+        💾 Enregistrer
+      </button>
+
+    </div>
 
   </div>
 
 </div>
 
-
-<!-- =========================
-     MODALE PAYER
-========================= -->
-
+<!-- MODALE PAIEMENT MANUEL -->
 <div id="manualPaymentModal" class="modal">
 
   <div class="modalContent">
@@ -547,14 +652,9 @@ button.small {
       🏦 Payer manuellement
     </div>
 
-    <div
-      id="manualPaymentSubtitle"
-      class="manualPaymentSubtitle"
-    ></div>
-
+    <p id="manualPaymentSubtitle"></p>
 
     <!-- BÉNÉFICIAIRE -->
-
     <div class="bankField">
 
       <div class="bankLabel">
@@ -569,8 +669,8 @@ button.small {
         ></div>
 
         <button
-          id="copyBeneficiaryButton"
           class="copyButton"
+          data-copy-type="beneficiary"
           onclick="copyBankField('beneficiary')"
         >
           Copier
@@ -580,9 +680,7 @@ button.small {
 
     </div>
 
-
     <!-- IBAN -->
-
     <div class="bankField">
 
       <div class="bankLabel">
@@ -597,8 +695,8 @@ button.small {
         ></div>
 
         <button
-          id="copyIbanButton"
           class="copyButton"
+          data-copy-type="iban"
           onclick="copyBankField('iban')"
         >
           Copier
@@ -608,9 +706,7 @@ button.small {
 
     </div>
 
-
     <!-- MONTANT -->
-
     <div class="bankField">
 
       <div class="bankLabel">
@@ -625,8 +721,8 @@ button.small {
         ></div>
 
         <button
-          id="copyAmountButton"
           class="copyButton"
+          data-copy-type="amount"
           onclick="copyBankField('amount')"
         >
           Copier
@@ -636,9 +732,7 @@ button.small {
 
     </div>
 
-
     <!-- COMMUNICATION -->
-
     <div class="bankField">
 
       <div class="bankLabel">
@@ -653,8 +747,8 @@ button.small {
         ></div>
 
         <button
-          id="copyCommunicationButton"
           class="copyButton"
+          data-copy-type="communication"
           onclick="copyBankField('communication')"
         >
           Copier
@@ -664,28 +758,26 @@ button.small {
 
     </div>
 
-
     <div class="bankHelp">
-
       💡 Ouvre ton app bancaire, crée un virement,
       et colle chaque information avec le bouton
-      <strong>« Copier »</strong>.
-
+      « Copier ».
     </div>
 
+    <div class="modalButtons">
 
-    <button
-      class="secondary"
-      onclick="closeManualPayment()"
-      style="margin-top:15px"
-    >
-      Fermer
-    </button>
+      <button
+        class="secondary"
+        onclick="closeManualPayment()"
+      >
+        Fermer
+      </button>
+
+    </div>
 
   </div>
 
 </div>
-
 
 <script>
 
@@ -703,98 +795,65 @@ let manualInstallmentIndex = null;
 
 let currentTab = "unpaid";
 
-
-/* =========================
-   EURO
-========================= */
+/* ---------------------------------
+   OUTILS
+--------------------------------- */
 
 function euro(value) {
-
-  return Number(value || 0).toLocaleString(
-    "fr-BE",
-    {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }
-  ) + " €";
-
+  return Number(value || 0).toLocaleString("fr-BE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + " €";
 }
-
-
-/* =========================
-   ID
-========================= */
 
 function generateId() {
-
-  return Date.now().toString() +
-    Math.random().toString(16).slice(2);
-
+  return Date.now().toString(36) +
+    Math.random().toString(36).substring(2);
 }
-
-
-/* =========================
-   DATE
-========================= */
 
 function formatDate(dateString) {
 
-  if (!dateString) {
-    return "-";
-  }
+  if (!dateString) return "";
 
-  const date =
-    new Date(dateString + "T00:00:00");
+  const parts = dateString.split("-");
 
-  return date.toLocaleDateString("fr-BE");
+  if (parts.length !== 3) return dateString;
 
+  return parts[2] + "/" + parts[1] + "/" + parts[0];
 }
-
 
 function addMonths(dateString, months) {
 
-  const date =
-    new Date(dateString + "T00:00:00");
+  const parts = dateString.split("-");
 
-  const originalDay =
-    date.getDate();
+  let year = Number(parts[0]);
+  let month = Number(parts[1]) - 1;
+  let day = Number(parts[2]);
 
-  date.setDate(1);
+  const targetMonth = month + months;
 
-  date.setMonth(
-    date.getMonth() + months
+  const result = new Date(
+    year,
+    targetMonth,
+    1
   );
 
-  const lastDay =
-    new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).getDate();
+  const lastDay = new Date(
+    result.getFullYear(),
+    result.getMonth() + 1,
+    0
+  ).getDate();
 
-  date.setDate(
-    Math.min(originalDay, lastDay)
+  result.setDate(
+    Math.min(day, lastDay)
   );
 
-  const year =
-    date.getFullYear();
-
-  const month =
-    String(date.getMonth() + 1)
-      .padStart(2, "0");
-
-  const day =
-    String(date.getDate())
-      .padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-
+  return [
+    result.getFullYear(),
+    String(result.getMonth() + 1).padStart(2, "0"),
+    String(result.getDate()).padStart(2, "0")
+  ].join("-");
 }
-
-
-/* =========================
-   NORMALISATION
-========================= */
 
 function normalizeData(data) {
 
@@ -808,50 +867,33 @@ function normalizeData(data) {
       payment.id = generateId();
     }
 
-    if (!payment.beneficiary) {
-      payment.beneficiary = "";
-    }
+    payment.beneficiary =
+      payment.beneficiary || "";
 
-    if (!payment.iban) {
-      payment.iban = "";
-    }
+    payment.iban =
+      payment.iban || "";
+
+    payment.iban =
+      payment.iban
+        .replace(/\s+/g, "")
+        .toUpperCase();
 
     if (!Array.isArray(payment.installments)) {
       payment.installments = [];
     }
 
     payment.installments =
-      payment.installments.map(
-        (item, index) => {
-
-          return {
-
-            number:
-              item.number || index + 1,
-
-            date:
-              item.date || "",
-
-            amount:
-              Number(item.amount || 0),
-
-            communication:
-              item.communication ||
-              payment.communication ||
-              "",
-
-            paid:
-              item.paid === true
-
-          };
-
-        }
-      );
+      payment.installments.map(item => ({
+        number: Number(item.number || 1),
+        date: item.date || "",
+        amount: Number(item.amount || 0),
+        communication: item.communication || "",
+        paid: Boolean(item.paid)
+      }));
 
     payment.totalAmount =
       payment.installments.reduce(
-        (sum, item) =>
-          sum + Number(item.amount || 0),
+        (sum, item) => sum + Number(item.amount || 0),
         0
       );
 
@@ -861,11 +903,6 @@ function normalizeData(data) {
 
 }
 
-
-/* =========================
-   CHARGEMENT
-========================= */
-
 function loadData() {
 
   try {
@@ -873,31 +910,22 @@ function loadData() {
     const saved =
       localStorage.getItem(STORAGE_KEY);
 
-    if (saved) {
-
-      payments =
-        normalizeData(
-          JSON.parse(saved)
-        );
-
+    if (!saved) {
+      payments = [];
+      return;
     }
+
+    payments =
+      normalizeData(JSON.parse(saved));
 
   } catch (error) {
 
     console.error(error);
-
     payments = [];
 
   }
 
-  render();
-
 }
-
-
-/* =========================
-   SAUVEGARDE
-========================= */
 
 function saveData() {
 
@@ -906,78 +934,69 @@ function saveData() {
     JSON.stringify(payments)
   );
 
-  render();
-
 }
 
-
-/* =========================
+/* ---------------------------------
    PIN
-========================= */
+--------------------------------- */
 
 function checkPin() {
 
-  const value =
-    document.getElementById(
-      "pinInput"
-    ).value;
+  const pin =
+    document.getElementById("pinInput").value;
 
-  if (value === PIN) {
+  if (pin === PIN) {
 
-    document.getElementById(
-      "loginScreen"
-    ).style.display = "none";
+    document
+      .getElementById("loginScreen")
+      .classList.add("hidden");
 
-    document.getElementById(
-      "app"
-    ).style.display = "block";
+    document
+      .getElementById("app")
+      .classList.remove("hidden");
 
     loadData();
+    render();
 
   } else {
 
-    document.getElementById(
-      "pinError"
-    ).textContent =
-      "Code PIN incorrect";
+    document
+      .getElementById("errorMessage")
+      .textContent =
+      "❌ Code PIN incorrect";
+
+    document
+      .getElementById("pinInput")
+      .value = "";
 
   }
 
 }
 
-
 document
   .getElementById("pinInput")
-  .addEventListener(
-    "keydown",
-    function(event) {
+  .addEventListener("keydown", function(event) {
 
-      if (event.key === "Enter") {
-        checkPin();
-      }
-
+    if (event.key === "Enter") {
+      checkPin();
     }
-  );
 
+  });
 
-/* =========================
-   AJOUT
-========================= */
+/* ---------------------------------
+   AJOUT PAIEMENT
+--------------------------------- */
 
 function addPayment() {
 
   const beneficiary =
-    document
-      .getElementById("beneficiary")
-      .value
-      .trim();
+    document.getElementById("beneficiary")
+      .value.trim();
 
   const iban =
-    document
-      .getElementById("iban")
+    document.getElementById("iban")
       .value
-      .trim()
-      .replace(/\s/g, "")
+      .replace(/\s+/g, "")
       .toUpperCase();
 
   const total =
@@ -987,77 +1006,40 @@ function addPayment() {
 
   const count =
     Number(
-      document
-        .getElementById("installmentsInput")
-        .value
+      document.getElementById("installmentsInput").value
     );
 
   const firstDate =
-    document
-      .getElementById("firstDate")
-      .value;
+    document.getElementById("firstDate").value;
 
   const communication =
-    document
-      .getElementById("communication")
-      .value
-      .trim();
-
+    document.getElementById("communication")
+      .value.trim();
 
   if (!beneficiary) {
-
-    alert(
-      "Veuillez entrer un bénéficiaire."
-    );
-
+    alert("Indique le bénéficiaire.");
     return;
-
   }
-
 
   if (!iban) {
-
-    alert(
-      "Veuillez entrer un IBAN."
-    );
-
+    alert("Indique l'IBAN.");
     return;
-
   }
-
 
   if (!total || total <= 0) {
-
-    alert(
-      "Veuillez entrer un montant."
-    );
-
+    alert("Indique un montant total valide.");
     return;
-
   }
-
 
   if (!count || count < 1) {
-
-    alert(
-      "Veuillez entrer le nombre d'échéances."
-    );
-
+    alert("Indique le nombre d'échéances.");
     return;
-
   }
-
 
   if (!firstDate) {
-
-    alert(
-      "Veuillez choisir une date."
-    );
-
+    alert("Indique la première date.");
     return;
-
   }
-
 
   const totalCents =
     Math.round(total * 100);
@@ -1068,314 +1050,177 @@ function addPayment() {
   const remainder =
     totalCents % count;
 
-
   const installments = [];
 
+  for (let i = 0; i < count; i++) {
 
-  for (
-    let i = 0;
-    i < count;
-    i++
-  ) {
-
-    let cents = baseCents;
-
-    if (i === count - 1) {
-      cents += remainder;
-    }
+    const cents =
+      baseCents +
+      (i === count - 1 ? remainder : 0);
 
     installments.push({
-
-      number:
-        i + 1,
-
-      date:
-        addMonths(firstDate, i),
-
-      amount:
-        cents / 100,
-
-      communication:
-        communication,
-
-      paid:
-        false
-
+      number: i + 1,
+      date: addMonths(firstDate, i),
+      amount: cents / 100,
+      communication: communication,
+      paid: false
     });
 
   }
 
+  const payment = {
 
-  payments.push({
+    id: generateId(),
 
-    id:
-      generateId(),
+    beneficiary: beneficiary,
 
-    beneficiary:
-      beneficiary,
+    iban: iban,
 
-    iban:
-      iban,
+    totalAmount: total,
 
-    totalAmount:
-      total,
+    installments: installments
 
-    installments:
-      installments
+  };
 
-  });
-
+  payments.push(payment);
 
   saveData();
 
+  document.getElementById("beneficiary").value = "";
+  document.getElementById("iban").value = "";
+  document.getElementById("totalInput").value = "";
+  document.getElementById("installmentsInput").value = "";
+  document.getElementById("firstDate").value = "";
+  document.getElementById("communication").value = "";
 
-  document.getElementById(
-    "beneficiary"
-  ).value = "";
+  render();
 
-  document.getElementById(
-    "iban"
-  ).value = "";
-
-  document.getElementById(
-    "totalInput"
-  ).value = "";
-
-  document.getElementById(
-    "installmentsInput"
-  ).value = "";
-
-  document.getElementById(
-    "firstDate"
-  ).value = "";
-
-  document.getElementById(
-    "communication"
-  ).value = "";
+  alert("✅ Paiement ajouté !");
 
 }
 
-
-/* =========================
-   ONGLET
-========================= */
+/* ---------------------------------
+   ONGLETS
+--------------------------------- */
 
 function showTab(tab) {
 
   currentTab = tab;
 
   const unpaidSection =
-    document.getElementById(
-      "unpaidSection"
-    );
+    document.getElementById("unpaidSection");
 
   const paidSection =
-    document.getElementById(
-      "paidSection"
-    );
+    document.getElementById("paidSection");
 
   const tabUnpaid =
-    document.getElementById(
-      "tabUnpaid"
-    );
+    document.getElementById("tabUnpaid");
 
   const tabPaid =
-    document.getElementById(
-      "tabPaid"
-    );
-
+    document.getElementById("tabPaid");
 
   if (tab === "unpaid") {
 
-    unpaidSection.style.display =
-      "block";
+    unpaidSection.classList.remove("hidden");
+    paidSection.classList.add("hidden");
 
-    paidSection.style.display =
-      "none";
-
-    tabUnpaid.classList.add(
-      "active"
-    );
-
-    tabPaid.classList.remove(
-      "active"
-    );
+    tabUnpaid.classList.add("active");
+    tabPaid.classList.remove("active");
 
   } else {
 
-    unpaidSection.style.display =
-      "none";
+    unpaidSection.classList.add("hidden");
+    paidSection.classList.remove("hidden");
 
-    paidSection.style.display =
-      "block";
-
-    tabUnpaid.classList.remove(
-      "active"
-    );
-
-    tabPaid.classList.add(
-      "active"
-    );
+    tabUnpaid.classList.remove("active");
+    tabPaid.classList.add("active");
 
   }
+
+  updateSelectionBar();
 
 }
 
-
-/* =========================
-   AFFICHAGE
-========================= */
+/* ---------------------------------
+   RENDU
+--------------------------------- */
 
 function render() {
 
+  let total = 0;
+  let paid = 0;
+
   const unpaidList =
-    document.getElementById(
-      "unpaidList"
-    );
+    document.getElementById("unpaidList");
 
   const paidList =
-    document.getElementById(
-      "paidList"
-    );
-
-
-  if (!unpaidList || !paidList) {
-    return;
-  }
-
+    document.getElementById("paidList");
 
   unpaidList.innerHTML = "";
   paidList.innerHTML = "";
 
-
-  let total = 0;
-  let paidTotal = 0;
-
   let unpaidCount = 0;
   let paidCount = 0;
 
-
   payments.forEach(payment => {
 
-    payment.installments.forEach(
-      item => {
+    payment.installments.forEach((item, index) => {
 
-        total +=
-          Number(item.amount || 0);
+      total += Number(item.amount || 0);
 
-        if (item.paid) {
+      if (item.paid) {
 
-          paidTotal +=
-            Number(item.amount || 0);
+        paid += Number(item.amount || 0);
+        paidCount++;
 
-          paidCount++;
-
-        } else {
-
-          unpaidCount++;
-
-        }
-
-      }
-    );
-
-  });
-
-
-  const remaining =
-    Math.max(
-      0,
-      total - paidTotal
-    );
-
-
-  document.getElementById(
-    "totalAmount"
-  ).textContent =
-    euro(total);
-
-
-  document.getElementById(
-    "paidAmount"
-  ).textContent =
-    euro(paidTotal);
-
-
-  document.getElementById(
-    "remainingAmount"
-  ).textContent =
-    euro(remaining);
-
-
-  document.getElementById(
-    "unpaidCount"
-  ).textContent =
-    unpaidCount;
-
-
-  document.getElementById(
-    "paidCount"
-  ).textContent =
-    paidCount;
-
-
-  payments.forEach(payment => {
-
-    payment.installments.forEach(
-      (item, index) => {
-
-        const card =
+        paidList.appendChild(
           createInstallmentCard(
             payment,
             item,
             index
-          );
+          )
+        );
 
+      } else {
 
-        if (item.paid) {
+        unpaidCount++;
 
-          paidList.appendChild(card);
-
-        } else {
-
-          unpaidList.appendChild(card);
-
-        }
+        unpaidList.appendChild(
+          createInstallmentCard(
+            payment,
+            item,
+            index
+          )
+        );
 
       }
-    );
+
+    });
 
   });
 
+  document.getElementById("totalAmount")
+    .textContent = euro(total);
 
-  if (unpaidCount === 0) {
+  document.getElementById("paidAmount")
+    .textContent = euro(paid);
 
-    unpaidList.innerHTML =
-      '<div class="card empty">' +
-      '🎉 Aucun paiement à effectuer.' +
-      '</div>';
+  document.getElementById("remainingAmount")
+    .textContent = euro(total - paid);
 
-  }
+  document.getElementById("unpaidCount")
+    .textContent = "(" + unpaidCount + ")";
 
+  document.getElementById("paidCount")
+    .textContent = "(" + paidCount + ")";
 
-  if (paidCount === 0) {
-
-    paidList.innerHTML =
-      '<div class="card empty">' +
-      'Aucun paiement effectué.' +
-      '</div>';
-
-  }
-
-
-  showTab(currentTab);
+  updateSelectionBar();
 
 }
 
-
-/* =========================
+/* ---------------------------------
    CARTE ÉCHÉANCE
-========================= */
+--------------------------------- */
 
 function createInstallmentCard(
   payment,
@@ -1383,429 +1228,422 @@ function createInstallmentCard(
   index
 ) {
 
-  const div =
+  const card =
     document.createElement("div");
 
-  div.className =
+  card.className =
     "installment" +
     (item.paid ? " paid" : "");
 
+  const top =
+    document.createElement("div");
 
-  const status =
-    item.paid
+  top.className =
+    "installmentTop";
 
-      ? '<span class="badge paid">PAYÉ</span>'
+  /* CASE À COCHER */
 
-      : '<span class="badge unpaid">À PAYER</span>';
+  const checkbox =
+    document.createElement("input");
 
-
-  div.innerHTML = `
-
-    <div class="installmentTop">
-
-      <div>
-
-        <div class="paymentName">
-          ${escapeHtml(payment.beneficiary)}
-        </div>
-
-        <div>
-          Échéance ${item.number}
-          ${status}
-        </div>
-
-      </div>
-
-      <div class="amount">
-        ${euro(item.amount)}
-      </div>
-
-    </div>
-
-
-    <div class="details">
-
-      📅 Date :
-      <strong>
-        ${formatDate(item.date)}
-      </strong>
-
-      <br>
-
-      💬 Communication :
-      <strong>
-        ${escapeHtml(
-          item.communication || "-"
-        )}
-      </strong>
-
-    </div>
-
-
-    <div class="actions">
-
-      ${
-        !item.paid
-          ? `
-            <button
-              class="small"
-              style="background:#5856d6"
-              onclick="
-                openManualPayment(
-                  '${payment.id}',
-                  ${index}
-                )
-              "
-            >
-              🏦 Payer
-            </button>
-          `
-          : ""
-      }
-
-
-      <button
-        class="small secondary"
-        onclick="
-          editInstallment(
-            '${payment.id}',
-            ${index}
-          )
-        "
-      >
-        ✏️ Modifier
-      </button>
-
-
-      <button
-        class="small"
-        onclick="
-          addToGoogleCalendar(
-            '${payment.id}',
-            ${index}
-          )
-        "
-      >
-        📅 Google Agenda
-      </button>
-
-
-      <button
-        class="small ${
-          item.paid
-            ? "secondary"
-            : "green"
-        }"
-        onclick="
-          togglePaid(
-            '${payment.id}',
-            ${index}
-          )
-        "
-      >
-        ${
-          item.paid
-            ? "↩️ Remettre à payer"
-            : "✅ Marquer payé"
-        }
-      </button>
-
-    </div>
-
-  `;
-
-
-  return div;
-
-}
-
-
-/* =========================
-   PAYER MANUELLEMENT
-========================= */
-
-function openManualPayment(
-  paymentId,
-  index
-) {
-
-  const payment =
-    payments.find(
-      p => p.id === paymentId
-    );
-
-
-  if (!payment) {
-    return;
-  }
-
-
-  const item =
-    payment.installments[index];
-
-
-  if (!item) {
-    return;
-  }
-
-
-  manualPaymentId =
-    paymentId;
-
-  manualInstallmentIndex =
+  checkbox.type = "checkbox";
+  checkbox.className = "checkbox";
+  checkbox.dataset.paymentId =
+    payment.id;
+  checkbox.dataset.installmentIndex =
     index;
 
+  checkbox.checked =
+    isSelected(payment.id, index);
 
-  document.getElementById(
-    "manualPaymentSubtitle"
-  ).textContent =
-    `Échéance ${item.number} • ${formatDate(item.date)}`;
+  checkbox.addEventListener(
+    "change",
+    updateSelectionBar
+  );
 
+  top.appendChild(checkbox);
 
-  document.getElementById(
-    "manualBeneficiary"
-  ).textContent =
-    payment.beneficiary || "-";
+  /* INFORMATIONS */
 
+  const info =
+    document.createElement("div");
 
-  document.getElementById(
-    "manualIban"
-  ).textContent =
-    payment.iban || "-";
+  info.className =
+    "installmentInfo";
 
+  const beneficiary =
+    document.createElement("div");
 
-  document.getElementById(
-    "manualAmount"
-  ).textContent =
+  beneficiary.className =
+    "beneficiary";
+
+  beneficiary.textContent =
+    payment.beneficiary;
+
+  const details =
+    document.createElement("div");
+
+  details.className =
+    "installmentDetails";
+
+  details.innerHTML =
+    "Échéance " +
+    item.number +
+    " • " +
+    formatDate(item.date) +
+    "<br>" +
+    "Communication : " +
+    escapeHtml(item.communication || "—");
+
+  if (item.paid) {
+
+    details.innerHTML +=
+      '<br><span class="badge paidBadge">PAYÉ</span>';
+
+  } else {
+
+    details.innerHTML +=
+      '<br><span class="badge">À PAYER</span>';
+
+  }
+
+  info.appendChild(beneficiary);
+  info.appendChild(details);
+
+  top.appendChild(info);
+
+  /* MONTANT */
+
+  const amount =
+    document.createElement("div");
+
+  amount.className =
+    "amount";
+
+  amount.textContent =
     euro(item.amount);
 
+  top.appendChild(amount);
 
-  document.getElementById(
-    "manualCommunication"
-  ).textContent =
-    item.communication || "-";
+  card.appendChild(top);
 
+  /* BOUTONS */
 
-  resetCopyButtons();
+  const actions =
+    document.createElement("div");
 
+  actions.className =
+    "actions";
 
-  document.getElementById(
-    "manualPaymentModal"
-  ).style.display =
-    "block";
+  if (!item.paid) {
 
-}
+    const payButton =
+      document.createElement("button");
 
+    payButton.className =
+      "success small";
 
-function closeManualPayment() {
+    payButton.textContent =
+      "🏦 Payer";
 
-  document.getElementById(
-    "manualPaymentModal"
-  ).style.display =
-    "none";
+    payButton.onclick = function() {
 
-  manualPaymentId = null;
-  manualInstallmentIndex = null;
+      openManualPayment(
+        payment.id,
+        index
+      );
 
-}
+    };
 
+    actions.appendChild(payButton);
 
-/* =========================
-   COPIER
-========================= */
+  }
 
-function getCopyValue(type) {
+  const editButton =
+    document.createElement("button");
 
-  const payment =
-    payments.find(
-      p => p.id === manualPaymentId
+  editButton.className =
+    "secondary small";
+
+  editButton.textContent =
+    "✏️ Modifier";
+
+  editButton.onclick = function() {
+
+    editInstallment(
+      payment.id,
+      index
     );
 
+  };
 
-  if (!payment) {
-    return "";
+  actions.appendChild(editButton);
+
+  const calendarButton =
+    document.createElement("button");
+
+  calendarButton.className =
+    "secondary small";
+
+  calendarButton.textContent =
+    "📅 Google Agenda";
+
+  calendarButton.onclick = function() {
+
+    addToGoogleCalendar(
+      payment.id,
+      index
+    );
+
+  };
+
+  actions.appendChild(calendarButton);
+
+  const paidButton =
+    document.createElement("button");
+
+  if (item.paid) {
+
+    paidButton.className =
+      "warning small";
+
+    paidButton.textContent =
+      "↩️ Remettre à payer";
+
+  } else {
+
+    paidButton.className =
+      "success small";
+
+    paidButton.textContent =
+      "✅ Marquer payé";
+
   }
 
+  paidButton.onclick = function() {
 
-  const item =
-    payment.installments[
-      manualInstallmentIndex
-    ];
+    togglePaid(
+      payment.id,
+      index
+    );
 
+  };
 
-  if (!item) {
-    return "";
-  }
+  actions.appendChild(paidButton);
 
+  card.appendChild(actions);
 
-  if (type === "beneficiary") {
-    return payment.beneficiary || "";
-  }
-
-
-  if (type === "iban") {
-    return payment.iban || "";
-  }
-
-
-  if (type === "amount") {
-
-    return Number(
-      item.amount || 0
-    ).toFixed(2);
-
-  }
-
-
-  if (type === "communication") {
-    return item.communication || "";
-  }
-
-
-  return "";
+  return card;
 
 }
 
+/* ---------------------------------
+   SÉLECTION / SUPPRESSION
+--------------------------------- */
 
-async function copyBankField(type) {
+function isSelected(paymentId, index) {
 
-  const value =
-    getCopyValue(type);
+  return document.querySelector(
+    `input[type="checkbox"][data-payment-id="${paymentId}"][data-installment-index="${index}"]`
+  )?.checked || false;
 
+}
 
-  if (!value) {
+function getSelectedItems() {
 
-    alert(
-      "Cette information est vide."
+  const boxes =
+    document.querySelectorAll(
+      ".checkbox:checked"
     );
 
+  return Array.from(boxes).map(box => ({
+    paymentId:
+      box.dataset.paymentId,
+
+    installmentIndex:
+      Number(box.dataset.installmentIndex)
+  }));
+
+}
+
+function updateSelectionBar() {
+
+  const selected =
+    getSelectedItems();
+
+  const bar =
+    document.getElementById("selectionBar");
+
+  const count =
+    selected.length;
+
+  if (count > 0) {
+
+    bar.classList.add("visible");
+
+  } else {
+
+    bar.classList.remove("visible");
+
+  }
+
+  document.getElementById("selectedCount")
+    .textContent = count;
+
+  document.getElementById("selectedText")
+    .textContent =
+    count === 1
+      ? "1 sélectionné"
+      : count + " sélectionnés";
+
+  const selectAll =
+    document.getElementById("selectAll");
+
+  const visibleBoxes =
+    Array.from(
+      document.querySelectorAll(
+        ".checkbox"
+      )
+    );
+
+  selectAll.checked =
+    visibleBoxes.length > 0 &&
+    visibleBoxes.every(box => box.checked);
+
+}
+
+function toggleSelectAll() {
+
+  const selectAll =
+    document.getElementById("selectAll").checked;
+
+  document
+    .querySelectorAll(".checkbox")
+    .forEach(box => {
+
+      box.checked = selectAll;
+
+    });
+
+  updateSelectionBar();
+
+}
+
+function deleteSelected() {
+
+  const selected =
+    getSelectedItems();
+
+  if (selected.length === 0) {
     return;
-
   }
 
+  const confirmation =
+    selected.length === 1
+      ? "Supprimer cette échéance ?\n\nCette action est définitive."
+      : "Supprimer les " +
+        selected.length +
+        " échéances sélectionnées ?\n\nCette action est définitive.";
 
-  try {
+  if (!confirm(confirmation)) {
+    return;
+  }
 
-    await navigator.clipboard.writeText(
-      value
+  /*
+   * On trie les échéances d'un même paiement
+   * de la plus grande à la plus petite.
+   * Cela évite que la suppression d'une échéance
+   * décale l'index des suivantes.
+   */
+
+  const grouped = {};
+
+  selected.forEach(item => {
+
+    if (!grouped[item.paymentId]) {
+      grouped[item.paymentId] = [];
+    }
+
+    grouped[item.paymentId].push(
+      item.installmentIndex
     );
 
-  } catch (error) {
+  });
 
-    const textarea =
-      document.createElement("textarea");
+  Object.keys(grouped).forEach(paymentId => {
 
-    textarea.value =
-      value;
+    const payment =
+      payments.find(
+        p => p.id === paymentId
+      );
 
-    document.body.appendChild(
-      textarea
-    );
+    if (!payment) {
+      return;
+    }
 
-    textarea.select();
+    grouped[paymentId]
+      .sort((a, b) => b - a)
+      .forEach(index => {
 
-    document.execCommand(
-      "copy"
-    );
-
-    textarea.remove();
-
-  }
-
-
-  let buttonId = "";
-
-
-  if (type === "beneficiary") {
-    buttonId =
-      "copyBeneficiaryButton";
-  }
-
-  if (type === "iban") {
-    buttonId =
-      "copyIbanButton";
-  }
-
-  if (type === "amount") {
-    buttonId =
-      "copyAmountButton";
-  }
-
-  if (type === "communication") {
-    buttonId =
-      "copyCommunicationButton";
-  }
-
-
-  const button =
-    document.getElementById(
-      buttonId
-    );
-
-
-  if (button) {
-
-    button.textContent =
-      "✓ Copié";
-
-    button.classList.add(
-      "copied"
-    );
-
-
-    setTimeout(
-      () => {
-
-        button.textContent =
-          "Copier";
-
-        button.classList.remove(
-          "copied"
+        payment.installments.splice(
+          index,
+          1
         );
 
-      },
-      1500
-    );
+      });
 
-  }
+    /*
+     * Si toutes les échéances du paiement
+     * ont été supprimées, on supprime aussi
+     * le paiement vide.
+     */
 
-}
+    if (payment.installments.length === 0) {
 
+      const paymentIndex =
+        payments.findIndex(
+          p => p.id === paymentId
+        );
 
-function resetCopyButtons() {
+      if (paymentIndex !== -1) {
 
-  const buttons = [
-    "copyBeneficiaryButton",
-    "copyIbanButton",
-    "copyAmountButton",
-    "copyCommunicationButton"
-  ];
+        payments.splice(
+          paymentIndex,
+          1
+        );
 
+      }
 
-  buttons.forEach(id => {
+    } else {
 
-    const button =
-      document.getElementById(id);
-
-    if (button) {
-
-      button.textContent =
-        "Copier";
-
-      button.classList.remove(
-        "copied"
-      );
+      payment.totalAmount =
+        payment.installments.reduce(
+          (sum, item) =>
+            sum + Number(item.amount || 0),
+          0
+        );
 
     }
 
   });
 
+  saveData();
+
+  render();
+
+  alert(
+    selected.length === 1
+      ? "🗑️ Échéance supprimée."
+      : "🗑️ " +
+        selected.length +
+        " échéances supprimées."
+  );
+
 }
 
-
-/* =========================
-   PAYÉ
-========================= */
+/* ---------------------------------
+   PAYER / IMPAYÉ
+--------------------------------- */
 
 function togglePaid(
   paymentId,
@@ -1817,29 +1655,25 @@ function togglePaid(
       p => p.id === paymentId
     );
 
+  if (!payment) return;
 
-  if (!payment) {
-    return;
-  }
+  const item =
+    payment.installments[index];
 
+  if (!item) return;
 
-  if (!payment.installments[index]) {
-    return;
-  }
-
-
-  payment.installments[index].paid =
-    !payment.installments[index].paid;
-
+  item.paid =
+    !item.paid;
 
   saveData();
 
+  render();
+
 }
 
-
-/* =========================
-   MODIFIER
-========================= */
+/* ---------------------------------
+   MODIFICATION
+--------------------------------- */
 
 function editInstallment(
   paymentId,
@@ -1851,20 +1685,12 @@ function editInstallment(
       p => p.id === paymentId
     );
 
-
-  if (!payment) {
-    return;
-  }
-
+  if (!payment) return;
 
   const item =
     payment.installments[index];
 
-
-  if (!item) {
-    return;
-  }
-
+  if (!item) return;
 
   editingPaymentId =
     paymentId;
@@ -1872,146 +1698,294 @@ function editInstallment(
   editingInstallmentIndex =
     index;
 
+  document.getElementById("editDate")
+    .value = item.date;
 
-  document.getElementById(
-    "editDate"
-  ).value =
-    item.date;
+  document.getElementById("editAmount")
+    .value = item.amount;
 
+  document.getElementById("editCommunication")
+    .value = item.communication;
 
-  document.getElementById(
-    "editAmount"
-  ).value =
-    item.amount;
-
-
-  document.getElementById(
-    "editCommunication"
-  ).value =
-    item.communication || "";
-
-
-  document.getElementById(
-    "editModal"
-  ).style.display =
-    "block";
+  document
+    .getElementById("editModal")
+    .classList.add("show");
 
 }
 
-
 function closeEdit() {
 
-  document.getElementById(
-    "editModal"
-  ).style.display =
-    "none";
+  document
+    .getElementById("editModal")
+    .classList.remove("show");
 
   editingPaymentId = null;
   editingInstallmentIndex = null;
 
 }
 
-
 function saveEdit() {
+
+  if (
+    editingPaymentId === null ||
+    editingInstallmentIndex === null
+  ) {
+    return;
+  }
 
   const payment =
     payments.find(
       p => p.id === editingPaymentId
     );
 
-
-  if (!payment) {
-    return;
-  }
-
+  if (!payment) return;
 
   const item =
     payment.installments[
       editingInstallmentIndex
     ];
 
-
-  if (!item) {
-    return;
-  }
-
+  if (!item) return;
 
   const date =
-    document.getElementById(
-      "editDate"
-    ).value;
-
+    document.getElementById("editDate").value;
 
   const amount =
     Number(
-      document.getElementById(
-        "editAmount"
-      ).value
+      document.getElementById("editAmount").value
     );
 
-
   const communication =
-    document.getElementById(
-      "editCommunication"
-    ).value.trim();
-
+    document.getElementById("editCommunication")
+      .value.trim();
 
   if (!date) {
 
-    alert(
-      "Veuillez choisir une date."
-    );
+    alert("Indique une date.");
 
     return;
 
   }
 
+  if (isNaN(amount) || amount < 0) {
 
-  if (
-    amount < 0 ||
-    isNaN(amount)
-  ) {
-
-    alert(
-      "Montant incorrect."
-    );
+    alert("Indique un montant valide.");
 
     return;
 
   }
 
-
-  item.date =
-    date;
-
-  item.amount =
-    amount;
-
-  item.communication =
-    communication;
-
+  item.date = date;
+  item.amount = amount;
+  item.communication = communication;
 
   payment.totalAmount =
     payment.installments.reduce(
-      (sum, installment) =>
-        sum +
-        Number(
-          installment.amount || 0
-        ),
+      (sum, item) =>
+        sum + Number(item.amount || 0),
       0
     );
-
 
   saveData();
 
   closeEdit();
 
+  render();
+
 }
 
+/* ---------------------------------
+   PAIEMENT MANUEL
+--------------------------------- */
 
-/* =========================
-   GOOGLE AGENDA
-========================= */
+function openManualPayment(
+  paymentId,
+  index
+) {
+
+  const payment =
+    payments.find(
+      p => p.id === paymentId
+    );
+
+  if (!payment) return;
+
+  const item =
+    payment.installments[index];
+
+  if (!item) return;
+
+  manualPaymentId =
+    paymentId;
+
+  manualInstallmentIndex =
+    index;
+
+  document.getElementById(
+    "manualPaymentSubtitle"
+  ).textContent =
+    "Échéance " +
+    item.number +
+    " • " +
+    formatDate(item.date);
+
+  document.getElementById(
+    "manualBeneficiary"
+  ).textContent =
+    payment.beneficiary;
+
+  document.getElementById(
+    "manualIban"
+  ).textContent =
+    payment.iban || "—";
+
+  document.getElementById(
+    "manualAmount"
+  ).textContent =
+    euro(item.amount);
+
+  document.getElementById(
+    "manualCommunication"
+  ).textContent =
+    item.communication || "—";
+
+  resetCopyButtons();
+
+  document
+    .getElementById("manualPaymentModal")
+    .classList.add("show");
+
+}
+
+function closeManualPayment() {
+
+  document
+    .getElementById("manualPaymentModal")
+    .classList.remove("show");
+
+  manualPaymentId = null;
+  manualInstallmentIndex = null;
+
+}
+
+function getCopyValue(type) {
+
+  if (
+    manualPaymentId === null ||
+    manualInstallmentIndex === null
+  ) {
+    return "";
+  }
+
+  const payment =
+    payments.find(
+      p => p.id === manualPaymentId
+    );
+
+  if (!payment) return "";
+
+  const item =
+    payment.installments[
+      manualInstallmentIndex
+    ];
+
+  if (!item) return "";
+
+  if (type === "beneficiary") {
+    return payment.beneficiary;
+  }
+
+  if (type === "iban") {
+    return payment.iban;
+  }
+
+  if (type === "amount") {
+    return Number(item.amount)
+      .toFixed(2)
+      .replace(".", ",");
+  }
+
+  if (type === "communication") {
+    return item.communication;
+  }
+
+  return "";
+
+}
+
+async function copyBankField(type) {
+
+  const value =
+    getCopyValue(type);
+
+  if (!value) {
+    return;
+  }
+
+  try {
+
+    await navigator.clipboard.writeText(value);
+
+  } catch (error) {
+
+    const textarea =
+      document.createElement("textarea");
+
+    textarea.value = value;
+
+    document.body.appendChild(textarea);
+
+    textarea.select();
+
+    document.execCommand("copy");
+
+    textarea.remove();
+
+  }
+
+  const button =
+    document.querySelector(
+      `.copyButton[data-copy-type="${type}"]`
+    );
+
+  if (!button) return;
+
+  button.textContent =
+    "✓ Copié";
+
+  button.classList.add("copied");
+
+  setTimeout(() => {
+
+    button.textContent =
+      "Copier";
+
+    button.classList.remove("copied");
+
+  }, 1500);
+
+}
+
+function resetCopyButtons() {
+
+  document
+    .querySelectorAll(".copyButton")
+    .forEach(button => {
+
+      button.textContent =
+        "Copier";
+
+      button.classList.remove(
+        "copied"
+      );
+
+    });
+
+}
+
+/* ---------------------------------
+   GOOGLE CALENDAR
+--------------------------------- */
 
 function addToGoogleCalendar(
   paymentId,
@@ -2023,37 +1997,36 @@ function addToGoogleCalendar(
       p => p.id === paymentId
     );
 
-
-  if (!payment) {
-    return;
-  }
-
+  if (!payment) return;
 
   const item =
     payment.installments[index];
 
+  if (!item) return;
 
-  if (!item) {
-    return;
-  }
+  const start =
+    item.date.replace(/-/g, "") +
+    "T090000";
 
-
-  const date =
-    item.date.replace(
-      /-/g,
-      ""
-    );
-
+  const end =
+    item.date.replace(/-/g, "") +
+    "T100000";
 
   const title =
-    `Paiement - ${payment.beneficiary} - Échéance ${item.number}`;
-
+    "Paiement - " +
+    payment.beneficiary +
+    " - Échéance " +
+    item.number;
 
   const details =
-    `Montant : ${euro(item.amount)}\n` +
-    `IBAN : ${payment.iban || "-"}\n` +
-    `Communication : ${item.communication || "-"}`;
-
+    "Montant : " +
+    euro(item.amount) +
+    "\n" +
+    "IBAN : " +
+    payment.iban +
+    "\n" +
+    "Communication : " +
+    item.communication;
 
   const url =
     "https://calendar.google.com/calendar/render" +
@@ -2061,13 +2034,11 @@ function addToGoogleCalendar(
     "&text=" +
     encodeURIComponent(title) +
     "&dates=" +
-    date +
-    "T090000/" +
-    date +
-    "T100000" +
+    start +
+    "/" +
+    end +
     "&details=" +
     encodeURIComponent(details);
-
 
   window.open(
     url,
@@ -2076,29 +2047,24 @@ function addToGoogleCalendar(
 
 }
 
-
-/* =========================
+/* ---------------------------------
    EXPORT
-========================= */
+--------------------------------- */
 
 function exportData() {
 
   const backup = {
 
-    app:
-      "Mes paiements",
+    app: "Mes paiements",
 
-    version:
-      BACKUP_VERSION,
+    version: BACKUP_VERSION,
 
     exportedAt:
       new Date().toISOString(),
 
-    payments:
-      payments
+    payments: payments
 
   };
-
 
   const blob =
     new Blob(
@@ -2110,63 +2076,53 @@ function exportData() {
         )
       ],
       {
-        type:
-          "application/json"
+        type: "application/json"
       }
     );
-
 
   const url =
     URL.createObjectURL(blob);
 
-
-  const a =
+  const link =
     document.createElement("a");
-
 
   const date =
     new Date()
       .toISOString()
       .slice(0, 10);
 
+  link.href = url;
 
-  a.href =
-    url;
+  link.download =
+    "mes-paiements-sauvegarde-" +
+    date +
+    ".json";
 
+  document.body.appendChild(link);
 
-  a.download =
-    `mes-paiements-sauvegarde-${date}.json`;
+  link.click();
 
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
+  link.remove();
 
   URL.revokeObjectURL(url);
 
 }
 
-
-/* =========================
+/* ---------------------------------
    IMPORT
-========================= */
+--------------------------------- */
 
 function importData(event) {
 
   const file =
     event.target.files[0];
 
-
   if (!file) {
     return;
   }
 
-
   const reader =
     new FileReader();
-
 
   reader.onload =
     function(e) {
@@ -2178,59 +2134,60 @@ function importData(event) {
             e.target.result
           );
 
-
         if (
           !backup ||
           backup.app !== "Mes paiements" ||
-          !Array.isArray(
-            backup.payments
-          )
+          !Array.isArray(backup.payments)
         ) {
 
           alert(
-            "Ce fichier n'est pas une sauvegarde valide."
+            "❌ Fichier de sauvegarde invalide."
           );
 
           return;
 
         }
 
-
-        const confirmed =
+        const confirmation =
           confirm(
-            "⚠️ Cette importation va remplacer les paiements actuels. Continuer ?"
+            "Importer cette sauvegarde ?\n\n" +
+            "Les paiements actuellement présents " +
+            "seront remplacés."
           );
 
-
-        if (!confirmed) {
+        if (!confirmation) {
           return;
         }
-
 
         payments =
           normalizeData(
             backup.payments
           );
 
-
         saveData();
 
+        currentTab =
+          "unpaid";
+
+        render();
+
+        showTab("unpaid");
 
         alert(
-          "✅ Sauvegarde importée avec succès !"
+          "✅ Sauvegarde importée."
         );
-
 
       } catch (error) {
 
+        console.error(error);
+
         alert(
-          "❌ Impossible de lire cette sauvegarde."
+          "❌ Impossible de lire la sauvegarde."
         );
 
       }
 
     };
-
 
   reader.readAsText(file);
 
@@ -2238,36 +2195,44 @@ function importData(event) {
 
 }
 
-
-/* =========================
-   PROTECTION HTML
-========================= */
+/* ---------------------------------
+   SÉCURITÉ HTML
+--------------------------------- */
 
 function escapeHtml(value) {
 
   return String(value || "")
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
+
+/* ---------------------------------
+   FERMETURE MODALES
+--------------------------------- */
+
+document
+  .getElementById("editModal")
+  .addEventListener("click", function(event) {
+
+    if (event.target === this) {
+      closeEdit();
+    }
+
+  });
+
+document
+  .getElementById("manualPaymentModal")
+  .addEventListener("click", function(event) {
+
+    if (event.target === this) {
+      closeManualPayment();
+    }
+
+  });
 
 </script>
 
