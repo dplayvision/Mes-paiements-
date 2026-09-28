@@ -5,313 +5,197 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f2f2f7">
-
+<meta name="theme-color" content="#f5f5f7">
 <title>Mes paiements</title>
 
 <style>
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-    background: #f2f2f7;
-    color: #111;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+  background: #f5f5f7;
+  color: #111;
 }
 
-header {
-    padding: 18px 16px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.app {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px 16px 40px;
 }
 
 h1 {
-    margin: 0;
-    font-size: 30px;
-}
-
-button {
-    font-family: inherit;
-}
-
-.addButton {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 21px;
-    background: #007aff;
-    color: white;
-    font-size: 28px;
-}
-
-main {
-    padding: 5px 14px 100px;
-}
-
-/* TOTALS */
-
-.summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
+  text-align: center;
+  margin: 10px 0 20px;
 }
 
 .card {
-    background: white;
-    border-radius: 15px;
-    padding: 13px 5px;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
 }
 
-.card span {
-    display: block;
-    font-size: 13px;
-    color: #777;
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
-.card strong {
-    display: block;
-    margin-top: 5px;
-    font-size: 17px;
+.stat {
+  text-align: center;
+  padding: 12px 5px;
+  background: #f2f2f7;
+  border-radius: 14px;
 }
 
-.total {
-    color: #007aff;
+.stat strong {
+  display: block;
+  font-size: 19px;
+  margin-top: 5px;
 }
-
-.paidTotal {
-    color: #34c759;
-}
-
-.remaining {
-    color: #ff9500;
-}
-
-/* MOIS */
 
 .month {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
 .month button {
-    border: none;
-    background: white;
-    width: 36px;
-    height: 36px;
-    border-radius: 18px;
-    font-size: 25px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  font-size: 22px;
+  background: #e5e5ea;
 }
-
-/* PAIEMENT */
 
 .payment {
-    background: white;
-    border-radius: 16px;
-    padding: 14px;
-    margin-bottom: 9px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  background: white;
+  border-radius: 17px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 
-.paymentTop {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.payment.paid {
+  opacity: .6;
 }
 
-.status {
-    border: none;
-    background: none;
-    font-size: 26px;
-    padding: 0;
+.payment-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.paymentInfo {
-    flex: 1;
+.payment-title h3 {
+  margin: 0;
 }
 
-.paymentName {
-    font-weight: 650;
-    font-size: 16px;
+.amount {
+  font-weight: bold;
+  white-space: nowrap;
 }
 
-.paymentDate {
-    color: #777;
-    font-size: 12px;
-    margin-top: 3px;
-}
-
-.paymentAmount {
-    font-weight: bold;
+.info {
+  color: #666;
+  font-size: 14px;
+  margin-top: 8px;
 }
 
 .actions {
-    display: flex;
-    gap: 7px;
-    margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  margin-top: 13px;
 }
 
-.actions button {
-    border: none;
-    border-radius: 10px;
-    padding: 8px 10px;
-    background: #eef3ff;
-    color: #007aff;
+button,
+input,
+select {
+  font: inherit;
 }
 
-.actions .delete {
-    color: #d00000;
-    background: #fff0f0;
+.primary,
+.secondary,
+.danger {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.primary {
+  background: #007aff;
+  color: white;
+  width: 100%;
+}
+
+.secondary {
+  background: #e5e5ea;
+  color: #111;
+  flex: 1;
+}
+
+.danger {
+  background: #ff3b30;
+  color: white;
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: white;
+}
+
+#form {
+  display: none;
+}
+
+#app {
+  display: none;
 }
 
 .empty {
-    text-align: center;
-    color: #777;
-    padding: 40px 10px;
+  text-align: center;
+  color: #777;
+  padding: 25px;
 }
 
-/* MODAL */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.45);
-    z-index: 10;
-    align-items: flex-end;
+#login {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 20px;
 }
 
-.sheet {
-    background: white;
-    width: 100%;
-    max-height: 94vh;
-    overflow-y: auto;
-    border-radius: 22px 22px 0 0;
-    padding: 20px;
-    padding-bottom: calc(25px + env(safe-area-inset-bottom));
-}
-
-.sheet h2 {
-    margin-top: 0;
-}
-
-.field {
-    margin-bottom: 13px;
-}
-
-.field label {
-    display: block;
-    font-size: 13px;
-    color: #777;
-    margin-bottom: 5px;
-}
-
-.field input,
-.field select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #fafafa;
-    font-size: 16px;
-}
-
-.saveButton {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    background: #007aff;
-    color: white;
-    font-weight: 600;
-    font-size: 16px;
-}
-
-.cancelButton {
-    width: 100%;
-    border: none;
-    background: none;
-    color: #007aff;
-    padding: 13px;
+.pin-input {
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: 10px;
 }
 
 .hidden {
-    display: none;
+  display: none !important;
 }
 
-/* PIN */
-
-#pinScreen {
-    position: fixed;
-    inset: 0;
-    background: #f2f2f7;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.pinTitle {
-    font-size: 28px;
-    font-weight: 700;
-}
-
-.pinDots {
-    font-size: 25px;
-    letter-spacing: 8px;
-    margin: 20px;
-}
-
-.pinPad {
-    display: grid;
-    grid-template-columns: repeat(3, 72px);
-    gap: 12px;
-}
-
-.pinPad button {
-    width: 72px;
-    height: 62px;
-    border: none;
-    border-radius: 31px;
-    background: white;
-    font-size: 22px;
-}
-
-.pinZero {
-    grid-column: 2;
-}
-
-.pinError {
-    height: 20px;
-    color: #d00000;
-    font-size: 13px;
-}
-
-/* INSTALLMENTS */
-
-.installment {
-    border-top: 1px solid #eee;
-    padding: 9px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.installment span:nth-child(2) {
-    flex: 1;
-}
-
-.installment button {
-    border: none;
-    background: none;
-    font-size: 20px;
+.check {
+  color: #34c759;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -319,1389 +203,492 @@ main {
 <body>
 
 <!-- PIN -->
+<div id="login">
+  <div class="card">
+    <h1>Mes paiements</h1>
+    <p style="text-align:center;">Entrez votre code PIN</p>
 
-<div id="pinScreen">
+    <input
+      id="pin"
+      class="pin-input"
+      type="password"
+      inputmode="numeric"
+      maxlength="4"
+      placeholder="••••"
+    >
 
-    <div class="pinTitle">🔒 Mes paiements</div>
+    <br><br>
 
-    <div id="pinDots" class="pinDots">
-        ○ ○ ○ ○
-    </div>
+    <button class="primary" onclick="unlock()">Ouvrir</button>
 
-    <div id="pinError" class="pinError"></div>
-
-    <div class="pinPad" id="pinPad"></div>
-
+    <p id="pinError"
+       style="color:#ff3b30;text-align:center;"></p>
+  </div>
 </div>
 
 <!-- APPLICATION -->
+<div id="app" class="app">
 
-<header>
+  <h1>Mes paiements</h1>
 
-    <h1>Paiements</h1>
-
-    <button class="addButton" onclick="openAdd()">
-        +
-    </button>
-
-</header>
-
-<main>
-
-    <div class="summary">
-
-        <div class="card">
-            <span>Total</span>
-            <strong id="total" class="total">0,00 €</strong>
-        </div>
-
-        <div class="card">
-            <span>Payé</span>
-            <strong id="paid" class="paidTotal">0,00 €</strong>
-        </div>
-
-        <div class="card">
-            <span>Reste</span>
-            <strong id="remaining" class="remaining">0,00 €</strong>
-        </div>
-
-    </div>
+  <div class="card">
 
     <div class="month">
+      <button onclick="changeMonth(-1)">‹</button>
+      <strong id="monthTitle"></strong>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
 
-        <button onclick="changeMonth(-1)">‹</button>
+    <div class="stats">
+      <div class="stat">
+        Total
+        <strong id="total">0,00 €</strong>
+      </div>
 
-        <strong id="monthName"></strong>
+      <div class="stat">
+        Payé
+        <strong id="paid">0,00 €</strong>
+      </div>
 
-        <button onclick="changeMonth(1)">›</button>
+      <div class="stat">
+        Reste
+        <strong id="remaining">0,00 €</strong>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="primary" onclick="openForm()">
+    ＋ Ajouter un paiement
+  </button>
+
+  <br><br>
+
+  <div id="payments"></div>
+
+  <!-- FORMULAIRE -->
+  <div id="form" class="card">
+
+    <h2 id="formTitle">Ajouter un paiement</h2>
+
+    <label>Nom</label>
+    <input id="name" placeholder="Ex. Électricité">
+
+    <label>Type</label>
+    <select id="type" onchange="updateType()">
+      <option value="monthly">Paiement mensuel</option>
+      <option value="multiple">Plusieurs fois</option>
+    </select>
+
+    <label>Montant</label>
+    <input id="amount" type="number" step="0.01" placeholder="0.00">
+
+    <label>Jour du mois</label>
+    <input id="day" type="number" min="1" max="31" placeholder="Ex. 15">
+
+    <div id="multipleFields" class="hidden">
+
+      <label>Montant total</label>
+      <input id="totalAmount" type="number" step="0.01">
+
+      <label>Nombre de versements</label>
+      <input id="installments" type="number" min="1">
+
+      <label>Première échéance</label>
+      <input id="firstDate" type="date">
 
     </div>
 
-    <div id="paymentsList"></div>
+    <label>Bénéficiaire</label>
+    <input id="beneficiary" placeholder="Nom du bénéficiaire">
 
-</main>
+    <label>IBAN</label>
+    <input id="iban" placeholder="BE / LU...">
 
+    <label>Communication</label>
+    <input id="communication" placeholder="Communication">
 
-<!-- FORMULAIRE -->
+    <br>
 
-<div class="modal" id="paymentModal">
+    <button class="primary" onclick="savePayment()">Enregistrer</button>
 
-    <div class="sheet">
+    <br><br>
 
-        <h2 id="formTitle">Nouveau paiement</h2>
+    <button class="secondary" onclick="closeForm()">
+      Annuler
+    </button>
 
-        <div class="field">
-
-            <label>Nom</label>
-
-            <input
-                id="name"
-                placeholder="Ex : Loyer, Netflix, Crédit"
-            >
-
-        </div>
-
-        <div class="field">
-
-            <label>Type</label>
-
-            <select id="mode" onchange="changeMode()">
-
-                <option value="single">
-                    Paiement mensuel
-                </option>
-
-                <option value="installments">
-                    Plusieurs fois
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <!-- PAIEMENT MENSUEL -->
-
-        <div id="singleFields">
-
-            <div class="field">
-
-                <label>Montant (€)</label>
-
-                <input
-                    id="amount"
-                    inputmode="decimal"
-                    placeholder="0,00"
-                >
-
-            </div>
-
-            <div class="field">
-
-                <label>Jour du mois</label>
-
-                <input
-                    id="dueDate"
-                    type="number"
-                    min="1"
-                    max="31"
-                    value="1"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- PLUSIEURS FOIS -->
-
-        <div id="installmentFields" class="hidden">
-
-            <div class="field">
-
-                <label>Montant total (€)</label>
-
-                <input
-                    id="totalAmount"
-                    inputmode="decimal"
-                    placeholder="0,00"
-                >
-
-            </div>
-
-            <div class="field">
-
-                <label>Nombre de versements</label>
-
-                <input
-                    id="installmentCount"
-                    type="number"
-                    min="2"
-                    max="60"
-                    value="3"
-                >
-
-            </div>
-
-            <div class="field">
-
-                <label>Première échéance</label>
-
-                <input
-                    id="firstDate"
-                    type="date"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- BANQUE -->
-
-        <div class="field">
-
-            <label>Bénéficiaire (optionnel)</label>
-
-            <input id="beneficiary">
-
-        </div>
-
-        <div class="field">
-
-            <label>IBAN (optionnel)</label>
-
-            <input
-                id="iban"
-                autocapitalize="characters"
-            >
-
-        </div>
-
-        <div class="field">
-
-            <label>Communication (optionnel)</label>
-
-            <input id="communication">
-
-        </div>
-
-
-        <button class="saveButton" onclick="savePayment()">
-            Enregistrer
-        </button>
-
-        <button class="cancelButton" onclick="closeModal()">
-            Annuler
-        </button>
-
-    </div>
+  </div>
 
 </div>
 
-
 <script>
 
-/* =========================
-   DONNÉES
-========================= */
-
-const STORAGE_KEY = "MES_PAIEMENTS_V1";
-const PIN_KEY = "MES_PAIEMENTS_PIN";
-
 let payments =
-    JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  JSON.parse(localStorage.getItem("mesPaiements") || "[]");
 
-let currentMonth = new Date();
-currentMonth.setDate(1);
-
+let currentDate = new Date();
 let editingId = null;
 
-
-/* =========================
-   OUTILS
-========================= */
+const euro = value =>
+  Number(value || 0).toLocaleString("fr-BE", {
+    style: "currency",
+    currency: "EUR"
+  });
 
 function saveData() {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(payments)
-    );
-
+  localStorage.setItem(
+    "mesPaiements",
+    JSON.stringify(payments)
+  );
 }
 
+function unlock() {
 
-function money(value) {
+  const pin = document.getElementById("pin").value;
 
-    return new Intl.NumberFormat(
-        "fr-BE",
-        {
-            style: "currency",
-            currency: "EUR"
-        }
-    ).format(value || 0);
+  let savedPin = localStorage.getItem("pinMesPaiements");
 
+  if (!savedPin) {
+    savedPin = "1234";
+    localStorage.setItem("pinMesPaiements", savedPin);
+  }
+
+  if (pin === savedPin) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    render();
+  } else {
+    document.getElementById("pinError").textContent =
+      "Code PIN incorrect";
+  }
 }
 
+function changeMonth(delta) {
+  currentDate.setMonth(currentDate.getMonth() + delta);
+  render();
+}
 
-function id() {
+function monthKey() {
+  return currentDate.getFullYear() + "-" +
+    String(currentDate.getMonth() + 1).padStart(2, "0");
+}
 
-    if (crypto.randomUUID) {
-        return crypto.randomUUID();
+function monthName() {
+
+  return currentDate.toLocaleDateString("fr-BE", {
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function openForm(id = null) {
+
+  editingId = id;
+
+  document.getElementById("form").style.display = "block";
+
+  if (id) {
+
+    const p = payments.find(x => x.id === id);
+
+    document.getElementById("formTitle").textContent =
+      "Modifier le paiement";
+
+    document.getElementById("name").value = p.name;
+    document.getElementById("type").value = p.type;
+    document.getElementById("amount").value = p.amount;
+    document.getElementById("day").value = p.day;
+    document.getElementById("beneficiary").value =
+      p.beneficiary || "";
+    document.getElementById("iban").value =
+      p.iban || "";
+    document.getElementById("communication").value =
+      p.communication || "";
+
+    if (p.type === "multiple") {
+      document.getElementById("totalAmount").value =
+        p.totalAmount || "";
+      document.getElementById("installments").value =
+        p.installments || "";
+      document.getElementById("firstDate").value =
+        p.firstDate || "";
     }
 
-    return Date.now() + "-" + Math.random();
+    updateType();
 
-}
+  } else {
 
+    document.getElementById("formTitle").textContent =
+      "Ajouter un paiement";
 
-function monthKey(date) {
-
-    return date.getFullYear()
-        + "-"
-        + String(date.getMonth() + 1).padStart(2,"0");
-
-}
-
-
-function monthName(date) {
-
-    return date.toLocaleDateString(
-        "fr-BE",
-        {
-            month: "long",
-            year: "numeric"
-        }
-    ).replace(/^./, c => c.toUpperCase());
-
-}
-
-
-function splitAmount(total, count) {
-
-    const base =
-        Math.round((total / count) * 100) / 100;
-
-    let amounts =
-        Array(count).fill(base);
-
-    amounts[count - 1] =
-        Math.round(
-            (total - base * (count - 1)) * 100
-        ) / 100;
-
-    return amounts;
-
-}
-
-
-/* =========================
-   DATE
-========================= */
-
-function monthlyDate(year, month, day) {
-
-    const lastDay =
-        new Date(year, month + 1, 0).getDate();
-
-    return new Date(
-        year,
-        month,
-        Math.min(day, lastDay)
-    );
-
-}
-
-
-/* =========================
-   PAIEMENTS DU MOIS
-========================= */
-
-function getMonthPayments(payment) {
-
-    const year =
-        currentMonth.getFullYear();
-
-    const month =
-        currentMonth.getMonth();
-
-
-    if (payment.mode === "single") {
-
-        const date =
-            monthlyDate(
-                year,
-                month,
-                payment.dueDate
-            );
-
-        const key =
-            monthKey(date);
-
-        return [
-
-            {
-                id:
-                    payment.id
-                    + "-"
-                    + key,
-
-                date: date,
-
-                amount:
-                    Number(payment.amount),
-
-                paid:
-                    !!(
-                        payment.paidMonths
-                        &&
-                        payment.paidMonths[key]
-                    )
-            }
-
-        ];
-
-    }
-
-
-    return payment.installments
-        .filter(item => {
-
-            const date =
-                new Date(item.date);
-
-            return (
-                date.getFullYear()
-                === year
-                &&
-                date.getMonth()
-                === month
-            );
-
-        })
-        .map(item => ({
-
-            id: item.id,
-
-            date: new Date(item.date),
-
-            amount: Number(item.amount),
-
-            paid: !!item.paid
-
-        }));
-
-}
-
-
-/* =========================
-   AFFICHAGE
-========================= */
-
-function render() {
-
-    document.getElementById(
-        "monthName"
-    ).textContent =
-        monthName(currentMonth);
-
-
-    let items = [];
-
-
-    payments.forEach(payment => {
-
-        getMonthPayments(payment)
-            .forEach(item => {
-
-                items.push({
-                    payment,
-                    item
-                });
-
-            });
-
+    [
+      "name",
+      "amount",
+      "day",
+      "totalAmount",
+      "installments",
+      "firstDate",
+      "beneficiary",
+      "iban",
+      "communication"
+    ].forEach(id => {
+      document.getElementById(id).value = "";
     });
 
+    document.getElementById("type").value = "monthly";
 
-    const total =
-        items.reduce(
-            (sum, x) =>
-                sum + x.item.amount,
-            0
-        );
+    updateType();
+  }
 
-
-    const paid =
-        items
-            .filter(x => x.item.paid)
-            .reduce(
-                (sum, x) =>
-                    sum + x.item.amount,
-                0
-            );
-
-
-    document.getElementById("total")
-        .textContent = money(total);
-
-    document.getElementById("paid")
-        .textContent = money(paid);
-
-    document.getElementById("remaining")
-        .textContent = money(total - paid);
-
-
-    const list =
-        document.getElementById(
-            "paymentsList"
-        );
-
-
-    if (!items.length) {
-
-        list.innerHTML = `
-            <div class="empty">
-                Aucun paiement pour ce mois.<br><br>
-                Appuie sur <b>+</b> pour en ajouter.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML =
-        items.map(({payment,item}) => `
-
-        <div class="payment">
-
-            <div class="paymentTop">
-
-                <button
-                    class="status"
-                    onclick="
-                        togglePaid(
-                            '${payment.id}',
-                            '${item.id}'
-                        )
-                    "
-                >
-                    ${item.paid ? "🟢" : "⚪"}
-                </button>
-
-                <div class="paymentInfo">
-
-                    <div class="paymentName">
-                        ${escapeHTML(payment.name)}
-                    </div>
-
-                    <div class="paymentDate">
-                        ${item.date.toLocaleDateString("fr-BE")}
-                        ${payment.mode === "installments"
-                            ? " • échéance"
-                            : " • mensuel"}
-                    </div>
-
-                </div>
-
-                <div class="paymentAmount">
-                    ${money(item.amount)}
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    onclick="
-                        showBank(
-                            '${payment.id}',
-                            '${item.id}'
-                        )
-                    "
-                >
-                    🏦 Payer
-                </button>
-
-                <button
-                    onclick="
-                        openEdit('${payment.id}')
-                    "
-                >
-                    ✏️ Modifier
-                </button>
-
-                <button
-                    class="delete"
-                    onclick="
-                        deletePayment('${payment.id}')
-                    "
-                >
-                    Supprimer
-                </button>
-
-            </div>
-
-
-            ${
-                payment.mode === "installments"
-                ?
-                renderInstallments(payment)
-                :
-                ""
-            }
-
-        </div>
-
-    `).join("");
-
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth"
+  });
 }
 
-
-function renderInstallments(payment) {
-
-    return `
-
-        <div class="installments">
-
-            ${
-                payment.installments
-                .map(i => `
-
-                    <div class="installment">
-
-                        <button
-                            onclick="
-                                toggleInstallment(
-                                    '${payment.id}',
-                                    '${i.id}'
-                                )
-                            "
-                        >
-                            ${i.paid ? "🟢" : "⚪"}
-                        </button>
-
-                        <span>
-                            ${new Date(i.date)
-                                .toLocaleDateString("fr-BE")}
-                        </span>
-
-                        <strong>
-                            ${money(i.amount)}
-                        </strong>
-
-                    </div>
-
-                `)
-                .join("")
-            }
-
-        </div>
-
-    `;
-
+function closeForm() {
+  document.getElementById("form").style.display = "none";
+  editingId = null;
 }
 
+function updateType() {
 
-/* =========================
-   PAIEMENT
-========================= */
+  const multiple =
+    document.getElementById("type").value === "multiple";
 
-function togglePaid(paymentId, itemId) {
-
-    const payment =
-        payments.find(
-            p => p.id === paymentId
-        );
-
-    if (!payment) return;
-
-
-    if (payment.mode === "single") {
-
-        const key =
-            monthKey(currentMonth);
-
-        if (!payment.paidMonths) {
-            payment.paidMonths = {};
-        }
-
-        payment.paidMonths[key] =
-            !payment.paidMonths[key];
-
-    }
-    else {
-
-        const installment =
-            payment.installments.find(
-                i => i.id === itemId
-            );
-
-        if (installment) {
-            installment.paid =
-                !installment.paid;
-        }
-
-    }
-
-
-    saveData();
-    render();
-
+  document.getElementById("multipleFields")
+    .classList.toggle("hidden", !multiple);
 }
-
-
-function toggleInstallment(
-    paymentId,
-    installmentId
-) {
-
-    const payment =
-        payments.find(
-            p => p.id === paymentId
-        );
-
-    if (!payment) return;
-
-
-    const installment =
-        payment.installments.find(
-            i => i.id === installmentId
-        );
-
-    if (!installment) return;
-
-
-    installment.paid =
-        !installment.paid;
-
-
-    saveData();
-    render();
-
-}
-
-
-/* =========================
-   MOIS
-========================= */
-
-function changeMonth(amount) {
-
-    currentMonth.setMonth(
-        currentMonth.getMonth() + amount
-    );
-
-    render();
-
-}
-
-
-/* =========================
-   FORMULAIRE
-========================= */
-
-function changeMode() {
-
-    const mode =
-        document.getElementById("mode").value;
-
-
-    document
-        .getElementById("singleFields")
-        .classList.toggle(
-            "hidden",
-            mode !== "single"
-        );
-
-
-    document
-        .getElementById("installmentFields")
-        .classList.toggle(
-            "hidden",
-            mode === "single"
-        );
-
-}
-
-
-function openAdd() {
-
-    editingId = null;
-
-    document.getElementById(
-        "formTitle"
-    ).textContent =
-        "Nouveau paiement";
-
-
-    document.getElementById("name").value = "";
-
-    document.getElementById("mode").value =
-        "single";
-
-    document.getElementById("amount").value = "";
-
-    document.getElementById("dueDate").value = 1;
-
-    document.getElementById("totalAmount").value = "";
-
-    document.getElementById("installmentCount").value = 3;
-
-    document.getElementById("firstDate").value =
-        new Date().toISOString().slice(0,10);
-
-    document.getElementById("beneficiary").value = "";
-
-    document.getElementById("iban").value = "";
-
-    document.getElementById("communication").value = "";
-
-
-    changeMode();
-
-    document.getElementById(
-        "paymentModal"
-    ).style.display = "flex";
-
-}
-
-
-function openEdit(id) {
-
-    const payment =
-        payments.find(
-            p => p.id === id
-        );
-
-    if (!payment) return;
-
-
-    editingId = id;
-
-
-    document.getElementById(
-        "formTitle"
-    ).textContent =
-        "Modifier le paiement";
-
-
-    document.getElementById("name").value =
-        payment.name;
-
-    document.getElementById("mode").value =
-        payment.mode;
-
-    document.getElementById("beneficiary").value =
-        payment.beneficiary || "";
-
-    document.getElementById("iban").value =
-        payment.iban || "";
-
-    document.getElementById("communication").value =
-        payment.communication || "";
-
-
-    if (payment.mode === "single") {
-
-        document.getElementById("amount").value =
-            payment.amount;
-
-        document.getElementById("dueDate").value =
-            payment.dueDate;
-
-    }
-    else {
-
-        document.getElementById("totalAmount").value =
-            payment.installments
-                .reduce(
-                    (s,i) => s + Number(i.amount),
-                    0
-                )
-                .toFixed(2);
-
-        document.getElementById(
-            "installmentCount"
-        ).value =
-            payment.installments.length;
-
-        document.getElementById(
-            "firstDate"
-        ).value =
-            payment.installments[0]?.date
-            || "";
-
-    }
-
-
-    changeMode();
-
-
-    document.getElementById(
-        "paymentModal"
-    ).style.display =
-        "flex";
-
-}
-
-
-function closeModal() {
-
-    document.getElementById(
-        "paymentModal"
-    ).style.display =
-        "none";
-
-    editingId = null;
-
-}
-
-
-/* =========================
-   SAUVEGARDE
-========================= */
 
 function savePayment() {
 
-    const name =
-        document.getElementById(
-            "name"
-        ).value.trim();
+  const name =
+    document.getElementById("name").value.trim();
 
+  const type =
+    document.getElementById("type").value;
 
-    if (!name) {
+  const amount =
+    parseFloat(document.getElementById("amount").value) || 0;
 
-        alert("Indique un nom.");
+  const day =
+    parseInt(document.getElementById("day").value) || 1;
 
-        return;
+  if (!name || !amount) {
+    alert("Veuillez remplir le nom et le montant.");
+    return;
+  }
 
-    }
+  const data = {
+    id: editingId || Date.now(),
+    name,
+    type,
+    amount,
+    day,
+    totalAmount:
+      parseFloat(document.getElementById("totalAmount").value) || 0,
+    installments:
+      parseInt(document.getElementById("installments").value) || 0,
+    firstDate:
+      document.getElementById("firstDate").value,
 
+    beneficiary:
+      document.getElementById("beneficiary").value.trim(),
 
-    const mode =
-        document.getElementById(
-            "mode"
-        ).value;
+    iban:
+      document.getElementById("iban").value.trim(),
 
+    communication:
+      document.getElementById("communication").value.trim(),
 
-    let payment;
+    paid: editingId
+      ? (payments.find(x => x.id === editingId)?.paid || {})
+      : {}
+  };
 
+  if (editingId) {
 
-    if (editingId) {
+    const index =
+      payments.findIndex(x => x.id === editingId);
 
-        payment =
-            payments.find(
-                p => p.id === editingId
-            );
+    payments[index] = data;
 
-    }
-    else {
+  } else {
 
-        payment = {
+    payments.push(data);
+  }
 
-            id: id(),
-
-            name: "",
-
-            mode: "single",
-
-            amount: 0,
-
-            dueDate: 1,
-
-            paidMonths: {},
-
-            installments: [],
-
-            beneficiary: "",
-
-            iban: "",
-
-            communication: ""
-
-        };
-
-    }
-
-
-    payment.name = name;
-
-    payment.mode = mode;
-
-    payment.beneficiary =
-        document.getElementById(
-            "beneficiary"
-        ).value.trim();
-
-    payment.iban =
-        document.getElementById(
-            "iban"
-        ).value
-        .replace(/\s/g,"")
-        .toUpperCase();
-
-    payment.communication =
-        document.getElementById(
-            "communication"
-        ).value.trim();
-
-
-    if (mode === "single") {
-
-        const amount =
-            parseFloat(
-                document.getElementById(
-                    "amount"
-                ).value
-                .replace(",",".")
-            );
-
-
-        if (!(amount > 0)) {
-
-            alert("Montant invalide.");
-
-            return;
-
-        }
-
-
-        payment.amount = amount;
-
-
-        payment.dueDate =
-            Math.min(
-                31,
-                Math.max(
-                    1,
-                    parseInt(
-                        document.getElementById(
-                            "dueDate"
-                        ).value
-                    ) || 1
-                )
-            );
-
-
-        if (!payment.paidMonths) {
-            payment.paidMonths = {};
-        }
-
-    }
-    else {
-
-        const total =
-            parseFloat(
-                document.getElementById(
-                    "totalAmount"
-                ).value
-                .replace(",",".")
-            );
-
-
-        const count =
-            Math.min(
-                60,
-                Math.max(
-                    2,
-                    parseInt(
-                        document.getElementById(
-                            "installmentCount"
-                        ).value
-                    ) || 2
-                )
-            );
-
-
-        if (!(total > 0)) {
-
-            alert("Montant total invalide.");
-
-            return;
-
-        }
-
-
-        const start =
-            new Date(
-                document.getElementById(
-                    "firstDate"
-                ).value
-                + "T12:00:00"
-            );
-
-
-        const amounts =
-            splitAmount(
-                total,
-                count
-            );
-
-
-        payment.installments =
-            amounts.map(
-                (amount,index) => {
-
-                    const date =
-                        new Date(start);
-
-                    date.setMonth(
-                        date.getMonth()
-                        + index
-                    );
-
-
-                    return {
-
-                        id:
-                            payment.installments[index]?.id
-                            || id(),
-
-                        date:
-                            date
-                            .toISOString()
-                            .slice(0,10),
-
-                        amount:
-                            amount,
-
-                        paid:
-                            payment.installments[index]?.paid
-                            || false
-
-                    };
-
-                }
-            );
-
-    }
-
-
-    if (!editingId) {
-        payments.push(payment);
-    }
-
-
-    saveData();
-
-    closeModal();
-
-    render();
-
+  saveData();
+  closeForm();
+  render();
 }
 
+function isPaid(payment) {
 
-/* =========================
-   SUPPRESSION
-========================= */
+  const key = monthKey();
+
+  return payment.paid &&
+    payment.paid[key] === true;
+}
+
+function togglePaid(id) {
+
+  const p = payments.find(x => x.id === id);
+
+  if (!p.paid) p.paid = {};
+
+  const key = monthKey();
+
+  p.paid[key] = !p.paid[key];
+
+  saveData();
+  render();
+}
 
 function deletePayment(id) {
 
-    if (
-        !confirm(
-            "Supprimer ce paiement ?"
-        )
-    ) {
-        return;
+  if (!confirm("Supprimer ce paiement ?")) return;
+
+  payments =
+    payments.filter(p => p.id !== id);
+
+  saveData();
+  render();
+}
+
+function payPayment(id) {
+
+  const p = payments.find(x => x.id === id);
+
+  let text =
+    "Bénéficiaire : " + (p.beneficiary || "") +
+    "\nIBAN : " + (p.iban || "") +
+    "\nCommunication : " + (p.communication || "") +
+    "\nMontant : " + euro(p.amount);
+
+  navigator.clipboard?.writeText(text);
+
+  alert(
+    "Informations du paiement copiées.\n\n" + text
+  );
+}
+
+function render() {
+
+  document.getElementById("monthTitle").textContent =
+    monthName();
+
+  const container =
+    document.getElementById("payments");
+
+  container.innerHTML = "";
+
+  let total = 0;
+  let paid = 0;
+
+  if (!payments.length) {
+
+    container.innerHTML =
+      '<div class="card empty">' +
+      'Aucun paiement enregistré.' +
+      '</div>';
+
+  }
+
+  payments.forEach(p => {
+
+    total += Number(p.amount);
+
+    if (isPaid(p)) {
+      paid += Number(p.amount);
     }
 
+    const div =
+      document.createElement("div");
 
-    payments =
-        payments.filter(
-            p => p.id !== id
-        );
+    div.className =
+      "payment" + (isPaid(p) ? " paid" : "");
 
+    div.innerHTML = `
 
-    saveData();
+      <div class="payment-title">
 
-    render();
+        <div>
+          <h3>${escapeHtml(p.name)}</h3>
 
+          <div class="info">
+            Échéance : ${p.day}
+          </div>
+        </div>
+
+        <div class="amount">
+          ${euro(p.amount)}
+        </div>
+
+      </div>
+
+      <div class="info">
+        ${isPaid(p)
+          ? '<span class="check">✓ Payé</span>'
+          : 'Non payé'}
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="secondary"
+          onclick="togglePaid(${p.id})">
+          ${isPaid(p) ? "Annuler payé" : "Marquer payé"}
+        </button>
+
+        <button
+          class="secondary"
+          onclick="payPayment(${p.id})">
+          Payer
+        </button>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="secondary"
+          onclick="openForm(${p.id})">
+          Modifier
+        </button>
+
+        <button
+          class="danger"
+          onclick="deletePayment(${p.id})">
+          Supprimer
+        </button>
+
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  document.getElementById("total").textContent =
+    euro(total);
+
+  document.getElementById("paid").textContent =
+    euro(paid);
+
+  document.getElementById("remaining").textContent =
+    euro(total - paid);
 }
 
+function escapeHtml(text) {
 
-/* =========================
-   BANQUE
-========================= */
-
-function showBank(
-    paymentId,
-    itemId
-) {
-
-    const payment =
-        payments.find(
-            p => p.id === paymentId
-        );
-
-    if (!payment) return;
-
-
-    const item =
-        getMonthPayments(payment)
-            .find(
-                x => x.id === itemId
-            );
-
-
-    if (!item) return;
-
-
-    const text =
-`Bénéficiaire : ${payment.beneficiary || payment.name}
-IBAN : ${payment.iban || "—"}
-Montant : ${money(item.amount)}
-Communication : ${payment.communication || "—"}`;
-
-
-    if (
-        navigator.clipboard
-    ) {
-
-        navigator.clipboard
-            .writeText(text);
-
-    }
-
-
-    alert(
-        text
-        + "\n\n"
-        + "Les informations ont été copiées."
-    );
-
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
-
-
-/* =========================
-   SÉCURITÉ
-========================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-let pin =
-    localStorage.getItem(PIN_KEY);
-
-
-if (!pin) {
-
-    let newPin =
-        prompt(
-            "Choisis un PIN à 4 chiffres"
-        );
-
-
-    if (
-        !/^\d{4}$/.test(
-            newPin || ""
-        )
-    ) {
-
-        newPin = "1234";
-
-        alert(
-            "PIN incorrect. PIN temporaire : 1234"
-        );
-
-    }
-
-
-    localStorage.setItem(
-        PIN_KEY,
-        newPin
-    );
-
-    pin = newPin;
-
-}
-
-
-let enteredPin = "";
-
-
-for (
-    let number = 1;
-    number <= 9;
-    number++
-) {
-
-    const button =
-        document.createElement("button");
-
-    button.textContent =
-        number;
-
-    button.onclick =
-        () => enterPin(
-            String(number)
-        );
-
-    document
-        .getElementById("pinPad")
-        .appendChild(button);
-
-}
-
-
-const back =
-    document.createElement("button");
-
-back.textContent = "⌫";
-
-back.onclick = () => {
-
-    enteredPin =
-        enteredPin.slice(0,-1);
-
-    updatePinDots();
-
-};
-
-
-document
-    .getElementById("pinPad")
-    .appendChild(back);
-
-
-const zero =
-    document.createElement("button");
-
-zero.textContent = "0";
-
-zero.className =
-    "pinZero";
-
-zero.onclick =
-    () => enterPin("0");
-
-
-document
-    .getElementById("pinPad")
-    .appendChild(zero);
-
-
-function enterPin(number) {
-
-    enteredPin += number;
-
-    updatePinDots();
-
-
-    if (enteredPin.length === 4) {
-
-        if (
-            enteredPin === pin
-        ) {
-
-            document
-                .getElementById(
-                    "pinScreen"
-                )
-                .style.display =
-                "none";
-
-        }
-        else {
-
-            document
-                .getElementById(
-                    "pinError"
-                )
-                .textContent =
-                "PIN incorrect";
-
-            enteredPin = "";
-
-            setTimeout(
-                updatePinDots,
-                300
-            );
-
-        }
-
-    }
-
-}
-
-
-function updatePinDots() {
-
-    document
-        .getElementById(
-            "pinDots"
-        )
-        .textContent =
-            [0,1,2,3]
-                .map(
-                    i =>
-                        i < enteredPin.length
-                        ? "●"
-                        : "○"
-                )
-                .join(" ");
-
-}
-
-
-/* =========================
-   DÉMARRAGE
-========================= */
-
-render();
 
 </script>
 
