@@ -3,1321 +3,1341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f5f5f7">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <title>Mes paiements</title>
+
 <style>
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
+
 body {
     margin: 0;
-    background: #f5f5f7;
-    color: #111;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #111827;
 }
-.app {
-    max-width: 680px;
-    margin: auto;
-    padding: 20px 15px 50px;
-}
-h1 {
+
+header {
+    background: #111827;
+    color: white;
+    padding: calc(18px + env(safe-area-inset-top)) 18px 18px;
     text-align: center;
-    margin: 10px 0 20px;
 }
-h2 {
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 15px;
+    padding-bottom: 40px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* PIN */
+
+#pinScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.pinBox {
+    background: white;
+    width: 100%;
+    max-width: 360px;
+    padding: 30px 22px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.12);
+    text-align: center;
+}
+
+.pinBox h2 {
     margin-top: 0;
 }
-.card {
-    background: white;
-    border-radius: 20px;
-    padding: 18px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+
+#pinInput {
+    width: 100%;
+    padding: 15px;
+    font-size: 22px;
+    text-align: center;
+    letter-spacing: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    margin: 15px 0;
 }
+
+button {
+    border: 0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary {
+    background: #111827;
+    color: white;
+}
+
+.green {
+    background: #16a34a;
+    color: white;
+}
+
+.blue {
+    background: #2563eb;
+    color: white;
+}
+
+.gray {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.red {
+    background: #dc2626;
+    color: white;
+}
+
+/* STATISTIQUES */
+
 .stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+    margin-bottom: 15px;
 }
+
 .stat {
-    background: #f2f2f7;
-    border-radius: 14px;
-    padding: 12px 5px;
+    background: white;
+    border-radius: 15px;
+    padding: 13px 6px;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
-.stat span {
+
+.stat small {
     display: block;
-    color: #666;
-    font-size: 13px;
+    color: #6b7280;
+    font-size: 11px;
 }
+
 .stat strong {
     display: block;
-    font-size: 18px;
-    margin-top: 5px;
-}
-.primary,
-.secondary,
-.danger {
-    border: 0;
-    border-radius: 13px;
-    padding: 13px;
+    margin-top: 4px;
     font-size: 16px;
-    cursor: pointer;
 }
-.primary {
-    width: 100%;
-    background: #007aff;
-    color: white;
+
+/* FORMULAIRE */
+
+.formCard {
+    background: white;
+    padding: 18px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
-.secondary {
-    background: #e5e5ea;
-    color: #111;
+
+.formCard h2 {
+    margin-top: 0;
+    font-size: 19px;
 }
-.danger {
-    background: #ff3b30;
-    color: white;
-}
+
 label {
     display: block;
-    margin-top: 13px;
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: #444;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
 }
+
 input,
 select {
     width: 100%;
-    padding: 13px;
-    border: 1px solid #d5d5d5;
-    border-radius: 12px;
-    background: white;
-    font-size: 16px;
-}
-#form {
-    display: none;
-}
-.hidden {
-    display: none !important;
-}
-/* Paiement */
-.payment {
-    background: white;
-    border-radius: 20px;
-    padding: 17px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
-}
-.payment-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-}
-.payment-title h3 {
-    margin: 0;
-    font-size: 19px;
-}
-.payment-total {
-    font-weight: 700;
-    white-space: nowrap;
-}
-.payment-info {
-    color: #666;
-    font-size: 14px;
-    margin-top: 7px;
-}
-/* Echéances */
-.installments {
-    margin-top: 15px;
-    border-top: 1px solid #eee;
-}
-.installment {
-    display: grid;
-    grid-template-columns: 32px 1fr auto 42px;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 0;
-    border-bottom: 1px solid #eee;
-}
-.installment:last-child {
-    border-bottom: 0;
-}
-.installment.paid {
-    opacity: .55;
-}
-.installment-checkbox {
-    width: 24px;
-    height: 24px;
-    margin: 0;
-    accent-color: #34c759;
-}
-.installment-main {
-    min-width: 0;
-}
-.installment-number {
-    font-weight: 700;
-}
-.installment-date {
-    color: #666;
-    font-size: 13px;
-    margin-top: 3px;
-}
-.installment-communication {
-    color: #666;
-    font-size: 13px;
-    margin-top: 3px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.installment-amount {
-    font-weight: 700;
-    white-space: nowrap;
-}
-.edit-installment {
-    width: 38px;
-    height: 38px;
-    padding: 0;
-    border: 0;
+    padding: 12px;
+    border: 1px solid #d1d5db;
     border-radius: 10px;
-    background: #e5e5ea;
-    font-size: 18px;
+    font-size: 16px;
+    background: white;
 }
-.installment-summary {
-    border-top: 1px solid #ddd;
-    margin-top: 5px;
-    padding-top: 12px;
-    font-size: 14px;
-    color: #666;
-}
-.payment-actions {
+
+.formButtons {
     display: flex;
     gap: 8px;
-    margin-top: 13px;
+    margin-top: 16px;
 }
-.payment-actions button {
+
+.formButtons button {
     flex: 1;
 }
-/* Aperçu */
-.preview {
-    background: #f2f2f7;
-    border-radius: 14px;
-    padding: 12px;
-    margin-top: 12px;
+
+/* PAIEMENTS */
+
+.paymentCard {
+    background: white;
+    border-radius: 18px;
+    margin-bottom: 14px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
 }
-.preview-row {
+
+.paymentHeader {
     display: flex;
     justify-content: space-between;
-    padding: 7px 0;
-    border-bottom: 1px solid #ddd;
+    gap: 10px;
+    align-items: flex-start;
 }
-.preview-row:last-child {
-    border-bottom: 0;
+
+.paymentTitle {
+    font-size: 18px;
+    font-weight: 700;
 }
-/* PIN */
-#login {
-    max-width: 400px;
-    margin: 80px auto;
-    padding: 15px;
+
+.paymentInfo {
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 13px;
 }
-.pin {
-    text-align: center;
-    font-size: 28px;
-    letter-spacing: 8px;
+
+.installmentList {
+    margin-top: 14px;
 }
-.error {
-    color: #ff3b30;
-    text-align: center;
+
+.installment {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 0;
 }
+
+.installmentTop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.check {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    cursor: pointer;
+}
+
+.installmentMain {
+    flex: 1;
+    min-width: 0;
+}
+
+.installmentTitle {
+    font-weight: 650;
+}
+
+.installmentDetails {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 3px;
+    word-break: break-word;
+}
+
+.installmentActions {
+    display: flex;
+    gap: 5px;
+}
+
+.iconButton {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    background: #f3f4f6;
+}
+
+.paid {
+    opacity: .65;
+}
+
+.paid .installmentTitle {
+    text-decoration: line-through;
+}
+
+/* MODAL */
+
+.modalBackground {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 22px 22px 0 0;
+    padding: 20px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modalButtons {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.modalButtons button {
+    flex: 1;
+}
+
+/* VIDE */
+
 .empty {
     text-align: center;
-    color: #777;
-    padding: 25px;
+    color: #6b7280;
+    padding: 30px 10px;
+}
+
+.error {
+    color: #dc2626;
+    margin-top: 8px;
+    font-size: 14px;
 }
 </style>
 </head>
+
 <body>
-<!-- ================= PIN ================= -->
-<div id="login">
-    <div class="card">
-        <h1>Mes paiements</h1>
-        <p style="text-align:center;">
-            Entrez votre code PIN
-        </p>
+
+<!-- ECRAN PIN -->
+
+<div id="pinScreen">
+    <div class="pinBox">
+        <h2>🔐 Mes paiements</h2>
+        <p>Entrez votre code PIN</p>
+
         <input
-            id="pin"
-            class="pin"
+            id="pinInput"
             type="password"
             inputmode="numeric"
             maxlength="4"
-            placeholder="••••"
+            autocomplete="off"
         >
-        <br><br>
-        <button class="primary" onclick="unlock()">
+
+        <button class="primary" id="pinButton">
             Ouvrir
         </button>
-        <p id="pinError" class="error"></p>
+
+        <div id="pinError" class="error"></div>
     </div>
 </div>
-<!-- ================= APPLICATION ================= -->
-<div id="app" class="app" style="display:none;">
-    <h1>Mes paiements</h1>
+
+
+<!-- APPLICATION -->
+
+<div id="app" class="hidden">
+
+<header>
+    <h1>💶 Mes paiements</h1>
+</header>
+
+<div class="container">
+
     <!-- STATISTIQUES -->
-    <div class="card">
-        <div class="stats">
-            <div class="stat">
-                <span>Total</span>
-                <strong id="total">0,00 €</strong>
-            </div>
-            <div class="stat">
-                <span>Payé</span>
-                <strong id="paid">0,00 €</strong>
-            </div>
-            <div class="stat">
-                <span>Reste</span>
-                <strong id="remaining">0,00 €</strong>
-            </div>
+
+    <div class="stats">
+        <div class="stat">
+            <small>Total</small>
+            <strong id="totalAmount">0,00 €</strong>
+        </div>
+
+        <div class="stat">
+            <small>Payé</small>
+            <strong id="paidAmount">0,00 €</strong>
+        </div>
+
+        <div class="stat">
+            <small>Reste à payer</small>
+            <strong id="remainingAmount">0,00 €</strong>
         </div>
     </div>
+
+
     <!-- AJOUT -->
-    <button class="primary" onclick="openForm()">
-        ＋ Ajouter un paiement
-    </button>
-    <br><br>
-    <!-- LISTE -->
-    <div id="payments"></div>
-    <!-- ================= FORMULAIRE ================= -->
-    <div id="form" class="card">
-        <h2 id="formTitle">
-            Ajouter un paiement
-        </h2>
-        <label>Nom du paiement</label>
-        <input
-            id="name"
-            type="text"
-            placeholder="Ex. Crédit voiture"
-        >
-        <label>Type de paiement</label>
-        <select id="type" onchange="updateType()">
-            <option value="monthly">
-                Paiement mensuel
-            </option>
-            <option value="multiple">
-                Paiement en plusieurs échéances
-            </option>
-        </select>
-        <!-- MENSUEL -->
-        <div id="monthlyFields">
-            <label>Montant mensuel</label>
-            <input
-                id="amount"
-                type="number"
-                step="0.01"
-                placeholder="0,00"
-            >
-            <label>Jour de paiement</label>
-            <input
-                id="day"
-                type="number"
-                min="1"
-                max="31"
-                placeholder="Ex. 15"
-            >
-        </div>
-        <!-- PLUSIEURS ECHEANCES -->
-        <div id="multipleFields" class="hidden">
-            <label>Montant total</label>
-            <input
-                id="totalAmount"
-                type="number"
-                step="0.01"
-                placeholder="Ex. 12000"
-                oninput="previewInstallments()"
-            >
-            <label>Nombre d'échéances</label>
-            <input
-                id="installments"
-                type="number"
-                min="1"
-                placeholder="Ex. 5"
-                oninput="previewInstallments()"
-            >
-            <label>Première date d'échéance</label>
-            <input
-                id="firstDate"
-                type="date"
-                onchange="previewInstallments()"
-            >
-            <div id="preview"></div>
-        </div>
-        <label>Bénéficiaire</label>
-        <input
-            id="beneficiary"
-            type="text"
-            placeholder="Nom du bénéficiaire"
-        >
+
+    <div class="formCard">
+
+        <h2>➕ Ajouter un paiement</h2>
+
+        <label>Nom / bénéficiaire</label>
+        <input id="beneficiary" type="text" placeholder="Ex. Assurance">
+
+        <label>Montant total</label>
+        <input id="totalInput" type="number" step="0.01" min="0" placeholder="Ex. 1200">
+
+        <label>Nombre d'échéances</label>
+        <input id="installmentsInput" type="number" min="1" value="1">
+
+        <label>Première date d'échéance</label>
+        <input id="firstDateInput" type="date">
+
         <label>Communication</label>
-        <input
-            id="communication"
-            type="text"
-            placeholder="Communication"
-        >
-        <br>
-        <button class="primary" onclick="savePayment()">
-            Enregistrer
-        </button>
-        <br><br>
-        <button
-            class="secondary"
-            style="width:100%;"
-            onclick="closeForm()"
-        >
-            Annuler
-        </button>
+        <input id="communicationInput" type="text" placeholder="Ex. Assurance voiture">
+
+        <div class="formButtons">
+            <button class="primary" id="addButton">
+                Ajouter
+            </button>
+        </div>
+
     </div>
+
+
+    <!-- LISTE -->
+
+    <div id="paymentsList"></div>
+
 </div>
+
+</div>
+
+
+<!-- MODIFICATION ECHEANCE -->
+
+<div id="editModalBackground" class="modalBackground hidden">
+
+    <div class="modal">
+
+        <h2>✏️ Modifier l'échéance</h2>
+
+        <label>Date d'échéance</label>
+        <input id="editDate" type="date">
+
+        <label>Montant</label>
+        <input id="editAmount" type="number" step="0.01" min="0">
+
+        <label>Communication</label>
+        <input id="editCommunication" type="text">
+
+        <div class="modalButtons">
+            <button class="gray" id="cancelEdit">
+                Annuler
+            </button>
+
+            <button class="primary" id="saveEdit">
+                Enregistrer
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
-/* =========================================================
-   CONFIGURATION
-========================================================= */
+
 const PIN = "1157";
-let payments =
-    JSON.parse(
-        localStorage.getItem("mesPaiements") || "[]"
+const STORAGE_KEY = "mesPaiements";
+
+let payments = [];
+let editingPaymentId = null;
+let editingInstallmentIndex = null;
+
+
+/* =========================
+   OUTILS
+========================= */
+
+function money(value) {
+    return Number(value || 0).toLocaleString("fr-BE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " €";
+}
+
+
+function generateId() {
+    return Date.now().toString() + Math.random().toString(36).substring(2, 8);
+}
+
+
+function formatDate(dateString) {
+
+    if (!dateString) return "";
+
+    const parts = dateString.split("-");
+
+    if (parts.length !== 3) return dateString;
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+
+function dateToUTC(dateString) {
+
+    const parts = dateString.split("-");
+
+    return new Date(
+        Number(parts[0]),
+        Number(parts[1]) - 1,
+        Number(parts[2])
     );
-let editingId = null;
-/* =========================================================
+}
+
+
+/*
+   Ajoute un mois sans provoquer le problème
+   du 31 janvier -> mars.
+*/
+
+function addMonthsClamped(dateString, months) {
+
+    const date = dateToUTC(dateString);
+
+    const originalDay = date.getDate();
+
+    const target = new Date(
+        date.getFullYear(),
+        date.getMonth() + months,
+        1
+    );
+
+    const lastDay = new Date(
+        target.getFullYear(),
+        target.getMonth() + 1,
+        0
+    ).getDate();
+
+    target.setDate(Math.min(originalDay, lastDay));
+
+    const y = target.getFullYear();
+    const m = String(target.getMonth() + 1).padStart(2, "0");
+    const d = String(target.getDate()).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+}
+
+
+/* =========================
    SAUVEGARDE
-========================================================= */
+========================= */
+
 function saveData() {
-    localStorage.setItem(
-        "mesPaiements",
-        JSON.stringify(payments)
-    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payments));
 }
-/* =========================================================
-   FORMAT EURO
-========================================================= */
-function euro(value) {
-    return Number(value || 0).toLocaleString(
-        "fr-BE",
-        {
-            style: "currency",
-            currency: "EUR"
+
+
+/* =========================
+   NORMALISATION
+========================= */
+
+function normalizeData() {
+
+    if (!Array.isArray(payments)) {
+        payments = [];
+    }
+
+    payments.forEach(payment => {
+
+        if (!payment.id) {
+            payment.id = generateId();
         }
-    );
-}
-/* =========================================================
-   FORMAT DATE
-========================================================= */
-function formatDate(date) {
-    if (!date) return "";
-    const d =
-        new Date(date + "T12:00:00");
-    return d.toLocaleDateString(
-        "fr-BE",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
+
+        if (!payment.type) {
+            payment.type = "multiple";
         }
-    );
-}
-/* =========================================================
-   PIN
-========================================================= */
-function unlock() {
-    const entered =
-        document.getElementById("pin").value;
-    if (entered === PIN) {
-        document.getElementById("login")
-            .style.display = "none";
-        document.getElementById("app")
-            .style.display = "block";
-        render();
-    } else {
-        document.getElementById("pinError")
-            .textContent =
-            "Code PIN incorrect";
-    }
-}
-/* =========================================================
-   TYPE DE PAIEMENT
-========================================================= */
-function updateType() {
-    const type =
-        document.getElementById("type").value;
-    const multiple =
-        type === "multiple";
-    document.getElementById("monthlyFields")
-        .classList.toggle(
-            "hidden",
-            multiple
-        );
-    document.getElementById("multipleFields")
-        .classList.toggle(
-            "hidden",
-            !multiple
-        );
-    if (multiple) {
-        previewInstallments();
-    }
-}
-/* =========================================================
-   OUVRIR FORMULAIRE
-========================================================= */
-function openForm(id = null) {
-    editingId = id;
-    document.getElementById("form")
-        .style.display = "block";
-    if (id === null) {
-        document.getElementById("formTitle")
-            .textContent =
-            "Ajouter un paiement";
-        clearForm();
-    } else {
-        const payment =
-            payments.find(
-                p => p.id === id
-            );
-        if (!payment) return;
-        document.getElementById("formTitle")
-            .textContent =
-            "Modifier le paiement";
-        document.getElementById("name")
-            .value =
-            payment.name || "";
-        document.getElementById("type")
-            .value =
-            payment.type || "monthly";
-        document.getElementById("beneficiary")
-            .value =
-            payment.beneficiary || "";
-        document.getElementById("communication")
-            .value =
-            payment.communication || "";
-        if (payment.type === "monthly") {
-            document.getElementById("amount")
-                .value =
-                payment.amount || "";
-            document.getElementById("day")
-                .value =
-                payment.day || "";
-        } else {
-            document.getElementById("totalAmount")
-                .value =
-                payment.totalAmount || "";
-            document.getElementById("installments")
-                .value =
-                payment.installments || "";
-            document.getElementById("firstDate")
-                .value =
-                payment.firstDate || "";
+
+        if (!payment.beneficiary) {
+            payment.beneficiary = "Paiement";
         }
-        updateType();
-    }
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
-    });
-}
-/* =========================================================
-   VIDER FORMULAIRE
-========================================================= */
-function clearForm() {
-    [
-        "name",
-        "amount",
-        "day",
-        "totalAmount",
-        "installments",
-        "firstDate",
-        "beneficiary",
-        "communication"
-    ].forEach(id => {
-        document.getElementById(id).value = "";
-    });
-    document.getElementById("type")
-        .value = "monthly";
-    updateType();
-}
-/* =========================================================
-   FERMER FORMULAIRE
-========================================================= */
-function closeForm() {
-    document.getElementById("form")
-        .style.display = "none";
-    editingId = null;
-}
-/* =========================================================
-   CALCUL DES ECHEANCES
-========================================================= */
-function calculateInstallments() {
-    const total =
-        parseFloat(
-            document.getElementById("totalAmount").value
-        ) || 0;
-    const count =
-        parseInt(
-            document.getElementById("installments").value
-        ) || 0;
-    const firstDate =
-        document.getElementById("firstDate").value;
-    const communication =
-        document.getElementById("communication").value
-        .trim();
-    if (
-        total <= 0 ||
-        count <= 0 ||
-        !firstDate
-    ) {
-        return [];
-    }
-    /*
-       Calcul en centimes pour éviter
-       les problèmes d'arrondi.
-    */
-    const totalCents =
-        Math.round(total * 100);
-    const base =
-        Math.floor(totalCents / count);
-    const difference =
-        totalCents - (base * count);
-    const result = [];
-    for (let i = 0; i < count; i++) {
-        const date =
-            new Date(
-                firstDate + "T12:00:00"
-            );
-        date.setMonth(
-            date.getMonth() + i
-        );
-        const dateString =
-            date.getFullYear() +
-            "-" +
-            String(
-                date.getMonth() + 1
-            ).padStart(2, "0") +
-            "-" +
-            String(
-                date.getDate()
-            ).padStart(2, "0");
-        /*
-           La différence éventuelle de centimes
-           est ajoutée à la dernière échéance.
-        */
-        const cents =
-            base +
-            (
-                i === count - 1
-                ? difference
-                : 0
-            );
-        result.push({
-            number: i + 1,
-            amount:
-                cents / 100,
-            date:
-                dateString,
-            communication:
-                communication,
-            paid:
-                false
-        });
-    }
-    return result;
-}
-/* =========================================================
-   APERCU ECHEANCES
-========================================================= */
-function previewInstallments() {
-    const preview =
-        document.getElementById("preview");
-    const list =
-        calculateInstallments();
-    if (!list.length) {
-        preview.innerHTML = "";
-        return;
-    }
-    let html =
-        '<div class="preview">' +
-        "<strong>Échéances générées</strong>";
-    list.forEach(item => {
-        html += `
-            <div class="preview-row">
-                <span>
-                    ${item.number}/${list.length}
-                    <br>
-                    <small>
-                        ${formatDate(item.date)}
-                    </small>
-                </span>
-                <strong>
-                    ${euro(item.amount)}
-                </strong>
-            </div>
-        `;
-    });
-    html += "</div>";
-    preview.innerHTML = html;
-}
-/* =========================================================
-   ENREGISTRER
-========================================================= */
-function savePayment() {
-    const name =
-        document.getElementById("name")
-            .value.trim();
-    const type =
-        document.getElementById("type")
-            .value;
-    const beneficiary =
-        document.getElementById("beneficiary")
-            .value.trim();
-    const communication =
-        document.getElementById("communication")
-            .value.trim();
-    if (!name) {
-        alert(
-            "Veuillez entrer le nom du paiement."
-        );
-        return;
-    }
-    /* ================= MENSUEL ================= */
-    if (type === "monthly") {
-        const amount =
-            parseFloat(
-                document.getElementById("amount").value
-            ) || 0;
-        const day =
-            parseInt(
-                document.getElementById("day").value
-            ) || 1;
-        if (amount <= 0) {
-            alert(
-                "Veuillez entrer un montant."
-            );
-            return;
-        }
-        const old =
-            editingId !== null
-            ? payments.find(
-                p => p.id === editingId
-            )
-            : null;
-        const payment = {
-            id:
-                editingId !== null
-                ? editingId
-                : Date.now(),
-            name:
-                name,
-            type:
-                "monthly",
-            amount:
-                amount,
-            day:
-                day,
-            beneficiary:
-                beneficiary,
-            communication:
-                communication,
-            paid:
-                old?.paid || {}
-        };
-        if (editingId !== null) {
-            const index =
-                payments.findIndex(
-                    p => p.id === editingId
+
+        if (payment.type === "multiple") {
+
+            if (!Array.isArray(payment.installmentsList)) {
+
+                const count = Math.max(
+                    1,
+                    Number(payment.installments || 1)
                 );
-            payments[index] = payment;
-        } else {
-            payments.push(payment);
-        }
-    }
-    /* ================= ECHEANCES ================= */
-    else {
-        const total =
-            parseFloat(
-                document.getElementById("totalAmount")
-                    .value
-            ) || 0;
-        const count =
-            parseInt(
-                document.getElementById("installments")
-                    .value
-            ) || 0;
-        const firstDate =
-            document.getElementById("firstDate")
-                .value;
-        if (
-            total <= 0 ||
-            count <= 0 ||
-            !firstDate
-        ) {
-            alert(
-                "Veuillez remplir le montant total, le nombre d'échéances et la date."
-            );
-            return;
-        }
-        const old =
-            editingId !== null
-            ? payments.find(
-                p => p.id === editingId
-            )
-            : null;
-        let list =
-            calculateInstallments();
-        /*
-           Si on modifie un paiement existant,
-           on conserve les échéances déjà payées
-           et leurs communications.
-        */
-        if (old?.installmentsList) {
-            list.forEach(
-                (item, index) => {
-                    const previous =
-                        old.installmentsList[index];
-                    if (previous) {
-                        item.paid =
-                            previous.paid === true;
-                        if (
-                            previous.communication !== undefined
-                        ) {
-                            item.communication =
-                                previous.communication;
-                        }
+
+                const total = Number(payment.totalAmount || 0);
+                const base = Math.floor((total / count) * 100) / 100;
+
+                payment.installmentsList = [];
+
+                let accumulated = 0;
+
+                for (let i = 0; i < count; i++) {
+
+                    let amount;
+
+                    if (i === count - 1) {
+                        amount = Math.round((total - accumulated) * 100) / 100;
+                    } else {
+                        amount = base;
                     }
+
+                    accumulated += amount;
+
+                    payment.installmentsList.push({
+                        number: i + 1,
+                        amount: amount,
+                        date: addMonthsClamped(
+                            payment.firstDate ||
+                            new Date().toISOString().substring(0, 10),
+                            i
+                        ),
+                        communication: payment.communication || "",
+                        paid: false
+                    });
                 }
-            );
-        }
-        const payment = {
-            id:
-                editingId !== null
-                ? editingId
-                : Date.now(),
-            name:
-                name,
-            type:
-                "multiple",
-            totalAmount:
-                total,
-            installments:
-                count,
-            firstDate:
-                firstDate,
-            beneficiary:
-                beneficiary,
-            communication:
-                communication,
-            installmentsList:
-                list
-        };
-        if (editingId !== null) {
-            const index =
-                payments.findIndex(
-                    p => p.id === editingId
+            }
+
+            payment.installmentsList.forEach((item, index) => {
+
+                item.number = index + 1;
+
+                item.amount = Number(item.amount || 0);
+
+                item.date = item.date ||
+                    addMonthsClamped(
+                        payment.firstDate ||
+                        new Date().toISOString().substring(0, 10),
+                        index
+                    );
+
+                item.communication =
+                    item.communication ??
+                    payment.communication ??
+                    "";
+
+                item.paid = item.paid === true;
+            });
+
+            payment.totalAmount =
+                payment.installmentsList.reduce(
+                    (sum, item) => sum + Number(item.amount || 0),
+                    0
                 );
-            payments[index] = payment;
-        } else {
-            payments.push(payment);
         }
-    }
-    saveData();
-    closeForm();
-    render();
+    });
 }
-/* =========================================================
-   AFFICHAGE PRINCIPAL
-========================================================= */
+
+
+/* =========================
+   CHARGEMENT
+========================= */
+
+function loadData() {
+
+    try {
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        payments = saved ? JSON.parse(saved) : [];
+
+        normalizeData();
+
+        saveData();
+
+    } catch (error) {
+
+        console.error(error);
+        payments = [];
+
+    }
+}
+
+
+/* =========================
+   AFFICHAGE
+========================= */
+
 function render() {
-    const container =
-        document.getElementById("payments");
-    container.innerHTML = "";
-    /*
-       IMPORTANT :
-       On calcule ici les trois montants
-       sur l'ensemble des paiements.
-    */
+
+    const list = document.getElementById("paymentsList");
+
+    list.innerHTML = "";
+
     let total = 0;
     let paid = 0;
+
+    if (payments.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                Aucun paiement pour le moment.<br>
+                Ajoutez votre premier paiement ci-dessus.
+            </div>
+        `;
+
+    }
+
+
     payments.forEach(payment => {
-        /* ---------- MENSUEL ---------- */
-        if (payment.type === "monthly") {
-            /*
-               Pour un paiement mensuel,
-               on affiche le montant comme
-               montant prévu.
-            */
-            total +=
-                Number(payment.amount) || 0;
-            /*
-               On utilise le mois actuel
-               pour déterminer s'il est payé.
-            */
-            const key =
-                getCurrentMonthKey();
-            if (
-                payment.paid &&
-                payment.paid[key] === true
-            ) {
-                paid +=
-                    Number(payment.amount) || 0;
+
+        if (payment.type !== "multiple") {
+            return;
+        }
+
+        const card = document.createElement("div");
+        card.className = "paymentCard";
+
+        const installments =
+            payment.installmentsList || [];
+
+        let paymentTotal = 0;
+        let paymentPaid = 0;
+
+        installments.forEach(item => {
+
+            const amount = Number(item.amount || 0);
+
+            paymentTotal += amount;
+
+            if (item.paid) {
+                paymentPaid += amount;
             }
-            container.appendChild(
-                createMonthlyCard(payment)
-            );
-        }
-        /* ---------- ECHEANCES ---------- */
-        else {
-            const list =
-                payment.installmentsList || [];
-            /*
-               TOUTES les échéances sont affichées.
-               Elles ne sont plus filtrées par mois.
-            */
-            list.forEach(item => {
-                total +=
-                    Number(item.amount) || 0;
-                if (item.paid === true) {
-                    paid +=
-                        Number(item.amount) || 0;
-                }
-            });
-            container.appendChild(
-                createMultipleCard(payment)
-            );
-        }
-    });
-    const remaining =
-        Math.max(0, total - paid);
-    document.getElementById("total")
-        .textContent =
-        euro(total);
-    document.getElementById("paid")
-        .textContent =
-        euro(paid);
-    document.getElementById("remaining")
-        .textContent =
-        euro(remaining);
-    if (!payments.length) {
-        container.innerHTML =
-            '<div class="card empty">' +
-            "Aucun paiement enregistré." +
-            "</div>";
-    }
-}
-/* =========================================================
-   MOIS ACTUEL
-========================================================= */
-function getCurrentMonthKey() {
-    const d = new Date();
-    return d.getFullYear() +
-        "-" +
-        String(
-            d.getMonth() + 1
-        ).padStart(2, "0");
-}
-/* =========================================================
-   CARTE MENSUELLE
-========================================================= */
-function createMonthlyCard(payment) {
-    const div =
-        document.createElement("div");
-    div.className = "payment";
-    const key =
-        getCurrentMonthKey();
-    const isPaid =
-        payment.paid &&
-        payment.paid[key] === true;
-    if (isPaid) {
-        div.classList.add("paid");
-    }
-    div.innerHTML = `
-        <div class="payment-title">
-            <div>
-                <h3>
-                    ${escapeHtml(payment.name)}
-                </h3>
-                <div class="payment-info">
-                    Paiement mensuel —
-                    le ${payment.day}
+        });
+
+        total += paymentTotal;
+        paid += paymentPaid;
+
+
+        card.innerHTML = `
+            <div class="paymentHeader">
+
+                <div>
+                    <div class="paymentTitle">
+                        ${escapeHtml(payment.beneficiary)}
+                    </div>
+
+                    <div class="paymentInfo">
+                        ${installments.length}
+                        échéance${installments.length > 1 ? "s" : ""}
+                        · Total ${money(paymentTotal)}
+                    </div>
                 </div>
+
             </div>
-            <div class="payment-total">
-                ${euro(payment.amount)}
-            </div>
-        </div>
-        ${
-            payment.beneficiary
-            ? `
-                <div class="payment-info">
-                    Bénéficiaire :
-                    ${escapeHtml(payment.beneficiary)}
-                </div>
-            `
-            : ""
-        }
-        ${
-            payment.communication
-            ? `
-                <div class="payment-info">
-                    Communication :
-                    ${escapeHtml(payment.communication)}
-                </div>
-            `
-            : ""
-        }
-        <div class="payment-actions">
-            <button
-                class="secondary"
-                onclick="
-                    toggleMonthlyPaid(${payment.id})
-                "
-            >
-                ${
-                    isPaid
-                    ? "☑ Payé"
-                    : "☐ Marquer payé"
-                }
-            </button>
-        </div>
-        <div class="payment-actions">
-            <button
-                class="secondary"
-                onclick="
-                    openForm(${payment.id})
-                "
-            >
-                ✏️ Modifier
-            </button>
-            <button
-                class="danger"
-                onclick="
-                    deletePayment(${payment.id})
-                "
-            >
-                Supprimer
-            </button>
-        </div>
-    `;
-    return div;
-}
-/* =========================================================
-   CARTE AVEC ECHEANCES
-========================================================= */
-function createMultipleCard(payment) {
-    const div =
-        document.createElement("div");
-    div.className = "payment";
-    let html = `
-        <div class="payment-title">
-            <div>
-                <h3>
-                    ${escapeHtml(payment.name)}
-                </h3>
-                <div class="payment-info">
-                    ${payment.installments}
-                    échéances
-                </div>
-            </div>
-            <div class="payment-total">
-                ${euro(payment.totalAmount)}
-            </div>
-        </div>
-        ${
-            payment.beneficiary
-            ? `
-                <div class="payment-info">
-                    Bénéficiaire :
-                    ${escapeHtml(payment.beneficiary)}
-                </div>
-            `
-            : ""
-        }
-        <div class="installments">
-    `;
-    const list =
-        payment.installmentsList || [];
-    list.forEach(
-        (item, index) => {
-            html += `
-                <div
-                    class="installment
-                    ${item.paid ? "paid" : ""}"
-                >
+
+            <div class="installmentList"></div>
+        `;
+
+        const installmentList =
+            card.querySelector(".installmentList");
+
+
+        installments.forEach((item, index) => {
+
+            const row = document.createElement("div");
+
+            row.className =
+                "installment" +
+                (item.paid ? " paid" : "");
+
+
+            row.innerHTML = `
+
+                <div class="installmentTop">
+
                     <input
-                        class="installment-checkbox"
+                        class="check"
                         type="checkbox"
-                        ${
-                            item.paid
-                            ? "checked"
-                            : ""
-                        }
-                        onchange="
-                            toggleInstallment(
-                                ${payment.id},
-                                ${index}
-                            )
-                        "
+                        ${item.paid ? "checked" : ""}
+                        data-payment-id="${payment.id}"
+                        data-index="${index}"
                     >
-                    <div class="installment-main">
-                        <div class="installment-number">
-                            ${
-                                item.paid
-                                ? "✓ "
-                                : ""
-                            }
-                            Échéance
-                            ${item.number}/${payment.installments}
+
+                    <div class="installmentMain">
+
+                        <div class="installmentTitle">
+                            Échéance ${index + 1}
+                            · ${money(item.amount)}
                         </div>
-                        <div class="installment-date">
-                            📅
-                            ${formatDate(item.date)}
+
+                        <div class="installmentDetails">
+                            📅 ${formatDate(item.date)}
+                            ${item.communication
+                                ? " · " + escapeHtml(item.communication)
+                                : ""}
                         </div>
-                        <div
-                            class="installment-communication"
+
+                    </div>
+
+                    <div class="installmentActions">
+
+                        <button
+                            class="iconButton editButton"
+                            title="Modifier"
+                            data-payment-id="${payment.id}"
+                            data-index="${index}"
                         >
-                            💬
-                            ${
-                                escapeHtml(
-                                    item.communication ||
-                                    "Aucune communication"
-                                )
-                            }
-                        </div>
+                            ✏️
+                        </button>
+
+                        <button
+                            class="iconButton calendarButton"
+                            title="Ajouter à Google Agenda"
+                            data-payment-id="${payment.id}"
+                            data-index="${index}"
+                        >
+                            📅
+                        </button>
+
                     </div>
-                    <div class="installment-amount">
-                        ${euro(item.amount)}
-                    </div>
-                    <button
-                        class="edit-installment"
-                        title="Modifier cette échéance"
-                        onclick="
-                            editInstallment(
-                                ${payment.id},
-                                ${index}
-                            )
-                        "
-                    >
-                        ✏️
-                    </button>
+
                 </div>
             `;
-        }
-    );
-    const paidList =
-        list.filter(
-            item => item.paid === true
-        );
-    const paidAmount =
-        paidList.reduce(
-            (sum, item) =>
-                sum + Number(item.amount || 0),
-            0
-        );
-    html += `
-        </div>
-        <div class="installment-summary">
-            <strong>
-                ${paidList.length}/${list.length}
-                échéances payées
-            </strong>
-            <br>
-            ${euro(paidAmount)}
-            payé sur
-            ${euro(payment.totalAmount)}
-        </div>
-        <div class="payment-actions">
-            <button
-                class="secondary"
-                onclick="
-                    openForm(${payment.id})
-                "
-            >
-                ✏️ Modifier le paiement
-            </button>
-            <button
-                class="danger"
-                onclick="
-                    deletePayment(${payment.id})
-                "
-            >
-                Supprimer
-            </button>
-        </div>
-    `;
-    div.innerHTML = html;
-    return div;
+
+            installmentList.appendChild(row);
+        });
+
+
+        list.appendChild(card);
+    });
+
+
+    document.getElementById("totalAmount").textContent =
+        money(total);
+
+    document.getElementById("paidAmount").textContent =
+        money(paid);
+
+    document.getElementById("remainingAmount").textContent =
+        money(Math.max(0, total - paid));
+
+
+    attachEvents();
 }
-/* =========================================================
-   COCHER UNE ECHEANCE
-========================================================= */
-function toggleInstallment(
-    paymentId,
-    installmentIndex
-) {
-    const payment =
-        payments.find(
-            p => p.id === paymentId
-        );
-    if (!payment) return;
-    if (
-        !payment.installmentsList ||
-        !payment.installmentsList[installmentIndex]
-    ) {
-        return;
-    }
-    /*
-       IMPORTANT :
-       On modifie uniquement l'échéance
-       sélectionnée.
-    */
-    payment.installmentsList[
-        installmentIndex
-    ].paid =
-        !payment.installmentsList[
-            installmentIndex
-        ].paid;
-    saveData();
-    render();
-}
-/* =========================================================
-   MODIFIER UNE ECHEANCE
-========================================================= */
-function editInstallment(
-    paymentId,
-    installmentIndex
-) {
-    const payment =
-        payments.find(
-            p => p.id === paymentId
-        );
-    if (!payment) return;
-    const item =
-        payment.installmentsList[
-            installmentIndex
-        ];
-    if (!item) return;
-    /* DATE */
-    const newDate =
-        prompt(
-            "Date de l'échéance (AAAA-MM-JJ)",
-            item.date
-        );
-    if (newDate === null) return;
-    if (
-        !/^\d{4}-\d{2}-\d{2}$/.test(
-            newDate
-        )
-    ) {
-        alert(
-            "Format de date incorrect.\n\nUtilisez AAAA-MM-JJ."
-        );
-        return;
-    }
-    /* MONTANT */
-    const newAmount =
-        prompt(
-            "Montant de cette échéance (€)",
-            String(item.amount)
-                .replace(".", ",")
-        );
-    if (newAmount === null) return;
-    const amount =
-        parseFloat(
-            newAmount.replace(",", ".")
-        );
-    if (
-        isNaN(amount) ||
-        amount < 0
-    ) {
-        alert(
-            "Montant incorrect."
-        );
-        return;
-    }
-    /* COMMUNICATION */
-    const newCommunication =
-        prompt(
-            "Communication de cette échéance",
-            item.communication || ""
-        );
-    if (newCommunication === null) return;
-    /* SAUVEGARDE */
-    item.date =
-        newDate;
-    item.amount =
-        Math.round(amount * 100) / 100;
-    item.communication =
-        newCommunication;
-    /*
-       Le statut payé n'est PAS modifié.
-    */
-    saveData();
-    render();
-}
-/* =========================================================
-   PAIEMENT MENSUEL
-========================================================= */
-function toggleMonthlyPaid(id) {
-    const payment =
-        payments.find(
-            p => p.id === id
-        );
-    if (!payment) return;
-    if (!payment.paid) {
-        payment.paid = {};
-    }
-    const key =
-        getCurrentMonthKey();
-    payment.paid[key] =
-        !payment.paid[key];
-    saveData();
-    render();
-}
-/* =========================================================
-   SUPPRIMER
-========================================================= */
-function deletePayment(id) {
-    const confirmed =
-        confirm(
-            "Supprimer ce paiement et toutes ses échéances ?"
-        );
-    if (!confirmed) return;
-    payments =
-        payments.filter(
-            p => p.id !== id
-        );
-    saveData();
-    render();
-}
-/* =========================================================
-   SECURITE AFFICHAGE
-========================================================= */
-function escapeHtml(text) {
-    return String(text || "")
+
+
+/* =========================
+   PROTECTION HTML
+========================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 }
-/* =========================================================
-   TOUCHE ENTREE DU PIN
-========================================================= */
-document.getElementById("pin")
-    .addEventListener(
-        "keydown",
-        function(event) {
-            if (event.key === "Enter") {
-                unlock();
-            }
+
+
+/* =========================
+   EVENEMENTS
+========================= */
+
+function attachEvents() {
+
+    document.querySelectorAll(".check")
+        .forEach(check => {
+
+            check.addEventListener("change", function() {
+
+                const paymentId =
+                    this.dataset.paymentId;
+
+                const index =
+                    Number(this.dataset.index);
+
+                const payment =
+                    payments.find(
+                        p => p.id === paymentId
+                    );
+
+                if (!payment) return;
+
+                const item =
+                    payment.installmentsList[index];
+
+                if (!item) return;
+
+                item.paid = this.checked;
+
+                saveData();
+
+                render();
+            });
+        });
+
+
+    document.querySelectorAll(".editButton")
+        .forEach(button => {
+
+            button.addEventListener("click", function() {
+
+                openEdit(
+                    this.dataset.paymentId,
+                    Number(this.dataset.index)
+                );
+            });
+        });
+
+
+    document.querySelectorAll(".calendarButton")
+        .forEach(button => {
+
+            button.addEventListener("click", function() {
+
+                addToGoogleCalendar(
+                    this.dataset.paymentId,
+                    Number(this.dataset.index)
+                );
+            });
+        });
+}
+
+
+/* =========================
+   AJOUT PAIEMENT
+========================= */
+
+document.getElementById("addButton")
+    .addEventListener("click", addPayment);
+
+
+function addPayment() {
+
+    const beneficiary =
+        document.getElementById("beneficiary")
+        .value.trim();
+
+    const total =
+        Number(
+            document.getElementById("totalInput").value
+        );
+
+    const count =
+        Number(
+            document.getElementById("installmentsInput").value
+        );
+
+    const firstDate =
+        document.getElementById("firstDateInput").value;
+
+    const communication =
+        document.getElementById("communicationInput")
+        .value.trim();
+
+
+    if (!beneficiary) {
+        alert("Veuillez indiquer le bénéficiaire.");
+        return;
+    }
+
+    if (!total || total <= 0) {
+        alert("Veuillez indiquer un montant valide.");
+        return;
+    }
+
+    if (!count || count < 1) {
+        alert("Veuillez indiquer le nombre d'échéances.");
+        return;
+    }
+
+    if (!firstDate) {
+        alert("Veuillez choisir la première date.");
+        return;
+    }
+
+
+    const totalCents =
+        Math.round(total * 100);
+
+    const baseCents =
+        Math.floor(totalCents / count);
+
+    const remainder =
+        totalCents - (baseCents * count);
+
+
+    const installmentsList = [];
+
+
+    for (let i = 0; i < count; i++) {
+
+        const cents =
+            baseCents +
+            (i === count - 1 ? remainder : 0);
+
+        installmentsList.push({
+
+            number: i + 1,
+
+            amount: cents / 100,
+
+            date:
+                addMonthsClamped(
+                    firstDate,
+                    i
+                ),
+
+            communication:
+                communication,
+
+            paid: false
+        });
+    }
+
+
+    payments.push({
+
+        id: generateId(),
+
+        type: "multiple",
+
+        beneficiary: beneficiary,
+
+        totalAmount: total,
+
+        installments: count,
+
+        firstDate: firstDate,
+
+        communication: communication,
+
+        installmentsList: installmentsList
+    });
+
+
+    saveData();
+
+    render();
+
+
+    document.getElementById("beneficiary").value = "";
+    document.getElementById("totalInput").value = "";
+    document.getElementById("installmentsInput").value = "1";
+    document.getElementById("firstDateInput").value = "";
+    document.getElementById("communicationInput").value = "";
+}
+
+
+/* =========================
+   MODIFICATION
+========================= */
+
+function openEdit(paymentId, index) {
+
+    const payment =
+        payments.find(
+            p => p.id === paymentId
+        );
+
+    if (!payment) return;
+
+    const item =
+        payment.installmentsList[index];
+
+    if (!item) return;
+
+
+    editingPaymentId = paymentId;
+    editingInstallmentIndex = index;
+
+
+    document.getElementById("editDate").value =
+        item.date || "";
+
+    document.getElementById("editAmount").value =
+        Number(item.amount || 0).toFixed(2);
+
+    document.getElementById("editCommunication").value =
+        item.communication || "";
+
+
+    document
+        .getElementById("editModalBackground")
+        .classList.remove("hidden");
+}
+
+
+document.getElementById("cancelEdit")
+    .addEventListener("click", closeEdit);
+
+
+document.getElementById("editModalBackground")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+            closeEdit();
         }
-    );
+    });
+
+
+function closeEdit() {
+
+    document
+        .getElementById("editModalBackground")
+        .classList.add("hidden");
+
+    editingPaymentId = null;
+    editingInstallmentIndex = null;
+}
+
+
+document.getElementById("saveEdit")
+    .addEventListener("click", saveEdit);
+
+
+function saveEdit() {
+
+    if (
+        editingPaymentId === null ||
+        editingInstallmentIndex === null
+    ) {
+        return;
+    }
+
+
+    const payment =
+        payments.find(
+            p => p.id === editingPaymentId
+        );
+
+    if (!payment) return;
+
+
+    const item =
+        payment.installmentsList[
+            editingInstallmentIndex
+        ];
+
+    if (!item) return;
+
+
+    const date =
+        document.getElementById("editDate").value;
+
+    const amount =
+        Number(
+            document.getElementById("editAmount").value
+        );
+
+    const communication =
+        document
+            .getElementById("editCommunication")
+            .value.trim();
+
+
+    if (!date) {
+        alert("Veuillez choisir une date.");
+        return;
+    }
+
+    if (isNaN(amount) || amount < 0) {
+        alert("Veuillez indiquer un montant valide.");
+        return;
+    }
+
+
+    /*
+       On ne touche PAS à item.paid.
+       La case payé reste donc indépendante.
+    */
+
+    item.date = date;
+    item.amount = Math.round(amount * 100) / 100;
+    item.communication = communication;
+
+
+    /*
+       Recalcul du total du paiement après modification.
+    */
+
+    payment.totalAmount =
+        payment.installmentsList.reduce(
+            (sum, installment) =>
+                sum + Number(installment.amount || 0),
+            0
+        );
+
+
+    saveData();
+
+    closeEdit();
+
+    render();
+}
+
+
+/* =========================
+   GOOGLE AGENDA
+========================= */
+
+function addToGoogleCalendar(paymentId, index) {
+
+    const payment =
+        payments.find(
+            p => p.id === paymentId
+        );
+
+    if (!payment) return;
+
+
+    const item =
+        payment.installmentsList[index];
+
+    if (!item) return;
+
+
+    const title =
+        `Paiement - ${payment.beneficiary} - Échéance ${index + 1}`;
+
+
+    const communication =
+        item.communication || "";
+
+
+    /*
+       Google Calendar utilise :
+       YYYYMMDD
+       ou YYYYMMDDTHHMMSS
+    */
+
+    const date =
+        item.date.replaceAll("-", "");
+
+
+    /*
+       Événement de 30 minutes à 09:00.
+       L'utilisateur pourra ensuite modifier l'heure
+       directement dans Google Agenda.
+    */
+
+    const start =
+        `${date}T090000`;
+
+    const endDate =
+        getNextDay(item.date);
+
+    const end =
+        `${endDate}T090000`;
+
+
+    const details =
+        `Montant : ${Number(item.amount).toFixed(2)} €` +
+        (communication
+            ? `\nCommunication : ${communication}`
+            : "");
+
+
+    const url =
+        "https://calendar.google.com/calendar/render" +
+        "?action=TEMPLATE" +
+        "&text=" + encodeURIComponent(title) +
+        "&dates=" + encodeURIComponent(`${start}/${end}`) +
+        "&details=" + encodeURIComponent(details);
+
+
+    window.open(url, "_blank");
+}
+
+
+function getNextDay(dateString) {
+
+    const date =
+        dateToUTC(dateString);
+
+    date.setDate(date.getDate() + 1);
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(date.getMonth() + 1).padStart(2, "0");
+
+    const d =
+        String(date.getDate()).padStart(2, "0");
+
+    return `${y}${m}${d}`;
+}
+
+
+/* =========================
+   PIN
+========================= */
+
+document.getElementById("pinButton")
+    .addEventListener("click", checkPin);
+
+
+document.getElementById("pinInput")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+            checkPin();
+        }
+    });
+
+
+function checkPin() {
+
+    const entered =
+        document.getElementById("pinInput").value;
+
+    if (entered === PIN) {
+
+        document
+            .getElementById("pinScreen")
+            .classList.add("hidden");
+
+        document
+            .getElementById("app")
+            .classList.remove("hidden");
+
+        loadData();
+        render();
+
+    } else {
+
+        document.getElementById("pinError")
+            .textContent =
+            "Code PIN incorrect.";
+
+        document.getElementById("pinInput")
+            .value = "";
+
+        document.getElementById("pinInput")
+            .focus();
+    }
+}
+
+
+/* =========================
+   INITIALISATION
+========================= */
+
+document.getElementById("pinInput").focus();
+
 </script>
+
 </body>
 </html>
