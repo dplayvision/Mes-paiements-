@@ -38,11 +38,45 @@ header h1 {
     max-width: 700px;
     margin: auto;
     padding: 15px;
-    padding-bottom: 40px;
+    padding-bottom: 50px;
 }
 
 .hidden {
     display: none !important;
+}
+
+button {
+    border: 0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary {
+    background: #111827;
+    color: white;
+}
+
+.green {
+    background: #16a34a;
+    color: white;
+}
+
+.blue {
+    background: #2563eb;
+    color: white;
+}
+
+.gray {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.red {
+    background: #dc2626;
+    color: white;
 }
 
 /* PIN */
@@ -80,41 +114,26 @@ header h1 {
     margin: 15px 0;
 }
 
-button {
-    border: 0;
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+.error {
+    color: #dc2626;
+    margin-top: 8px;
+    font-size: 14px;
 }
 
-.primary {
-    background: #111827;
-    color: white;
+/* BARRE OUTILS */
+
+.toolbar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 15px;
 }
 
-.green {
-    background: #16a34a;
-    color: white;
+.toolbar button {
+    width: 100%;
 }
 
-.blue {
-    background: #2563eb;
-    color: white;
-}
-
-.gray {
-    background: #e5e7eb;
-    color: #111827;
-}
-
-.red {
-    background: #dc2626;
-    color: white;
-}
-
-/* STATISTIQUES */
+/* STATS */
 
 .stats {
     display: grid;
@@ -140,7 +159,7 @@ button {
 .stat strong {
     display: block;
     margin-top: 4px;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 /* FORMULAIRE */
@@ -167,8 +186,7 @@ label {
     color: #374151;
 }
 
-input,
-select {
+input {
     width: 100%;
     padding: 12px;
     border: 1px solid #d1d5db;
@@ -197,13 +215,6 @@ select {
     box-shadow: 0 2px 8px rgba(0,0,0,.07);
 }
 
-.paymentHeader {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    align-items: flex-start;
-}
-
 .paymentTitle {
     font-size: 18px;
     font-weight: 700;
@@ -227,7 +238,7 @@ select {
 .installmentTop {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
 }
 
 .check {
@@ -277,6 +288,12 @@ select {
     text-decoration: line-through;
 }
 
+.empty {
+    text-align: center;
+    color: #6b7280;
+    padding: 30px 10px;
+}
+
 /* MODAL */
 
 .modalBackground {
@@ -314,29 +331,34 @@ select {
     flex: 1;
 }
 
-/* VIDE */
+/* MESSAGE */
 
-.empty {
+.message {
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: calc(15px + env(safe-area-inset-bottom));
+    background: #111827;
+    color: white;
+    padding: 14px;
+    border-radius: 14px;
     text-align: center;
-    color: #6b7280;
-    padding: 30px 10px;
-}
-
-.error {
-    color: #dc2626;
-    margin-top: 8px;
-    font-size: 14px;
+    z-index: 2000;
+    box-shadow: 0 5px 20px rgba(0,0,0,.25);
 }
 </style>
 </head>
 
 <body>
 
-<!-- ECRAN PIN -->
+<!-- ================= PIN ================= -->
 
 <div id="pinScreen">
+
     <div class="pinBox">
+
         <h2>🔐 Mes paiements</h2>
+
         <p>Entrez votre code PIN</p>
 
         <input
@@ -352,11 +374,13 @@ select {
         </button>
 
         <div id="pinError" class="error"></div>
+
     </div>
+
 </div>
 
 
-<!-- APPLICATION -->
+<!-- ================= APPLICATION ================= -->
 
 <div id="app" class="hidden">
 
@@ -366,9 +390,32 @@ select {
 
 <div class="container">
 
+    <!-- SAUVEGARDE -->
+
+    <div class="toolbar">
+
+        <button class="blue" id="exportButton">
+            📤 Exporter
+        </button>
+
+        <button class="green" id="importButton">
+            📥 Importer
+        </button>
+
+    </div>
+
+    <input
+        id="importFile"
+        type="file"
+        accept=".json,application/json"
+        class="hidden"
+    >
+
+
     <!-- STATISTIQUES -->
 
     <div class="stats">
+
         <div class="stat">
             <small>Total</small>
             <strong id="totalAmount">0,00 €</strong>
@@ -383,6 +430,7 @@ select {
             <small>Reste à payer</small>
             <strong id="remainingAmount">0,00 €</strong>
         </div>
+
     </div>
 
 
@@ -393,24 +441,58 @@ select {
         <h2>➕ Ajouter un paiement</h2>
 
         <label>Nom / bénéficiaire</label>
-        <input id="beneficiary" type="text" placeholder="Ex. Assurance">
+
+        <input
+            id="beneficiary"
+            type="text"
+            placeholder="Ex. Assurance"
+        >
+
 
         <label>Montant total</label>
-        <input id="totalInput" type="number" step="0.01" min="0" placeholder="Ex. 1200">
+
+        <input
+            id="totalInput"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="Ex. 1200"
+        >
+
 
         <label>Nombre d'échéances</label>
-        <input id="installmentsInput" type="number" min="1" value="1">
+
+        <input
+            id="installmentsInput"
+            type="number"
+            min="1"
+            value="1"
+        >
+
 
         <label>Première date d'échéance</label>
-        <input id="firstDateInput" type="date">
+
+        <input
+            id="firstDateInput"
+            type="date"
+        >
+
 
         <label>Communication</label>
-        <input id="communicationInput" type="text" placeholder="Ex. Assurance voiture">
+
+        <input
+            id="communicationInput"
+            type="text"
+            placeholder="Ex. Assurance voiture"
+        >
+
 
         <div class="formButtons">
+
             <button class="primary" id="addButton">
                 Ajouter
             </button>
+
         </div>
 
     </div>
@@ -425,7 +507,7 @@ select {
 </div>
 
 
-<!-- MODIFICATION ECHEANCE -->
+<!-- ================= MODIFICATION ================= -->
 
 <div id="editModalBackground" class="modalBackground hidden">
 
@@ -434,15 +516,33 @@ select {
         <h2>✏️ Modifier l'échéance</h2>
 
         <label>Date d'échéance</label>
-        <input id="editDate" type="date">
+
+        <input
+            id="editDate"
+            type="date"
+        >
+
 
         <label>Montant</label>
-        <input id="editAmount" type="number" step="0.01" min="0">
+
+        <input
+            id="editAmount"
+            type="number"
+            step="0.01"
+            min="0"
+        >
+
 
         <label>Communication</label>
-        <input id="editCommunication" type="text">
+
+        <input
+            id="editCommunication"
+            type="text"
+        >
+
 
         <div class="modalButtons">
+
             <button class="gray" id="cancelEdit">
                 Annuler
             </button>
@@ -450,6 +550,7 @@ select {
             <button class="primary" id="saveEdit">
                 Enregistrer
             </button>
+
         </div>
 
     </div>
@@ -460,18 +561,24 @@ select {
 <script>
 
 const PIN = "1157";
+
 const STORAGE_KEY = "mesPaiements";
 
+const BACKUP_VERSION = 1;
+
 let payments = [];
+
 let editingPaymentId = null;
+
 let editingInstallmentIndex = null;
 
 
-/* =========================
+/* ==========================================
    OUTILS
-========================= */
+========================================== */
 
 function money(value) {
+
     return Number(value || 0).toLocaleString("fr-BE", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -480,7 +587,20 @@ function money(value) {
 
 
 function generateId() {
-    return Date.now().toString() + Math.random().toString(36).substring(2, 8);
+
+    return Date.now().toString() +
+           Math.random().toString(36).substring(2, 9);
+}
+
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 
@@ -508,10 +628,7 @@ function dateToUTC(dateString) {
 }
 
 
-/*
-   Ajoute un mois sans provoquer le problème
-   du 31 janvier -> mars.
-*/
+/* Ajout de mois avec gestion correcte des 28/29/30/31 */
 
 function addMonthsClamped(dateString, months) {
 
@@ -531,28 +648,66 @@ function addMonthsClamped(dateString, months) {
         0
     ).getDate();
 
-    target.setDate(Math.min(originalDay, lastDay));
+    target.setDate(
+        Math.min(originalDay, lastDay)
+    );
 
     const y = target.getFullYear();
-    const m = String(target.getMonth() + 1).padStart(2, "0");
-    const d = String(target.getDate()).padStart(2, "0");
+
+    const m = String(
+        target.getMonth() + 1
+    ).padStart(2, "0");
+
+    const d = String(
+        target.getDate()
+    ).padStart(2, "0");
 
     return `${y}-${m}-${d}`;
 }
 
 
-/* =========================
-   SAUVEGARDE
-========================= */
+/* ==========================================
+   MESSAGE
+========================================== */
 
-function saveData() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payments));
+function showMessage(message) {
+
+    const old = document.querySelector(".message");
+
+    if (old) old.remove();
+
+    const div = document.createElement("div");
+
+    div.className = "message";
+
+    div.textContent = message;
+
+    document.body.appendChild(div);
+
+    setTimeout(() => {
+
+        div.remove();
+
+    }, 2500);
 }
 
 
-/* =========================
-   NORMALISATION
-========================= */
+/* ==========================================
+   SAUVEGARDE LOCALE
+========================================== */
+
+function saveData() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(payments)
+    );
+}
+
+
+/* ==========================================
+   NORMALISATION / ANCIENNES DONNÉES
+========================================== */
 
 function normalizeData() {
 
@@ -574,7 +729,16 @@ function normalizeData() {
             payment.beneficiary = "Paiement";
         }
 
-        if (payment.type === "multiple") {
+
+        /*
+           Si les anciennes données ont déjà une
+           liste d'échéances, on la conserve.
+        */
+
+        if (
+            payment.type === "multiple" ||
+            Array.isArray(payment.installmentsList)
+        ) {
 
             if (!Array.isArray(payment.installmentsList)) {
 
@@ -583,81 +747,109 @@ function normalizeData() {
                     Number(payment.installments || 1)
                 );
 
-                const total = Number(payment.totalAmount || 0);
-                const base = Math.floor((total / count) * 100) / 100;
+                const total =
+                    Number(payment.totalAmount || 0);
+
+                const totalCents =
+                    Math.round(total * 100);
+
+                const base =
+                    Math.floor(totalCents / count);
+
+                const remainder =
+                    totalCents - base * count;
 
                 payment.installmentsList = [];
 
-                let accumulated = 0;
-
                 for (let i = 0; i < count; i++) {
 
-                    let amount;
+                    let cents = base;
 
                     if (i === count - 1) {
-                        amount = Math.round((total - accumulated) * 100) / 100;
-                    } else {
-                        amount = base;
+                        cents += remainder;
                     }
 
-                    accumulated += amount;
-
                     payment.installmentsList.push({
+
                         number: i + 1,
-                        amount: amount,
+
+                        amount: cents / 100,
+
                         date: addMonthsClamped(
                             payment.firstDate ||
-                            new Date().toISOString().substring(0, 10),
+                            new Date()
+                                .toISOString()
+                                .substring(0, 10),
                             i
                         ),
-                        communication: payment.communication || "",
+
+                        communication:
+                            payment.communication || "",
+
                         paid: false
                     });
                 }
             }
 
-            payment.installmentsList.forEach((item, index) => {
 
-                item.number = index + 1;
+            payment.installmentsList.forEach(
+                (item, index) => {
 
-                item.amount = Number(item.amount || 0);
+                    item.number = index + 1;
 
-                item.date = item.date ||
-                    addMonthsClamped(
-                        payment.firstDate ||
-                        new Date().toISOString().substring(0, 10),
-                        index
-                    );
+                    item.amount =
+                        Number(item.amount || 0);
 
-                item.communication =
-                    item.communication ??
-                    payment.communication ??
-                    "";
+                    item.date =
+                        item.date ||
+                        addMonthsClamped(
+                            payment.firstDate ||
+                            new Date()
+                                .toISOString()
+                                .substring(0, 10),
+                            index
+                        );
 
-                item.paid = item.paid === true;
-            });
+                    item.communication =
+                        item.communication ??
+                        payment.communication ??
+                        "";
+
+                    item.paid =
+                        item.paid === true;
+                }
+            );
+
 
             payment.totalAmount =
                 payment.installmentsList.reduce(
-                    (sum, item) => sum + Number(item.amount || 0),
+                    (sum, item) =>
+                        sum +
+                        Number(item.amount || 0),
                     0
                 );
         }
+
     });
+
 }
 
 
-/* =========================
+/* ==========================================
    CHARGEMENT
-========================= */
+========================================== */
 
 function loadData() {
 
     try {
 
-        const saved = localStorage.getItem(STORAGE_KEY);
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
 
-        payments = saved ? JSON.parse(saved) : [];
+        payments =
+            saved
+            ? JSON.parse(saved)
+            : [];
 
         normalizeData();
 
@@ -666,24 +858,29 @@ function loadData() {
     } catch (error) {
 
         console.error(error);
-        payments = [];
 
+        payments = [];
     }
 }
 
 
-/* =========================
+/* ==========================================
    AFFICHAGE
-========================= */
+========================================== */
 
 function render() {
 
-    const list = document.getElementById("paymentsList");
+    const list =
+        document.getElementById(
+            "paymentsList"
+        );
 
     list.innerHTML = "";
 
     let total = 0;
+
     let paid = 0;
+
 
     if (payments.length === 0) {
 
@@ -693,28 +890,31 @@ function render() {
                 Ajoutez votre premier paiement ci-dessus.
             </div>
         `;
-
     }
 
 
     payments.forEach(payment => {
 
-        if (payment.type !== "multiple") {
+        if (!Array.isArray(
+            payment.installmentsList
+        )) {
             return;
         }
 
-        const card = document.createElement("div");
-        card.className = "paymentCard";
 
         const installments =
-            payment.installmentsList || [];
+            payment.installmentsList;
+
 
         let paymentTotal = 0;
+
         let paymentPaid = 0;
+
 
         installments.forEach(item => {
 
-            const amount = Number(item.amount || 0);
+            const amount =
+                Number(item.amount || 0);
 
             paymentTotal += amount;
 
@@ -723,111 +923,134 @@ function render() {
             }
         });
 
+
         total += paymentTotal;
+
         paid += paymentPaid;
 
 
+        const card =
+            document.createElement("div");
+
+        card.className = "paymentCard";
+
+
         card.innerHTML = `
-            <div class="paymentHeader">
 
-                <div>
-                    <div class="paymentTitle">
-                        ${escapeHtml(payment.beneficiary)}
-                    </div>
+            <div class="paymentTitle">
+                ${escapeHtml(payment.beneficiary)}
+            </div>
 
-                    <div class="paymentInfo">
-                        ${installments.length}
-                        échéance${installments.length > 1 ? "s" : ""}
-                        · Total ${money(paymentTotal)}
-                    </div>
-                </div>
-
+            <div class="paymentInfo">
+                ${installments.length}
+                échéance${installments.length > 1 ? "s" : ""}
+                · Total ${money(paymentTotal)}
             </div>
 
             <div class="installmentList"></div>
         `;
 
+
         const installmentList =
-            card.querySelector(".installmentList");
+            card.querySelector(
+                ".installmentList"
+            );
 
 
-        installments.forEach((item, index) => {
+        installments.forEach(
+            (item, index) => {
 
-            const row = document.createElement("div");
+                const row =
+                    document.createElement("div");
 
-            row.className =
-                "installment" +
-                (item.paid ? " paid" : "");
+                row.className =
+                    "installment" +
+                    (item.paid
+                        ? " paid"
+                        : "");
 
 
-            row.innerHTML = `
+                row.innerHTML = `
 
-                <div class="installmentTop">
+                    <div class="installmentTop">
 
-                    <input
-                        class="check"
-                        type="checkbox"
-                        ${item.paid ? "checked" : ""}
-                        data-payment-id="${payment.id}"
-                        data-index="${index}"
-                    >
-
-                    <div class="installmentMain">
-
-                        <div class="installmentTitle">
-                            Échéance ${index + 1}
-                            · ${money(item.amount)}
-                        </div>
-
-                        <div class="installmentDetails">
-                            📅 ${formatDate(item.date)}
-                            ${item.communication
-                                ? " · " + escapeHtml(item.communication)
-                                : ""}
-                        </div>
-
-                    </div>
-
-                    <div class="installmentActions">
-
-                        <button
-                            class="iconButton editButton"
-                            title="Modifier"
+                        <input
+                            class="check"
+                            type="checkbox"
+                            ${item.paid ? "checked" : ""}
                             data-payment-id="${payment.id}"
                             data-index="${index}"
                         >
-                            ✏️
-                        </button>
 
-                        <button
-                            class="iconButton calendarButton"
-                            title="Ajouter à Google Agenda"
-                            data-payment-id="${payment.id}"
-                            data-index="${index}"
-                        >
-                            📅
-                        </button>
+                        <div class="installmentMain">
+
+                            <div class="installmentTitle">
+                                Échéance ${index + 1}
+                                · ${money(item.amount)}
+                            </div>
+
+                            <div class="installmentDetails">
+                                📅 ${formatDate(item.date)}
+                                ${
+                                    item.communication
+                                    ? " · " +
+                                      escapeHtml(
+                                          item.communication
+                                      )
+                                    : ""
+                                }
+                            </div>
+
+                        </div>
+
+                        <div class="installmentActions">
+
+                            <button
+                                class="iconButton editButton"
+                                title="Modifier"
+                                data-payment-id="${payment.id}"
+                                data-index="${index}"
+                            >
+                                ✏️
+                            </button>
+
+                            <button
+                                class="iconButton calendarButton"
+                                title="Google Agenda"
+                                data-payment-id="${payment.id}"
+                                data-index="${index}"
+                            >
+                                📅
+                            </button>
+
+                        </div>
 
                     </div>
+                `;
 
-                </div>
-            `;
 
-            installmentList.appendChild(row);
-        });
+                installmentList.appendChild(row);
+            }
+        );
 
 
         list.appendChild(card);
     });
 
 
-    document.getElementById("totalAmount").textContent =
-        money(total);
+    document.getElementById(
+        "totalAmount"
+    ).textContent = money(total);
 
-    document.getElementById("paidAmount").textContent =
-        money(paid);
 
-    document.getElementById("remainingAmount").textContent =
+    document.getElementById(
+        "paidAmount"
+    ).textContent = money(paid);
+
+
+    document.getElementById(
+        "remainingAmount"
+    ).textContent =
         money(Math.max(0, total - paid));
 
 
@@ -835,147 +1058,210 @@ function render() {
 }
 
 
-/* =========================
-   PROTECTION HTML
-========================= */
-
-function escapeHtml(value) {
-
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-
-/* =========================
-   EVENEMENTS
-========================= */
+/* ==========================================
+   EVENEMENTS LISTE
+========================================== */
 
 function attachEvents() {
 
-    document.querySelectorAll(".check")
+    document
+        .querySelectorAll(".check")
         .forEach(check => {
 
-            check.addEventListener("change", function() {
+            check.addEventListener(
+                "change",
+                function() {
 
-                const paymentId =
-                    this.dataset.paymentId;
+                    const payment =
+                        payments.find(
+                            p =>
+                            p.id ===
+                            this.dataset.paymentId
+                        );
 
-                const index =
-                    Number(this.dataset.index);
+                    if (!payment) return;
 
-                const payment =
-                    payments.find(
-                        p => p.id === paymentId
+
+                    const index =
+                        Number(
+                            this.dataset.index
+                        );
+
+
+                    const item =
+                        payment
+                            .installmentsList[
+                                index
+                            ];
+
+
+                    if (!item) return;
+
+
+                    item.paid =
+                        this.checked;
+
+
+                    saveData();
+
+                    render();
+                }
+            );
+        });
+
+
+    document
+        .querySelectorAll(".editButton")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    openEdit(
+                        this.dataset.paymentId,
+                        Number(
+                            this.dataset.index
+                        )
                     );
-
-                if (!payment) return;
-
-                const item =
-                    payment.installmentsList[index];
-
-                if (!item) return;
-
-                item.paid = this.checked;
-
-                saveData();
-
-                render();
-            });
+                }
+            );
         });
 
 
-    document.querySelectorAll(".editButton")
+    document
+        .querySelectorAll(".calendarButton")
         .forEach(button => {
 
-            button.addEventListener("click", function() {
+            button.addEventListener(
+                "click",
+                function() {
 
-                openEdit(
-                    this.dataset.paymentId,
-                    Number(this.dataset.index)
-                );
-            });
-        });
-
-
-    document.querySelectorAll(".calendarButton")
-        .forEach(button => {
-
-            button.addEventListener("click", function() {
-
-                addToGoogleCalendar(
-                    this.dataset.paymentId,
-                    Number(this.dataset.index)
-                );
-            });
+                    addToGoogleCalendar(
+                        this.dataset.paymentId,
+                        Number(
+                            this.dataset.index
+                        )
+                    );
+                }
+            );
         });
 }
 
 
-/* =========================
+/* ==========================================
    AJOUT PAIEMENT
-========================= */
+========================================== */
 
-document.getElementById("addButton")
-    .addEventListener("click", addPayment);
+document
+    .getElementById("addButton")
+    .addEventListener(
+        "click",
+        addPayment
+    );
 
 
 function addPayment() {
 
     const beneficiary =
-        document.getElementById("beneficiary")
-        .value.trim();
+        document
+            .getElementById("beneficiary")
+            .value.trim();
+
 
     const total =
         Number(
-            document.getElementById("totalInput").value
+            document
+                .getElementById("totalInput")
+                .value
         );
+
 
     const count =
         Number(
-            document.getElementById("installmentsInput").value
+            document
+                .getElementById(
+                    "installmentsInput"
+                )
+                .value
         );
 
+
     const firstDate =
-        document.getElementById("firstDateInput").value;
+        document
+            .getElementById(
+                "firstDateInput"
+            )
+            .value;
+
 
     const communication =
-        document.getElementById("communicationInput")
-        .value.trim();
+        document
+            .getElementById(
+                "communicationInput"
+            )
+            .value.trim();
 
 
     if (!beneficiary) {
-        alert("Veuillez indiquer le bénéficiaire.");
+
+        alert(
+            "Veuillez indiquer le bénéficiaire."
+        );
+
         return;
     }
+
 
     if (!total || total <= 0) {
-        alert("Veuillez indiquer un montant valide.");
+
+        alert(
+            "Veuillez indiquer un montant valide."
+        );
+
         return;
     }
+
 
     if (!count || count < 1) {
-        alert("Veuillez indiquer le nombre d'échéances.");
+
+        alert(
+            "Veuillez indiquer le nombre d'échéances."
+        );
+
         return;
     }
+
 
     if (!firstDate) {
-        alert("Veuillez choisir la première date.");
+
+        alert(
+            "Veuillez choisir la première date."
+        );
+
         return;
     }
 
+
+    /*
+       Division exacte en centimes.
+       Exemple 1000 € / 3 :
+       333,33 €
+       333,33 €
+       333,34 €
+    */
 
     const totalCents =
         Math.round(total * 100);
 
     const baseCents =
-        Math.floor(totalCents / count);
+        Math.floor(
+            totalCents / count
+        );
 
     const remainder =
-        totalCents - (baseCents * count);
+        totalCents -
+        (baseCents * count);
 
 
     const installmentsList = [];
@@ -983,9 +1269,12 @@ function addPayment() {
 
     for (let i = 0; i < count; i++) {
 
-        const cents =
-            baseCents +
-            (i === count - 1 ? remainder : 0);
+        let cents = baseCents;
+
+        if (i === count - 1) {
+            cents += remainder;
+        }
+
 
         installmentsList.push({
 
@@ -1013,17 +1302,29 @@ function addPayment() {
 
         type: "multiple",
 
-        beneficiary: beneficiary,
+        beneficiary:
 
-        totalAmount: total,
+            beneficiary,
 
-        installments: count,
+        totalAmount:
 
-        firstDate: firstDate,
+            total,
 
-        communication: communication,
+        installments:
 
-        installmentsList: installmentsList
+            count,
+
+        firstDate:
+
+            firstDate,
+
+        communication:
+
+            communication,
+
+        installmentsList:
+
+            installmentsList
     });
 
 
@@ -1032,79 +1333,146 @@ function addPayment() {
     render();
 
 
-    document.getElementById("beneficiary").value = "";
-    document.getElementById("totalInput").value = "";
-    document.getElementById("installmentsInput").value = "1";
-    document.getElementById("firstDateInput").value = "";
-    document.getElementById("communicationInput").value = "";
+    document
+        .getElementById("beneficiary")
+        .value = "";
+
+
+    document
+        .getElementById("totalInput")
+        .value = "";
+
+
+    document
+        .getElementById("installmentsInput")
+        .value = "1";
+
+
+    document
+        .getElementById("firstDateInput")
+        .value = "";
+
+
+    document
+        .getElementById("communicationInput")
+        .value = "";
+
+
+    showMessage(
+        "Paiement ajouté ✅"
+    );
 }
 
 
-/* =========================
+/* ==========================================
    MODIFICATION
-========================= */
+========================================== */
 
-function openEdit(paymentId, index) {
+function openEdit(
+    paymentId,
+    index
+) {
 
     const payment =
         payments.find(
             p => p.id === paymentId
         );
 
+
     if (!payment) return;
+
 
     const item =
         payment.installmentsList[index];
 
+
     if (!item) return;
 
 
-    editingPaymentId = paymentId;
-    editingInstallmentIndex = index;
+    editingPaymentId =
+        paymentId;
 
 
-    document.getElementById("editDate").value =
+    editingInstallmentIndex =
+        index;
+
+
+    document
+        .getElementById("editDate")
+        .value =
         item.date || "";
 
-    document.getElementById("editAmount").value =
-        Number(item.amount || 0).toFixed(2);
 
-    document.getElementById("editCommunication").value =
+    document
+        .getElementById("editAmount")
+        .value =
+        Number(
+            item.amount || 0
+        ).toFixed(2);
+
+
+    document
+        .getElementById(
+            "editCommunication"
+        )
+        .value =
         item.communication || "";
 
 
     document
-        .getElementById("editModalBackground")
-        .classList.remove("hidden");
+        .getElementById(
+            "editModalBackground"
+        )
+        .classList
+        .remove("hidden");
 }
 
 
-document.getElementById("cancelEdit")
-    .addEventListener("click", closeEdit);
+document
+    .getElementById("cancelEdit")
+    .addEventListener(
+        "click",
+        closeEdit
+    );
 
 
-document.getElementById("editModalBackground")
-    .addEventListener("click", function(event) {
+document
+    .getElementById(
+        "editModalBackground"
+    )
+    .addEventListener(
+        "click",
+        function(event) {
 
-        if (event.target === this) {
-            closeEdit();
+            if (event.target === this) {
+                closeEdit();
+            }
         }
-    });
+    );
 
 
 function closeEdit() {
 
     document
-        .getElementById("editModalBackground")
-        .classList.add("hidden");
+        .getElementById(
+            "editModalBackground"
+        )
+        .classList
+        .add("hidden");
+
 
     editingPaymentId = null;
+
     editingInstallmentIndex = null;
 }
 
 
-document.getElementById("saveEdit")
-    .addEventListener("click", saveEdit);
+document
+    .getElementById("saveEdit")
+    .addEventListener(
+        "click",
+        saveEdit
+    );
 
 
 function saveEdit() {
@@ -1119,8 +1487,11 @@ function saveEdit() {
 
     const payment =
         payments.find(
-            p => p.id === editingPaymentId
+            p =>
+            p.id ===
+            editingPaymentId
         );
+
 
     if (!payment) return;
 
@@ -1130,52 +1501,90 @@ function saveEdit() {
             editingInstallmentIndex
         ];
 
+
     if (!item) return;
 
 
     const date =
-        document.getElementById("editDate").value;
+        document
+            .getElementById(
+                "editDate"
+            )
+            .value;
+
 
     const amount =
         Number(
-            document.getElementById("editAmount").value
+            document
+                .getElementById(
+                    "editAmount"
+                )
+                .value
         );
+
 
     const communication =
         document
-            .getElementById("editCommunication")
-            .value.trim();
+            .getElementById(
+                "editCommunication"
+            )
+            .value
+            .trim();
 
 
     if (!date) {
-        alert("Veuillez choisir une date.");
+
+        alert(
+            "Veuillez choisir une date."
+        );
+
         return;
     }
 
-    if (isNaN(amount) || amount < 0) {
-        alert("Veuillez indiquer un montant valide.");
+
+    if (
+        isNaN(amount) ||
+        amount < 0
+    ) {
+
+        alert(
+            "Veuillez indiquer un montant valide."
+        );
+
         return;
     }
 
 
     /*
-       On ne touche PAS à item.paid.
-       La case payé reste donc indépendante.
+       IMPORTANT :
+       On conserve item.paid.
+       Modifier une échéance ne la
+       décoche donc jamais.
     */
 
     item.date = date;
-    item.amount = Math.round(amount * 100) / 100;
-    item.communication = communication;
+
+    item.amount =
+        Math.round(
+            amount * 100
+        ) / 100;
+
+    item.communication =
+        communication;
 
 
     /*
-       Recalcul du total du paiement après modification.
+       Nouveau total recalculé
+       automatiquement.
     */
 
     payment.totalAmount =
         payment.installmentsList.reduce(
             (sum, installment) =>
-                sum + Number(installment.amount || 0),
+                sum +
+                Number(
+                    installment.amount || 0
+                ),
             0
         );
 
@@ -1185,19 +1594,27 @@ function saveEdit() {
     closeEdit();
 
     render();
+
+    showMessage(
+        "Échéance modifiée ✅"
+    );
 }
 
 
-/* =========================
+/* ==========================================
    GOOGLE AGENDA
-========================= */
+========================================== */
 
-function addToGoogleCalendar(paymentId, index) {
+function addToGoogleCalendar(
+    paymentId,
+    index
+) {
 
     const payment =
         payments.find(
             p => p.id === paymentId
         );
+
 
     if (!payment) return;
 
@@ -1205,137 +1622,443 @@ function addToGoogleCalendar(paymentId, index) {
     const item =
         payment.installmentsList[index];
 
+
     if (!item) return;
+
+
+    if (!item.date) {
+
+        alert(
+            "Cette échéance n'a pas de date."
+        );
+
+        return;
+    }
 
 
     const title =
         `Paiement - ${payment.beneficiary} - Échéance ${index + 1}`;
 
 
-    const communication =
-        item.communication || "";
-
-
-    /*
-       Google Calendar utilise :
-       YYYYMMDD
-       ou YYYYMMDDTHHMMSS
-    */
-
     const date =
-        item.date.replaceAll("-", "");
+        item.date.replaceAll(
+            "-",
+            ""
+        );
 
 
     /*
-       Événement de 30 minutes à 09:00.
-       L'utilisateur pourra ensuite modifier l'heure
+       Google Agenda :
+       événement créé à 09h00.
+       L'heure peut ensuite être changée
        directement dans Google Agenda.
     */
 
     const start =
         `${date}T090000`;
 
-    const endDate =
+
+    const nextDate =
         getNextDay(item.date);
 
+
     const end =
-        `${endDate}T090000`;
+        `${nextDate}T090000`;
 
 
     const details =
-        `Montant : ${Number(item.amount).toFixed(2)} €` +
-        (communication
-            ? `\nCommunication : ${communication}`
-            : "");
+        `Montant : ${Number(
+            item.amount
+        ).toFixed(2)} €` +
+        (
+            item.communication
+            ? `\nCommunication : ${item.communication}`
+            : ""
+        );
 
 
     const url =
         "https://calendar.google.com/calendar/render" +
         "?action=TEMPLATE" +
-        "&text=" + encodeURIComponent(title) +
-        "&dates=" + encodeURIComponent(`${start}/${end}`) +
-        "&details=" + encodeURIComponent(details);
+        "&text=" +
+        encodeURIComponent(title) +
+        "&dates=" +
+        encodeURIComponent(
+            `${start}/${end}`
+        ) +
+        "&details=" +
+        encodeURIComponent(details);
 
 
-    window.open(url, "_blank");
+    window.open(
+        url,
+        "_blank"
+    );
 }
 
 
-function getNextDay(dateString) {
+function getNextDay(
+    dateString
+) {
 
     const date =
-        dateToUTC(dateString);
+        dateToUTC(
+            dateString
+        );
 
-    date.setDate(date.getDate() + 1);
+
+    date.setDate(
+        date.getDate() + 1
+    );
+
 
     const y =
         date.getFullYear();
 
+
     const m =
-        String(date.getMonth() + 1).padStart(2, "0");
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
 
     const d =
-        String(date.getDate()).padStart(2, "0");
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
 
     return `${y}${m}${d}`;
 }
 
 
-/* =========================
-   PIN
-========================= */
+/* ==========================================
+   EXPORTATION
+========================================== */
 
-document.getElementById("pinButton")
-    .addEventListener("click", checkPin);
+document
+    .getElementById("exportButton")
+    .addEventListener(
+        "click",
+        exportData
+    );
 
 
-document.getElementById("pinInput")
-    .addEventListener("keydown", function(event) {
+function exportData() {
 
-        if (event.key === "Enter") {
-            checkPin();
+    /*
+       On crée une copie complète.
+       Rien n'est envoyé sur Internet.
+    */
+
+    const backup = {
+
+        app:
+            "Mes paiements",
+
+        version:
+            BACKUP_VERSION,
+
+        exportedAt:
+            new Date().toISOString(),
+
+        payments:
+            payments
+    };
+
+
+    const json =
+        JSON.stringify(
+            backup,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [json],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    const date =
+        new Date()
+            .toISOString()
+            .substring(
+                0,
+                10
+            );
+
+
+    link.href = url;
+
+    link.download =
+        `mes-paiements-sauvegarde-${date}.json`;
+
+
+    document
+        .body
+        .appendChild(link);
+
+
+    link.click();
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    showMessage(
+        "Sauvegarde créée 📤"
+    );
+}
+
+
+/* ==========================================
+   IMPORTATION
+========================================== */
+
+document
+    .getElementById("importButton")
+    .addEventListener(
+        "click",
+        function() {
+
+            document
+                .getElementById(
+                    "importFile"
+                )
+                .click();
         }
-    });
+    );
+
+
+document
+    .getElementById("importFile")
+    .addEventListener(
+        "change",
+        importData
+    );
+
+
+function importData(event) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) return;
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function() {
+
+            try {
+
+                const backup =
+                    JSON.parse(
+                        reader.result
+                    );
+
+
+                /*
+                   Vérification du fichier.
+                */
+
+                if (
+                    !backup ||
+                    backup.app !==
+                    "Mes paiements" ||
+                    !Array.isArray(
+                        backup.payments
+                    )
+                ) {
+
+                    alert(
+                        "Ce fichier n'est pas une sauvegarde valide de Mes paiements."
+                    );
+
+                    return;
+                }
+
+
+                const confirmed =
+                    confirm(
+                        "⚠️ Importer cette sauvegarde va remplacer les données actuellement présentes dans l'application.\n\nVoulez-vous continuer ?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                /*
+                   On charge la sauvegarde.
+                */
+
+                payments =
+                    backup.payments;
+
+
+                /*
+                   On normalise pour assurer
+                   la compatibilité avec les
+                   futures versions.
+                */
+
+                normalizeData();
+
+                saveData();
+
+                render();
+
+
+                showMessage(
+                    "Sauvegarde restaurée ✅"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Impossible de lire cette sauvegarde."
+                );
+            }
+
+            /*
+               Permet de réimporter exactement
+               le même fichier ensuite.
+            */
+
+            event.target.value = "";
+        };
+
+
+    reader.readAsText(
+        file
+    );
+}
+
+
+/* ==========================================
+   PIN
+========================================== */
+
+document
+    .getElementById("pinButton")
+    .addEventListener(
+        "click",
+        checkPin
+    );
+
+
+document
+    .getElementById("pinInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+                checkPin();
+            }
+        }
+    );
 
 
 function checkPin() {
 
     const entered =
-        document.getElementById("pinInput").value;
+        document
+            .getElementById(
+                "pinInput"
+            )
+            .value;
+
 
     if (entered === PIN) {
 
         document
-            .getElementById("pinScreen")
-            .classList.add("hidden");
+            .getElementById(
+                "pinScreen"
+            )
+            .classList
+            .add("hidden");
+
 
         document
             .getElementById("app")
-            .classList.remove("hidden");
+            .classList
+            .remove("hidden");
+
 
         loadData();
+
         render();
 
     } else {
 
-        document.getElementById("pinError")
+        document
+            .getElementById(
+                "pinError"
+            )
             .textContent =
             "Code PIN incorrect.";
 
-        document.getElementById("pinInput")
+
+        document
+            .getElementById(
+                "pinInput"
+            )
             .value = "";
 
-        document.getElementById("pinInput")
+
+        document
+            .getElementById(
+                "pinInput"
+            )
             .focus();
     }
 }
 
 
-/* =========================
-   INITIALISATION
-========================= */
+/* ==========================================
+   DEMARRAGE
+========================================== */
 
-document.getElementById("pinInput").focus();
+document
+    .getElementById(
+        "pinInput"
+    )
+    .focus();
 
 </script>
 
