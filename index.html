@@ -2,693 +2,1453 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f5f5f7">
+
 <title>Mes paiements</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+background:#f5f5f7;
+color:#111
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
-  background: #f5f5f7;
-  color: #111;
+.app{
+max-width:650px;
+margin:auto;
+padding:20px 16px 50px
 }
 
-.app {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px 16px 40px;
+h1{text-align:center;margin:10px 0 20px}
+
+.card{
+background:white;
+border-radius:18px;
+padding:18px;
+margin-bottom:15px;
+box-shadow:0 2px 10px rgba(0,0,0,.06)
 }
 
-h1 {
-  text-align: center;
-  margin: 10px 0 20px;
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px
 }
 
-.card {
-  background: white;
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+.stat{
+text-align:center;
+padding:12px 5px;
+background:#f2f2f7;
+border-radius:14px
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+.stat strong{
+display:block;
+font-size:18px;
+margin-top:5px
 }
 
-.stat {
-  text-align: center;
-  padding: 12px 5px;
-  background: #f2f2f7;
-  border-radius: 14px;
+.month{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:15px
 }
 
-.stat strong {
-  display: block;
-  font-size: 19px;
-  margin-top: 5px;
+.month button{
+width:42px;
+height:42px;
+border:0;
+border-radius:50%;
+font-size:24px;
+background:#e5e5ea
 }
 
-.month {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 15px;
+.payment{
+background:white;
+border-radius:17px;
+padding:16px;
+margin-bottom:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.06)
 }
 
-.month button {
-  width: 42px;
-  height: 42px;
-  border: 0;
-  border-radius: 50%;
-  font-size: 22px;
-  background: #e5e5ea;
+.payment.paid{opacity:.6}
+
+.payment-header{
+display:flex;
+justify-content:space-between;
+gap:10px
 }
 
-.payment {
-  background: white;
-  border-radius: 17px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+.payment h3{margin:0}
+
+.amount{
+font-weight:bold;
+white-space:nowrap
 }
 
-.payment.paid {
-  opacity: .6;
+.info{
+color:#666;
+font-size:14px;
+margin-top:7px
 }
 
-.payment-title {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+.actions{
+display:flex;
+gap:8px;
+margin-top:12px
 }
 
-.payment-title h3 {
-  margin: 0;
+button,input,select{font:inherit}
+
+.primary,.secondary,.danger{
+border:0;
+border-radius:12px;
+padding:12px;
+cursor:pointer
 }
 
-.amount {
-  font-weight: bold;
-  white-space: nowrap;
+.primary{
+background:#007aff;
+color:white;
+width:100%
 }
 
-.info {
-  color: #666;
-  font-size: 14px;
-  margin-top: 8px;
+.secondary{
+background:#e5e5ea;
+color:#111;
+flex:1
 }
 
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 13px;
+.danger{
+background:#ff3b30;
+color:white;
+flex:1
 }
 
-button,
-input,
-select {
-  font: inherit;
+label{
+display:block;
+font-size:14px;
+margin-top:12px;
+margin-bottom:5px
 }
 
-.primary,
-.secondary,
-.danger {
-  border: 0;
-  border-radius: 12px;
-  padding: 12px;
-  cursor: pointer;
+input,select{
+width:100%;
+padding:13px;
+border:1px solid #ddd;
+border-radius:12px;
+background:white
 }
 
-.primary {
-  background: #007aff;
-  color: white;
-  width: 100%;
+#form{display:none}
+
+.empty{
+text-align:center;
+color:#777;
+padding:25px
 }
 
-.secondary {
-  background: #e5e5ea;
-  color: #111;
-  flex: 1;
+#login{
+max-width:400px;
+margin:80px auto;
+padding:20px
 }
 
-.danger {
-  background: #ff3b30;
-  color: white;
-  flex: 1;
+.pin-input{
+text-align:center;
+font-size:28px;
+letter-spacing:10px
 }
 
-label {
-  display: block;
-  font-size: 14px;
-  margin-top: 12px;
-  margin-bottom: 5px;
+.hidden{display:none!important}
+
+.check{
+color:#34c759;
+font-weight:bold
 }
 
-input,
-select {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background: white;
+.installment{
+background:#f2f2f7;
+border-radius:14px;
+padding:13px;
+margin-top:10px
 }
 
-#form {
-  display: none;
+.installment-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
 }
 
-#app {
-  display: none;
+.installment input{
+margin-top:8px
 }
 
-.empty {
-  text-align: center;
-  color: #777;
-  padding: 25px;
+.badge{
+font-size:12px;
+padding:5px 8px;
+border-radius:8px;
+background:#e5e5ea
 }
 
-#login {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 20px;
+.paidBadge{
+background:#d1f2d8;
+color:#167c2d
 }
 
-.pin-input {
-  text-align: center;
-  font-size: 28px;
-  letter-spacing: 10px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.check {
-  color: #34c759;
-  font-weight: bold;
+.totalLine{
+display:flex;
+justify-content:space-between;
+font-weight:bold;
+padding-top:12px;
+margin-top:12px;
+border-top:1px solid #ddd
 }
 </style>
 </head>
 
 <body>
 
-<!-- PIN -->
+<!-- CONNEXION -->
 <div id="login">
-  <div class="card">
-    <h1>Mes paiements</h1>
-    <p style="text-align:center;">Entrez votre code PIN</p>
 
-    <input
-      id="pin"
-      class="pin-input"
-      type="password"
-      inputmode="numeric"
-      maxlength="4"
-      placeholder="••••"
-    >
+<div class="card">
 
-    <br><br>
+<h1>Mes paiements</h1>
 
-    <button class="primary" onclick="unlock()">Ouvrir</button>
+<p style="text-align:center">
+Entrez votre code PIN
+</p>
 
-    <p id="pinError"
-       style="color:#ff3b30;text-align:center;"></p>
-  </div>
+<input
+id="pin"
+class="pin-input"
+type="password"
+inputmode="numeric"
+maxlength="4"
+placeholder="••••">
+
+<br><br>
+
+<button class="primary" onclick="unlock()">
+Ouvrir
+</button>
+
+<p id="pinError"
+style="color:#ff3b30;text-align:center">
+</p>
+
 </div>
+</div>
+
 
 <!-- APPLICATION -->
 <div id="app" class="app">
 
-  <h1>Mes paiements</h1>
+<h1>Mes paiements</h1>
 
-  <div class="card">
+<div class="card">
 
-    <div class="month">
-      <button onclick="changeMonth(-1)">‹</button>
-      <strong id="monthTitle"></strong>
-      <button onclick="changeMonth(1)">›</button>
-    </div>
+<div class="month">
 
-    <div class="stats">
-      <div class="stat">
-        Total
-        <strong id="total">0,00 €</strong>
-      </div>
+<button onclick="changeMonth(-1)">‹</button>
 
-      <div class="stat">
-        Payé
-        <strong id="paid">0,00 €</strong>
-      </div>
+<strong id="monthTitle"></strong>
 
-      <div class="stat">
-        Reste
-        <strong id="remaining">0,00 €</strong>
-      </div>
-    </div>
-
-  </div>
-
-  <button class="primary" onclick="openForm()">
-    ＋ Ajouter un paiement
-  </button>
-
-  <br><br>
-
-  <div id="payments"></div>
-
-  <!-- FORMULAIRE -->
-  <div id="form" class="card">
-
-    <h2 id="formTitle">Ajouter un paiement</h2>
-
-    <label>Nom</label>
-    <input id="name" placeholder="Ex. Électricité">
-
-    <label>Type</label>
-    <select id="type" onchange="updateType()">
-      <option value="monthly">Paiement mensuel</option>
-      <option value="multiple">Plusieurs fois</option>
-    </select>
-
-    <label>Montant</label>
-    <input id="amount" type="number" step="0.01" placeholder="0.00">
-
-    <label>Jour du mois</label>
-    <input id="day" type="number" min="1" max="31" placeholder="Ex. 15">
-
-    <div id="multipleFields" class="hidden">
-
-      <label>Montant total</label>
-      <input id="totalAmount" type="number" step="0.01">
-
-      <label>Nombre de versements</label>
-      <input id="installments" type="number" min="1">
-
-      <label>Première échéance</label>
-      <input id="firstDate" type="date">
-
-    </div>
-
-    <label>Bénéficiaire</label>
-    <input id="beneficiary" placeholder="Nom du bénéficiaire">
-
-    <label>IBAN</label>
-    <input id="iban" placeholder="BE / LU...">
-
-    <label>Communication</label>
-    <input id="communication" placeholder="Communication">
-
-    <br>
-
-    <button class="primary" onclick="savePayment()">Enregistrer</button>
-
-    <br><br>
-
-    <button class="secondary" onclick="closeForm()">
-      Annuler
-    </button>
-
-  </div>
+<button onclick="changeMonth(1)">›</button>
 
 </div>
 
+<div class="stats">
+
+<div class="stat">
+Total
+<strong id="total">0,00 €</strong>
+</div>
+
+<div class="stat">
+Payé
+<strong id="paid">0,00 €</strong>
+</div>
+
+<div class="stat">
+Reste
+<strong id="remaining">0,00 €</strong>
+</div>
+
+</div>
+</div>
+
+
+<button class="primary" onclick="openForm()">
+＋ Ajouter un paiement
+</button>
+
+<br><br>
+
+<div id="payments"></div>
+
+
+<!-- FORMULAIRE -->
+<div id="form" class="card">
+
+<h2 id="formTitle">
+Ajouter un paiement
+</h2>
+
+<label>Nom du paiement</label>
+
+<input
+id="name"
+placeholder="Ex. Crédit voiture">
+
+
+<label>Type</label>
+
+<select id="type" onchange="updateType()">
+
+<option value="monthly">
+Paiement mensuel
+</option>
+
+<option value="multiple">
+Paiement en plusieurs échéances
+</option>
+
+</select>
+
+
+<!-- MENSUEL -->
+
+<div id="monthlyFields">
+
+<label>Montant mensuel</label>
+
+<input
+id="amount"
+type="number"
+step="0.01"
+placeholder="0.00">
+
+
+<label>Jour du mois</label>
+
+<input
+id="day"
+type="number"
+min="1"
+max="31"
+placeholder="Ex. 15">
+
+</div>
+
+
+<!-- ECHEANCES -->
+
+<div id="multipleFields" class="hidden">
+
+<label>Montant total</label>
+
+<input
+id="totalAmount"
+type="number"
+step="0.01"
+placeholder="Ex. 12000">
+
+
+<label>Nombre d'échéances</label>
+
+<input
+id="installments"
+type="number"
+min="1"
+placeholder="Ex. 24"
+oninput="previewInstallments()">
+
+
+<label>Première date d'échéance</label>
+
+<input
+id="firstDate"
+type="date"
+onchange="previewInstallments()">
+
+
+<div id="installmentPreview"></div>
+
+</div>
+
+
+<label>Bénéficiaire</label>
+
+<input
+id="beneficiary"
+placeholder="Nom du bénéficiaire">
+
+
+<label>Communication générale</label>
+
+<input
+id="communication"
+placeholder="Communication">
+
+
+<br>
+
+<button class="primary" onclick="savePayment()">
+Enregistrer
+</button>
+
+<br><br>
+
+<button class="secondary" onclick="closeForm()">
+Annuler
+</button>
+
+</div>
+
+</div>
+
+
 <script>
 
-let payments =
-  JSON.parse(localStorage.getItem("mesPaiements") || "[]");
+const PIN="1157";
 
-let currentDate = new Date();
-let editingId = null;
+let payments=
+JSON.parse(localStorage.getItem("mesPaiements")||"[]");
 
-const euro = value =>
-  Number(value || 0).toLocaleString("fr-BE", {
-    style: "currency",
-    currency: "EUR"
-  });
+let currentDate=new Date();
 
-function saveData() {
-  localStorage.setItem(
-    "mesPaiements",
-    JSON.stringify(payments)
-  );
+let editingId=null;
+
+
+function saveData(){
+
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(payments)
+);
+
 }
 
-function unlock() {
 
-  const pin = document.getElementById("pin").value;
+function euro(value){
 
-  let savedPin = localStorage.getItem("pinMesPaiements");
+return Number(value||0).toLocaleString(
+"fr-BE",
+{
+style:"currency",
+currency:"EUR"
+}
+);
 
-  if (!savedPin) {
-    savedPin = "1234";
-    localStorage.setItem("pinMesPaiements", savedPin);
-  }
-
-  if (pin === savedPin) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    render();
-  } else {
-    document.getElementById("pinError").textContent =
-      "Code PIN incorrect";
-  }
 }
 
-function changeMonth(delta) {
-  currentDate.setMonth(currentDate.getMonth() + delta);
-  render();
+
+function unlock(){
+
+const pin=
+document.getElementById("pin").value;
+
+if(pin===PIN){
+
+document.getElementById("login")
+.style.display="none";
+
+document.getElementById("app")
+.style.display="block";
+
+render();
+
+}else{
+
+document.getElementById("pinError")
+.textContent="Code PIN incorrect";
+
 }
 
-function monthKey() {
-  return currentDate.getFullYear() + "-" +
-    String(currentDate.getMonth() + 1).padStart(2, "0");
 }
 
-function monthName() {
 
-  return currentDate.toLocaleDateString("fr-BE", {
-    month: "long",
-    year: "numeric"
-  });
+function changeMonth(delta){
+
+currentDate.setMonth(
+currentDate.getMonth()+delta
+);
+
+render();
+
 }
 
-function openForm(id = null) {
 
-  editingId = id;
+function monthKey(){
 
-  document.getElementById("form").style.display = "block";
+return currentDate.getFullYear()+"-"+
+String(currentDate.getMonth()+1).padStart(2,"0");
 
-  if (id) {
-
-    const p = payments.find(x => x.id === id);
-
-    document.getElementById("formTitle").textContent =
-      "Modifier le paiement";
-
-    document.getElementById("name").value = p.name;
-    document.getElementById("type").value = p.type;
-    document.getElementById("amount").value = p.amount;
-    document.getElementById("day").value = p.day;
-    document.getElementById("beneficiary").value =
-      p.beneficiary || "";
-    document.getElementById("iban").value =
-      p.iban || "";
-    document.getElementById("communication").value =
-      p.communication || "";
-
-    if (p.type === "multiple") {
-      document.getElementById("totalAmount").value =
-        p.totalAmount || "";
-      document.getElementById("installments").value =
-        p.installments || "";
-      document.getElementById("firstDate").value =
-        p.firstDate || "";
-    }
-
-    updateType();
-
-  } else {
-
-    document.getElementById("formTitle").textContent =
-      "Ajouter un paiement";
-
-    [
-      "name",
-      "amount",
-      "day",
-      "totalAmount",
-      "installments",
-      "firstDate",
-      "beneficiary",
-      "iban",
-      "communication"
-    ].forEach(id => {
-      document.getElementById(id).value = "";
-    });
-
-    document.getElementById("type").value = "monthly";
-
-    updateType();
-  }
-
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: "smooth"
-  });
 }
 
-function closeForm() {
-  document.getElementById("form").style.display = "none";
-  editingId = null;
+
+function monthName(){
+
+return currentDate.toLocaleDateString(
+"fr-BE",
+{
+month:"long",
+year:"numeric"
+}
+);
+
 }
 
-function updateType() {
 
-  const multiple =
-    document.getElementById("type").value === "multiple";
+function openForm(id=null){
 
-  document.getElementById("multipleFields")
-    .classList.toggle("hidden", !multiple);
+editingId=id;
+
+document.getElementById("form")
+.style.display="block";
+
+
+if(id){
+
+const p=
+payments.find(x=>x.id===id);
+
+document.getElementById("formTitle")
+.textContent="Modifier le paiement";
+
+document.getElementById("name").value=p.name;
+
+document.getElementById("type").value=p.type;
+
+document.getElementById("beneficiary").value=
+p.beneficiary||"";
+
+document.getElementById("communication").value=
+p.communication||"";
+
+
+if(p.type==="monthly"){
+
+document.getElementById("amount").value=
+p.amount||"";
+
+document.getElementById("day").value=
+p.day||"";
+
+}else{
+
+document.getElementById("totalAmount").value=
+p.totalAmount||"";
+
+document.getElementById("installments").value=
+p.installments||"";
+
+document.getElementById("firstDate").value=
+p.firstDate||"";
+
 }
 
-function savePayment() {
+updateType();
 
-  const name =
-    document.getElementById("name").value.trim();
+}else{
 
-  const type =
-    document.getElementById("type").value;
+document.getElementById("formTitle")
+.textContent="Ajouter un paiement";
 
-  const amount =
-    parseFloat(document.getElementById("amount").value) || 0;
+[
+"name",
+"amount",
+"day",
+"totalAmount",
+"installments",
+"firstDate",
+"beneficiary",
+"communication"
+].forEach(id=>{
+document.getElementById(id).value="";
+});
 
-  const day =
-    parseInt(document.getElementById("day").value) || 1;
+document.getElementById("type").value="monthly";
 
-  if (!name || !amount) {
-    alert("Veuillez remplir le nom et le montant.");
-    return;
-  }
+updateType();
 
-  const data = {
-    id: editingId || Date.now(),
-    name,
-    type,
-    amount,
-    day,
-    totalAmount:
-      parseFloat(document.getElementById("totalAmount").value) || 0,
-    installments:
-      parseInt(document.getElementById("installments").value) || 0,
-    firstDate:
-      document.getElementById("firstDate").value,
-
-    beneficiary:
-      document.getElementById("beneficiary").value.trim(),
-
-    iban:
-      document.getElementById("iban").value.trim(),
-
-    communication:
-      document.getElementById("communication").value.trim(),
-
-    paid: editingId
-      ? (payments.find(x => x.id === editingId)?.paid || {})
-      : {}
-  };
-
-  if (editingId) {
-
-    const index =
-      payments.findIndex(x => x.id === editingId);
-
-    payments[index] = data;
-
-  } else {
-
-    payments.push(data);
-  }
-
-  saveData();
-  closeForm();
-  render();
 }
 
-function isPaid(payment) {
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:"smooth"
+});
 
-  const key = monthKey();
-
-  return payment.paid &&
-    payment.paid[key] === true;
 }
 
-function togglePaid(id) {
 
-  const p = payments.find(x => x.id === id);
+function closeForm(){
 
-  if (!p.paid) p.paid = {};
+document.getElementById("form")
+.style.display="none";
 
-  const key = monthKey();
+editingId=null;
 
-  p.paid[key] = !p.paid[key];
-
-  saveData();
-  render();
 }
 
-function deletePayment(id) {
 
-  if (!confirm("Supprimer ce paiement ?")) return;
+function updateType(){
 
-  payments =
-    payments.filter(p => p.id !== id);
+const multiple=
+document.getElementById("type").value==="multiple";
 
-  saveData();
-  render();
+document.getElementById("monthlyFields")
+.classList.toggle("hidden",multiple);
+
+document.getElementById("multipleFields")
+.classList.toggle("hidden",!multiple);
+
+if(multiple){
+
+previewInstallments();
+
 }
 
-function payPayment(id) {
-
-  const p = payments.find(x => x.id === id);
-
-  let text =
-    "Bénéficiaire : " + (p.beneficiary || "") +
-    "\nIBAN : " + (p.iban || "") +
-    "\nCommunication : " + (p.communication || "") +
-    "\nMontant : " + euro(p.amount);
-
-  navigator.clipboard?.writeText(text);
-
-  alert(
-    "Informations du paiement copiées.\n\n" + text
-  );
 }
 
-function render() {
 
-  document.getElementById("monthTitle").textContent =
-    monthName();
+function calculateInstallments(){
 
-  const container =
-    document.getElementById("payments");
+const total=
+parseFloat(
+document.getElementById("totalAmount").value
+)||0;
 
-  container.innerHTML = "";
+const count=
+parseInt(
+document.getElementById("installments").value
+)||0;
 
-  let total = 0;
-  let paid = 0;
+const firstDate=
+document.getElementById("firstDate").value;
 
-  if (!payments.length) {
+if(!total||!count||!firstDate){
 
-    container.innerHTML =
-      '<div class="card empty">' +
-      'Aucun paiement enregistré.' +
-      '</div>';
+return [];
 
-  }
-
-  payments.forEach(p => {
-
-    total += Number(p.amount);
-
-    if (isPaid(p)) {
-      paid += Number(p.amount);
-    }
-
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "payment" + (isPaid(p) ? " paid" : "");
-
-    div.innerHTML = `
-
-      <div class="payment-title">
-
-        <div>
-          <h3>${escapeHtml(p.name)}</h3>
-
-          <div class="info">
-            Échéance : ${p.day}
-          </div>
-        </div>
-
-        <div class="amount">
-          ${euro(p.amount)}
-        </div>
-
-      </div>
-
-      <div class="info">
-        ${isPaid(p)
-          ? '<span class="check">✓ Payé</span>'
-          : 'Non payé'}
-      </div>
-
-      <div class="actions">
-
-        <button
-          class="secondary"
-          onclick="togglePaid(${p.id})">
-          ${isPaid(p) ? "Annuler payé" : "Marquer payé"}
-        </button>
-
-        <button
-          class="secondary"
-          onclick="payPayment(${p.id})">
-          Payer
-        </button>
-
-      </div>
-
-      <div class="actions">
-
-        <button
-          class="secondary"
-          onclick="openForm(${p.id})">
-          Modifier
-        </button>
-
-        <button
-          class="danger"
-          onclick="deletePayment(${p.id})">
-          Supprimer
-        </button>
-
-      </div>
-    `;
-
-    container.appendChild(div);
-  });
-
-  document.getElementById("total").textContent =
-    euro(total);
-
-  document.getElementById("paid").textContent =
-    euro(paid);
-
-  document.getElementById("remaining").textContent =
-    euro(total - paid);
 }
 
-function escapeHtml(text) {
+const base=Math.floor(
+(total/count)*100
+)/100;
 
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+const lastAmount=
+Math.round(
+(total-(base*(count-1)))*100
+)/100;
+
+const result=[];
+
+for(let i=0;i<count;i++){
+
+const date=new Date(firstDate+"T12:00:00");
+
+date.setMonth(
+date.getMonth()+i
+);
+
+const dateString=
+date.toISOString().split("T")[0];
+
+result.push({
+
+number:i+1,
+
+amount:
+i===count-1
+?lastAmount
+:base,
+
+date:dateString,
+
+communication:
+""
+
+});
+
 }
+
+return result;
+
+}
+
+
+function previewInstallments(){
+
+const preview=
+document.getElementById(
+"installmentPreview"
+);
+
+const list=calculateInstallments();
+
+if(!list.length){
+
+preview.innerHTML="";
+
+return;
+
+}
+
+let html=
+"<div style='margin-top:15px'><strong>Échéances générées</strong>";
+
+list.forEach(x=>{
+
+html+=`
+
+<div class="installment">
+
+<div class="installment-top">
+
+<strong>
+Échéance ${x.number}
+</strong>
+
+<span class="badge">
+${euro(x.amount)}
+</span>
+
+</div>
+
+<div class="info">
+Date : ${formatDate(x.date)}
+</div>
+
+</div>
+
+`;
+
+});
+
+html+="</div>";
+
+preview.innerHTML=html;
+
+}
+
+
+function savePayment(){
+
+const name=
+document.getElementById("name")
+.value.trim();
+
+const type=
+document.getElementById("type").value;
+
+const beneficiary=
+document.getElementById("beneficiary")
+.value.trim();
+
+const communication=
+document.getElementById("communication")
+.value.trim();
+
+
+if(!name){
+
+alert("Veuillez entrer un nom.");
+
+return;
+
+}
+
+
+if(type==="monthly"){
+
+const amount=
+parseFloat(
+document.getElementById("amount").value
+)||0;
+
+const day=
+parseInt(
+document.getElementById("day").value
+)||1;
+
+if(!amount){
+
+alert("Veuillez entrer un montant.");
+
+return;
+
+}
+
+const old=
+editingId
+?payments.find(x=>x.id===editingId)
+:null;
+
+const data={
+
+id:editingId||Date.now(),
+
+name:name,
+
+type:"monthly",
+
+amount:amount,
+
+day:day,
+
+beneficiary:beneficiary,
+
+communication:communication,
+
+paid:old?.paid||{}
+
+};
+
+if(editingId){
+
+const index=
+payments.findIndex(x=>x.id===editingId);
+
+payments[index]=data;
+
+}else{
+
+payments.push(data);
+
+}
+
+}else{
+
+const total=
+parseFloat(
+document.getElementById("totalAmount").value
+)||0;
+
+const count=
+parseInt(
+document.getElementById("installments").value
+)||0;
+
+const firstDate=
+document.getElementById("firstDate").value;
+
+if(!total||!count||!firstDate){
+
+alert(
+"Veuillez remplir le montant total, le nombre d'échéances et la première date."
+);
+
+return;
+
+}
+
+const old=
+editingId
+?payments.find(x=>x.id===editingId)
+:null;
+
+let installments=
+calculateInstallments();
+
+
+// Conserver les communications
+// déjà modifiées lors d'une édition
+
+if(old&&old.installmentsList){
+
+installments.forEach((item,index)=>{
+
+if(old.installmentsList[index]){
+
+item.communication=
+old.installmentsList[index].communication||"";
+
+item.paid=
+old.installmentsList[index].paid||false;
+
+}
+
+});
+
+}
+
+
+// Communication générale par défaut
+
+installments.forEach(item=>{
+
+if(!item.communication){
+
+item.communication=communication;
+
+}
+
+});
+
+
+const data={
+
+id:editingId||Date.now(),
+
+name:name,
+
+type:"multiple",
+
+totalAmount:total,
+
+installments:count,
+
+firstDate:firstDate,
+
+beneficiary:beneficiary,
+
+communication:communication,
+
+installmentsList:installments
+
+};
+
+
+if(editingId){
+
+const index=
+payments.findIndex(x=>x.id===editingId);
+
+payments[index]=data;
+
+}else{
+
+payments.push(data);
+
+}
+
+}
+
+saveData();
+
+closeForm();
+
+render();
+
+}
+
+
+function formatDate(date){
+
+return new Date(date+"T12:00:00")
+.toLocaleDateString(
+"fr-BE",
+{
+day:"2-digit",
+month:"2-digit",
+year:"numeric"
+}
+);
+
+}
+
+
+function installmentMonth(date){
+
+const d=new Date(date+"T12:00:00");
+
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0");
+
+}
+
+
+function render(){
+
+document.getElementById("monthTitle")
+.textContent=monthName();
+
+const container=
+document.getElementById("payments");
+
+container.innerHTML="";
+
+let total=0;
+
+let paid=0;
+
+let found=false;
+
+
+payments.forEach(p=>{
+
+if(p.type==="monthly"){
+
+const key=monthKey();
+
+const date=
+new Date(
+currentDate.getFullYear(),
+currentDate.getMonth(),
+p.day
+);
+
+total+=Number(p.amount);
+
+if(p.paid&&p.paid[key]){
+
+paid+=Number(p.amount);
+
+}
+
+found=true;
+
+container.appendChild(
+createMonthlyCard(p)
+);
+
+}else{
+
+(p.installmentsList||[])
+.forEach((inst,index)=>{
+
+if(
+installmentMonth(inst.date)
+===
+monthKey()
+){
+
+found=true;
+
+total+=Number(inst.amount);
+
+if(inst.paid){
+
+paid+=Number(inst.amount);
+
+}
+
+container.appendChild(
+createInstallmentCard(
+p,
+inst,
+index
+)
+);
+
+}
+
+});
+
+}
+
+});
+
+
+if(!found){
+
+container.innerHTML=
+'<div class="card empty">'+
+'Aucun paiement pour ce mois.'+
+'</div>';
+
+}
+
+
+document.getElementById("total")
+.textContent=euro(total);
+
+document.getElementById("paid")
+.textContent=euro(paid);
+
+document.getElementById("remaining")
+.textContent=euro(total-paid);
+
+}
+
+
+function createMonthlyCard(p){
+
+const div=
+document.createElement("div");
+
+const paidNow=
+p.paid&&p.paid[monthKey()];
+
+div.className=
+"payment"+
+(paidNow?" paid":"");
+
+div.innerHTML=`
+
+<div class="payment-header">
+
+<div>
+
+<h3>${escapeHtml(p.name)}</h3>
+
+<div class="info">
+Échéance : le ${p.day}
+</div>
+
+</div>
+
+<div class="amount">
+${euro(p.amount)}
+</div>
+
+</div>
+
+<div class="info">
+
+${paidNow
+?'<span class="check">✓ Payé</span>'
+:"Non payé"}
+
+</div>
+
+${p.beneficiary
+?`<div class="info">
+Bénéficiaire : ${escapeHtml(p.beneficiary)}
+</div>`
+:""}
+
+${p.communication
+?`<div class="info">
+Communication : ${escapeHtml(p.communication)}
+</div>`
+:""}
+
+<div class="actions">
+
+<button class="secondary"
+onclick="toggleMonthlyPaid(${p.id})">
+
+${paidNow
+?"Annuler payé"
+:"Marquer payé"}
+
+</button>
+
+</div>
+
+<div class="actions">
+
+<button class="secondary"
+onclick="openForm(${p.id})">
+
+Modifier
+
+</button>
+
+<button class="danger"
+onclick="deletePayment(${p.id})">
+
+Supprimer
+
+</button>
+
+</div>
+`;
+
+return div;
+
+}
+
+
+function createInstallmentCard(
+p,
+inst,
+index
+){
+
+const div=
+document.createElement("div");
+
+div.className=
+"payment"+
+(inst.paid?" paid":"");
+
+div.innerHTML=`
+
+<div class="payment-header">
+
+<div>
+
+<h3>
+${escapeHtml(p.name)}
+</h3>
+
+<div class="info">
+Échéance ${inst.number} / ${p.installments}
+</div>
+
+</div>
+
+<div class="amount">
+${euro(inst.amount)}
+</div>
+
+</div>
+
+
+<div class="info">
+📅 ${formatDate(inst.date)}
+</div>
+
+
+<div class="info">
+
+${inst.paid
+?'<span class="check">✓ Payé</span>'
+:"Non payé"}
+
+</div>
+
+
+${p.beneficiary
+?`<div class="info">
+Bénéficiaire : ${escapeHtml(p.beneficiary)}
+</div>`
+:""}
+
+
+<label>
+Communication de cette échéance
+</label>
+
+<input
+value="${escapeAttribute(inst.communication||"")}"
+onchange="changeCommunication(
+${p.id},
+${index},
+this.value
+)"
+placeholder="Communication">
+
+
+<div class="actions">
+
+<button
+class="secondary"
+onclick="toggleInstallmentPaid(
+${p.id},
+${index}
+)">
+
+${inst.paid
+?"Annuler payé"
+:"Marquer payé"}
+
+</button>
+
+</div>
+
+
+<div class="actions">
+
+<button
+class="secondary"
+onclick="editInstallment(
+${p.id},
+${index}
+)">
+
+Modifier
+
+</button>
+
+<button
+class="danger"
+onclick="deletePayment(${p.id})">
+
+Supprimer le paiement
+
+</button>
+
+</div>
+
+`;
+
+return div;
+
+}
+
+
+function toggleMonthlyPaid(id){
+
+const p=
+payments.find(x=>x.id===id);
+
+if(!p.paid)p.paid={};
+
+const key=monthKey();
+
+p.paid[key]=!p.paid[key];
+
+saveData();
+
+render();
+
+}
+
+
+function toggleInstallmentPaid(
+id,
+index
+){
+
+const p=
+payments.find(x=>x.id===id);
+
+if(!p.installmentsList[index])return;
+
+p.installmentsList[index].paid=
+!p.installmentsList[index].paid;
+
+saveData();
+
+render();
+
+}
+
+
+function changeCommunication(
+id,
+index,
+value
+){
+
+const p=
+payments.find(x=>x.id===id);
+
+if(!p.installmentsList[index])return;
+
+p.installmentsList[index].communication=
+value;
+
+saveData();
+
+}
+
+
+function editInstallment(
+id,
+index
+){
+
+const p=
+payments.find(x=>x.id===id);
+
+const inst=
+p.installmentsList[index];
+
+const newDate=
+prompt(
+"Date de l'échéance (AAAA-MM-JJ)",
+inst.date
+);
+
+if(newDate){
+
+inst.date=newDate;
+
+}
+
+const newAmount=
+prompt(
+"Montant de cette échéance",
+inst.amount
+);
+
+if(newAmount){
+
+const amount=
+parseFloat(
+newAmount.replace(",",".")
+);
+
+if(!isNaN(amount)){
+
+inst.amount=amount;
+
+}
+
+}
+
+const newCommunication=
+prompt(
+"Communication",
+inst.communication||""
+);
+
+if(newCommunication!==null){
+
+inst.communication=
+newCommunication;
+
+}
+
+saveData();
+
+render();
+
+}
+
+
+function deletePayment(id){
+
+if(!confirm(
+"Supprimer définitivement ce paiement et toutes ses échéances ?"
+))return;
+
+payments=
+payments.filter(x=>x.id!==id);
+
+saveData();
+
+render();
+
+}
+
+
+function escapeHtml(text){
+
+return String(text||"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+function escapeAttribute(text){
+
+return escapeHtml(text)
+.replaceAll("\n","");
+
+}
+
+
+// Ouvrir avec Entrée sur le PIN
+
+document.getElementById("pin")
+.addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter")unlock();
+
+}
+);
 
 </script>
 
