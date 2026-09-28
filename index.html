@@ -6,7 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f5f5f7">
-
 <title>Mes paiements</title>
 
 <style>
@@ -174,50 +173,95 @@ color:#34c759;
 font-weight:bold
 }
 
+/* ECHEANCES */
+
+.installments-box{
+margin-top:15px;
+border-top:1px solid #ddd;
+padding-top:10px
+}
+
 .installment{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 0;
+border-bottom:1px solid #eee
+}
+
+.installment:last-child{
+border-bottom:0
+}
+
+.installment.paid{
+opacity:.55
+}
+
+.checkBox{
+width:24px;
+height:24px;
+flex:none
+}
+
+.installment-info{
+flex:1;
+min-width:0
+}
+
+.installment-number{
+font-weight:bold
+}
+
+.installment-date{
+font-size:14px;
+color:#666;
+margin-top:3px
+}
+
+.installment-communication{
+font-size:13px;
+color:#666;
+margin-top:3px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap
+}
+
+.installment-amount{
+font-weight:bold;
+white-space:nowrap
+}
+
+.edit-button{
+width:38px;
+height:38px;
+padding:0;
+border:0;
+border-radius:10px;
+background:#e5e5ea;
+font-size:18px;
+flex:none
+}
+
+.installment-summary{
+margin-top:12px;
+padding-top:12px;
+border-top:1px solid #ddd;
+font-size:14px
+}
+
+.form-preview{
 background:#f2f2f7;
 border-radius:14px;
-padding:13px;
-margin-top:10px
-}
-
-.installment-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px
-}
-
-.installment input{
-margin-top:8px
-}
-
-.badge{
-font-size:12px;
-padding:5px 8px;
-border-radius:8px;
-background:#e5e5ea
-}
-
-.paidBadge{
-background:#d1f2d8;
-color:#167c2d
-}
-
-.totalLine{
-display:flex;
-justify-content:space-between;
-font-weight:bold;
-padding-top:12px;
-margin-top:12px;
-border-top:1px solid #ddd
+padding:12px;
+margin-top:12px
 }
 </style>
 </head>
 
 <body>
 
-<!-- CONNEXION -->
+<!-- PIN -->
 <div id="login">
 
 <div class="card">
@@ -251,7 +295,7 @@ style="color:#ff3b30;text-align:center">
 
 
 <!-- APPLICATION -->
-<div id="app" class="app">
+<div id="app" class="app" style="display:none">
 
 <h1>Mes paiements</h1>
 
@@ -298,6 +342,7 @@ Reste
 
 
 <!-- FORMULAIRE -->
+
 <div id="form" class="card">
 
 <h2 id="formTitle">
@@ -326,8 +371,6 @@ Paiement en plusieurs échéances
 </select>
 
 
-<!-- MENSUEL -->
-
 <div id="monthlyFields">
 
 <label>Montant mensuel</label>
@@ -351,8 +394,6 @@ placeholder="Ex. 15">
 </div>
 
 
-<!-- ECHEANCES -->
-
 <div id="multipleFields" class="hidden">
 
 <label>Montant total</label>
@@ -361,7 +402,8 @@ placeholder="Ex. 15">
 id="totalAmount"
 type="number"
 step="0.01"
-placeholder="Ex. 12000">
+placeholder="Ex. 12000"
+oninput="previewInstallments()">
 
 
 <label>Nombre d'échéances</label>
@@ -370,7 +412,7 @@ placeholder="Ex. 12000">
 id="installments"
 type="number"
 min="1"
-placeholder="Ex. 24"
+placeholder="Ex. 5"
 oninput="previewInstallments()">
 
 
@@ -394,11 +436,11 @@ id="beneficiary"
 placeholder="Nom du bénéficiaire">
 
 
-<label>Communication générale</label>
+<label>Communication</label>
 
 <input
 id="communication"
-placeholder="Communication">
+placeholder="Communication par défaut">
 
 
 <br>
@@ -430,15 +472,7 @@ let currentDate=new Date();
 let editingId=null;
 
 
-function saveData(){
-
-localStorage.setItem(
-"mesPaiements",
-JSON.stringify(payments)
-);
-
-}
-
+/* UTILITAIRES */
 
 function euro(value){
 
@@ -452,6 +486,84 @@ currency:"EUR"
 
 }
 
+
+function formatDate(date){
+
+return new Date(date+"T12:00:00")
+.toLocaleDateString(
+"fr-BE",
+{
+day:"2-digit",
+month:"2-digit",
+year:"numeric"
+}
+);
+
+}
+
+
+function monthKeyFromDate(date){
+
+const d=new Date(date+"T12:00:00");
+
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0");
+
+}
+
+
+function currentMonthKey(){
+
+return currentDate.getFullYear()+"-"+
+String(currentDate.getMonth()+1).padStart(2,"0");
+
+}
+
+
+function monthName(){
+
+return currentDate.toLocaleDateString(
+"fr-BE",
+{
+month:"long",
+year:"numeric"
+}
+);
+
+}
+
+
+function saveData(){
+
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(payments)
+);
+
+}
+
+
+function escapeHtml(text){
+
+return String(text||"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+function escapeAttribute(text){
+
+return escapeHtml(text)
+.replaceAll("\n","");
+
+}
+
+
+/* PIN */
 
 function unlock(){
 
@@ -478,6 +590,8 @@ document.getElementById("pinError")
 }
 
 
+/* MOIS */
+
 function changeMonth(delta){
 
 currentDate.setMonth(
@@ -489,23 +603,24 @@ render();
 }
 
 
-function monthKey(){
+/* FORMULAIRE */
 
-return currentDate.getFullYear()+"-"+
-String(currentDate.getMonth()+1).padStart(2,"0");
+function updateType(){
+
+const multiple=
+document.getElementById("type").value==="multiple";
+
+document.getElementById("monthlyFields")
+.classList.toggle("hidden",multiple);
+
+document.getElementById("multipleFields")
+.classList.toggle("hidden",!multiple);
+
+if(multiple){
+
+previewInstallments();
 
 }
-
-
-function monthName(){
-
-return currentDate.toLocaleDateString(
-"fr-BE",
-{
-month:"long",
-year:"numeric"
-}
-);
 
 }
 
@@ -526,9 +641,11 @@ payments.find(x=>x.id===id);
 document.getElementById("formTitle")
 .textContent="Modifier le paiement";
 
-document.getElementById("name").value=p.name;
+document.getElementById("name").value=
+p.name||"";
 
-document.getElementById("type").value=p.type;
+document.getElementById("type").value=
+p.type||"monthly";
 
 document.getElementById("beneficiary").value=
 p.beneficiary||"";
@@ -602,25 +719,7 @@ editingId=null;
 }
 
 
-function updateType(){
-
-const multiple=
-document.getElementById("type").value==="multiple";
-
-document.getElementById("monthlyFields")
-.classList.toggle("hidden",multiple);
-
-document.getElementById("multipleFields")
-.classList.toggle("hidden",!multiple);
-
-if(multiple){
-
-previewInstallments();
-
-}
-
-}
-
+/* CREATION DES ECHEANCES */
 
 function calculateInstallments(){
 
@@ -643,41 +742,53 @@ return [];
 
 }
 
-const base=Math.floor(
-(total/count)*100
-)/100;
 
-const lastAmount=
-Math.round(
-(total-(base*(count-1)))*100
-)/100;
+/*
+On calcule en centimes pour éviter
+les erreurs d'arrondi.
+*/
+
+const totalCents=
+Math.round(total*100);
+
+const baseCents=
+Math.floor(totalCents/count);
+
+const remainder=
+totalCents-(baseCents*count);
 
 const result=[];
 
 for(let i=0;i<count;i++){
 
-const date=new Date(firstDate+"T12:00:00");
+const date=
+new Date(firstDate+"T12:00:00");
 
 date.setMonth(
 date.getMonth()+i
 );
 
 const dateString=
-date.toISOString().split("T")[0];
+date.getFullYear()+"-"+
+String(date.getMonth()+1).padStart(2,"0")+"-"+
+String(date.getDate()).padStart(2,"0");
+
+const cents=
+baseCents+
+(i===count-1?remainder:0);
 
 result.push({
 
 number:i+1,
 
-amount:
-i===count-1
-?lastAmount
-:base,
+amount:cents/100,
 
 date:dateString,
 
 communication:
-""
+document.getElementById("communication").value||"",
+
+paid:false
 
 });
 
@@ -688,6 +799,8 @@ return result;
 }
 
 
+/* APERCU */
+
 function previewInstallments(){
 
 const preview=
@@ -695,7 +808,10 @@ document.getElementById(
 "installmentPreview"
 );
 
-const list=calculateInstallments();
+if(!preview)return;
+
+const list=
+calculateInstallments();
 
 if(!list.length){
 
@@ -706,29 +822,28 @@ return;
 }
 
 let html=
-"<div style='margin-top:15px'><strong>Échéances générées</strong>";
+'<div class="form-preview">'+
+"<strong>Échéances</strong>";
 
-list.forEach(x=>{
+list.forEach(item=>{
 
 html+=`
 
-<div class="installment">
+<div style="
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+border-bottom:1px solid #ddd">
 
-<div class="installment-top">
-
-<strong>
-Échéance ${x.number}
-</strong>
-
-<span class="badge">
-${euro(x.amount)}
+<span>
+${item.number}/${list.length}
+<br>
+<small>${formatDate(item.date)}</small>
 </span>
 
-</div>
-
-<div class="info">
-Date : ${formatDate(x.date)}
-</div>
+<strong>
+${euro(item.amount)}
+</strong>
 
 </div>
 
@@ -742,6 +857,8 @@ preview.innerHTML=html;
 
 }
 
+
+/* ENREGISTREMENT */
 
 function savePayment(){
 
@@ -769,6 +886,8 @@ return;
 
 }
 
+
+/* MENSUEL */
 
 if(type==="monthly"){
 
@@ -799,17 +918,17 @@ const data={
 
 id:editingId||Date.now(),
 
-name:name,
+name,
 
 type:"monthly",
 
-amount:amount,
+amount,
 
-day:day,
+day,
 
-beneficiary:beneficiary,
+beneficiary,
 
-communication:communication,
+communication,
 
 paid:old?.paid||{}
 
@@ -818,7 +937,9 @@ paid:old?.paid||{}
 if(editingId){
 
 const index=
-payments.findIndex(x=>x.id===editingId);
+payments.findIndex(
+x=>x.id===editingId
+);
 
 payments[index]=data;
 
@@ -828,7 +949,12 @@ payments.push(data);
 
 }
 
-}else{
+}
+
+
+/* PLUSIEURS ECHEANCES */
+
+else{
 
 const total=
 parseFloat(
@@ -846,7 +972,7 @@ document.getElementById("firstDate").value;
 if(!total||!count||!firstDate){
 
 alert(
-"Veuillez remplir le montant total, le nombre d'échéances et la première date."
+"Veuillez remplir le montant total, le nombre d'échéances et la date."
 );
 
 return;
@@ -858,50 +984,47 @@ editingId
 ?payments.find(x=>x.id===editingId)
 :null;
 
-let installments=
+let list=
 calculateInstallments();
 
 
-// Conserver les communications
-// déjà modifiées lors d'une édition
+/*
+Lors d'une modification,
+on conserve l'état payé et les
+communications existantes.
+*/
 
-if(old&&old.installmentsList){
+if(old?.installmentsList){
 
-installments.forEach((item,index)=>{
+list.forEach((item,index)=>{
 
-if(old.installmentsList[index]){
+const previous=
+old.installmentsList[index];
 
-item.communication=
-old.installmentsList[index].communication||"";
+if(previous){
 
 item.paid=
-old.installmentsList[index].paid||false;
+previous.paid||false;
+
+if(previous.communication){
+
+item.communication=
+previous.communication;
+
+}
 
 }
 
 });
 
 }
-
-
-// Communication générale par défaut
-
-installments.forEach(item=>{
-
-if(!item.communication){
-
-item.communication=communication;
-
-}
-
-});
 
 
 const data={
 
 id:editingId||Date.now(),
 
-name:name,
+name,
 
 type:"multiple",
 
@@ -909,13 +1032,13 @@ totalAmount:total,
 
 installments:count,
 
-firstDate:firstDate,
+firstDate,
 
-beneficiary:beneficiary,
+beneficiary,
 
-communication:communication,
+communication,
 
-installmentsList:installments
+installmentsList:list
 
 };
 
@@ -923,7 +1046,9 @@ installmentsList:installments
 if(editingId){
 
 const index=
-payments.findIndex(x=>x.id===editingId);
+payments.findIndex(
+x=>x.id===editingId
+);
 
 payments[index]=data;
 
@@ -944,30 +1069,7 @@ render();
 }
 
 
-function formatDate(date){
-
-return new Date(date+"T12:00:00")
-.toLocaleDateString(
-"fr-BE",
-{
-day:"2-digit",
-month:"2-digit",
-year:"numeric"
-}
-);
-
-}
-
-
-function installmentMonth(date){
-
-const d=new Date(date+"T12:00:00");
-
-return d.getFullYear()+"-"+
-String(d.getMonth()+1).padStart(2,"0");
-
-}
-
+/* AFFICHAGE */
 
 function render(){
 
@@ -985,25 +1087,22 @@ let paid=0;
 
 let found=false;
 
+const key=
+currentMonthKey();
+
 
 payments.forEach(p=>{
 
+
+/* PAIEMENT MENSUEL */
+
 if(p.type==="monthly"){
 
-const key=monthKey();
-
-const date=
-new Date(
-currentDate.getFullYear(),
-currentDate.getMonth(),
-p.day
-);
-
-total+=Number(p.amount);
+total+=Number(p.amount)||0;
 
 if(p.paid&&p.paid[key]){
 
-paid+=Number(p.amount);
+paid+=Number(p.amount)||0;
 
 }
 
@@ -1013,38 +1112,35 @@ container.appendChild(
 createMonthlyCard(p)
 );
 
-}else{
+}
 
-(p.installmentsList||[])
-.forEach((inst,index)=>{
 
-if(
-installmentMonth(inst.date)
-===
-monthKey()
-){
+/* PAIEMENT A ECHEANCES */
+
+else{
+
+const list=
+p.installmentsList||[];
+
+const relevant=
+list.filter(
+item=>
+monthKeyFromDate(item.date)===key
+);
+
+if(relevant.length){
 
 found=true;
 
-total+=Number(inst.amount);
-
-if(inst.paid){
-
-paid+=Number(inst.amount);
-
-}
-
-container.appendChild(
-createInstallmentCard(
+const card=
+createMultipleCard(
 p,
-inst,
-index
-)
+relevant
 );
 
-}
+container.appendChild(card);
 
-});
+}
 
 }
 
@@ -1073,17 +1169,18 @@ document.getElementById("remaining")
 }
 
 
+/* MENSUEL */
+
 function createMonthlyCard(p){
 
 const div=
 document.createElement("div");
 
-const paidNow=
-p.paid&&p.paid[monthKey()];
+const isPaid=
+p.paid&&p.paid[currentMonthKey()];
 
 div.className=
-"payment"+
-(paidNow?" paid":"");
+"payment"+(isPaid?" paid":"");
 
 div.innerHTML=`
 
@@ -1091,7 +1188,9 @@ div.innerHTML=`
 
 <div>
 
-<h3>${escapeHtml(p.name)}</h3>
+<h3>
+${escapeHtml(p.name)}
+</h3>
 
 <div class="info">
 Échéance : le ${p.day}
@@ -1107,7 +1206,7 @@ ${euro(p.amount)}
 
 <div class="info">
 
-${paidNow
+${isPaid
 ?'<span class="check">✓ Payé</span>'
 :"Non payé"}
 
@@ -1127,12 +1226,13 @@ Communication : ${escapeHtml(p.communication)}
 
 <div class="actions">
 
-<button class="secondary"
+<button
+class="secondary"
 onclick="toggleMonthlyPaid(${p.id})">
 
-${paidNow
-?"Annuler payé"
-:"Marquer payé"}
+${isPaid
+?"☑ Payé"
+:"☐ Marquer payé"}
 
 </button>
 
@@ -1140,18 +1240,16 @@ ${paidNow
 
 <div class="actions">
 
-<button class="secondary"
+<button
+class="secondary"
 onclick="openForm(${p.id})">
-
-Modifier
-
+✏️ Modifier
 </button>
 
-<button class="danger"
+<button
+class="danger"
 onclick="deletePayment(${p.id})">
-
 Supprimer
-
 </button>
 
 </div>
@@ -1162,20 +1260,19 @@ return div;
 }
 
 
-function createInstallmentCard(
+/* PAIEMENT EN PLUSIEURS ECHEANCES */
+
+function createMultipleCard(
 p,
-inst,
-index
+relevant
 ){
 
 const div=
 document.createElement("div");
 
-div.className=
-"payment"+
-(inst.paid?" paid":"");
+div.className="payment";
 
-div.innerHTML=`
+let html=`
 
 <div class="payment-header">
 
@@ -1186,89 +1283,90 @@ ${escapeHtml(p.name)}
 </h3>
 
 <div class="info">
-Échéance ${inst.number} / ${p.installments}
+Paiement en ${p.installments} échéances
 </div>
 
 </div>
 
 <div class="amount">
-${euro(inst.amount)}
+${euro(p.totalAmount)}
 </div>
 
 </div>
 
-
-<div class="info">
-📅 ${formatDate(inst.date)}
-</div>
+<div class="installments-box">
+`;
 
 
-<div class="info">
+/*
+Chaque échéance possède sa propre
+case à cocher et son bouton modifier.
+*/
 
-${inst.paid
-?'<span class="check">✓ Payé</span>'
-:"Non payé"}
+relevant.forEach(item=>{
 
-</div>
+const index=
+p.installmentsList.indexOf(item);
 
+html+=`
 
-${p.beneficiary
-?`<div class="info">
-Bénéficiaire : ${escapeHtml(p.beneficiary)}
-</div>`
-:""}
-
-
-<label>
-Communication de cette échéance
-</label>
+<div class="installment
+${item.paid?"paid":""}">
 
 <input
-value="${escapeAttribute(inst.communication||"")}"
-onchange="changeCommunication(
-${p.id},
-${index},
-this.value
-)"
-placeholder="Communication">
-
-
-<div class="actions">
-
-<button
-class="secondary"
-onclick="toggleInstallmentPaid(
+class="checkBox"
+type="checkbox"
+${item.paid?"checked":""}
+onchange="
+toggleInstallmentPaid(
 ${p.id},
 ${index}
 )">
 
-${inst.paid
-?"Annuler payé"
-:"Marquer payé"}
+<div class="installment-info">
 
-</button>
+<div class="installment-number">
+
+${item.paid
+?"✓ "
+:""}
+
+Échéance ${item.number}/${p.installments}
 
 </div>
 
+<div class="installment-date">
 
-<div class="actions">
+📅 ${formatDate(item.date)}
+
+</div>
+
+<div class="installment-communication">
+
+💬 ${escapeHtml(
+item.communication||"Aucune communication"
+)}
+
+</div>
+
+</div>
+
+<div class="installment-amount">
+
+${euro(item.amount)}
+
+</div>
 
 <button
-class="secondary"
-onclick="editInstallment(
+class="edit-button"
+title="Modifier"
+onclick="
+editInstallment(
 ${p.id},
 ${index}
 )">
 
-Modifier
-
-</button>
-
-<button
-class="danger"
-onclick="deletePayment(${p.id})">
-
-Supprimer le paiement
+✏️
 
 </button>
 
@@ -1276,28 +1374,76 @@ Supprimer le paiement
 
 `;
 
+});
+
+
+/* TOTAL DU PAIEMENT */
+
+const paidCount=
+(p.installmentsList||[])
+.filter(x=>x.paid)
+.length;
+
+const paidAmount=
+(p.installmentsList||[])
+.filter(x=>x.paid)
+.reduce(
+(sum,x)=>sum+Number(x.amount),
+0
+);
+
+html+=`
+
+</div>
+
+<div class="installment-summary">
+
+<strong>
+${paidCount}/${p.installments} échéances payées
+</strong>
+
+<br>
+
+<span style="color:#666">
+
+${euro(paidAmount)}
+payés sur
+${euro(p.totalAmount)}
+
+</span>
+
+</div>
+
+<div class="actions">
+
+<button
+class="secondary"
+onclick="openForm(${p.id})">
+
+✏️ Modifier le paiement
+
+</button>
+
+<button
+class="danger"
+onclick="deletePayment(${p.id})">
+
+Supprimer
+
+</button>
+
+</div>
+
+`;
+
+div.innerHTML=html;
+
 return div;
 
 }
 
 
-function toggleMonthlyPaid(id){
-
-const p=
-payments.find(x=>x.id===id);
-
-if(!p.paid)p.paid={};
-
-const key=monthKey();
-
-p.paid[key]=!p.paid[key];
-
-saveData();
-
-render();
-
-}
-
+/* COCHER UNE ECHEANCE */
 
 function toggleInstallmentPaid(
 id,
@@ -1307,7 +1453,7 @@ index
 const p=
 payments.find(x=>x.id===id);
 
-if(!p.installmentsList[index])return;
+if(!p||!p.installmentsList[index])return;
 
 p.installmentsList[index].paid=
 !p.installmentsList[index].paid;
@@ -1319,24 +1465,7 @@ render();
 }
 
 
-function changeCommunication(
-id,
-index,
-value
-){
-
-const p=
-payments.find(x=>x.id===id);
-
-if(!p.installmentsList[index])return;
-
-p.installmentsList[index].communication=
-value;
-
-saveData();
-
-}
-
+/* MODIFIER UNE ECHEANCE */
 
 function editInstallment(
 id,
@@ -1346,54 +1475,77 @@ index
 const p=
 payments.find(x=>x.id===id);
 
-const inst=
+if(!p||!p.installmentsList[index])return;
+
+const item=
 p.installmentsList[index];
+
+
+/* DATE */
 
 const newDate=
 prompt(
 "Date de l'échéance (AAAA-MM-JJ)",
-inst.date
+item.date
 );
 
-if(newDate){
+if(newDate===null)return;
 
-inst.date=newDate;
+if(!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){
+
+alert(
+"Format incorrect. Utilisez AAAA-MM-JJ."
+);
+
+return;
 
 }
 
+
+/* MONTANT */
+
 const newAmount=
 prompt(
-"Montant de cette échéance",
-inst.amount
+"Montant de cette échéance (€)",
+String(item.amount).replace(".",",")
 );
 
-if(newAmount){
+if(newAmount===null)return;
 
 const amount=
 parseFloat(
 newAmount.replace(",",".")
 );
 
-if(!isNaN(amount)){
+if(isNaN(amount)||amount<0){
 
-inst.amount=amount;
+alert("Montant incorrect.");
+
+return;
 
 }
 
-}
+
+/* COMMUNICATION */
 
 const newCommunication=
 prompt(
-"Communication",
-inst.communication||""
+"Communication de cette échéance",
+item.communication||""
 );
 
-if(newCommunication!==null){
+if(newCommunication===null)return;
 
-inst.communication=
+
+/* ENREGISTREMENT */
+
+item.date=newDate;
+
+item.amount=
+Math.round(amount*100)/100;
+
+item.communication=
 newCommunication;
-
-}
 
 saveData();
 
@@ -1401,15 +1553,43 @@ render();
 
 }
 
+
+/* MENSUEL PAYE */
+
+function toggleMonthlyPaid(id){
+
+const p=
+payments.find(x=>x.id===id);
+
+if(!p)return;
+
+if(!p.paid)p.paid={};
+
+const key=
+currentMonthKey();
+
+p.paid[key]=
+!p.paid[key];
+
+saveData();
+
+render();
+
+}
+
+
+/* SUPPRESSION */
 
 function deletePayment(id){
 
 if(!confirm(
-"Supprimer définitivement ce paiement et toutes ses échéances ?"
+"Supprimer ce paiement et toutes ses échéances ?"
 ))return;
 
 payments=
-payments.filter(x=>x.id!==id);
+payments.filter(
+x=>x.id!==id
+);
 
 saveData();
 
@@ -1418,37 +1598,20 @@ render();
 }
 
 
-function escapeHtml(text){
-
-return String(text||"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-function escapeAttribute(text){
-
-return escapeHtml(text)
-.replaceAll("\n","");
-
-}
-
-
-// Ouvrir avec Entrée sur le PIN
+/* ENTER SUR LE PIN */
 
 document.getElementById("pin")
 .addEventListener(
 "keydown",
 function(e){
 
-if(e.key==="Enter")unlock();
+if(e.key==="Enter"){
+
+unlock();
 
 }
-);
+
+});
 
 </script>
 
