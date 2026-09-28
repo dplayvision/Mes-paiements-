@@ -84,6 +84,7 @@ button {
   background: #007aff;
   color: white;
   font-weight: 600;
+  cursor: pointer;
 }
 
 button.secondary {
@@ -95,18 +96,12 @@ button.green {
   background: #34c759;
 }
 
-button.red {
-  background: #ff3b30;
-}
-
 button.small {
   width: auto;
   padding: 9px 11px;
   margin: 0;
   font-size: 14px;
 }
-
-/* ONGlets */
 
 .tabs {
   display: flex;
@@ -133,8 +128,6 @@ button.small {
   box-shadow: 0 1px 4px rgba(0,0,0,.12);
 }
 
-/* Compteur onglet */
-
 .tabCount {
   display: inline-block;
   min-width: 22px;
@@ -148,16 +141,6 @@ button.small {
 .tab.active .tabCount {
   background: #007aff;
   color: white;
-}
-
-/* Paiements */
-
-.payment {
-  background: white;
-  border-radius: 16px;
-  padding: 15px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
 .installment {
@@ -226,7 +209,7 @@ button.small {
   padding: 25px 15px;
 }
 
-/* Modal */
+/* MODALES */
 
 .modal {
   display: none;
@@ -241,8 +224,8 @@ button.small {
 .modalContent {
   background: white;
   max-width: 500px;
-  margin: 40px auto;
-  border-radius: 18px;
+  margin: 35px auto;
+  border-radius: 20px;
   padding: 20px;
 }
 
@@ -250,7 +233,66 @@ button.small {
   margin-top: 0;
 }
 
-/* Connexion */
+/* PAIEMENT MANUEL */
+
+.manualPaymentTitle {
+  font-size: 23px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.manualPaymentSubtitle {
+  color: #666;
+  margin-bottom: 18px;
+}
+
+.bankField {
+  background: #f2f2f7;
+  border-radius: 13px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.bankLabel {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.bankRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bankValue {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.copyButton {
+  width: auto;
+  min-width: 75px;
+  padding: 8px 10px;
+  margin: 0;
+  background: #007aff;
+  font-size: 13px;
+}
+
+.copyButton.copied {
+  background: #34c759;
+}
+
+.bankHelp {
+  background: #fff7df;
+  border-radius: 13px;
+  padding: 13px;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+}
 
 #app {
   display: none;
@@ -273,7 +315,7 @@ button.small {
 <body>
 
 <!-- =========================
-     ÉCRAN PIN
+     PIN
 ========================= -->
 
 <div id="loginScreen" class="login">
@@ -313,11 +355,9 @@ button.small {
   <h1>💳 Mes paiements</h1>
 </header>
 
-
 <div class="container">
 
-
-  <!-- TOTALS -->
+  <!-- TOTAL -->
 
   <div class="summary">
 
@@ -364,25 +404,16 @@ button.small {
   </div>
 
 
-  <!-- LISTE À PAYER -->
-
   <div id="unpaidSection">
-
     <div id="unpaidList"></div>
-
   </div>
-
-
-  <!-- LISTE PAYÉ -->
 
   <div id="paidSection" style="display:none">
-
     <div id="paidList"></div>
-
   </div>
 
 
-  <!-- AJOUT -->
+  <!-- NOUVEAU PAIEMENT -->
 
   <div class="card">
 
@@ -391,6 +422,12 @@ button.small {
     <input
       id="beneficiary"
       placeholder="Bénéficiaire"
+    >
+
+    <input
+      id="iban"
+      placeholder="IBAN"
+      autocomplete="off"
     >
 
     <input
@@ -456,7 +493,7 @@ button.small {
 
 
 <!-- =========================
-     MODALE MODIFICATION
+     MODALE MODIFIER
 ========================= -->
 
 <div id="editModal" class="modal">
@@ -498,6 +535,158 @@ button.small {
 </div>
 
 
+<!-- =========================
+     MODALE PAYER
+========================= -->
+
+<div id="manualPaymentModal" class="modal">
+
+  <div class="modalContent">
+
+    <div class="manualPaymentTitle">
+      🏦 Payer manuellement
+    </div>
+
+    <div
+      id="manualPaymentSubtitle"
+      class="manualPaymentSubtitle"
+    ></div>
+
+
+    <!-- BÉNÉFICIAIRE -->
+
+    <div class="bankField">
+
+      <div class="bankLabel">
+        Bénéficiaire
+      </div>
+
+      <div class="bankRow">
+
+        <div
+          id="manualBeneficiary"
+          class="bankValue"
+        ></div>
+
+        <button
+          id="copyBeneficiaryButton"
+          class="copyButton"
+          onclick="copyBankField('beneficiary')"
+        >
+          Copier
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- IBAN -->
+
+    <div class="bankField">
+
+      <div class="bankLabel">
+        IBAN
+      </div>
+
+      <div class="bankRow">
+
+        <div
+          id="manualIban"
+          class="bankValue"
+        ></div>
+
+        <button
+          id="copyIbanButton"
+          class="copyButton"
+          onclick="copyBankField('iban')"
+        >
+          Copier
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- MONTANT -->
+
+    <div class="bankField">
+
+      <div class="bankLabel">
+        Montant
+      </div>
+
+      <div class="bankRow">
+
+        <div
+          id="manualAmount"
+          class="bankValue"
+        ></div>
+
+        <button
+          id="copyAmountButton"
+          class="copyButton"
+          onclick="copyBankField('amount')"
+        >
+          Copier
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- COMMUNICATION -->
+
+    <div class="bankField">
+
+      <div class="bankLabel">
+        Communication
+      </div>
+
+      <div class="bankRow">
+
+        <div
+          id="manualCommunication"
+          class="bankValue"
+        ></div>
+
+        <button
+          id="copyCommunicationButton"
+          class="copyButton"
+          onclick="copyBankField('communication')"
+        >
+          Copier
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="bankHelp">
+
+      💡 Ouvre ton app bancaire, crée un virement,
+      et colle chaque information avec le bouton
+      <strong>« Copier »</strong>.
+
+    </div>
+
+
+    <button
+      class="secondary"
+      onclick="closeManualPayment()"
+      style="margin-top:15px"
+    >
+      Fermer
+    </button>
+
+  </div>
+
+</div>
+
+
 <script>
 
 const PIN = "1157";
@@ -509,11 +698,14 @@ let payments = [];
 let editingPaymentId = null;
 let editingInstallmentIndex = null;
 
+let manualPaymentId = null;
+let manualInstallmentIndex = null;
+
 let currentTab = "unpaid";
 
 
 /* =========================
-   FORMAT EURO
+   EURO
 ========================= */
 
 function euro(value) {
@@ -558,10 +750,6 @@ function formatDate(dateString) {
 
 }
 
-
-/* =========================
-   AJOUT MOIS
-========================= */
 
 function addMonths(dateString, months) {
 
@@ -622,6 +810,10 @@ function normalizeData(data) {
 
     if (!payment.beneficiary) {
       payment.beneficiary = "";
+    }
+
+    if (!payment.iban) {
+      payment.iban = "";
     }
 
     if (!Array.isArray(payment.installments)) {
@@ -769,7 +961,7 @@ document
 
 
 /* =========================
-   AJOUT PAIEMENT
+   AJOUT
 ========================= */
 
 function addPayment() {
@@ -779,6 +971,14 @@ function addPayment() {
       .getElementById("beneficiary")
       .value
       .trim();
+
+  const iban =
+    document
+      .getElementById("iban")
+      .value
+      .trim()
+      .replace(/\s/g, "")
+      .toUpperCase();
 
   const total =
     Number(
@@ -811,6 +1011,18 @@ function addPayment() {
     );
 
     return;
+
+  }
+
+
+  if (!iban) {
+
+    alert(
+      "Veuillez entrer un IBAN."
+    );
+
+    return;
+
   }
 
 
@@ -821,6 +1033,7 @@ function addPayment() {
     );
 
     return;
+
   }
 
 
@@ -831,6 +1044,7 @@ function addPayment() {
     );
 
     return;
+
   }
 
 
@@ -841,6 +1055,7 @@ function addPayment() {
     );
 
     return;
+
   }
 
 
@@ -871,7 +1086,8 @@ function addPayment() {
 
     installments.push({
 
-      number: i + 1,
+      number:
+        i + 1,
 
       date:
         addMonths(firstDate, i),
@@ -898,6 +1114,9 @@ function addPayment() {
     beneficiary:
       beneficiary,
 
+    iban:
+      iban,
+
     totalAmount:
       total,
 
@@ -912,6 +1131,10 @@ function addPayment() {
 
   document.getElementById(
     "beneficiary"
+  ).value = "";
+
+  document.getElementById(
+    "iban"
   ).value = "";
 
   document.getElementById(
@@ -940,7 +1163,6 @@ function addPayment() {
 function showTab(tab) {
 
   currentTab = tab;
-
 
   const unpaidSection =
     document.getElementById(
@@ -1040,7 +1262,6 @@ function render() {
 
         total +=
           Number(item.amount || 0);
-
 
         if (item.paid) {
 
@@ -1153,7 +1374,7 @@ function render() {
 
 
 /* =========================
-   CARTE
+   CARTE ÉCHÉANCE
 ========================= */
 
 function createInstallmentCard(
@@ -1223,23 +1444,24 @@ function createInstallmentCard(
 
     <div class="actions">
 
-      <button
-        class="small ${
-          item.paid ? "secondary" : "green"
-        }"
-        onclick="
-          togglePaid(
-            '${payment.id}',
-            ${index}
-          )
-        "
-      >
-        ${
-          item.paid
-            ? "↩️ Remettre à payer"
-            : "✅ Marquer payé"
-        }
-      </button>
+      ${
+        !item.paid
+          ? `
+            <button
+              class="small"
+              style="background:#5856d6"
+              onclick="
+                openManualPayment(
+                  '${payment.id}',
+                  ${index}
+                )
+              "
+            >
+              🏦 Payer
+            </button>
+          `
+          : ""
+      }
 
 
       <button
@@ -1267,6 +1489,27 @@ function createInstallmentCard(
         📅 Google Agenda
       </button>
 
+
+      <button
+        class="small ${
+          item.paid
+            ? "secondary"
+            : "green"
+        }"
+        onclick="
+          togglePaid(
+            '${payment.id}',
+            ${index}
+          )
+        "
+      >
+        ${
+          item.paid
+            ? "↩️ Remettre à payer"
+            : "✅ Marquer payé"
+        }
+      </button>
+
     </div>
 
   `;
@@ -1278,7 +1521,290 @@ function createInstallmentCard(
 
 
 /* =========================
-   PAYÉ / À PAYER
+   PAYER MANUELLEMENT
+========================= */
+
+function openManualPayment(
+  paymentId,
+  index
+) {
+
+  const payment =
+    payments.find(
+      p => p.id === paymentId
+    );
+
+
+  if (!payment) {
+    return;
+  }
+
+
+  const item =
+    payment.installments[index];
+
+
+  if (!item) {
+    return;
+  }
+
+
+  manualPaymentId =
+    paymentId;
+
+  manualInstallmentIndex =
+    index;
+
+
+  document.getElementById(
+    "manualPaymentSubtitle"
+  ).textContent =
+    `Échéance ${item.number} • ${formatDate(item.date)}`;
+
+
+  document.getElementById(
+    "manualBeneficiary"
+  ).textContent =
+    payment.beneficiary || "-";
+
+
+  document.getElementById(
+    "manualIban"
+  ).textContent =
+    payment.iban || "-";
+
+
+  document.getElementById(
+    "manualAmount"
+  ).textContent =
+    euro(item.amount);
+
+
+  document.getElementById(
+    "manualCommunication"
+  ).textContent =
+    item.communication || "-";
+
+
+  resetCopyButtons();
+
+
+  document.getElementById(
+    "manualPaymentModal"
+  ).style.display =
+    "block";
+
+}
+
+
+function closeManualPayment() {
+
+  document.getElementById(
+    "manualPaymentModal"
+  ).style.display =
+    "none";
+
+  manualPaymentId = null;
+  manualInstallmentIndex = null;
+
+}
+
+
+/* =========================
+   COPIER
+========================= */
+
+function getCopyValue(type) {
+
+  const payment =
+    payments.find(
+      p => p.id === manualPaymentId
+    );
+
+
+  if (!payment) {
+    return "";
+  }
+
+
+  const item =
+    payment.installments[
+      manualInstallmentIndex
+    ];
+
+
+  if (!item) {
+    return "";
+  }
+
+
+  if (type === "beneficiary") {
+    return payment.beneficiary || "";
+  }
+
+
+  if (type === "iban") {
+    return payment.iban || "";
+  }
+
+
+  if (type === "amount") {
+
+    return Number(
+      item.amount || 0
+    ).toFixed(2);
+
+  }
+
+
+  if (type === "communication") {
+    return item.communication || "";
+  }
+
+
+  return "";
+
+}
+
+
+async function copyBankField(type) {
+
+  const value =
+    getCopyValue(type);
+
+
+  if (!value) {
+
+    alert(
+      "Cette information est vide."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    await navigator.clipboard.writeText(
+      value
+    );
+
+  } catch (error) {
+
+    const textarea =
+      document.createElement("textarea");
+
+    textarea.value =
+      value;
+
+    document.body.appendChild(
+      textarea
+    );
+
+    textarea.select();
+
+    document.execCommand(
+      "copy"
+    );
+
+    textarea.remove();
+
+  }
+
+
+  let buttonId = "";
+
+
+  if (type === "beneficiary") {
+    buttonId =
+      "copyBeneficiaryButton";
+  }
+
+  if (type === "iban") {
+    buttonId =
+      "copyIbanButton";
+  }
+
+  if (type === "amount") {
+    buttonId =
+      "copyAmountButton";
+  }
+
+  if (type === "communication") {
+    buttonId =
+      "copyCommunicationButton";
+  }
+
+
+  const button =
+    document.getElementById(
+      buttonId
+    );
+
+
+  if (button) {
+
+    button.textContent =
+      "✓ Copié";
+
+    button.classList.add(
+      "copied"
+    );
+
+
+    setTimeout(
+      () => {
+
+        button.textContent =
+          "Copier";
+
+        button.classList.remove(
+          "copied"
+        );
+
+      },
+      1500
+    );
+
+  }
+
+}
+
+
+function resetCopyButtons() {
+
+  const buttons = [
+    "copyBeneficiaryButton",
+    "copyIbanButton",
+    "copyAmountButton",
+    "copyCommunicationButton"
+  ];
+
+
+  buttons.forEach(id => {
+
+    const button =
+      document.getElementById(id);
+
+    if (button) {
+
+      button.textContent =
+        "Copier";
+
+      button.classList.remove(
+        "copied"
+      );
+
+    }
+
+  });
+
+}
+
+
+/* =========================
+   PAYÉ
 ========================= */
 
 function togglePaid(
@@ -1312,7 +1838,7 @@ function togglePaid(
 
 
 /* =========================
-   MODIFICATION
+   MODIFIER
 ========================= */
 
 function editInstallment(
@@ -1380,7 +1906,6 @@ function closeEdit() {
   ).style.display =
     "none";
 
-
   editingPaymentId = null;
   editingInstallmentIndex = null;
 
@@ -1442,7 +1967,10 @@ function saveEdit() {
   }
 
 
-  if (amount < 0 || isNaN(amount)) {
+  if (
+    amount < 0 ||
+    isNaN(amount)
+  ) {
 
     alert(
       "Montant incorrect."
@@ -1523,6 +2051,7 @@ function addToGoogleCalendar(
 
   const details =
     `Montant : ${euro(item.amount)}\n` +
+    `IBAN : ${payment.iban || "-"}\n` +
     `Communication : ${item.communication || "-"}`;
 
 
@@ -1614,7 +2143,6 @@ function exportData() {
   a.click();
 
   a.remove();
-
 
   URL.revokeObjectURL(url);
 
