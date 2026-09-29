@@ -108,7 +108,10 @@ color:white
 
 .tabCount{opacity:.8}
 
-/* CADRE PRINCIPAL D'UN PAIEMENT */
+
+/* =========================
+   CADRE DU PAIEMENT
+   ========================= */
 
 .paymentGroup{
 background:white;
@@ -144,7 +147,10 @@ color:#777;
 margin-top:7px
 }
 
-/* CADRE DE CHAQUE ECHEANCE */
+
+/* =========================
+   CADRE ECHEANCE
+   ========================= */
 
 .installment{
 border:1px solid #ddd;
@@ -225,6 +231,11 @@ color:white
 background:#34c759
 }
 
+
+/* =========================
+   SELECTION
+   ========================= */
+
 .selectionBar{
 display:none;
 align-items:center;
@@ -267,6 +278,11 @@ color:#777;
 padding:25px 10px
 }
 
+
+/* =========================
+   MODALES
+   ========================= */
+
 .modal{
 display:none;
 position:fixed;
@@ -301,6 +317,11 @@ margin-top:10px
 .modalButtons button{
 flex:1
 }
+
+
+/* =========================
+   PAIEMENT MANUEL
+   ========================= */
 
 .manualPaymentTitle{
 font-size:20px;
@@ -352,6 +373,11 @@ font-size:14px;
 line-height:1.5
 }
 
+
+/* =========================
+   LOGIN
+   ========================= */
+
 #loginScreen{
 min-height:100vh;
 display:flex;
@@ -383,6 +409,11 @@ min-height:20px
 .hidden{
 display:none!important
 }
+
+
+/* =========================
+   PHOTOS
+   ========================= */
 
 .fileButtons{
 display:flex;
@@ -456,6 +487,11 @@ background:#111
 
 <body>
 
+
+<!-- =========================
+     CONNEXION PIN
+     ========================= -->
+
 <div id="loginScreen">
 
 <div class="loginBox">
@@ -489,6 +525,10 @@ onclick="checkPin()"
 </div>
 
 
+<!-- =========================
+     APPLICATION
+     ========================= -->
+
 <div id="app" class="hidden">
 
 <header>
@@ -498,6 +538,10 @@ onclick="checkPin()"
 
 <div class="container">
 
+
+<!-- =========================
+     RESUME
+     ========================= -->
 
 <div class="card">
 
@@ -523,6 +567,10 @@ onclick="checkPin()"
 </div>
 
 
+<!-- =========================
+     ONGLETS
+     ========================= -->
+
 <div class="tabs">
 
 <button
@@ -545,6 +593,10 @@ onclick="showTab('paid')"
 
 </div>
 
+
+<!-- =========================
+     SELECTION
+     ========================= -->
 
 <div id="selectionBar" class="selectionBar">
 
@@ -574,6 +626,10 @@ onclick="deleteSelected()"
 </div>
 
 
+<!-- =========================
+     LISTE A PAYER
+     ========================= -->
+
 <div id="unpaidSection">
 
 <div id="unpaidList"></div>
@@ -581,12 +637,20 @@ onclick="deleteSelected()"
 </div>
 
 
+<!-- =========================
+     LISTE PAYE
+     ========================= -->
+
 <div id="paidSection" class="hidden">
 
 <div id="paidList"></div>
 
 </div>
 
+
+<!-- =========================
+     AJOUT PAIEMENT
+     ========================= -->
 
 <div class="card">
 
@@ -598,20 +662,20 @@ onclick="deleteSelected()"
 <input
 id="alias"
 type="text"
-placeholder="Ex : Maison, Garage, Gaz..."
+placeholder="Ex : Gaz, Maison, Garage..."
 >
 
 
-<label>Bénéficiaire</label>
+<label>👤 Bénéficiaire</label>
 
 <input
 id="beneficiary"
 type="text"
-placeholder="Ex : EDF"
+placeholder="Ex : ENGIE Belgique"
 >
 
 
-<label>IBAN</label>
+<label>🏦 IBAN</label>
 
 <input
 id="iban"
@@ -620,7 +684,7 @@ placeholder="BE00 0000 0000 0000"
 >
 
 
-<label>Montant total</label>
+<label>💶 Montant total</label>
 
 <input
 id="totalInput"
@@ -631,7 +695,7 @@ placeholder="1000"
 >
 
 
-<label>Nombre d'échéances</label>
+<label>🔢 Nombre d'échéances</label>
 
 <input
 id="installmentsInput"
@@ -642,7 +706,7 @@ placeholder="12"
 >
 
 
-<label>Première date</label>
+<label>📅 Première date</label>
 
 <input
 id="firstDate"
@@ -650,7 +714,7 @@ type="date"
 >
 
 
-<label>Communication</label>
+<label>📝 Communication</label>
 
 <input
 id="communication"
@@ -681,6 +745,7 @@ onclick="choosePhoto()"
 
 </div>
 
+
 <input
 id="cameraPhoto"
 type="file"
@@ -688,6 +753,7 @@ accept="image/*"
 capture="environment"
 class="hidden"
 >
+
 
 <input
 id="galleryPhoto"
@@ -738,6 +804,10 @@ onclick="addPayment()"
 </div>
 
 
+<!-- =========================
+     SAUVEGARDE
+     ========================= -->
+
 <div class="card">
 
 <h2>💾 Sauvegarde</h2>
@@ -775,20 +845,53 @@ onchange="importData(event)"
 </div>
 
 
+<!-- =========================
+     MODIFIER ECHEANCE
+     ========================= -->
+
 <div id="editModal" class="modal">
 
 <div class="modalContent">
 
-<h2>✏️ Modifier l'échéance</h2>
+<h2>✏️ Modifier</h2>
 
-<label>Date</label>
+
+<label>🏷️ Alias / nom raccourci</label>
+
+<input
+id="editAlias"
+type="text"
+placeholder="Ex : Gaz"
+>
+
+
+<label>👤 Bénéficiaire</label>
+
+<input
+id="editBeneficiary"
+type="text"
+placeholder="Ex : ENGIE Belgique"
+>
+
+
+<label>🏦 IBAN</label>
+
+<input
+id="editIban"
+type="text"
+placeholder="BE00 0000 0000 0000"
+>
+
+
+<label>📅 Date</label>
 
 <input
 id="editDate"
 type="date"
 >
 
-<label>Montant</label>
+
+<label>💶 Montant</label>
 
 <input
 id="editAmount"
@@ -797,12 +900,14 @@ step="0.01"
 min="0"
 >
 
-<label>Communication</label>
+
+<label>📝 Communication</label>
 
 <input
 id="editCommunication"
 type="text"
 >
+
 
 <div class="modalButtons">
 
@@ -826,6 +931,10 @@ onclick="saveEdit()"
 
 </div>
 
+
+<!-- =========================
+     PAIEMENT MANUEL
+     ========================= -->
 
 <div id="manualPaymentModal" class="modal">
 
@@ -967,6 +1076,10 @@ Fermer
 </div>
 
 
+<!-- =========================
+     PHOTO
+     ========================= -->
+
 <div id="photoModal" class="modal">
 
 <div class="modalContent">
@@ -1004,6 +1117,11 @@ onclick="removeCurrentPhoto()"
 
 <script>
 
+
+/* =========================
+   CONFIGURATION
+   ========================= */
+
 const PIN="1157";
 
 const STORAGE_KEY="mesPaiements";
@@ -1026,6 +1144,10 @@ let currentTab="unpaid";
 
 let newPhotoData="";
 
+
+/* =========================
+   OUTILS
+   ========================= */
 
 function euro(value){
 
@@ -1091,6 +1213,10 @@ String(r.getDate()).padStart(2,"0")
 }
 
 
+/* =========================
+   NORMALISATION
+   ========================= */
+
 function normalizeData(data){
 
 if(!Array.isArray(data))return[];
@@ -1139,6 +1265,10 @@ return p;
 }
 
 
+/* =========================
+   STOCKAGE
+   ========================= */
+
 function loadData(){
 
 try{
@@ -1169,6 +1299,10 @@ JSON.stringify(payments)
 
 }
 
+
+/* =========================
+   PIN
+   ========================= */
 
 function checkPin(){
 
@@ -1217,7 +1351,7 @@ checkPin();
 
 
 /* =========================
-   PHOTO — APPAREIL / GALERIE
+   PHOTO APPAREIL / GALERIE
    ========================= */
 
 document
@@ -1400,6 +1534,10 @@ document
 
 }
 
+
+/* =========================
+   AJOUT PAIEMENT
+   ========================= */
 
 function addPayment(){
 
@@ -1596,6 +1734,10 @@ alert(
 }
 
 
+/* =========================
+   ONGLETS
+   ========================= */
+
 function showTab(tab){
 
 currentTab=tab;
@@ -1636,6 +1778,10 @@ updateSelectionBar();
 
 }
 
+
+/* =========================
+   AFFICHAGE
+   ========================= */
 
 function render(){
 
@@ -1771,6 +1917,10 @@ updateSelectionBar();
 }
 
 
+/* =========================
+   GROUPE D'UN PAIEMENT
+   ========================= */
+
 function createPaymentGroup(
 payment,
 items
@@ -1801,9 +1951,10 @@ payment.alias||
 payment.beneficiary||
 "Paiement";
 
-
 header.appendChild(alias);
 
+
+if(payment.alias){
 
 const beneficiary=
 document.createElement("div");
@@ -1812,14 +1963,11 @@ beneficiary.className=
 "paymentGroupBeneficiary";
 
 beneficiary.textContent=
-payment.alias
-?
-payment.beneficiary
-:
-"";
-
+payment.beneficiary;
 
 header.appendChild(beneficiary);
+
+}
 
 
 const info=
@@ -1843,7 +1991,6 @@ items.length>1
 );
 
 header.appendChild(info);
-
 
 group.appendChild(header);
 
@@ -1870,6 +2017,10 @@ return group;
 
 }
 
+
+/* =========================
+   ECHEANCE
+   ========================= */
 
 function createInstallmentCard(
 payment,
@@ -1943,9 +2094,7 @@ ben.textContent=
 "Échéance "+
 item.number;
 
-info.appendChild(
-ben
-);
+info.appendChild(ben);
 
 
 const details=
@@ -1987,9 +2136,7 @@ details.innerHTML+=
 }
 
 
-info.appendChild(
-details
-);
+info.appendChild(details);
 
 top.appendChild(info);
 
@@ -2127,6 +2274,10 @@ return card;
 }
 
 
+/* =========================
+   SELECTION
+   ========================= */
+
 function isSelected(
 id,
 index
@@ -2245,6 +2396,10 @@ updateSelectionBar();
 }
 
 
+/* =========================
+   SUPPRESSION
+   ========================= */
+
 function deleteSelected(){
 
 const selected=
@@ -2350,6 +2505,10 @@ alert(
 }
 
 
+/* =========================
+   MARQUER PAYE
+   ========================= */
+
 function togglePaid(
 id,
 index
@@ -2376,6 +2535,10 @@ render();
 
 }
 
+
+/* =========================
+   MODIFIER
+   ========================= */
 
 function editInstallment(
 id,
@@ -2404,19 +2567,52 @@ const i=
 p.installments[index];
 
 
+/* Alias */
+
+document
+.getElementById("editAlias")
+.value=
+p.alias||"";
+
+
+/* Bénéficiaire */
+
+document
+.getElementById("editBeneficiary")
+.value=
+p.beneficiary||"";
+
+
+/* IBAN */
+
+document
+.getElementById("editIban")
+.value=
+p.iban||"";
+
+
+/* Date */
+
 document
 .getElementById("editDate")
-.value=i.date;
+.value=
+i.date||"";
 
+
+/* Montant */
 
 document
 .getElementById("editAmount")
-.value=i.amount;
+.value=
+i.amount;
 
+
+/* Communication */
 
 document
 .getElementById("editCommunication")
-.value=i.communication;
+.value=
+i.communication||"";
 
 
 document
@@ -2459,10 +2655,35 @@ editingInstallmentIndex
 if(!i)return;
 
 
+/* Récupération des nouvelles valeurs */
+
+const alias=
+document
+.getElementById("editAlias")
+.value
+.trim();
+
+
+const beneficiary=
+document
+.getElementById("editBeneficiary")
+.value
+.trim();
+
+
+const iban=
+document
+.getElementById("editIban")
+.value
+.replace(/\s+/g,"")
+.toUpperCase();
+
+
 const date=
 document
 .getElementById("editDate")
 .value;
+
 
 const amount=
 Number(
@@ -2471,11 +2692,36 @@ document
 .value
 );
 
+
 const communication=
 document
 .getElementById("editCommunication")
 .value
 .trim();
+
+
+/* Vérifications */
+
+if(!beneficiary){
+
+alert(
+"Indique le bénéficiaire."
+);
+
+return;
+
+}
+
+
+if(!iban){
+
+alert(
+"Indique l'IBAN."
+);
+
+return;
+
+}
 
 
 if(!date){
@@ -2503,13 +2749,28 @@ return;
 }
 
 
-i.date=date;
+/* Enregistrement */
 
-i.amount=amount;
+p.alias=
+alias;
+
+p.beneficiary=
+beneficiary;
+
+p.iban=
+iban;
+
+i.date=
+date;
+
+i.amount=
+amount;
 
 i.communication=
 communication;
 
+
+/* Recalcul du total */
 
 p.totalAmount=
 p.installments.reduce(
@@ -2528,6 +2789,10 @@ render();
 
 }
 
+
+/* =========================
+   PAIEMENT MANUEL
+   ========================= */
 
 function openManualPayment(
 id,
@@ -2763,8 +3028,10 @@ b.classList.remove(
 }
 );
 
-}
 
+/* =========================
+   GOOGLE CALENDAR
+   ========================= */
 
 function addToGoogleCalendar(
 id,
@@ -2848,6 +3115,10 @@ url,
 }
 
 
+/* =========================
+   PHOTO DOCUMENT
+   ========================= */
+
 function openPhoto(id){
 
 const p=
@@ -2928,6 +3199,10 @@ render();
 }
 
 
+/* =========================
+   EXPORT
+   ========================= */
+
 function exportData(){
 
 const backup={
@@ -2997,6 +3272,10 @@ url
 
 }
 
+
+/* =========================
+   IMPORT
+   ========================= */
 
 function importData(event){
 
@@ -3083,6 +3362,10 @@ event.target.value="";
 }
 
 
+/* =========================
+   SECURITE HTML
+   ========================= */
+
 function escapeHtml(v){
 
 return String(v||"")
@@ -3109,6 +3392,10 @@ return String(v||"")
 
 }
 
+
+/* =========================
+   FERMETURE MODALES
+   ========================= */
 
 document
 .getElementById("editModal")
