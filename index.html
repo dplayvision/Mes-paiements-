@@ -108,12 +108,54 @@ color:white
 
 .tabCount{opacity:.8}
 
+/* CADRE PRINCIPAL D'UN PAIEMENT */
+
+.paymentGroup{
+background:white;
+border:2px solid #d9d9df;
+border-radius:18px;
+padding:14px;
+margin-bottom:16px;
+box-shadow:0 2px 8px rgba(0,0,0,.08)
+}
+
+.paymentGroupHeader{
+background:#f2f2f7;
+border-radius:14px;
+padding:12px;
+margin-bottom:12px
+}
+
+.paymentGroupAlias{
+font-size:19px;
+font-weight:800;
+color:#111
+}
+
+.paymentGroupBeneficiary{
+font-size:14px;
+color:#666;
+margin-top:3px
+}
+
+.paymentGroupInfo{
+font-size:13px;
+color:#777;
+margin-top:7px
+}
+
+/* CADRE DE CHAQUE ECHEANCE */
+
 .installment{
 border:1px solid #ddd;
 border-radius:14px;
 padding:13px;
 margin-bottom:10px;
 background:white
+}
+
+.installment:last-child{
+margin-bottom:0
 }
 
 .installment.paid{
@@ -551,6 +593,15 @@ onclick="deleteSelected()"
 <h2>➕ Ajouter un paiement</h2>
 
 
+<label>🏷️ Alias / nom raccourci</label>
+
+<input
+id="alias"
+type="text"
+placeholder="Ex : Maison, Garage, Gaz..."
+>
+
+
 <label>Bénéficiaire</label>
 
 <input
@@ -664,6 +715,7 @@ Photo prête à être enregistrée avec le paiement.
 <div class="photoActions">
 
 <button
+type="button"
 class="secondary"
 onclick="clearNewPhoto()"
 >
@@ -1047,6 +1099,8 @@ return data.map(p=>{
 
 p.id=p.id||generateId();
 
+p.alias=p.alias||"";
+
 p.beneficiary=p.beneficiary||"";
 
 p.iban=(p.iban||"")
@@ -1349,6 +1403,12 @@ document
 
 function addPayment(){
 
+const alias=
+document
+.getElementById("alias")
+.value
+.trim();
+
 const beneficiary=
 document
 .getElementById("beneficiary")
@@ -1477,7 +1537,6 @@ i===count-1
 )/100,
 
 communication:
-
 communication,
 
 paid:false
@@ -1490,6 +1549,8 @@ paid:false
 payments.push({
 
 id:generateId(),
+
+alias:alias,
 
 beneficiary:beneficiary,
 
@@ -1508,6 +1569,7 @@ saveData();
 
 
 [
+"alias",
 "beneficiary",
 "iban",
 "totalInput",
@@ -1601,45 +1663,70 @@ pl.innerHTML="";
 
 
 payments.forEach(
-p=>
-p.installments.forEach(
-(item,index)=>{
+p=>{
+
+const unpaidItems=
+p.installments.filter(
+item=>!item.paid
+);
+
+const paidItems=
+p.installments.filter(
+item=>item.paid
+);
+
+
+unpaidItems.forEach(
+item=>{
 
 total+=
 Number(item.amount||0);
 
+uc++;
 
-if(item.paid){
+}
+);
+
+
+paidItems.forEach(
+item=>{
+
+total+=
+Number(item.amount||0);
 
 paid+=
 Number(item.amount||0);
 
 pc++;
 
-pl.appendChild(
-createInstallmentCard(
-p,
-item,
-index
-)
+}
 );
 
-}else{
 
-uc++;
+if(unpaidItems.length){
 
 ul.appendChild(
-createInstallmentCard(
+createPaymentGroup(
 p,
-item,
-index
+unpaidItems
+)
+);
+
+}
+
+
+if(paidItems.length){
+
+pl.appendChild(
+createPaymentGroup(
+p,
+paidItems
 )
 );
 
 }
 
 }
-)
 );
 
 
@@ -1680,6 +1767,106 @@ document
 .textContent="("+pc+")";
 
 updateSelectionBar();
+
+}
+
+
+function createPaymentGroup(
+payment,
+items
+){
+
+const group=
+document.createElement("div");
+
+group.className=
+"paymentGroup";
+
+
+const header=
+document.createElement("div");
+
+header.className=
+"paymentGroupHeader";
+
+
+const alias=
+document.createElement("div");
+
+alias.className=
+"paymentGroupAlias";
+
+alias.textContent=
+payment.alias||
+payment.beneficiary||
+"Paiement";
+
+
+header.appendChild(alias);
+
+
+const beneficiary=
+document.createElement("div");
+
+beneficiary.className=
+"paymentGroupBeneficiary";
+
+beneficiary.textContent=
+payment.alias
+?
+payment.beneficiary
+:
+"";
+
+
+header.appendChild(beneficiary);
+
+
+const info=
+document.createElement("div");
+
+info.className=
+"paymentGroupInfo";
+
+info.textContent=
+items.length+
+(
+items.length>1
+?" échéances"
+:" échéance"
+)+
+" affichée"+
+(
+items.length>1
+?"s"
+:""
+);
+
+header.appendChild(info);
+
+
+group.appendChild(header);
+
+
+items.forEach(
+item=>{
+
+const originalIndex=
+payment.installments.indexOf(item);
+
+group.appendChild(
+createInstallmentCard(
+payment,
+item,
+originalIndex
+)
+);
+
+}
+);
+
+
+return group;
 
 }
 
@@ -1753,9 +1940,12 @@ ben.className=
 "beneficiary";
 
 ben.textContent=
-payment.beneficiary;
+"Échéance "+
+item.number;
 
-info.appendChild(ben);
+info.appendChild(
+ben
+);
 
 
 const details=
@@ -1766,10 +1956,15 @@ details.className=
 
 
 details.innerHTML=
-"Échéance "+
-item.number+
-" • "+
 formatDate(item.date)+
+" • "+
+(
+payment.alias
+?
+payment.alias
+:
+payment.beneficiary
+)+
 "<br>Communication : "+
 escapeHtml(
 item.communication||"—"
@@ -1796,9 +1991,7 @@ info.appendChild(
 details
 );
 
-top.appendChild(
-info
-);
+top.appendChild(info);
 
 
 const amount=
@@ -1809,13 +2002,9 @@ amount.className="amount";
 amount.textContent=
 euro(item.amount);
 
-top.appendChild(
-amount
-);
+top.appendChild(amount);
 
-card.appendChild(
-top
-);
+card.appendChild(top);
 
 
 const actions=
@@ -1931,9 +2120,7 @@ index
 actions.appendChild(pb);
 
 
-card.appendChild(
-actions
-);
+card.appendChild(actions);
 
 return card;
 
@@ -2374,6 +2561,12 @@ document
 "manualPaymentSubtitle"
 )
 .textContent=
+(
+p.alias
+?
+p.alias+" • "
+:""
+)+
 "Échéance "+
 i.number+
 " • "+
@@ -2612,6 +2805,12 @@ i.date.replace(
 
 const title=
 "Paiement - "+
+(
+p.alias
+?
+p.alias+" - "
+:""
+)+
 p.beneficiary+
 " - Échéance "+
 i.number;
@@ -2620,6 +2819,8 @@ i.number;
 const details=
 "Montant : "+
 euro(i.amount)+
+"\nBénéficiaire : "+
+p.beneficiary+
 "\nIBAN : "+
 p.iban+
 "\nCommunication : "+
