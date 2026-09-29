@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>Mes paiements</title>
 
@@ -13,3518 +17,3945 @@
 <style>
 
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
 body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:#f2f2f7;
-  color:#111;
+margin:0;
+font-family:-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+Arial,
+sans-serif;
+background:#f2f2f7;
+color:#111;
 }
 
 button,
-input,
-select{
-  font-family:inherit;
-}
-
-button{
-  cursor:pointer;
+input{
+font-family:inherit;
 }
 
 .header{
-  background:#007aff;
-  color:white;
-  padding:18px 16px;
-  padding-top:calc(18px + env(safe-area-inset-top));
-  font-size:23px;
-  font-weight:700;
-  text-align:center;
+background:#007aff;
+color:white;
+padding:
+calc(env(safe-area-inset-top) + 15px)
+18px 16px;
+font-size:22px;
+font-weight:700;
 }
 
 .container{
-  max-width:700px;
-  margin:auto;
-  padding:15px;
-  padding-bottom:100px;
+padding:15px;
+padding-bottom:40px;
+max-width:700px;
+margin:auto;
 }
 
 .card{
-  background:white;
-  border-radius:16px;
-  padding:15px;
-  margin-bottom:14px;
-  box-shadow:0 2px 8px rgba(0,0,0,.07);
+background:white;
+border-radius:18px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
 h2{
-  margin:0 0 12px;
-}
-
-h3{
-  margin:0;
+font-size:19px;
+margin:0 0 14px;
 }
 
 label{
-  display:block;
-  font-size:14px;
-  font-weight:600;
-  margin-top:10px;
-  margin-bottom:5px;
+display:block;
+font-size:14px;
+font-weight:600;
+margin:12px 0 6px;
 }
 
-input,
-select{
-  width:100%;
-  padding:12px;
-  border:1px solid #d1d1d6;
-  border-radius:10px;
-  background:white;
-  font-size:16px;
+input{
+width:100%;
+padding:13px;
+border:1px solid #d1d1d6;
+border-radius:11px;
+font-size:16px;
+background:#fff;
+}
+
+button{
+border:0;
+border-radius:11px;
+padding:11px 14px;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
 }
 
 .primary{
-  width:100%;
-  border:0;
-  border-radius:12px;
-  background:#007aff;
-  color:white;
-  padding:13px;
-  font-size:16px;
-  font-weight:700;
-  margin-top:12px;
+background:#007aff;
+color:white;
+width:100%;
 }
 
 .secondary{
-  border:0;
-  border-radius:10px;
-  background:#e9e9ee;
-  color:#111;
-  padding:10px 13px;
-  font-weight:600;
+background:#e9e9ee;
+color:#111;
 }
 
 .danger{
-  background:#ff3b30;
-  color:white;
+background:#ff3b30;
+color:white;
 }
 
 .green{
-  background:#34c759;
-  color:white;
+background:#34c759;
+color:white;
 }
 
-.tabs{
-  display:flex;
-  background:#e5e5ea;
-  border-radius:12px;
-  padding:3px;
-  margin-bottom:14px;
+.bnpButton{
+background:#111;
+color:white;
 }
 
-.tab{
-  flex:1;
-  border:0;
-  background:transparent;
-  padding:10px;
-  border-radius:9px;
-  font-weight:700;
-}
-
-.tab.active{
-  background:white;
-  box-shadow:0 1px 3px rgba(0,0,0,.12);
+.qrButton{
+background:#5856d6;
+color:white;
 }
 
 .summary{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-bottom:14px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-bottom:15px;
 }
 
 .summaryBox{
-  background:white;
-  border-radius:12px;
-  padding:12px 5px;
-  text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.05);
+background:white;
+border-radius:15px;
+padding:12px 8px;
+text-align:center;
+box-shadow:0 2px 7px rgba(0,0,0,.05);
 }
 
 .summaryTitle{
-  color:#777;
-  font-size:12px;
+font-size:12px;
+color:#666;
 }
 
 .summaryValue{
-  font-size:18px;
-  font-weight:700;
-  margin-top:4px;
+font-size:18px;
+font-weight:700;
+margin-top:4px;
 }
 
-.paymentGroup{
-  background:white;
-  border-radius:16px;
-  margin-bottom:14px;
-  overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.07);
+.tabs{
+display:flex;
+background:#dddde2;
+border-radius:11px;
+padding:3px;
+margin-bottom:15px;
 }
 
-.paymentHeader{
-  padding:14px;
-  background:#f8f8fa;
-  border-bottom:1px solid #eee;
+.tab{
+flex:1;
+text-align:center;
+padding:9px;
+border-radius:9px;
+font-weight:600;
+font-size:14px;
 }
 
-.alias{
-  font-size:18px;
-  font-weight:800;
-}
-
-.beneficiary{
-  color:#666;
-  margin-top:3px;
-}
-
-.installment{
-  padding:13px;
-  border-bottom:1px solid #eee;
-}
-
-.installment:last-child{
-  border-bottom:0;
-}
-
-.installmentTop{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-}
-
-.installmentInfo{
-  flex:1;
-  min-width:0;
-}
-
-.installmentTitle{
-  font-weight:700;
-}
-
-.installmentDate{
-  color:#666;
-  font-size:14px;
-  margin-top:3px;
-}
-
-.installmentAmount{
-  font-size:18px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.communication{
-  font-size:13px;
-  color:#666;
-  margin-top:5px;
-  word-break:break-word;
-}
-
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-top:10px;
-}
-
-.actions button{
-  border:0;
-  border-radius:9px;
-  padding:8px 10px;
-  font-weight:600;
-  font-size:13px;
-}
-
-.editBtn{
-  background:#e9e9ee;
-}
-
-.payBtn{
-  background:#34c759;
-  color:white;
-}
-
-.unpayBtn{
-  background:#ff9500;
-  color:white;
-}
-
-.calendarBtn{
-  background:#5856d6;
-  color:white;
-}
-
-.bnpBtn{
-  background:#0066cc;
-  color:white;
-}
-
-.qrBtn{
-  background:#111;
-  color:white;
-}
-
-.photoBtn{
-  background:#ff9500;
-  color:white;
-}
-
-.deleteBtn{
-  background:#ff3b30;
-  color:white;
-}
-
-.checkLine{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:9px;
-}
-
-.checkLine input{
-  width:20px;
-  height:20px;
-}
-
-.installmentSummary{
-  margin-top:8px;
-  color:#666;
-  font-size:13px;
+.tab.active{
+background:white;
+box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 
 .selectionBar{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  background:white;
-  border-top:1px solid #ddd;
-  padding:10px 15px;
-  padding-bottom:calc(10px + env(safe-area-inset-bottom));
-  display:none;
-  z-index:100;
+display:none;
+background:#fff;
+border-radius:14px;
+padding:12px;
+margin-bottom:12px;
+align-items:center;
+justify-content:space-between;
+gap:8px;
 }
 
 .selectionBar.show{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
+display:flex;
 }
 
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-  z-index:1000;
+.selectionInfo{
+font-size:14px;
+font-weight:600;
 }
 
-.modal.show{
-  display:flex;
+.paymentGroup{
+background:#fff;
+border-radius:18px;
+padding:0;
+margin-bottom:15px;
+overflow:hidden;
+box-shadow:0 2px 8px rgba(0,0,0,.07);
 }
 
-.modalBox{
-  width:100%;
-  max-width:550px;
-  max-height:90vh;
-  overflow:auto;
-  background:white;
-  border-radius:18px;
-  padding:18px;
+.paymentGroupHeader{
+padding:15px;
+background:#f8f8fa;
+border-bottom:1px solid #e5e5ea;
 }
 
-.modalBox h2{
-  margin-top:0;
+.paymentGroupAlias{
+font-size:18px;
+font-weight:750;
+color:#007aff;
 }
 
-.modalButtons{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
+.paymentGroupBeneficiary{
+font-size:14px;
+font-weight:600;
+margin-top:4px;
 }
 
-.modalButtons button{
-  flex:1;
+.paymentGroupInfo{
+font-size:12px;
+color:#777;
+margin-top:5px;
 }
 
-.photoPreview{
-  width:100%;
-  max-height:220px;
-  object-fit:contain;
-  border-radius:12px;
-  margin-top:10px;
+.installment{
+margin:10px;
+padding:13px;
+border:1px solid #e1e1e6;
+border-radius:15px;
+background:#fff;
 }
 
-.pinScreen{
-  position:fixed;
-  inset:0;
-  background:#f2f2f7;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:5000;
-  padding:20px;
+.installment.paid{
+background:#f3fff5;
+border-color:#b7e5c0;
 }
 
-.pinBox{
-  width:100%;
-  max-width:350px;
-  background:white;
-  border-radius:20px;
-  padding:25px;
-  text-align:center;
-  box-shadow:0 5px 30px rgba(0,0,0,.12);
+.installmentTop{
+display:flex;
+gap:10px;
+align-items:flex-start;
 }
 
-.pinBox input{
-  text-align:center;
-  font-size:25px;
-  letter-spacing:8px;
+.checkbox{
+width:21px;
+height:21px;
+margin-top:2px;
+flex-shrink:0;
 }
 
-.hidden{
-  display:none !important;
+.installmentInfo{
+flex:1;
+min-width:0;
 }
 
-/* BNP */
-
-.bnpRow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  background:#f5f6f8;
-  padding:12px;
-  border-radius:12px;
-  margin:10px 0;
+.beneficiary{
+font-weight:700;
+font-size:15px;
 }
 
-.bnpRow div{
-  min-width:0;
-  flex:1;
+.installmentDetails{
+font-size:13px;
+color:#666;
+margin-top:4px;
+line-height:1.5;
 }
 
-.bnpRow strong{
-  display:block;
-  font-size:13px;
-  color:#555;
-  margin-bottom:4px;
+.amount{
+font-size:18px;
+font-weight:750;
+margin-top:6px;
 }
 
-.bnpRow span{
-  display:block;
-  font-size:15px;
-  font-weight:600;
-  word-break:break-word;
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+margin-top:10px;
 }
 
-.bnpRow button{
-  border:0;
-  background:#007aff;
-  color:white;
-  padding:9px 12px;
-  border-radius:9px;
-  font-weight:600;
-  flex-shrink:0;
+.actions button{
+padding:8px 10px;
+font-size:13px;
 }
 
-.bnpOpenBtn{
-  width:100%;
-  border:0;
-  background:#0066cc;
-  color:white;
-  padding:15px;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:700;
-  margin-top:15px;
+.small{
+font-size:12px;
+color:#777;
 }
 
-.bnpCloseBtn{
-  width:100%;
-  border:0;
-  background:#eee;
-  color:#333;
-  padding:13px;
-  border-radius:12px;
-  font-size:15px;
-  margin-top:10px;
+.badge{
+display:inline-block;
+font-size:11px;
+font-weight:700;
+padding:4px 7px;
+border-radius:7px;
+margin-left:5px;
 }
 
-/* QR */
-
-#qrCode{
-  display:flex;
-  justify-content:center;
-  margin:15px 0;
+.badgePaid{
+background:#d8f8df;
+color:#167c2e;
 }
 
-.qrInfo{
-  background:#f5f5f7;
-  padding:12px;
-  border-radius:12px;
-  font-size:14px;
-}
-
-.qrInfo div{
-  margin:5px 0;
-  word-break:break-word;
-}
-
-/* Calculatrice */
-
-.calcDisplay{
-  width:100%;
-  background:#111;
-  color:white;
-  padding:15px;
-  border-radius:12px;
-  font-size:25px;
-  text-align:right;
-  min-height:55px;
-  margin-bottom:10px;
-  overflow:hidden;
-}
-
-.calcGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
-}
-
-.calcGrid button{
-  border:0;
-  padding:15px 5px;
-  border-radius:10px;
-  background:#e5e5ea;
-  font-size:18px;
-  font-weight:600;
-}
-
-.calcGrid button.operator{
-  background:#007aff;
-  color:white;
-}
-
-.calcGrid button.equal{
-  background:#34c759;
-  color:white;
-}
-
-.calcGrid button.clear{
-  background:#ff3b30;
-  color:white;
+.badgeUnpaid{
+background:#ffe0dd;
+color:#c62820;
 }
 
 .photoButtons{
-  display:flex;
-  gap:8px;
+display:flex;
+gap:8px;
 }
 
 .photoButtons button{
-  flex:1;
+flex:1;
 }
 
-.documentName{
-  font-size:13px;
-  color:#666;
-  margin-top:6px;
+.photoPreview{
+max-width:100%;
+max-height:180px;
+display:block;
+margin-top:10px;
+border-radius:10px;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+z-index:1000;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modalBox{
+background:white;
+width:100%;
+max-width:500px;
+max-height:90vh;
+overflow:auto;
+border-radius:20px;
+padding:18px;
+}
+
+.modalTitle{
+font-size:20px;
+font-weight:750;
+margin-bottom:12px;
+}
+
+.modalActions{
+display:flex;
+gap:8px;
+margin-top:15px;
+}
+
+.modalActions button{
+flex:1;
+}
+
+.manualInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-bottom:10px;
+}
+
+.manualLine{
+margin-bottom:12px;
+}
+
+.manualLabel{
+font-size:12px;
+color:#777;
+}
+
+.manualValue{
+font-size:15px;
+font-weight:600;
+word-break:break-word;
+margin-top:2px;
+}
+
+.copyButton{
+margin-top:5px;
+background:#e9e9ee;
+font-size:12px;
+padding:7px 10px;
+}
+
+.copyButton.copied{
+background:#34c759;
+color:white;
+}
+
+.login{
+position:fixed;
+inset:0;
+background:#f2f2f7;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:25px;
+z-index:2000;
+}
+
+.loginBox{
+background:white;
+width:100%;
+max-width:360px;
+border-radius:22px;
+padding:25px;
+box-shadow:0 5px 25px rgba(0,0,0,.12);
+text-align:center;
+}
+
+.loginTitle{
+font-size:25px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+.loginText{
+font-size:14px;
+color:#777;
+margin-bottom:18px;
+}
+
+#pinInput{
+text-align:center;
+font-size:25px;
+letter-spacing:8px;
+}
+
+.hidden{
+display:none !important;
+}
+
+input[type="file"]{
+display:none;
+}
+
+.photoModalImage{
+max-width:100%;
+max-height:75vh;
+display:block;
+margin:auto;
+border-radius:12px;
+}
+
+.photoModalButtons{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.photoModalButtons button{
+flex:1;
+}
+
+
+/* QR */
+
+.qrContainer{
+text-align:center;
+padding:10px 0;
+}
+
+#qrCode{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:10px;
+background:white;
+}
+
+#qrCode img,
+#qrCode canvas{
+margin:auto;
+}
+
+.qrInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-top:12px;
+font-size:13px;
+line-height:1.5;
+text-align:left;
+}
+
+.qrWarning{
+font-size:12px;
+color:#777;
+margin-top:10px;
+text-align:center;
+}
+
+
+/* CALCULETTE */
+
+.calculatorDisplay{
+font-size:25px;
+font-weight:700;
+text-align:right;
+background:#f2f2f7;
+margin-bottom:10px;
+}
+
+.calculatorGrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px;
+}
+
+.calculatorGrid button{
+font-size:18px;
+padding:14px 5px;
+}
+
+.calculatorEquals{
+margin-top:8px;
+width:100%;
+font-size:18px;
+}
+
+
+/* BNP */
+
+.bnpInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-bottom:10px;
+}
+
+.bnpLine{
+margin-bottom:14px;
+}
+
+.bnpLabel{
+font-size:12px;
+color:#777;
+}
+
+.bnpValue{
+font-size:15px;
+font-weight:600;
+word-break:break-word;
+margin-top:3px;
+}
+
+.bnpCopy{
+margin-top:6px;
+background:#e9e9ee;
+font-size:12px;
+padding:7px 10px;
+}
+
+.bnpOpen{
+background:#111;
+color:white;
+width:100%;
+}
+
+.bnpNote{
+font-size:12px;
+color:#777;
+line-height:1.5;
+margin-top:12px;
+}
+
+
+/* ERREUR / VIDE */
+
+.empty{
+background:white;
+border-radius:15px;
+padding:20px;
+text-align:center;
+color:#777;
+margin-bottom:15px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- ========================= -->
-<!-- ÉCRAN PIN -->
-<!-- ========================= -->
 
-<div id="pinScreen" class="pinScreen">
+<!-- =========================
+     CONNEXION
+========================= -->
 
-  <div class="pinBox">
+<div id="loginScreen" class="login">
 
-    <h2>🔐 Mes paiements</h2>
+<div class="loginBox">
 
-    <p>Entrez votre code PIN</p>
+<div class="loginTitle">
+Mes paiements
+</div>
 
-    <input
-      id="pinInput"
-      type="password"
-      inputmode="numeric"
-      maxlength="4"
-      autocomplete="off"
-    >
+<div class="loginText">
+Entrez votre code PIN
+</div>
 
-    <button class="primary" onclick="checkPin()">
-      Ouvrir
-    </button>
+<input
+id="pinInput"
+type="password"
+inputmode="numeric"
+maxlength="4"
+placeholder="••••">
 
-    <p id="pinError" style="color:#ff3b30;"></p>
+<br><br>
 
-  </div>
+<button
+class="primary"
+onclick="checkPin()">
+
+Ouvrir
+
+</button>
+
+</div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- APPLICATION -->
-<!-- ========================= -->
+<!-- =========================
+     APPLICATION
+========================= -->
 
 <div id="app" class="hidden">
 
-  <div class="header">
-    Mes paiements
-  </div>
+<div class="header">
+Mes paiements
+</div>
 
-  <div class="container">
 
+<div class="container">
 
-    <!-- ========================= -->
-    <!-- AJOUT PAIEMENT -->
-    <!-- ========================= -->
 
-    <div class="card">
+<!-- RESUME -->
 
-      <h2>➕ Ajouter un paiement</h2>
+<div class="summary">
 
-      <label>Nom / Alias</label>
-      <input id="alias" placeholder="Ex : Taxe maison">
+<div class="summaryBox">
 
-      <label>Bénéficiaire</label>
-      <input id="beneficiary" placeholder="Ex : SERVICE PUBLIC DE WALLONIE">
+<div class="summaryTitle">
+Total
+</div>
 
-      <label>IBAN</label>
-      <input id="iban" placeholder="BE...">
-
-      <label>Montant total (€)</label>
-      <input id="total" type="number" step="0.01" placeholder="0.00">
-
-      <label>Nombre d'échéances</label>
-      <input id="installments" type="number" min="1" value="1">
-
-      <label>Première échéance</label>
-      <input id="firstDate" type="date">
-
-      <label>Communication</label>
-      <input id="communication" placeholder="Communication du virement">
-
-      <label>Document / Photo</label>
-
-      <div class="photoButtons">
-
-        <button
-          class="secondary"
-          onclick="document.getElementById('cameraInput').click()">
-          📷 Appareil photo
-        </button>
-
-        <button
-          class="secondary"
-          onclick="document.getElementById('galleryInput').click()">
-          🖼️ Mes photos
-        </button>
-
-      </div>
-
-      <input
-        id="cameraInput"
-        type="file"
-        accept="image/*"
-        capture="environment"
-        class="hidden"
-      >
-
-      <input
-        id="galleryInput"
-        type="file"
-        accept="image/*"
-        class="hidden"
-      >
-
-      <div id="photoAddPreview"></div>
-
-      <button class="primary" onclick="addPayment()">
-        Ajouter le paiement
-      </button>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- RÉSUMÉ -->
-    <!-- ========================= -->
-
-    <div class="summary">
-
-      <div class="summaryBox">
-        <div class="summaryTitle">Total</div>
-        <div class="summaryValue" id="sumTotal">0,00 €</div>
-      </div>
-
-      <div class="summaryBox">
-        <div class="summaryTitle">Payé</div>
-        <div class="summaryValue" id="sumPaid">0,00 €</div>
-      </div>
-
-      <div class="summaryBox">
-        <div class="summaryTitle">Reste</div>
-        <div class="summaryValue" id="sumRemaining">0,00 €</div>
-      </div>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- ONGLETS -->
-    <!-- ========================= -->
-
-    <div class="tabs">
-
-      <button
-        id="tabUnpaid"
-        class="tab active"
-        onclick="showTab('unpaid')">
-
-        À payer
-        (<span id="countUnpaid">0</span>)
-
-      </button>
-
-      <button
-        id="tabPaid"
-        class="tab"
-        onclick="showTab('paid')">
-
-        Payé
-        (<span id="countPaid">0</span>)
-
-      </button>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- LISTE -->
-    <!-- ========================= -->
-
-    <div id="paymentsList"></div>
-
-
-    <!-- ========================= -->
-    <!-- CALCULATRICE -->
-    <!-- ========================= -->
-
-    <div class="card">
-
-      <h2>🧮 Calculatrice</h2>
-
-      <div id="calcDisplay" class="calcDisplay">
-        0
-      </div>
-
-      <div class="calcGrid">
-
-        <button class="clear" onclick="calcClear()">C</button>
-        <button onclick="calcAdd('(')">(</button>
-        <button onclick="calcAdd(')')">)</button>
-        <button class="operator" onclick="calcAdd('/')">÷</button>
-
-        <button onclick="calcAdd('7')">7</button>
-        <button onclick="calcAdd('8')">8</button>
-        <button onclick="calcAdd('9')">9</button>
-        <button class="operator" onclick="calcAdd('*')">×</button>
-
-        <button onclick="calcAdd('4')">4</button>
-        <button onclick="calcAdd('5')">5</button>
-        <button onclick="calcAdd('6')">6</button>
-        <button class="operator" onclick="calcAdd('-')">−</button>
-
-        <button onclick="calcAdd('1')">1</button>
-        <button onclick="calcAdd('2')">2</button>
-        <button onclick="calcAdd('3')">3</button>
-        <button class="operator" onclick="calcAdd('+')">+</button>
-
-        <button onclick="calcAdd('0')">0</button>
-        <button onclick="calcAdd('.')">.</button>
-        <button onclick="calcBackspace()">⌫</button>
-        <button class="equal" onclick="calcEqual()">=</button>
-
-      </div>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- SAUVEGARDE -->
-    <!-- ========================= -->
-
-    <div class="card">
-
-      <h2>💾 Sauvegarde</h2>
-
-      <button class="primary" onclick="exportData()">
-        Exporter mes données
-      </button>
-
-      <button
-        class="secondary"
-        style="width:100%;margin-top:8px;"
-        onclick="document.getElementById('importInput').click()">
-
-        Importer une sauvegarde
-
-      </button>
-
-      <input
-        id="importInput"
-        type="file"
-        accept=".json,application/json"
-        class="hidden"
-      >
-
-    </div>
-
-  </div>
+<div id="totalValue" class="summaryValue">
+0,00 €
+</div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- MODALE ÉDITION -->
-<!-- ========================= -->
+<div class="summaryBox">
+
+<div class="summaryTitle">
+Payé
+</div>
+
+<div id="paidValue" class="summaryValue">
+0,00 €
+</div>
+
+</div>
+
+
+<div class="summaryBox">
+
+<div class="summaryTitle">
+Reste
+</div>
+
+<div id="remainingValue" class="summaryValue">
+0,00 €
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ONGLETS -->
+
+<div class="tabs">
+
+<div
+id="tabUnpaid"
+class="tab active"
+onclick="showTab('unpaid')">
+
+À payer
+(<span id="unpaidCount">0</span>)
+
+</div>
+
+<div
+id="tabPaid"
+class="tab"
+onclick="showTab('paid')">
+
+Payé
+(<span id="paidCount">0</span>)
+
+</div>
+
+</div>
+
+
+<!-- SELECTION -->
+
+<div
+id="selectionBar"
+class="selectionBar">
+
+<div
+id="selectionInfo"
+class="selectionInfo">
+
+0 sélectionné
+
+</div>
+
+<button
+class="danger"
+onclick="deleteSelected()">
+
+Supprimer
+
+</button>
+
+</div>
+
+
+<div id="unpaidList"></div>
+
+<div id="paidList" class="hidden"></div>
+
+
+<!-- =========================
+     AJOUT PAIEMENT
+========================= -->
+
+<div class="card">
+
+<h2>
+Ajouter un paiement
+</h2>
+
+
+<label>
+Alias / raccourci
+</label>
+
+<input
+id="alias"
+placeholder="Ex : Taxe maison">
+
+
+<label>
+Bénéficiaire
+</label>
+
+<input
+id="beneficiary"
+placeholder="Nom du bénéficiaire">
+
+
+<label>
+IBAN
+</label>
+
+<input
+id="iban"
+placeholder="BE...">
+
+
+<label>
+Montant total
+</label>
+
+<input
+id="totalAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="0,00">
+
+
+<label>
+Nombre d'échéances
+</label>
+
+<input
+id="installments"
+type="number"
+min="1"
+value="1">
+
+
+<label>
+Première échéance
+</label>
+
+<input
+id="firstDate"
+type="date">
+
+
+<label>
+Communication
+</label>
+
+<input
+id="communication"
+placeholder="Communication">
+
+
+<label>
+Document
+</label>
+
+<div class="photoButtons">
+
+<button
+class="secondary"
+onclick="document.getElementById('cameraInput').click()">
+
+📷 Appareil photo
+
+</button>
+
+<button
+class="secondary"
+onclick="document.getElementById('galleryInput').click()">
+
+🖼️ Mes photos
+
+</button>
+
+</div>
+
+
+<input
+id="cameraInput"
+type="file"
+accept="image/*"
+capture="environment">
+
+
+<input
+id="galleryInput"
+type="file"
+accept="image/*">
+
+
+<div id="addPhotoPreview"></div>
+
+<br>
+
+<button
+class="primary"
+onclick="addPayment()">
+
+Ajouter le paiement
+
+</button>
+
+</div>
+
+
+<!-- =========================
+     CALCULETTE
+========================= -->
+
+<div class="card">
+
+<h2>
+🧮 Calculette
+</h2>
+
+<input
+id="calcDisplay"
+class="calculatorDisplay"
+type="text"
+readonly
+placeholder="0">
+
+
+<div class="calculatorGrid">
+
+<button class="secondary" onclick="calcInput('7')">7</button>
+<button class="secondary" onclick="calcInput('8')">8</button>
+<button class="secondary" onclick="calcInput('9')">9</button>
+<button class="secondary" onclick="calcInput('/')">÷</button>
+
+<button class="secondary" onclick="calcInput('4')">4</button>
+<button class="secondary" onclick="calcInput('5')">5</button>
+<button class="secondary" onclick="calcInput('6')">6</button>
+<button class="secondary" onclick="calcInput('*')">×</button>
+
+<button class="secondary" onclick="calcInput('1')">1</button>
+<button class="secondary" onclick="calcInput('2')">2</button>
+<button class="secondary" onclick="calcInput('3')">3</button>
+<button class="secondary" onclick="calcInput('-')">−</button>
+
+<button class="secondary" onclick="calcInput('0')">0</button>
+<button class="secondary" onclick="calcInput('.')">.</button>
+<button class="danger" onclick="calcClear()">C</button>
+<button class="secondary" onclick="calcInput('+')">+</button>
+
+</div>
+
+<button
+class="primary calculatorEquals"
+onclick="calcResult()">
+
+= Calculer
+
+</button>
+
+</div>
+
+
+<!-- =========================
+     SAUVEGARDE
+========================= -->
+
+<div class="card">
+
+<h2>
+Sauvegarde
+</h2>
+
+<button
+class="secondary"
+onclick="exportData()">
+
+Exporter mes données
+
+</button>
+
+<button
+class="secondary"
+onclick="document.getElementById('importInput').click()">
+
+Importer une sauvegarde
+
+</button>
+
+<input
+id="importInput"
+type="file"
+accept=".json">
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     MODALE MODIFICATION
+========================= -->
 
 <div id="editModal" class="modal">
 
-  <div class="modalBox">
+<div class="modalBox">
 
-    <h2>✏️ Modifier l'échéance</h2>
+<div class="modalTitle">
+Modifier l'échéance
+</div>
 
-    <label>Date</label>
-    <input id="editDate" type="date">
+<label>
+Alias
+</label>
 
-    <label>Montant (€)</label>
-    <input id="editAmount" type="number" step="0.01">
+<input id="editAlias">
 
-    <label>Communication</label>
-    <input id="editCommunication">
+<label>
+Bénéficiaire
+</label>
 
-    <div class="modalButtons">
+<input id="editBeneficiary">
 
-      <button class="secondary" onclick="closeEdit()">
-        Annuler
-      </button>
+<label>
+IBAN
+</label>
 
-      <button class="primary" onclick="saveEdit()">
-        Enregistrer
-      </button>
+<input id="editIban">
 
-    </div>
+<label>
+Date
+</label>
 
-  </div>
+<input id="editDate" type="date">
+
+<label>
+Montant
+</label>
+
+<input
+id="editAmount"
+type="number"
+step="0.01">
+
+<label>
+Communication
+</label>
+
+<input id="editCommunication">
+
+<div class="modalActions">
+
+<button
+class="secondary"
+onclick="closeEdit()">
+
+Annuler
+
+</button>
+
+<button
+class="primary"
+onclick="saveEdit()">
+
+Enregistrer
+
+</button>
+
+</div>
+
+</div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- MODALE PAIEMENT MANUEL -->
-<!-- ========================= -->
+<!-- =========================
+     MODALE PAIEMENT MANUEL
+========================= -->
 
 <div id="manualModal" class="modal">
 
-  <div class="modalBox">
+<div class="modalBox">
 
-    <h2>💶 Paiement</h2>
+<div class="modalTitle">
+Paiement manuel
+</div>
 
-    <div id="manualContent"></div>
+<div id="manualContent"></div>
 
-    <button class="primary" onclick="closeManual()">
-      Fermer
-    </button>
+<div class="modalActions">
 
-  </div>
+<button
+class="secondary"
+onclick="closeManual()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- MODALE PHOTO -->
-<!-- ========================= -->
-
-<div id="photoModal" class="modal">
-
-  <div class="modalBox">
-
-    <h2>📷 Document</h2>
-
-    <img id="photoModalImage" class="photoPreview">
-
-    <button
-      class="primary danger"
-      onclick="deletePhoto()">
-
-      Supprimer la photo
-
-    </button>
-
-    <button
-      class="secondary"
-      style="width:100%;margin-top:8px;"
-      onclick="closePhoto()">
-
-      Fermer
-
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- ========================= -->
-<!-- MODALE BNP -->
-<!-- ========================= -->
+<!-- =========================
+     MODALE BNP
+========================= -->
 
 <div id="bnpModal" class="modal">
 
-  <div class="modalBox">
+<div class="modalBox">
 
-    <h2>🏦 Virement BNP</h2>
+<div class="modalTitle">
+🏦 Préparer le virement BNP
+</div>
 
-    <p style="color:#666;font-size:14px;margin-top:-5px;">
-      Copie les informations nécessaires puis ouvre Easy Banking.
-    </p>
+<div id="bnpContent"></div>
 
+<div class="bnpNote">
+Les informations ci-dessus sont simplement préparées pour ton virement.
+Tu peux copier chaque élément puis ouvrir BNP Paribas Fortis et introduire le virement dans Easy Banking.
+Vérifie toujours les informations avant de valider.
+</div>
 
-    <div class="bnpRow">
+<div class="modalActions">
 
-      <div>
-        <strong>Bénéficiaire</strong>
-        <span id="bnpBeneficiary">—</span>
-      </div>
+<button
+class="secondary"
+onclick="closeBNP()">
 
-      <button onclick="copyBNP('bnpBeneficiary', this)">
-        Copier
-      </button>
+Fermer
 
-    </div>
+</button>
 
+</div>
 
-    <div class="bnpRow">
-
-      <div>
-        <strong>IBAN</strong>
-        <span id="bnpIban">—</span>
-      </div>
-
-      <button onclick="copyBNP('bnpIban', this)">
-        Copier
-      </button>
-
-    </div>
-
-
-    <div class="bnpRow">
-
-      <div>
-        <strong>Montant</strong>
-        <span id="bnpAmount">—</span>
-      </div>
-
-      <button onclick="copyBNP('bnpAmount', this)">
-        Copier
-      </button>
-
-    </div>
-
-
-    <div class="bnpRow">
-
-      <div>
-        <strong>Communication</strong>
-        <span id="bnpCommunication">—</span>
-      </div>
-
-      <button onclick="copyBNP('bnpCommunication', this)">
-        Copier
-      </button>
-
-    </div>
-
-
-    <button
-      class="bnpOpenBtn"
-      onclick="launchBNP()">
-
-      🏦 Ouvrir Easy Banking
-
-    </button>
-
-
-    <button
-      class="bnpCloseBtn"
-      onclick="closeBNP()">
-
-      Fermer
-
-    </button>
-
-  </div>
+</div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- MODALE QR -->
-<!-- ========================= -->
+<!-- =========================
+     MODALE QR
+========================= -->
 
 <div id="qrModal" class="modal">
 
-  <div class="modalBox">
+<div class="modalBox">
 
-    <h2>▣ QR de paiement</h2>
+<div class="modalTitle">
+▣ QR paiement
+</div>
 
-    <div id="qrCode"></div>
+<div class="qrContainer">
 
-    <div class="qrInfo">
+<div id="qrCode"></div>
 
-      <div>
-        <strong>Bénéficiaire :</strong>
-        <span id="qrBeneficiary"></span>
-      </div>
+<div id="qrInfo" class="qrInfo"></div>
 
-      <div>
-        <strong>IBAN :</strong>
-        <span id="qrIban"></span>
-      </div>
+<div class="qrWarning">
+Scanne ce QR avec une application bancaire compatible.
+Vérifie toujours les informations avant de valider le paiement.
+</div>
 
-      <div>
-        <strong>Montant :</strong>
-        <span id="qrAmount"></span>
-      </div>
+</div>
 
-      <div>
-        <strong>Communication :</strong>
-        <span id="qrCommunication"></span>
-      </div>
+<div class="modalActions">
 
-    </div>
+<button
+class="secondary"
+onclick="closeQR()">
 
-    <button
-      class="secondary"
-      style="width:100%;margin-top:12px;"
-      onclick="closeQR()">
+Fermer
 
-      Fermer
+</button>
 
-    </button>
+</div>
 
-  </div>
+</div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- BARRE SUPPRESSION -->
-<!-- ========================= -->
+<!-- =========================
+     MODALE PHOTO
+========================= -->
 
-<div id="selectionBar" class="selectionBar">
+<div id="photoModal" class="modal">
 
-  <span id="selectionCount">
-    0 sélectionné
-  </span>
+<div class="modalBox">
 
-  <button
-    class="secondary danger"
-    onclick="deleteSelected()">
+<div class="modalTitle">
+Document
+</div>
 
-    🗑️ Supprimer
+<img
+id="photoModalImage"
+class="photoModalImage">
 
-  </button>
+<div class="photoModalButtons">
+
+<button
+class="danger"
+onclick="deletePhoto()">
+
+Supprimer
+
+</button>
+
+<button
+class="secondary"
+onclick="closePhoto()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
 
 </div>
 
 
 <script>
 
-/* =========================================
-   VARIABLES
-   ========================================= */
+/* =========================
+   DONNEES
+========================= */
 
-const STORAGE_KEY = "mesPaiements";
+const PIN="1157";
 
-let data = [];
-let currentTab = "unpaid";
+let data=[];
 
-let addPhotoData = null;
+let currentTab="unpaid";
 
-let editingPaymentId = null;
-let editingInstallmentId = null;
+let selectedIds=new Set();
 
-let currentPhotoPaymentId = null;
-let currentPhotoInstallmentId = null;
+let editId=null;
 
-let currentBNPPayment = null;
-let currentBNPInstallment = null;
+let manualId=null;
 
+let photoId=null;
 
-/* =========================================
-   NORMALISATION
-   ========================================= */
+let qrId=null;
 
-function normalizeData(input){
+let bnpId=null;
 
-  if(!Array.isArray(input)){
-    return [];
-  }
+let addPhotoData="";
 
-  return input.map(payment => {
 
-    payment.id =
-      payment.id ||
-      Date.now() + Math.random();
-
-    payment.alias =
-      payment.alias || "";
-
-    payment.beneficiary =
-      payment.beneficiary || "";
-
-    payment.iban =
-      payment.iban || "";
-
-    payment.communication =
-      payment.communication || "";
-
-    payment.installments =
-      Array.isArray(payment.installments)
-        ? payment.installments
-        : [];
-
-    payment.installments =
-      payment.installments.map(inst => {
-
-        return {
-          id:
-            inst.id ||
-            Date.now() + Math.random(),
-
-          date:
-            inst.date || "",
-
-          amount:
-            Number(inst.amount || 0),
-
-          communication:
-            inst.communication ||
-            payment.communication ||
-            "",
-
-          paid:
-            Boolean(inst.paid),
-
-          photo:
-            inst.photo || null
-        };
-
-      });
-
-    return payment;
-
-  });
-
-}
-
-
-/* =========================================
-   CHARGEMENT
-   ========================================= */
-
-function loadData(){
-
-  try{
-
-    const saved =
-      localStorage.getItem(STORAGE_KEY);
-
-    if(saved){
-
-      data =
-        normalizeData(JSON.parse(saved));
-
-    }else{
-
-      data = [];
-
-    }
-
-  }catch(e){
-
-    data = [];
-
-  }
-
-}
-
-
-/* =========================================
-   SAUVEGARDE
-   ========================================= */
-
-function saveData(){
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(data)
-  );
-
-}
-
-
-/* =========================================
-   PIN
-   ========================================= */
-
-function checkPin(){
-
-  const pin =
-    document.getElementById("pinInput").value;
-
-  if(pin === "1157"){
-
-    document.getElementById("pinScreen")
-      .classList.add("hidden");
-
-    document.getElementById("app")
-      .classList.remove("hidden");
-
-    render();
-
-  }else{
-
-    document.getElementById("pinError")
-      .textContent =
-      "Code incorrect";
-
-    document.getElementById("pinInput")
-      .value = "";
-
-  }
-
-}
-
-
-/* =========================================
-   PHOTO
-   ========================================= */
-
-function handlePhoto(file){
-
-  if(!file) return;
-
-  const reader =
-    new FileReader();
-
-  reader.onload = function(e){
-
-    const img =
-      new Image();
-
-    img.onload = function(){
-
-      const canvas =
-        document.createElement("canvas");
-
-      const maxSize = 1200;
-
-      let width = img.width;
-      let height = img.height;
-
-      if(width > height && width > maxSize){
-
-        height =
-          height * maxSize / width;
-
-        width = maxSize;
-
-      }else if(height > maxSize){
-
-        width =
-          width * maxSize / height;
-
-        height = maxSize;
-
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx =
-        canvas.getContext("2d");
-
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        width,
-        height
-      );
-
-      addPhotoData =
-        canvas.toDataURL(
-          "image/jpeg",
-          .75
-        );
-
-      document.getElementById(
-        "photoAddPreview"
-      ).innerHTML = `
-        <img
-          src="${addPhotoData}"
-          class="photoPreview">
-      `;
-
-    };
-
-    img.src = e.target.result;
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-
-/* =========================================
-   INPUT PHOTOS
-   ========================================= */
-
-document.getElementById("cameraInput")
-.addEventListener("change", function(){
-
-  handlePhoto(this.files[0]);
-
-});
-
-
-document.getElementById("galleryInput")
-.addEventListener("change", function(){
-
-  handlePhoto(this.files[0]);
-
-});
-
-
-/* =========================================
-   AJOUT PAIEMENT
-   ========================================= */
-
-function addPayment(){
-
-  const alias =
-    document.getElementById("alias")
-      .value.trim();
-
-  const beneficiary =
-    document.getElementById("beneficiary")
-      .value.trim();
-
-  const iban =
-    document.getElementById("iban")
-      .value.trim();
-
-  const total =
-    Number(
-      document.getElementById("total")
-        .value
-    );
-
-  const number =
-    parseInt(
-      document.getElementById("installments")
-        .value
-    );
-
-  const firstDate =
-    document.getElementById("firstDate")
-      .value;
-
-  const communication =
-    document.getElementById("communication")
-      .value.trim();
-
-
-  if(!beneficiary){
-
-    alert("Veuillez entrer le bénéficiaire.");
-
-    return;
-
-  }
-
-
-  if(!total || total <= 0){
-
-    alert("Veuillez entrer un montant.");
-
-    return;
-
-  }
-
-
-  if(!number || number < 1){
-
-    alert("Veuillez entrer le nombre d'échéances.");
-
-    return;
-
-  }
-
-
-  if(!firstDate){
-
-    alert("Veuillez choisir la première date.");
-
-    return;
-
-  }
-
-
-  const payment = {
-
-    id:
-      Date.now() +
-      Math.random(),
-
-    alias,
-
-    beneficiary,
-
-    iban,
-
-    communication,
-
-    installments: []
-
-  };
-
-
-  const baseAmount =
-    Math.floor(
-      (total / number) * 100
-    ) / 100;
-
-  let remainder =
-    Math.round(
-      (total - baseAmount * number) * 100
-    ) / 100;
-
-
-  for(let i = 0; i < number; i++){
-
-    const date =
-      new Date(firstDate + "T12:00:00");
-
-    date.setMonth(
-      date.getMonth() + i
-    );
-
-
-    let amount =
-      baseAmount;
-
-
-    if(i === number - 1){
-
-      amount =
-        Math.round(
-          (baseAmount + remainder) * 100
-        ) / 100;
-
-    }
-
-
-    payment.installments.push({
-
-      id:
-        Date.now() +
-        Math.random(),
-
-      date:
-        date.toISOString()
-          .split("T")[0],
-
-      amount,
-
-      communication,
-
-      paid:false,
-
-      photo:
-        i === 0
-          ? addPhotoData
-          : null
-
-    });
-
-  }
-
-
-  data.push(payment);
-
-  saveData();
-
-  resetAddForm();
-
-  render();
-
-  alert("Paiement ajouté.");
-
-}
-
-
-/* =========================================
-   RESET FORMULAIRE
-   ========================================= */
-
-function resetAddForm(){
-
-  document.getElementById("alias").value = "";
-  document.getElementById("beneficiary").value = "";
-  document.getElementById("iban").value = "";
-  document.getElementById("total").value = "";
-  document.getElementById("installments").value = "1";
-  document.getElementById("firstDate").value = "";
-  document.getElementById("communication").value = "";
-
-  addPhotoData = null;
-
-  document.getElementById(
-    "photoAddPreview"
-  ).innerHTML = "";
-
-  document.getElementById(
-    "cameraInput"
-  ).value = "";
-
-  document.getElementById(
-    "galleryInput"
-  ).value = "";
-
-}
-
-
-/* =========================================
-   ONGLETS
-   ========================================= */
-
-function showTab(tab){
-
-  currentTab = tab;
-
-  document.getElementById("tabUnpaid")
-    .classList.toggle(
-      "active",
-      tab === "unpaid"
-    );
-
-  document.getElementById("tabPaid")
-    .classList.toggle(
-      "active",
-      tab === "paid"
-    );
-
-  render();
-
-}
-
-
-/* =========================================
-   FORMAT €
-   ========================================= */
+/* =========================
+   OUTILS
+========================= */
 
 function euro(value){
 
-  return Number(value || 0)
-    .toLocaleString(
-      "fr-BE",
-      {
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-      }
-    ) + " €";
+return Number(value || 0)
+.toLocaleString(
+"fr-BE",
+{
+style:"currency",
+currency:"EUR"
+}
+);
 
 }
 
 
-/* =========================================
-   FORMAT DATE
-   ========================================= */
+function generateId(){
+
+return Date.now().toString()
++
+Math.random()
+.toString(36)
+.substring(2,9);
+
+}
+
 
 function formatDate(date){
 
-  if(!date) return "";
+if(!date)
+return "";
 
-  const parts =
-    date.split("-");
+const d=
+new Date(
+date+"T00:00:00"
+);
 
-  if(parts.length !== 3){
-    return date;
-  }
-
-  return parts[2] +
-    "/" +
-    parts[1] +
-    "/" +
-    parts[0];
+return d.toLocaleDateString(
+"fr-BE"
+);
 
 }
 
 
-/* =========================================
-   RENDER
-   ========================================= */
+function addMonths(date,months){
+
+const d=
+new Date(
+date+"T00:00:00"
+);
+
+d.setMonth(
+d.getMonth()+months
+);
+
+return d.toISOString()
+.substring(0,10);
+
+}
+
+
+/* ID unique pour sélection */
+
+function selectionKey(
+paymentId,
+installmentId
+){
+
+return String(paymentId)
++
+"::"+
+String(installmentId);
+
+}
+
+
+/* =========================
+   NORMALISATION
+========================= */
+
+function normalizeData(){
+
+if(!Array.isArray(data))
+data=[];
+
+data.forEach(p=>{
+
+if(!p.id)
+p.id=generateId();
+
+if(!p.alias)
+p.alias="";
+
+if(!p.beneficiary)
+p.beneficiary="";
+
+if(!p.iban)
+p.iban="";
+
+if(!p.communication)
+p.communication="";
+
+if(!p.photo)
+p.photo="";
+
+if(!Array.isArray(p.installments))
+p.installments=[];
+
+p.installments.forEach(i=>{
+
+if(!i.id)
+i.id=generateId();
+
+if(typeof i.paid!=="boolean")
+i.paid=false;
+
+if(i.amount===undefined ||
+i.amount===null ||
+i.amount==="")
+i.amount=0;
+
+});
+
+});
+
+}
+
+
+/* =========================
+   CHARGEMENT
+========================= */
+
+function loadData(){
+
+try{
+
+const saved=
+localStorage.getItem(
+"mesPaiements"
+);
+
+if(saved){
+
+data=JSON.parse(saved);
+
+normalizeData();
+
+}
+
+}catch(e){
+
+console.error(
+"Erreur chargement :",
+e
+);
+
+data=[];
+
+}
+
+render();
+
+}
+
+
+/* =========================
+   SAUVEGARDE
+========================= */
+
+function saveData(){
+
+try{
+
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(data)
+);
+
+}catch(e){
+
+console.error(
+"Erreur sauvegarde :",
+e
+);
+
+alert(
+"Impossible de sauvegarder les données."
+);
+
+}
+
+}
+
+
+/* =========================
+   PIN
+========================= */
+
+function checkPin(){
+
+const value=
+document.getElementById(
+"pinInput"
+).value;
+
+if(value===PIN){
+
+document.getElementById(
+"loginScreen"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"app"
+).classList.remove(
+"hidden"
+);
+
+loadData();
+
+}else{
+
+alert(
+"Code PIN incorrect"
+);
+
+document.getElementById(
+"pinInput"
+).value="";
+
+}
+
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+function handlePhoto(file){
+
+if(!file)
+return;
+
+const reader=
+new FileReader();
+
+reader.onload=function(e){
+
+const img=
+new Image();
+
+img.onload=function(){
+
+const canvas=
+document.createElement(
+"canvas"
+);
+
+const maxWidth=1400;
+
+let width=img.width;
+
+let height=img.height;
+
+if(width>maxWidth){
+
+height=
+height*
+(maxWidth/width);
+
+width=maxWidth;
+
+}
+
+canvas.width=width;
+
+canvas.height=height;
+
+const ctx=
+canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0,
+width,
+height
+);
+
+addPhotoData=
+canvas.toDataURL(
+"image/jpeg",
+0.75
+);
+
+document.getElementById(
+"addPhotoPreview"
+).innerHTML=
+`
+<img
+src="${addPhotoData}"
+class="photoPreview">
+`;
+
+};
+
+img.src=e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+
+document.getElementById(
+"cameraInput"
+).addEventListener(
+"change",
+function(){
+
+handlePhoto(this.files[0]);
+
+}
+);
+
+
+document.getElementById(
+"galleryInput"
+).addEventListener(
+"change",
+function(){
+
+handlePhoto(this.files[0]);
+
+}
+);
+
+
+/* =========================
+   AJOUT PAIEMENT
+========================= */
+
+function addPayment(){
+
+const alias=
+document.getElementById(
+"alias"
+).value.trim();
+
+const beneficiary=
+document.getElementById(
+"beneficiary"
+).value.trim();
+
+const iban=
+document.getElementById(
+"iban"
+).value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+const total=
+parseFloat(
+document.getElementById(
+"totalAmount"
+).value
+);
+
+const count=
+parseInt(
+document.getElementById(
+"installments"
+).value
+);
+
+const firstDate=
+document.getElementById(
+"firstDate"
+).value;
+
+const communication=
+document.getElementById(
+"communication"
+).value.trim();
+
+
+if(
+!beneficiary ||
+isNaN(total) ||
+total<=0 ||
+isNaN(count) ||
+count<1 ||
+!firstDate
+){
+
+alert(
+"Veuillez remplir les champs obligatoires."
+);
+
+return;
+
+}
+
+
+const base=
+Math.floor(
+(total/count)*100
+)/100;
+
+const last=
+Math.round(
+(
+total-
+base*(count-1)
+)*100
+)/100;
+
+
+const installments=[];
+
+
+for(
+let i=0;
+i<count;
+i++
+){
+
+installments.push({
+
+id:generateId(),
+
+date:addMonths(
+firstDate,
+i
+),
+
+amount:
+i===count-1
+?last
+:base,
+
+paid:false
+
+});
+
+}
+
+
+data.push({
+
+id:generateId(),
+
+alias:alias,
+
+beneficiary:beneficiary,
+
+iban:iban,
+
+communication:communication,
+
+photo:addPhotoData,
+
+installments:installments
+
+});
+
+
+saveData();
+
+resetAddForm();
+
+selectedIds.clear();
+
+render();
+
+alert(
+"Paiement ajouté."
+);
+
+}
+
+
+/* =========================
+   RESET AJOUT
+========================= */
+
+function resetAddForm(){
+
+document.getElementById(
+"alias"
+).value="";
+
+document.getElementById(
+"beneficiary"
+).value="";
+
+document.getElementById(
+"iban"
+).value="";
+
+document.getElementById(
+"totalAmount"
+).value="";
+
+document.getElementById(
+"installments"
+).value="1";
+
+document.getElementById(
+"firstDate"
+).value="";
+
+document.getElementById(
+"communication"
+).value="";
+
+document.getElementById(
+"addPhotoPreview"
+).innerHTML="";
+
+document.getElementById(
+"cameraInput"
+).value="";
+
+document.getElementById(
+"galleryInput"
+).value="";
+
+addPhotoData="";
+
+}
+
+
+/* =========================
+   ONGLETS
+========================= */
+
+function showTab(tab){
+
+currentTab=tab;
+
+document.getElementById(
+"tabUnpaid"
+).classList.toggle(
+"active",
+tab==="unpaid"
+);
+
+document.getElementById(
+"tabPaid"
+).classList.toggle(
+"active",
+tab==="paid"
+);
+
+document.getElementById(
+"unpaidList"
+).classList.toggle(
+"hidden",
+tab!=="unpaid"
+);
+
+document.getElementById(
+"paidList"
+).classList.toggle(
+"hidden",
+tab!=="paid"
+);
+
+render();
+
+}
+
+
+/* =========================
+   AFFICHAGE
+========================= */
 
 function render(){
 
-  const list =
-    document.getElementById(
-      "paymentsList"
-    );
+normalizeData();
 
-  list.innerHTML = "";
+const unpaidList=
+document.getElementById(
+"unpaidList"
+);
 
+const paidList=
+document.getElementById(
+"paidList"
+);
 
-  let total = 0;
-  let paid = 0;
-  let remaining = 0;
+unpaidList.innerHTML="";
 
-  let unpaidCount = 0;
-  let paidCount = 0;
-
-
-  data.forEach(payment => {
-
-    payment.installments.forEach(inst => {
-
-      const amount =
-        Number(inst.amount || 0);
-
-      total += amount;
-
-      if(inst.paid){
-
-        paid += amount;
-        paidCount++;
-
-      }else{
-
-        remaining += amount;
-        unpaidCount++;
-
-      }
-
-    });
-
-  });
+paidList.innerHTML="";
 
 
-  document.getElementById("sumTotal")
-    .textContent = euro(total);
+let total=0;
 
-  document.getElementById("sumPaid")
-    .textContent = euro(paid);
+let paid=0;
 
-  document.getElementById("sumRemaining")
-    .textContent = euro(remaining);
+let unpaidCount=0;
 
-  document.getElementById("countUnpaid")
-    .textContent = unpaidCount;
-
-  document.getElementById("countPaid")
-    .textContent = paidCount;
+let paidCount=0;
 
 
-  data.forEach(payment => {
+data.forEach(payment=>{
 
-    const relevant =
-      payment.installments.filter(
-        inst =>
-          currentTab === "paid"
-            ? inst.paid
-            : !inst.paid
-      );
+payment.installments.forEach(inst=>{
+
+total+=
+Number(inst.amount||0);
+
+if(inst.paid){
+
+paid+=
+Number(inst.amount||0);
+
+paidCount++;
+
+}else{
+
+unpaidCount++;
+
+}
+
+});
+
+});
 
 
-    if(relevant.length === 0){
-      return;
-    }
+document.getElementById(
+"totalValue"
+).textContent=
+euro(total);
+
+document.getElementById(
+"paidValue"
+).textContent=
+euro(paid);
+
+document.getElementById(
+"remainingValue"
+).textContent=
+euro(total-paid);
+
+document.getElementById(
+"unpaidCount"
+).textContent=
+unpaidCount;
+
+document.getElementById(
+"paidCount"
+).textContent=
+paidCount;
 
 
-    list.appendChild(
-      createPaymentGroup(
-        payment,
-        relevant
-      )
-    );
+data.forEach(payment=>{
 
-  });
+const visible=
+payment.installments.filter(
+i=>
+currentTab==="unpaid"
+? !i.paid
+: i.paid
+);
+
+if(!visible.length)
+return;
+
+const group=
+createPaymentGroup(
+payment,
+visible
+);
+
+if(currentTab==="unpaid")
+unpaidList.appendChild(group);
+else
+paidList.appendChild(group);
+
+});
 
 
-  updateSelectionBar();
+updateSelectionBar();
 
 }
 
 
-/* =========================================
+/* =========================
    GROUPE PAIEMENT
-   ========================================= */
+========================= */
 
 function createPaymentGroup(
-  payment,
-  installments
+payment,
+installments
 ){
 
-  const group =
-    document.createElement("div");
+const group=
+document.createElement("div");
 
-  group.className =
-    "paymentGroup";
-
-
-  const paidCount =
-    payment.installments
-      .filter(i => i.paid)
-      .length;
-
-  const totalCount =
-    payment.installments.length;
-
-  const remainingCount =
-    totalCount - paidCount;
+group.className=
+"paymentGroup";
 
 
-  const header =
-    document.createElement("div");
+const header=
+document.createElement("div");
 
-  header.className =
-    "paymentHeader";
-
-
-  header.innerHTML = `
-
-    <div class="alias">
-      ${escapeHtml(
-        payment.alias ||
-        "Paiement"
-      )}
-    </div>
-
-    <div class="beneficiary">
-      ${escapeHtml(
-        payment.beneficiary
-      )}
-    </div>
-
-    <div class="installmentSummary">
-      ${totalCount} échéance(s)
-      • ${paidCount} payée(s)
-      • ${remainingCount} restante(s)
-    </div>
-
-  `;
+header.className=
+"paymentGroupHeader";
 
 
-  group.appendChild(header);
+const alias=
+payment.alias ||
+"Sans alias";
 
 
-  installments.forEach(inst => {
+const totalInstallments=
+payment.installments.length;
 
-    group.appendChild(
-      createInstallmentCard(
-        payment,
-        inst
-      )
-    );
+const paidInstallments=
+payment.installments.filter(
+i=>i.paid
+).length;
 
-  });
+const remainingInstallments=
+payment.installments.filter(
+i=>!i.paid
+).length;
 
 
-  return group;
+header.innerHTML=
+`
+<div class="paymentGroupAlias">
+${escapeHtml(alias)}
+</div>
+
+<div class="paymentGroupBeneficiary">
+${escapeHtml(payment.beneficiary)}
+</div>
+
+<div class="paymentGroupInfo">
+${totalInstallments}
+échéance(s)
+•
+${paidInstallments}
+payée(s)
+•
+${remainingInstallments}
+restante(s)
+</div>
+`;
+
+
+group.appendChild(header);
+
+
+installments.forEach(inst=>{
+
+group.appendChild(
+createInstallmentCard(
+payment,
+inst
+)
+);
+
+});
+
+
+return group;
 
 }
 
 
-/* =========================================
-   CARTE ÉCHÉANCE
-   ========================================= */
+/* =========================
+   CARTE ECHEANCE
+========================= */
 
 function createInstallmentCard(
-  payment,
-  inst
+payment,
+inst
 ){
 
-  const card =
-    document.createElement("div");
+const card=
+document.createElement("div");
 
-  card.className =
-    "installment";
+card.className=
+"installment";
 
-
-  const checked =
-    inst.paid
-      ? "checked"
-      : "";
+if(inst.paid)
+card.classList.add("paid");
 
 
-  card.innerHTML = `
+const top=
+document.createElement("div");
 
-    <div class="installmentTop">
-
-      <div class="installmentInfo">
-
-        <div class="installmentTitle">
-          Échéance
-        </div>
-
-        <div class="installmentDate">
-          ${formatDate(inst.date)}
-        </div>
-
-        ${
-          inst.communication
-            ? `
-              <div class="communication">
-                ${escapeHtml(
-                  inst.communication
-                )}
-              </div>
-            `
-            : ""
-        }
-
-      </div>
-
-      <div class="installmentAmount">
-        ${euro(inst.amount)}
-      </div>
-
-    </div>
+top.className=
+"installmentTop";
 
 
-    <div class="checkLine">
+/* CASE DE SELECTION */
 
-      <input
-        type="checkbox"
-        ${checked}
-        onchange="togglePaid(
-          ${JSON.stringify(payment.id)},
-          ${JSON.stringify(inst.id)}
-        )">
+const checkbox=
+document.createElement("input");
 
-      <span>
-        ${inst.paid
-          ? "Payé"
-          : "À payer"}
-      </span>
+checkbox.type="checkbox";
 
-    </div>
+checkbox.className=
+"checkbox";
 
+const key=
+selectionKey(
+payment.id,
+inst.id
+);
 
-    <div class="actions">
-
-      <button
-        class="editBtn"
-        onclick="openEdit(
-          ${JSON.stringify(payment.id)},
-          ${JSON.stringify(inst.id)}
-        )">
-
-        ✏️ Modifier
-
-      </button>
+checkbox.checked=
+selectedIds.has(key);
 
 
-      ${
-        inst.paid
-        ?
-        `
-        <button
-          class="unpayBtn"
-          onclick="togglePaid(
-            ${JSON.stringify(payment.id)},
-            ${JSON.stringify(inst.id)}
-          )">
+checkbox.addEventListener(
+"change",
+function(){
 
-          ↩️ Impayé
+if(this.checked)
+selectedIds.add(key);
+else
+selectedIds.delete(key);
 
-        </button>
-        `
-        :
-        `
-        <button
-          class="payBtn"
-          onclick="openManual(
-            ${JSON.stringify(payment.id)},
-            ${JSON.stringify(inst.id)}
-          )">
+updateSelectionBar();
 
-          💶 Payer
-
-        </button>
-        `
-      }
+}
+);
 
 
-      <button
-        class="calendarBtn"
-        onclick="addCalendar(
-          ${JSON.stringify(payment.id)},
-          ${JSON.stringify(inst.id)}
-        )">
+const info=
+document.createElement("div");
 
-        📅 Agenda
-
-      </button>
+info.className=
+"installmentInfo";
 
 
-      <button
-        class="bnpBtn"
-        onclick="openBNP(
-          ${JSON.stringify(payment.id)},
-          ${JSON.stringify(inst.id)}
-        )">
-
-        🏦 BNP
-
-      </button>
-
-
-      <button
-        class="qrBtn"
-        onclick="openQR(
-          ${JSON.stringify(payment.id)},
-          ${JSON.stringify(inst.id)}
-        )">
-
-        ▣ QR
-
-      </button>
+const status=
+inst.paid
+?
+`<span class="badge badgePaid">
+PAYÉ
+</span>`
+:
+`<span class="badge badgeUnpaid">
+À PAYER
+</span>`;
 
 
-      ${
-        inst.photo
-        ?
-        `
-        <button
-          class="photoBtn"
-          onclick="openPhoto(
-            ${JSON.stringify(payment.id)},
-            ${JSON.stringify(inst.id)}
-          )">
+info.innerHTML=
+`
+<div class="beneficiary">
 
-          🖼️ Photo
+${escapeHtml(
+payment.beneficiary
+)}
 
-        </button>
-        `
-        :
-        ""
-      }
+${status}
 
+</div>
 
-      <button
-        class="deleteBtn"
-        onclick="deleteInstallment(
-          ${JSON.stringify(payment.id)},
-          ${JSON.stringify(inst.id)}
-        )">
+<div class="installmentDetails">
 
-        🗑️
+Échéance :
+${formatDate(inst.date)}
 
-      </button>
+<br>
 
-    </div>
+Communication :
+${escapeHtml(
+payment.communication || "-"
+)}
 
-  `;
+</div>
+
+<div class="amount">
+
+${euro(inst.amount)}
+
+</div>
+`;
 
 
-  return card;
+top.appendChild(
+checkbox
+);
+
+top.appendChild(
+info
+);
+
+card.appendChild(top);
+
+
+const actions=
+document.createElement("div");
+
+actions.className="actions";
+
+
+/* MODIFIER */
+
+const editBtn=
+document.createElement("button");
+
+editBtn.className=
+"secondary";
+
+editBtn.textContent=
+"✏️ Modifier";
+
+editBtn.onclick=function(){
+
+openEdit(
+payment.id,
+inst.id
+);
+
+};
+
+
+/* PAYE */
+
+const paidBtn=
+document.createElement("button");
+
+paidBtn.className=
+inst.paid
+?"secondary"
+:"green";
+
+paidBtn.textContent=
+inst.paid
+?"↩️ À payer"
+:"✓ Payé";
+
+paidBtn.onclick=function(){
+
+togglePaid(
+payment.id,
+inst.id
+);
+
+};
+
+
+/* PAYER */
+
+const manualBtn=
+document.createElement("button");
+
+manualBtn.className=
+"secondary";
+
+manualBtn.textContent=
+"💳 Payer";
+
+manualBtn.onclick=function(){
+
+openManual(
+payment.id,
+inst.id
+);
+
+};
+
+
+/* BNP */
+
+const bnpBtn=
+document.createElement("button");
+
+bnpBtn.className=
+"bnpButton";
+
+bnpBtn.textContent=
+"🏦 BNP";
+
+bnpBtn.onclick=function(){
+
+openBNP(
+payment.id,
+inst.id
+);
+
+};
+
+
+/* QR */
+
+const qrBtn=
+document.createElement("button");
+
+qrBtn.className=
+"qrButton";
+
+qrBtn.textContent=
+"▣ QR";
+
+qrBtn.onclick=function(){
+
+openQR(
+payment,
+inst
+);
+
+};
+
+
+/* CALENDRIER */
+
+const calendarBtn=
+document.createElement("button");
+
+calendarBtn.className=
+"secondary";
+
+calendarBtn.textContent=
+"📅 Calendrier";
+
+calendarBtn.onclick=function(){
+
+addCalendar(
+payment,
+inst
+);
+
+};
+
+
+/* SUPPRIMER */
+
+const deleteBtn=
+document.createElement("button");
+
+deleteBtn.className=
+"danger";
+
+deleteBtn.textContent=
+"🗑️ Supprimer";
+
+deleteBtn.onclick=function(){
+
+deleteInstallment(
+payment.id,
+inst.id
+);
+
+};
+
+
+actions.appendChild(editBtn);
+
+actions.appendChild(paidBtn);
+
+actions.appendChild(manualBtn);
+
+actions.appendChild(bnpBtn);
+
+actions.appendChild(qrBtn);
+
+actions.appendChild(calendarBtn);
+
+actions.appendChild(deleteBtn);
+
+
+if(payment.photo){
+
+const photoBtn=
+document.createElement("button");
+
+photoBtn.className=
+"secondary";
+
+photoBtn.textContent=
+"📄 Document";
+
+photoBtn.onclick=function(){
+
+openPhoto(
+payment.id
+);
+
+};
+
+actions.appendChild(photoBtn);
 
 }
 
 
-/* =========================================
-   SÉLECTION
-   ========================================= */
+card.appendChild(actions);
 
-function updateSelectionBar(){
-
-  const bar =
-    document.getElementById(
-      "selectionBar"
-    );
-
-  const selected =
-    document.querySelectorAll(
-      ".selectInstallment:checked"
-    ).length;
-
-
-  if(selected > 0){
-
-    bar.classList.add("show");
-
-    document.getElementById(
-      "selectionCount"
-    ).textContent =
-      selected +
-      " sélectionné(s)";
-
-  }else{
-
-    bar.classList.remove("show");
-
-  }
+return card;
 
 }
 
 
-/* =========================================
-   SUPPRESSION ÉCHÉANCE
-   ========================================= */
+/* =========================
+   SUPPRESSION INDIVIDUELLE
+========================= */
 
 function deleteInstallment(
-  paymentId,
-  installmentId
+paymentId,
+installmentId
 ){
 
-  const payment =
-    data.find(
-      p => String(p.id) === String(paymentId)
-    );
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
 
-  if(!payment) return;
+if(!payment)
+return;
 
-
-  if(!confirm(
-    "Supprimer cette échéance ?"
-  )){
-    return;
-  }
-
-
-  payment.installments =
-    payment.installments.filter(
-      i =>
-        String(i.id) !==
-        String(installmentId)
-    );
+if(
+!confirm(
+"Supprimer cette échéance ?"
+)
+)
+return;
 
 
-  if(payment.installments.length === 0){
-
-    data =
-      data.filter(
-        p =>
-          String(p.id) !==
-          String(paymentId)
-      );
-
-  }
+payment.installments=
+payment.installments.filter(
+i=>String(i.id)!==String(installmentId)
+);
 
 
-  saveData();
-  render();
-
-}
-
-
-/* =========================================
-   SUPPRESSION SÉLECTIONNÉE
-   ========================================= */
-
-function deleteSelected(){
-
-  const selected =
-    document.querySelectorAll(
-      ".selectInstallment:checked"
-    );
-
-  if(!selected.length) return;
+selectedIds.delete(
+selectionKey(
+paymentId,
+installmentId
+)
+);
 
 
-  if(!confirm(
-    "Supprimer les éléments sélectionnés ?"
-  )){
-    return;
-  }
+if(payment.installments.length===0){
 
-
-  selected.forEach(box => {
-
-    const paymentId =
-      box.dataset.paymentId;
-
-    const installmentId =
-      box.dataset.installmentId;
-
-
-    const payment =
-      data.find(
-        p =>
-          String(p.id) ===
-          String(paymentId)
-      );
-
-    if(!payment) return;
-
-
-    payment.installments =
-      payment.installments.filter(
-        i =>
-          String(i.id) !==
-          String(installmentId)
-      );
-
-  });
-
-
-  data =
-    data.filter(
-      p => p.installments.length > 0
-    );
-
-
-  saveData();
-  render();
+data=
+data.filter(
+p=>String(p.id)!==String(paymentId)
+);
 
 }
 
 
-/* =========================================
-   PAYÉ / IMPAYÉ
-   ========================================= */
+saveData();
 
-function togglePaid(
-  paymentId,
-  installmentId
-){
-
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
-
-  if(!payment) return;
-
-
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
-
-  if(!inst) return;
-
-
-  inst.paid =
-    !inst.paid;
-
-
-  saveData();
-  render();
+render();
 
 }
 
 
-/* =========================================
-   MODIFICATION
-   ========================================= */
-
-function openEdit(
-  paymentId,
-  installmentId
-){
-
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
-
-  if(!payment) return;
-
-
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
-
-  if(!inst) return;
-
-
-  editingPaymentId =
-    paymentId;
-
-  editingInstallmentId =
-    installmentId;
-
-
-  document.getElementById(
-    "editDate"
-  ).value = inst.date;
-
-  document.getElementById(
-    "editAmount"
-  ).value = inst.amount;
-
-  document.getElementById(
-    "editCommunication"
-  ).value =
-    inst.communication || "";
-
-
-  document.getElementById(
-    "editModal"
-  ).classList.add("show");
-
-}
-
-
-function closeEdit(){
-
-  document.getElementById(
-    "editModal"
-  ).classList.remove("show");
-
-}
-
-
-function saveEdit(){
-
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(editingPaymentId)
-    );
-
-  if(!payment) return;
-
-
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(editingInstallmentId)
-    );
-
-  if(!inst) return;
-
-
-  inst.date =
-    document.getElementById(
-      "editDate"
-    ).value;
-
-  inst.amount =
-    Number(
-      document.getElementById(
-        "editAmount"
-      ).value
-    );
-
-  inst.communication =
-    document.getElementById(
-      "editCommunication"
-    ).value.trim();
-
-
-  saveData();
-
-  closeEdit();
-
-  render();
-
-}
-
-
-/* =========================================
-   PAIEMENT MANUEL
-   ========================================= */
-
-function openManual(
-  paymentId,
-  installmentId
-){
-
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
-
-  if(!payment) return;
-
-
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
-
-  if(!inst) return;
-
-
-  const communication =
-    inst.communication ||
-    payment.communication ||
-    "";
-
-
-  document.getElementById(
-    "manualContent"
-  ).innerHTML = `
-
-    <div class="card">
-
-      <strong>Bénéficiaire</strong>
-
-      <p>
-        ${escapeHtml(
-          payment.beneficiary
-        )}
-      </p>
-
-      <button
-        class="secondary"
-        onclick="copyText(
-          ${JSON.stringify(
-            payment.beneficiary
-          )},
-          this
-        )">
-
-        📋 Copier
-
-      </button>
-
-    </div>
-
-
-    <div class="card">
-
-      <strong>IBAN</strong>
-
-      <p>
-        ${escapeHtml(
-          payment.iban || "—"
-        )}
-      </p>
-
-      <button
-        class="secondary"
-        onclick="copyText(
-          ${JSON.stringify(
-            payment.iban || ""
-          )},
-          this
-        )">
-
-        📋 Copier
-
-      </button>
-
-    </div>
-
-
-    <div class="card">
-
-      <strong>Montant</strong>
-
-      <p>
-        ${euro(inst.amount)}
-      </p>
-
-      <button
-        class="secondary"
-        onclick="copyText(
-          ${JSON.stringify(
-            Number(inst.amount).toFixed(2)
-          )},
-          this
-        )">
-
-        📋 Copier
-
-      </button>
-
-    </div>
-
-
-    <div class="card">
-
-      <strong>Communication</strong>
-
-      <p>
-        ${escapeHtml(
-          communication || "—"
-        )}
-      </p>
-
-      <button
-        class="secondary"
-        onclick="copyText(
-          ${JSON.stringify(
-            communication
-          )},
-          this
-        )">
-
-        📋 Copier
-
-      </button>
-
-    </div>
-
-
-    <button
-      class="primary green"
-      onclick="
-        markManualPaid(
-          ${JSON.stringify(paymentId)},
-          ${JSON.stringify(installmentId)}
-        )
-      ">
-
-      ✓ Marquer comme payé
-
-    </button>
-
-  `;
-
-
-  document.getElementById(
-    "manualModal"
-  ).classList.add("show");
-
-}
-
-
-function closeManual(){
-
-  document.getElementById(
-    "manualModal"
-  ).classList.remove("show");
-
-}
-
-
-function markManualPaid(
-  paymentId,
-  installmentId
-){
-
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
-
-  if(!payment) return;
-
-
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
-
-  if(!inst) return;
-
-
-  inst.paid = true;
-
-  saveData();
-
-  closeManual();
-
-  render();
-
-}
-
-
-/* =========================================
-   COPIE GÉNÉRALE
-   ========================================= */
-
-function copyText(text, button){
-
-  if(navigator.clipboard){
-
-    navigator.clipboard.writeText(text)
-      .then(() => {
-
-        const old =
-          button.textContent;
-
-        button.textContent =
-          "✓ Copié";
-
-        setTimeout(() => {
-
-          button.textContent =
-            old;
-
-        },1200);
-
-      });
-
-  }else{
-
-    const textarea =
-      document.createElement("textarea");
-
-    textarea.value = text;
-
-    document.body.appendChild(
-      textarea
-    );
-
-    textarea.select();
-
-    document.execCommand("copy");
-
-    textarea.remove();
-
-    button.textContent =
-      "✓ Copié";
-
-  }
-
-}
-
-
-/* =========================================
+/* =========================
    BNP
-   ========================================= */
+========================= */
 
 function openBNP(
-  paymentId,
-  installmentId
+paymentId,
+installmentId
 ){
 
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
 
-  if(!payment) return;
+if(!payment)
+return;
 
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
 
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
+if(!inst)
+return;
 
-  if(!inst) return;
 
+bnpId={
+paymentId:paymentId,
+installmentId:installmentId
+};
 
-  currentBNPPayment =
-    payment;
 
-  currentBNPInstallment =
-    inst;
+const beneficiary=
+String(
+payment.beneficiary || ""
+).trim();
 
+const iban=
+String(
+payment.iban || ""
+)
+.replace(/\s/g,"")
+.toUpperCase();
 
-  const beneficiary =
-    payment.beneficiary || "";
+const amount=
+Number(inst.amount || 0)
+.toFixed(2);
 
-  const iban =
-    payment.iban || "";
+const communication=
+String(
+payment.communication || ""
+).trim();
 
-  const amount =
-    Number(
-      inst.amount || 0
-    ).toFixed(2);
 
-  const communication =
-    inst.communication ||
-    payment.communication ||
-    "";
+document.getElementById(
+"bnpContent"
+).innerHTML=
+`
 
+<div class="bnpInfo">
 
-  document.getElementById(
-    "bnpBeneficiary"
-  ).textContent =
-    beneficiary || "—";
+<div class="bnpLine">
 
+<div class="bnpLabel">
+Bénéficiaire
+</div>
 
-  document.getElementById(
-    "bnpIban"
-  ).textContent =
-    iban || "—";
+<div class="bnpValue">
+${escapeHtml(beneficiary || "-")}
+</div>
 
+<button
+class="bnpCopy"
+onclick="copyText(
+'${escapeJs(beneficiary)}',
+this
+)">
 
-  document.getElementById(
-    "bnpAmount"
-  ).textContent =
-    amount.replace(
-      ".",
-      ","
-    ) + " €";
+Copier
 
+</button>
 
-  document.getElementById(
-    "bnpCommunication"
-  ).textContent =
-    communication || "—";
+</div>
 
 
-  document.getElementById(
-    "bnpModal"
-  ).classList.add("show");
+<div class="bnpLine">
 
-}
+<div class="bnpLabel">
+IBAN
+</div>
 
+<div class="bnpValue">
+${escapeHtml(iban || "-")}
+</div>
 
-function copyBNP(
-  elementId,
-  button
-){
+<button
+class="bnpCopy"
+onclick="copyText(
+'${escapeJs(iban)}',
+this
+)">
 
-  const element =
-    document.getElementById(
-      elementId
-    );
+Copier
 
-  if(!element) return;
+</button>
 
+</div>
 
-  let text =
-    element.textContent.trim();
 
+<div class="bnpLine">
 
-  if(elementId === "bnpAmount"){
+<div class="bnpLabel">
+Montant
+</div>
 
-    text =
-      text
-        .replace("€","")
-        .trim();
+<div class="bnpValue">
+${escapeHtml(amount)} €
+</div>
 
-  }
+<button
+class="bnpCopy"
+onclick="copyText(
+'${escapeJs(amount)}',
+this
+)">
 
+Copier
 
-  if(navigator.clipboard){
+</button>
 
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
+</div>
 
-        showBNPCopied(button);
 
-      })
-      .catch(() => {
+<div class="bnpLine">
 
-        fallbackCopyBNP(
-          text,
-          button
-        );
+<div class="bnpLabel">
+Communication
+</div>
 
-      });
+<div class="bnpValue">
+${escapeHtml(communication || "-")}
+</div>
 
-  }else{
+<button
+class="bnpCopy"
+onclick="copyText(
+'${escapeJs(communication)}',
+this
+)">
 
-    fallbackCopyBNP(
-      text,
-      button
-    );
+Copier
 
-  }
+</button>
 
-}
+</div>
 
+</div>
 
-function fallbackCopyBNP(
-  text,
-  button
-){
 
-  const textarea =
-    document.createElement(
-      "textarea"
-    );
+<button
+class="bnpOpen"
+onclick="openBNPSite()">
 
-  textarea.value = text;
+🏦 Ouvrir BNP Paribas Fortis
 
-  textarea.style.position =
-    "fixed";
+</button>
 
-  textarea.style.opacity =
-    "0";
+`;
 
-  document.body.appendChild(
-    textarea
-  );
 
-  textarea.focus();
-  textarea.select();
-
-  try{
-
-    document.execCommand(
-      "copy"
-    );
-
-  }catch(e){}
-
-  textarea.remove();
-
-  showBNPCopied(button);
-
-}
-
-
-function showBNPCopied(button){
-
-  const oldText =
-    button.textContent;
-
-  button.textContent =
-    "✓ Copié";
-
-  setTimeout(() => {
-
-    button.textContent =
-      oldText;
-
-  },1200);
+document.getElementById(
+"bnpModal"
+).classList.add(
+"show"
+);
 
 }
 
 
 function closeBNP(){
 
-  document.getElementById(
-    "bnpModal"
-  ).classList.remove("show");
+document.getElementById(
+"bnpModal"
+).classList.remove(
+"show"
+);
+
+bnpId=null;
+
+resetCopyButtons();
 
 }
 
 
-function launchBNP(){
+function openBNPSite(){
 
-  /*
-   * IMPORTANT :
-   * aucun easybanking://payment
-   * n'est utilisé ici.
-   *
-   * Cela évite le problème Apple Pay.
-   */
-
-  window.location.href =
-    "https://www.bnpparibasfortis.com/";
+window.open(
+"https://www.bnpparibasfortis.be/",
+"_blank"
+);
 
 }
 
 
-/* =========================================
-   QR CODE SEPA / EPC
-   ========================================= */
+/* =========================
+   QR SEPA
+========================= */
 
 function createEPCQR(
-  payment,
-  inst
+payment,
+inst
 ){
 
-  const name =
-    (payment.beneficiary || "")
-      .substring(0,70);
+const name=
+String(
+payment.beneficiary || ""
+)
+.trim()
+.substring(0,70);
 
-  const iban =
-    (payment.iban || "")
-      .replace(/\s/g,"")
-      .toUpperCase();
+const iban=
+String(
+payment.iban || ""
+)
+.replace(/\s/g,"")
+.toUpperCase();
 
-  const amount =
-    Number(
-      inst.amount || 0
-    ).toFixed(2);
+const amount=
+Number(inst.amount || 0)
+.toFixed(2);
 
-  const communication =
-    (
-      inst.communication ||
-      payment.communication ||
-      ""
-    ).substring(0,140);
+const communication=
+String(
+payment.communication || ""
+)
+.trim()
+.substring(0,140);
 
 
-  /*
-   * Format EPC QR
-   */
+const payload=
+[
+"BCD",
+"002",
+"1",
+"SCT",
+"",
+name,
+iban,
+"EUR"+amount,
+"",
+communication,
+""
+].join("\n");
 
-  return [
-    "BCD",
-    "002",
-    "1",
-    "SCT",
-    "",
-    name,
-    iban,
-    "EUR" + amount,
-    "",
-    communication,
-    ""
-  ].join("\n");
+return payload;
 
 }
 
 
 function openQR(
-  paymentId,
-  installmentId
+payment,
+inst
 ){
 
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
+const iban=
+String(
+payment.iban || ""
+)
+.replace(/\s/g,"")
+.toUpperCase();
 
-  if(!payment) return;
+if(!iban){
 
+alert(
+"Il faut un IBAN pour générer le QR."
+);
 
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
+return;
 
-  if(!inst) return;
+}
 
 
-  document.getElementById(
-    "qrCode"
-  ).innerHTML = "";
+if(
+typeof QRCode==="undefined"
+){
+
+alert(
+"Le générateur QR n'a pas pu être chargé. Vérifie ta connexion internet."
+);
+
+return;
+
+}
 
 
-  const payload =
-    createEPCQR(
-      payment,
-      inst
-    );
+qrId={
+paymentId:payment.id,
+installmentId:inst.id
+};
 
 
-  new QRCode(
-    document.getElementById(
-      "qrCode"
-    ),
-    {
-      text:payload,
-      width:220,
-      height:220,
-      correctLevel:
-        QRCode.CorrectLevel.M
-    }
-  );
+const qrBox=
+document.getElementById(
+"qrCode"
+);
+
+qrBox.innerHTML="";
 
 
-  document.getElementById(
-    "qrBeneficiary"
-  ).textContent =
-    payment.beneficiary || "—";
+const payload=
+createEPCQR(
+payment,
+inst
+);
 
 
-  document.getElementById(
-    "qrIban"
-  ).textContent =
-    payment.iban || "—";
+new QRCode(
+qrBox,
+{
+text:payload,
+width:240,
+height:240,
+correctLevel:QRCode.CorrectLevel.M
+}
+);
 
 
-  document.getElementById(
-    "qrAmount"
-  ).textContent =
-    euro(inst.amount);
+document.getElementById(
+"qrInfo"
+).innerHTML=
+`
+<strong>
+${escapeHtml(payment.beneficiary)}
+</strong>
+
+<br>
+
+IBAN :
+${escapeHtml(iban)}
+
+<br>
+
+Montant :
+${euro(inst.amount)}
+
+<br>
+
+Communication :
+${escapeHtml(
+payment.communication || "-"
+)}
+`;
 
 
-  document.getElementById(
-    "qrCommunication"
-  ).textContent =
-    inst.communication ||
-    payment.communication ||
-    "—";
-
-
-  document.getElementById(
-    "qrModal"
-  ).classList.add("show");
+document.getElementById(
+"qrModal"
+).classList.add(
+"show"
+);
 
 }
 
 
 function closeQR(){
 
-  document.getElementById(
-    "qrModal"
-  ).classList.remove("show");
+document.getElementById(
+"qrModal"
+).classList.remove(
+"show"
+);
+
+document.getElementById(
+"qrCode"
+).innerHTML="";
+
+qrId=null;
 
 }
 
 
-/* =========================================
-   CALENDRIER
-   ========================================= */
+/* =========================
+   SELECTION
+========================= */
+
+function updateSelectionBar(){
+
+const bar=
+document.getElementById(
+"selectionBar"
+);
+
+const info=
+document.getElementById(
+"selectionInfo"
+);
+
+
+const count=
+selectedIds.size;
+
+
+if(count>0){
+
+bar.classList.add("show");
+
+info.textContent=
+count+
+(
+count>1
+?
+" sélectionnés"
+:
+" sélectionné"
+);
+
+}else{
+
+bar.classList.remove("show");
+
+}
+
+}
+
+
+/* =========================
+   SUPPRESSION SELECTION
+========================= */
+
+function deleteSelected(){
+
+if(!selectedIds.size)
+return;
+
+
+if(
+!confirm(
+"Supprimer les échéances sélectionnées ?"
+)
+)
+return;
+
+
+data.forEach(payment=>{
+
+payment.installments=
+payment.installments.filter(inst=>{
+
+const key=
+selectionKey(
+payment.id,
+inst.id
+);
+
+return !selectedIds.has(key);
+
+});
+
+});
+
+
+data=
+data.filter(
+p=>
+p.installments.length>0
+);
+
+
+selectedIds.clear();
+
+saveData();
+
+render();
+
+}
+
+
+/* =========================
+   PAYE / NON PAYE
+========================= */
+
+function togglePaid(
+paymentId,
+installmentId
+){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)
+return;
+
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst)
+return;
+
+
+inst.paid=!inst.paid;
+
+saveData();
+
+render();
+
+}
+
+
+/* =========================
+   MODIFICATION
+========================= */
+
+function openEdit(
+paymentId,
+installmentId
+){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment){
+
+alert(
+"Paiement introuvable."
+);
+
+return;
+
+}
+
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst){
+
+alert(
+"Échéance introuvable."
+);
+
+return;
+
+}
+
+
+editId={
+paymentId:paymentId,
+installmentId:installmentId
+};
+
+
+document.getElementById(
+"editAlias"
+).value=
+payment.alias || "";
+
+
+document.getElementById(
+"editBeneficiary"
+).value=
+payment.beneficiary || "";
+
+
+document.getElementById(
+"editIban"
+).value=
+payment.iban || "";
+
+
+document.getElementById(
+"editDate"
+).value=
+inst.date || "";
+
+
+document.getElementById(
+"editAmount"
+).value=
+inst.amount ?? "";
+
+
+document.getElementById(
+"editCommunication"
+).value=
+payment.communication || "";
+
+
+document.getElementById(
+"editModal"
+).classList.add(
+"show"
+);
+
+}
+
+
+function closeEdit(){
+
+document.getElementById(
+"editModal"
+).classList.remove(
+"show"
+);
+
+editId=null;
+
+}
+
+
+function saveEdit(){
+
+if(!editId)
+return;
+
+
+const payment=
+data.find(
+p=>String(p.id)===String(editId.paymentId)
+);
+
+if(!payment){
+
+alert(
+"Paiement introuvable."
+);
+
+return;
+
+}
+
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(editId.installmentId)
+);
+
+if(!inst){
+
+alert(
+"Échéance introuvable."
+);
+
+return;
+
+}
+
+
+payment.alias=
+document.getElementById(
+"editAlias"
+).value.trim();
+
+
+payment.beneficiary=
+document.getElementById(
+"editBeneficiary"
+).value.trim();
+
+
+payment.iban=
+document.getElementById(
+"editIban"
+).value
+.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+
+payment.communication=
+document.getElementById(
+"editCommunication"
+).value.trim();
+
+
+inst.date=
+document.getElementById(
+"editDate"
+).value;
+
+
+const amount=
+parseFloat(
+document.getElementById(
+"editAmount"
+).value
+);
+
+
+if(isNaN(amount) || amount<0){
+
+alert(
+"Montant incorrect."
+);
+
+return;
+
+}
+
+
+inst.amount=amount;
+
+
+saveData();
+
+closeEdit();
+
+render();
+
+alert(
+"Modification enregistrée."
+);
+
+}
+
+
+/* =========================
+   PAIEMENT MANUEL
+========================= */
+
+function openManual(
+paymentId,
+installmentId
+){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)
+return;
+
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst)
+return;
+
+
+manualId={
+paymentId,
+installmentId
+};
+
+
+const content=
+document.getElementById(
+"manualContent"
+);
+
+
+content.innerHTML=
+`
+<div class="manualInfo">
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Bénéficiaire
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.beneficiary)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.beneficiary)}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+IBAN
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.iban || "-")}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.iban || "")}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Montant
+</div>
+
+<div class="manualValue">
+${euro(inst.amount)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(Number(inst.amount).toFixed(2))}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Communication
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.communication || "-")}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.communication || "")}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+</div>
+`;
+
+
+document.getElementById(
+"manualModal"
+).classList.add(
+"show"
+);
+
+}
+
+
+function closeManual(){
+
+document.getElementById(
+"manualModal"
+).classList.remove(
+"show"
+);
+
+manualId=null;
+
+resetCopyButtons();
+
+}
+
+
+/* =========================
+   COPIER
+========================= */
+
+function copyText(
+text,
+button
+){
+
+if(
+navigator.clipboard &&
+navigator.clipboard.writeText
+){
+
+navigator.clipboard.writeText(
+text
+).then(()=>{
+
+button.textContent=
+"✓ Copié";
+
+button.classList.add(
+"copied"
+);
+
+}).catch(()=>{
+
+fallbackCopy(
+text,
+button
+);
+
+});
+
+}else{
+
+fallbackCopy(
+text,
+button
+);
+
+}
+
+}
+
+
+function fallbackCopy(
+text,
+button
+){
+
+const textarea=
+document.createElement(
+"textarea"
+);
+
+textarea.value=text;
+
+document.body.appendChild(
+textarea
+);
+
+textarea.select();
+
+try{
+
+document.execCommand(
+"copy"
+);
+
+button.textContent=
+"✓ Copié";
+
+button.classList.add(
+"copied"
+);
+
+}catch(e){
+
+alert(
+"Impossible de copier."
+);
+
+}
+
+textarea.remove();
+
+}
+
+
+function resetCopyButtons(){
+
+document
+.querySelectorAll(
+".copyButton, .bnpCopy"
+)
+.forEach(b=>{
+
+b.textContent=
+"Copier";
+
+b.classList.remove(
+"copied"
+);
+
+});
+
+}
+
+
+/* =========================
+   GOOGLE CALENDAR
+========================= */
 
 function addCalendar(
-  paymentId,
-  installmentId
+payment,
+inst
 ){
 
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
-
-  if(!payment) return;
+if(!inst.date)
+return;
 
 
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
-
-  if(!inst) return;
+const date=
+inst.date.replaceAll(
+"-",
+""
+);
 
 
-  const title =
-    (
-      payment.alias
-        ? payment.alias + " - "
-        : ""
-    ) +
-    payment.beneficiary;
+const d2=
+new Date(
+inst.date+
+"T00:00:00"
+);
+
+d2.setDate(
+d2.getDate()+1
+);
 
 
-  const communication =
-    inst.communication ||
-    payment.communication ||
-    "";
+const end=
+d2.toISOString()
+.substring(0,10)
+.replaceAll(
+"-",
+""
+);
 
 
-  const details =
-    "IBAN : " +
-    (payment.iban || "") +
-    "\nMontant : " +
-    euro(inst.amount) +
-    "\nCommunication : " +
-    communication;
+const title=
+(
+payment.alias
+?
+payment.alias+
+" - "
+:
+""
+)+
+payment.beneficiary;
 
 
-  const date =
-    inst.date.replace(
-      /-/g,
-      ""
-    );
+const details=
+"Montant : "+
+Number(inst.amount)
+.toFixed(2)+
+" €\n"+
+"IBAN : "+
+(payment.iban||"")+
+"\n"+
+"Communication : "+
+(payment.communication||"");
 
 
-  const url =
-    "https://calendar.google.com/calendar/render" +
-    "?action=TEMPLATE" +
-    "&text=" +
-    encodeURIComponent(title) +
-    "&dates=" +
-    date +
-    "/" +
-    date +
-    "&details=" +
-    encodeURIComponent(details);
+const url=
+"https://calendar.google.com/calendar/render?action=TEMPLATE"+
+"&text="+
+encodeURIComponent(title)+
+"&dates="+
+date+
+"/"+
+end+
+"&details="+
+encodeURIComponent(details);
 
 
-  window.open(
-    url,
-    "_blank"
-  );
+window.open(
+url,
+"_blank"
+);
 
 }
 
 
-/* =========================================
+/* =========================
    PHOTO
-   ========================================= */
+========================= */
 
 function openPhoto(
-  paymentId,
-  installmentId
+paymentId
 ){
 
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(paymentId)
-    );
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
 
-  if(!payment) return;
-
-
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(installmentId)
-    );
-
-  if(!inst || !inst.photo) return;
+if(
+!payment ||
+!payment.photo
+)
+return;
 
 
-  currentPhotoPaymentId =
-    paymentId;
-
-  currentPhotoInstallmentId =
-    installmentId;
+photoId=paymentId;
 
 
-  document.getElementById(
-    "photoModalImage"
-  ).src =
-    inst.photo;
+document.getElementById(
+"photoModalImage"
+).src=
+payment.photo;
 
 
-  document.getElementById(
-    "photoModal"
-  ).classList.add("show");
+document.getElementById(
+"photoModal"
+).classList.add(
+"show"
+);
 
 }
 
 
 function closePhoto(){
 
-  document.getElementById(
-    "photoModal"
-  ).classList.remove("show");
+document.getElementById(
+"photoModal"
+).classList.remove(
+"show"
+);
+
+photoId=null;
 
 }
 
 
 function deletePhoto(){
 
-  if(
-    currentPhotoPaymentId === null ||
-    currentPhotoInstallmentId === null
-  ){
-    return;
-  }
+if(!photoId)
+return;
 
 
-  const payment =
-    data.find(
-      p =>
-        String(p.id) ===
-        String(currentPhotoPaymentId)
-    );
+const payment=
+data.find(
+p=>String(p.id)===String(photoId)
+);
 
-  if(!payment) return;
+if(payment){
 
+if(
+!confirm(
+"Supprimer ce document ?"
+)
+)
+return;
 
-  const inst =
-    payment.installments.find(
-      i =>
-        String(i.id) ===
-        String(currentPhotoInstallmentId)
-    );
+payment.photo="";
 
-  if(!inst) return;
-
-
-  if(!confirm(
-    "Supprimer cette photo ?"
-  )){
-    return;
-  }
-
-
-  inst.photo = null;
-
-  saveData();
-
-  closePhoto();
-
-  render();
+saveData();
 
 }
 
 
-/* =========================================
+closePhoto();
+
+render();
+
+}
+
+
+/* =========================
    EXPORT
-   ========================================= */
+========================= */
 
 function exportData(){
 
-  const backup = {
+const backup={
 
-    version:1,
+version:1,
 
-    date:
-      new Date().toISOString(),
+date:
+new Date().toISOString(),
 
-    payments:data
+data:data
 
-  };
-
-
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          backup,
-          null,
-          2
-        )
-      ],
-      {
-        type:
-          "application/json"
-      }
-    );
+};
 
 
-  const url =
-    URL.createObjectURL(blob);
-
-
-  const a =
-    document.createElement("a");
-
-  a.href = url;
-
-  a.download =
-    "mes-paiements-sauvegarde.json";
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-  URL.revokeObjectURL(url);
-
+const blob=
+new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
 }
-
-
-/* =========================================
-   IMPORT
-   ========================================= */
-
-document.getElementById(
-  "importInput"
-).addEventListener(
-  "change",
-  function(){
-
-    const file =
-      this.files[0];
-
-    if(!file) return;
-
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload =
-      function(e){
-
-        try{
-
-          const imported =
-            JSON.parse(
-              e.target.result
-            );
-
-
-          if(
-            imported &&
-            Array.isArray(
-              imported.payments
-            )
-          ){
-
-            data =
-              normalizeData(
-                imported.payments
-              );
-
-          }else if(
-            Array.isArray(imported)
-          ){
-
-            data =
-              normalizeData(
-                imported
-              );
-
-          }else{
-
-            alert(
-              "Fichier de sauvegarde invalide."
-            );
-
-            return;
-
-          }
-
-
-          saveData();
-
-          render();
-
-          alert(
-            "Sauvegarde importée avec succès."
-          );
-
-
-        }catch(error){
-
-          alert(
-            "Impossible de lire la sauvegarde."
-          );
-
-        }
-
-      };
-
-
-    reader.readAsText(file);
-
-    this.value = "";
-
-  }
 );
 
 
-/* =========================================
-   ESCAPE HTML
-   ========================================= */
+const url=
+URL.createObjectURL(
+blob
+);
+
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"mes-paiements-backup.json";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+setTimeout(
+()=>{
+URL.revokeObjectURL(url);
+},
+1000
+);
+
+}
+
+
+/* =========================
+   IMPORT
+========================= */
+
+document.getElementById(
+"importInput"
+).addEventListener(
+"change",
+function(){
+
+const file=
+this.files[0];
+
+if(!file)
+return;
+
+
+const reader=
+new FileReader();
+
+
+reader.onload=
+function(e){
+
+try{
+
+const backup=
+JSON.parse(
+e.target.result
+);
+
+
+if(
+backup.data &&
+Array.isArray(
+backup.data
+)
+){
+
+data=
+backup.data;
+
+normalizeData();
+
+selectedIds.clear();
+
+saveData();
+
+render();
+
+alert(
+"Importation réussie."
+);
+
+}else{
+
+alert(
+"Fichier de sauvegarde invalide."
+);
+
+}
+
+}catch(err){
+
+console.error(err);
+
+alert(
+"Impossible de lire la sauvegarde."
+);
+
+}
+
+};
+
+
+reader.readAsText(file);
+
+this.value="";
+
+}
+);
+
+
+/* =========================
+   SECURITE HTML
+========================= */
 
 function escapeHtml(value){
 
-  return String(value ?? "")
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+return String(
+value ?? ""
+)
+
+.replaceAll(
+"&",
+"&amp;"
+)
+
+.replaceAll(
+"<",
+"&lt;"
+)
+
+.replaceAll(
+">",
+"&gt;"
+)
+
+.replaceAll(
+'"',
+"&quot;"
+)
+
+.replaceAll(
+"'",
+"&#039;"
+);
 
 }
 
-
-/* =========================================
-   ESCAPE JS
-   ========================================= */
 
 function escapeJs(value){
 
-  return JSON.stringify(
-    String(value ?? "")
-  );
+return String(
+value ?? ""
+)
+
+.replaceAll(
+"\\",
+"\\\\"
+)
+
+.replaceAll(
+"'",
+"\\'"
+)
+
+.replaceAll(
+"\n",
+"\\n"
+)
+
+.replaceAll(
+"\r",
+"\\r"
+);
 
 }
 
 
-/* =========================================
-   CALCULATRICE
-   ========================================= */
+/* =========================
+   CALCULETTE
+========================= */
 
-let calcValue = "";
-
-
-function updateCalc(){
-
-  document.getElementById(
-    "calcDisplay"
-  ).textContent =
-    calcValue || "0";
-
-}
+let calculatorValue="";
 
 
-function calcAdd(value){
+function calcInput(value){
 
-  calcValue += value;
+calculatorValue+=value;
 
-  updateCalc();
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
 
 }
 
 
 function calcClear(){
 
-  calcValue = "";
-
-  updateCalc();
-
-}
-
-
-function calcBackspace(){
-
-  calcValue =
-    calcValue.slice(
-      0,
-      -1
-    );
-
-  updateCalc();
-
-}
-
-
-function calcEqual(){
-
-  if(!calcValue){
-
-    return;
-
-  }
-
-
-  /*
-   * Autorise uniquement :
-   * chiffres
-   * opérateurs
-   * parenthèses
-   * point
-   */
-
-  if(
-    !/^[0-9+\-*/().\s]+$/
-      .test(calcValue)
-  ){
-
-    calcValue = "";
-
-    updateCalc();
-
-    return;
-
-  }
-
-
-  try{
-
-    const result =
-      Function(
-        '"use strict"; return (' +
-        calcValue +
-        ')'
-      )();
-
-
-    if(
-      typeof result !== "number" ||
-      !isFinite(result)
-    ){
-
-      throw new Error();
-
-    }
-
-
-    calcValue =
-      String(
-        Math.round(
-          result * 100000000
-        ) / 100000000
-      );
-
-
-    updateCalc();
-
-
-  }catch(e){
-
-    calcValue = "";
-
-    document.getElementById(
-      "calcDisplay"
-    ).textContent =
-      "Erreur";
-
-    setTimeout(
-      updateCalc,
-      1000
-    );
-
-  }
-
-}
-
-
-/* =========================================
-   FERMETURE DES MODALES
-   ========================================= */
-
-document.addEventListener(
-  "click",
-  function(e){
-
-    const editModal =
-      document.getElementById(
-        "editModal"
-      );
-
-    const manualModal =
-      document.getElementById(
-        "manualModal"
-      );
-
-    const photoModal =
-      document.getElementById(
-        "photoModal"
-      );
-
-    const bnpModal =
-      document.getElementById(
-        "bnpModal"
-      );
-
-    const qrModal =
-      document.getElementById(
-        "qrModal"
-      );
-
-
-    if(e.target === editModal){
-
-      closeEdit();
-
-    }
-
-
-    if(e.target === manualModal){
-
-      closeManual();
-
-    }
-
-
-    if(e.target === photoModal){
-
-      closePhoto();
-
-    }
-
-
-    if(e.target === bnpModal){
-
-      closeBNP();
-
-    }
-
-
-    if(e.target === qrModal){
-
-      closeQR();
-
-    }
-
-  }
-);
-
-
-/* =========================================
-   PIN AVEC TOUCHE ENTRÉE
-   ========================================= */
+calculatorValue="";
 
 document.getElementById(
-  "pinInput"
-).addEventListener(
-  "keydown",
-  function(e){
+"calcDisplay"
+).value="";
 
-    if(e.key === "Enter"){
+}
 
-      checkPin();
 
-    }
+function calcResult(){
 
-  }
+try{
+
+if(!calculatorValue)
+return;
+
+
+const safe=
+calculatorValue.replace(
+/[^0-9+\-*/().]/g,
+""
 );
 
 
-/* =========================================
-   INITIALISATION
-   ========================================= */
+if(!safe)
+throw new Error();
 
-loadData();
 
-const today =
-  new Date()
-    .toISOString()
-    .split("T")[0];
+const result=
+Function(
+'"use strict";return ('+
+safe+
+')'
+)();
+
 
 if(
-  !document.getElementById(
-    "firstDate"
-  ).value
+typeof result!=="number" ||
+!isFinite(result)
 ){
 
-  document.getElementById(
-    "firstDate"
-  ).value =
-    today;
+throw new Error();
 
 }
+
+
+calculatorValue=
+String(
+Math.round(
+(result+
+Number.EPSILON)
+*100
+)/100
+);
+
+
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
+
+
+}catch(e){
+
+document.getElementById(
+"calcDisplay"
+).value=
+"Erreur";
+
+calculatorValue="";
+
+}
+
+}
+
+
+/* =========================
+   MODALES
+========================= */
+
+document.getElementById(
+"editModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeEdit();
+
+}
+);
+
+
+document.getElementById(
+"manualModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeManual();
+
+}
+);
+
+
+document.getElementById(
+"bnpModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeBNP();
+
+}
+);
+
+
+document.getElementById(
+"qrModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeQR();
+
+}
+);
+
+
+document.getElementById(
+"photoModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closePhoto();
+
+}
+);
+
+
+/* =========================
+   ENTREE PIN
+========================= */
+
+document.getElementById(
+"pinInput"
+).addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter")
+checkPin();
+
+}
+);
 
 </script>
 
