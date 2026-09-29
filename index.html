@@ -106,11 +106,6 @@ background:#34c759;
 color:white;
 }
 
-.bnpButton{
-background:#111;
-color:white;
-}
-
 .qrButton{
 background:#5856d6;
 color:white;
@@ -520,54 +515,6 @@ width:100%;
 font-size:18px;
 }
 
-.bnpInfo{
-background:#f2f2f7;
-border-radius:12px;
-padding:12px;
-margin-bottom:10px;
-}
-
-.bnpLine{
-margin-bottom:14px;
-}
-
-.bnpLabel{
-font-size:12px;
-color:#777;
-}
-
-.bnpValue{
-font-size:15px;
-font-weight:600;
-word-break:break-word;
-margin-top:3px;
-}
-
-.bnpCopy{
-margin-top:6px;
-background:#e9e9ee;
-font-size:12px;
-padding:7px 10px;
-}
-
-.bnpCopy.copied{
-background:#34c759;
-color:white;
-}
-
-.bnpOpen{
-background:#111;
-color:white;
-width:100%;
-}
-
-.bnpNote{
-font-size:12px;
-color:#777;
-line-height:1.5;
-margin-top:12px;
-}
-
 .empty{
 background:white;
 border-radius:15px;
@@ -935,41 +882,6 @@ Fermer
 </div>
 
 
-<div id="bnpModal" class="modal">
-
-<div class="modalBox">
-
-<div class="modalTitle">
-🏦 Virement BNP
-</div>
-
-<div id="bnpContent"></div>
-
-<div class="bnpNote">
-
-Copie les informations du virement une par une,
-puis ouvre l'application BNP Paribas Fortis.
-Tu pourras ensuite choisir manuellement
-la fonction Virement.
-
-</div>
-
-<div class="modalActions">
-
-<button
-class="secondary"
-onclick="closeBNP()">
-
-Fermer
-
-</button>
-
-</div>
-
-</div>
-</div>
-
-
 <div id="qrModal" class="modal">
 
 <div class="modalBox">
@@ -1054,7 +966,6 @@ let editId=null;
 let manualId=null;
 let photoId=null;
 let qrId=null;
-let bnpId=null;
 let addPhotoData="";
 
 
@@ -1752,21 +1663,6 @@ inst.id
 };
 
 
-const bnpBtn=document.createElement("button");
-
-bnpBtn.className="bnpButton";
-bnpBtn.textContent="🏦 BNP";
-
-bnpBtn.onclick=function(){
-
-openBNP(
-payment.id,
-inst.id
-);
-
-};
-
-
 const qrBtn=document.createElement("button");
 
 qrBtn.className="qrButton";
@@ -1815,7 +1711,6 @@ inst.id
 actions.appendChild(editBtn);
 actions.appendChild(paidBtn);
 actions.appendChild(manualBtn);
-actions.appendChild(bnpBtn);
 actions.appendChild(qrBtn);
 actions.appendChild(calendarBtn);
 actions.appendChild(deleteBtn);
@@ -1880,189 +1775,6 @@ p=>String(p.id)!==String(paymentId)
 saveData();
 
 render();
-
-}
-
-
-/* =====================================================
-   BNP
-===================================================== */
-
-function openBNP(paymentId,installmentId){
-
-const payment=data.find(
-p=>String(p.id)===String(paymentId)
-);
-
-if(!payment)return;
-
-const inst=payment.installments.find(
-i=>String(i.id)===String(installmentId)
-);
-
-if(!inst)return;
-
-
-bnpId={
-paymentId:paymentId,
-installmentId:installmentId
-};
-
-
-const beneficiary=
-String(payment.beneficiary||"").trim();
-
-const iban=
-String(payment.iban||"")
-.replace(/\s/g,"")
-.toUpperCase();
-
-const amount=
-Number(inst.amount||0).toFixed(2);
-
-const communication=
-String(payment.communication||"").trim();
-
-
-document.getElementById(
-"bnpContent"
-).innerHTML=
-`
-
-<div class="bnpInfo">
-
-<div class="bnpLine">
-
-<div class="bnpLabel">
-Bénéficiaire
-</div>
-
-<div class="bnpValue">
-${escapeHtml(beneficiary||"-")}
-</div>
-
-<button
-class="bnpCopy"
-onclick="copyText(
-'${escapeJs(beneficiary)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-<div class="bnpLine">
-
-<div class="bnpLabel">
-IBAN
-</div>
-
-<div class="bnpValue">
-${escapeHtml(iban||"-")}
-</div>
-
-<button
-class="bnpCopy"
-onclick="copyText(
-'${escapeJs(iban)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-<div class="bnpLine">
-
-<div class="bnpLabel">
-Montant
-</div>
-
-<div class="bnpValue">
-${escapeHtml(amount)} €
-</div>
-
-<button
-class="bnpCopy"
-onclick="copyText(
-'${escapeJs(amount)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-<div class="bnpLine">
-
-<div class="bnpLabel">
-Communication
-</div>
-
-<div class="bnpValue">
-${escapeHtml(communication||"-")}
-</div>
-
-<button
-class="bnpCopy"
-onclick="copyText(
-'${escapeJs(communication)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-</div>
-
-
-<button
-class="bnpOpen"
-onclick="openBNPSite()">
-
-🏦 Ouvrir BNP Paribas Fortis
-
-</button>
-
-`;
-
-
-document.getElementById(
-"bnpModal"
-).classList.add("show");
-
-}
-
-
-function openBNPSite(){
-
-window.location.href="easybanking://";
-
-}
-
-
-function closeBNP(){
-
-document.getElementById(
-"bnpModal"
-).classList.remove("show");
-
-bnpId=null;
-
-resetCopyButtons();
 
 }
 
@@ -2682,7 +2394,7 @@ textarea.remove();
 function resetCopyButtons(){
 
 document.querySelectorAll(
-".copyButton,.bnpCopy"
+".copyButton"
 ).forEach(b=>{
 
 b.textContent="Copier";
@@ -3060,19 +2772,6 @@ function(e){
 
 if(e.target===this)
 closeManual();
-
-}
-);
-
-
-document.getElementById(
-"bnpModal"
-).addEventListener(
-"click",
-function(e){
-
-if(e.target===this)
-closeBNP();
 
 }
 );
