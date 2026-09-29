@@ -161,7 +161,8 @@ font-size:14px;
 
 .tab.active{
 background:white;
-box-shadow:0 1px 3px rgba(0,0,0,.15);
+box-shadow:
+0 1px 3px rgba(0,0,0,.15);
 }
 
 .selectionBar{
@@ -215,7 +216,7 @@ margin-top:4px;
 .paymentGroupInfo{
 font-size:12px;
 color:#777;
-margin-top:4px;
+margin-top:5px;
 }
 
 .installment{
@@ -462,10 +463,35 @@ margin-top:12px;
 flex:1;
 }
 
-hr{
-border:0;
-border-top:1px solid #eee;
-margin:15px 0;
+
+/* =========================
+   CALCULETTE
+========================= */
+
+.calculatorDisplay{
+font-size:25px;
+font-weight:700;
+text-align:right;
+background:#f2f2f7;
+margin-bottom:10px;
+}
+
+.calculatorGrid{
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+gap:7px;
+}
+
+.calculatorGrid button{
+font-size:18px;
+padding:14px 5px;
+}
+
+.calculatorEquals{
+margin-top:8px;
+width:100%;
+font-size:18px;
 }
 
 </style>
@@ -474,7 +500,10 @@ margin:15px 0;
 
 <body>
 
-<!-- CONNEXION -->
+
+<!-- =========================
+     CONNEXION
+========================= -->
 
 <div
 id="loginScreen"
@@ -512,7 +541,9 @@ Ouvrir
 </div>
 
 
-<!-- APPLICATION -->
+<!-- =========================
+     APPLICATION
+========================= -->
 
 <div
 id="app"
@@ -528,7 +559,9 @@ Mes paiements
 <div class="container">
 
 
-<!-- RESUME -->
+<!-- =========================
+     RESUME
+========================= -->
 
 <div class="summary">
 
@@ -579,7 +612,9 @@ class="summaryValue">
 </div>
 
 
-<!-- ONGLETS -->
+<!-- =========================
+     ONGLETS
+========================= -->
 
 <div class="tabs">
 
@@ -606,7 +641,9 @@ Payé
 </div>
 
 
-<!-- SELECTION -->
+<!-- =========================
+     SELECTION
+========================= -->
 
 <div
 id="selectionBar"
@@ -631,7 +668,9 @@ Supprimer
 </div>
 
 
-<!-- LISTES -->
+<!-- =========================
+     LISTES
+========================= -->
 
 <div id="unpaidList"></div>
 
@@ -640,7 +679,9 @@ id="paidList"
 class="hidden"></div>
 
 
-<!-- AJOUT -->
+<!-- =========================
+     AJOUT PAIEMENT
+========================= -->
 
 <div class="card">
 
@@ -655,7 +696,7 @@ Alias / raccourci
 
 <input
 id="alias"
-placeholder="Ex : EDF, Crédit maison...">
+placeholder="Ex : Taxe maison">
 
 
 <label>
@@ -775,7 +816,143 @@ Ajouter le paiement
 </div>
 
 
-<!-- SAUVEGARDE -->
+<!-- =========================
+     CALCULETTE
+========================= -->
+
+<div class="card">
+
+<h2>
+🧮 Calculette
+</h2>
+
+
+<input
+id="calcDisplay"
+class="calculatorDisplay"
+type="text"
+readonly
+placeholder="0">
+
+
+<div class="calculatorGrid">
+
+<button
+class="secondary"
+onclick="calcInput('7')">
+7
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('8')">
+8
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('9')">
+9
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('/')">
+÷
+</button>
+
+
+<button
+class="secondary"
+onclick="calcInput('4')">
+4
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('5')">
+5
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('6')">
+6
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('*')">
+×
+</button>
+
+
+<button
+class="secondary"
+onclick="calcInput('1')">
+1
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('2')">
+2
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('3')">
+3
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('-')">
+−
+</button>
+
+
+<button
+class="secondary"
+onclick="calcInput('0')">
+0
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('.')">
+.
+</button>
+
+<button
+class="danger"
+onclick="calcClear()">
+C
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('+')">
++
+</button>
+
+</div>
+
+
+<button
+class="primary calculatorEquals"
+onclick="calcResult()">
+
+= Calculer
+
+</button>
+
+</div>
+
+
+<!-- =========================
+     SAUVEGARDE
+========================= -->
 
 <div class="card">
 
@@ -814,7 +991,9 @@ accept=".json">
 </div>
 
 
-<!-- MODALE MODIFICATION -->
+<!-- =========================
+     MODALE MODIFICATION
+========================= -->
 
 <div
 id="editModal"
@@ -899,7 +1078,9 @@ Enregistrer
 </div>
 
 
-<!-- MODALE PAIEMENT MANUEL -->
+<!-- =========================
+     MODALE PAIEMENT MANUEL
+========================= -->
 
 <div
 id="manualModal"
@@ -931,7 +1112,9 @@ Fermer
 </div>
 
 
-<!-- MODALE PHOTO -->
+<!-- =========================
+     MODALE PHOTO
+========================= -->
 
 <div
 id="photoModal"
@@ -1026,9 +1209,13 @@ Math.random()
 
 function formatDate(date){
 
-if(!date) return "";
+if(!date)
+return "";
 
-const d=new Date(date+"T00:00:00");
+const d=
+new Date(
+date+"T00:00:00"
+);
 
 return d.toLocaleDateString(
 "fr-BE"
@@ -1037,9 +1224,13 @@ return d.toLocaleDateString(
 }
 
 
-function addMonths(date,months){
+function addMonths(
+date,
+months
+){
 
-const d=new Date(
+const d=
+new Date(
 date+"T00:00:00"
 );
 
@@ -1112,7 +1303,8 @@ localStorage.getItem(
 
 if(saved){
 
-data=JSON.parse(saved);
+data=
+JSON.parse(saved);
 
 normalizeData();
 
@@ -1174,7 +1366,9 @@ loadData();
 
 }else{
 
-alert("Code PIN incorrect");
+alert(
+"Code PIN incorrect"
+);
 
 document.getElementById(
 "pinInput"
@@ -1359,12 +1553,15 @@ Math.floor(
 
 const last=
 Math.round(
-(total-
-base*(count-1))*100
+(
+total-
+base*(count-1)
+)*100
 )/100;
 
 
 const installments=[];
+
 
 for(
 let i=0;
@@ -1547,15 +1744,19 @@ let unpaidCount=0;
 let paidCount=0;
 
 
-data.forEach(payment=>{
+data.forEach(
+payment=>{
 
-payment.installments.forEach(inst=>{
+payment.installments.forEach(
+inst=>{
 
-total+=Number(inst.amount||0);
+total+=
+Number(inst.amount||0);
 
 if(inst.paid){
 
-paid+=Number(inst.amount||0);
+paid+=
+Number(inst.amount||0);
 
 paidCount++;
 
@@ -1572,11 +1773,13 @@ unpaidCount++;
 
 document.getElementById(
 "totalValue"
-).textContent=euro(total);
+).textContent=
+euro(total);
 
 document.getElementById(
 "paidValue"
-).textContent=euro(paid);
+).textContent=
+euro(paid);
 
 document.getElementById(
 "remainingValue"
@@ -1594,11 +1797,12 @@ document.getElementById(
 paidCount;
 
 
-data.forEach(payment=>{
+data.forEach(
+payment=>{
 
 const visible=
-payment.installments
-.filter(i=>
+payment.installments.filter(
+i=>
 currentTab==="unpaid"
 ? !i.paid
 : i.paid
@@ -1654,21 +1858,47 @@ payment.alias ||
 "Sans alias";
 
 
+const totalInstallments=
+payment.installments.length;
+
+const paidInstallments=
+payment.installments.filter(
+i=>i.paid
+).length;
+
+const remainingInstallments=
+payment.installments.filter(
+i=>!i.paid
+).length;
+
+
 header.innerHTML=
 `
 <div class="paymentGroupAlias">
+
 ${escapeHtml(alias)}
+
 </div>
 
 <div class="paymentGroupBeneficiary">
+
 ${escapeHtml(
 payment.beneficiary
 )}
+
 </div>
 
 <div class="paymentGroupInfo">
-${payment.installments.length}
+
+${totalInstallments}
 échéance(s)
+•
+${paidInstallments}
+payée(s)
+•
+${remainingInstallments}
+restante(s)
+
 </div>
 `;
 
@@ -1676,7 +1906,8 @@ ${payment.installments.length}
 group.appendChild(header);
 
 
-installments.forEach(inst=>{
+installments.forEach(
+inst=>{
 
 group.appendChild(
 createInstallmentCard(
@@ -1708,6 +1939,7 @@ document.createElement("div");
 card.className=
 "installment";
 
+
 if(inst.paid)
 card.classList.add("paid");
 
@@ -1729,6 +1961,7 @@ checkbox.className=
 
 checkbox.checked=
 selectedIds.has(inst.id);
+
 
 checkbox.addEventListener(
 "change",
@@ -1821,7 +2054,9 @@ document.createElement("button");
 editBtn.className=
 "secondary";
 
-editBtn.textContent="✏️ Modifier";
+editBtn.textContent=
+"✏️ Modifier";
+
 
 editBtn.onclick=function(){
 
@@ -1846,6 +2081,7 @@ inst.paid
 ?"↩️ À payer"
 :"✓ Payé";
 
+
 paidBtn.onclick=function(){
 
 togglePaid(
@@ -1865,6 +2101,7 @@ manualBtn.className=
 manualBtn.textContent=
 "💳 Payer";
 
+
 manualBtn.onclick=function(){
 
 openManual(
@@ -1883,6 +2120,7 @@ calendarBtn.className=
 
 calendarBtn.textContent=
 "📅 Calendrier";
+
 
 calendarBtn.onclick=function(){
 
@@ -1921,6 +2159,7 @@ photoBtn.className=
 
 photoBtn.textContent=
 "📄 Document";
+
 
 photoBtn.onclick=function(){
 
@@ -1964,15 +2203,20 @@ document.getElementById(
 const count=
 selectedIds.size;
 
+
 if(count>0){
 
 bar.classList.add("show");
 
 info.textContent=
 count+
-(count>1
-?" sélectionnés"
-:" sélectionné");
+(
+count>1
+?
+" sélectionnés"
+:
+" sélectionné"
+);
 
 }else{
 
@@ -1982,6 +2226,10 @@ bar.classList.remove("show");
 
 }
 
+
+/* =========================
+   SUPPRESSION
+========================= */
 
 function deleteSelected(){
 
@@ -1996,7 +2244,8 @@ if(
 return;
 
 
-data.forEach(payment=>{
+data.forEach(
+payment=>{
 
 payment.installments=
 payment.installments.filter(
@@ -2009,8 +2258,10 @@ inst=>
 
 data=
 data.filter(
-p=>p.installments.length>0
+p=>
+p.installments.length>0
 );
+
 
 selectedIds.clear();
 
@@ -2038,6 +2289,7 @@ p=>p.id===paymentId
 if(!payment)
 return;
 
+
 const inst=
 payment.installments.find(
 i=>i.id===installmentId
@@ -2045,6 +2297,7 @@ i=>i.id===installmentId
 
 if(!inst)
 return;
+
 
 inst.paid=!inst.paid;
 
@@ -2086,25 +2339,30 @@ document.getElementById(
 ).value=
 payment.alias || "";
 
+
 document.getElementById(
 "editBeneficiary"
 ).value=
 payment.beneficiary || "";
+
 
 document.getElementById(
 "editIban"
 ).value=
 payment.iban || "";
 
+
 document.getElementById(
 "editDate"
 ).value=
 inst.date || "";
 
+
 document.getElementById(
 "editAmount"
 ).value=
 inst.amount || "";
+
 
 document.getElementById(
 "editCommunication"
@@ -2114,7 +2372,9 @@ payment.communication || "";
 
 document.getElementById(
 "editModal"
-).classList.add("show");
+).classList.add(
+"show"
+);
 
 }
 
@@ -2123,7 +2383,9 @@ function closeEdit(){
 
 document.getElementById(
 "editModal"
-).classList.remove("show");
+).classList.remove(
+"show"
+);
 
 editId=null;
 
@@ -2135,6 +2397,7 @@ function saveEdit(){
 if(!editId)
 return;
 
+
 const payment=
 data.find(
 p=>p.id===editId.paymentId
@@ -2142,6 +2405,7 @@ p=>p.id===editId.paymentId
 
 if(!payment)
 return;
+
 
 const inst=
 payment.installments.find(
@@ -2152,58 +2416,48 @@ if(!inst)
 return;
 
 
-const newAlias=
+payment.alias=
 document.getElementById(
 "editAlias"
 ).value.trim();
 
-const newBeneficiary=
+
+payment.beneficiary=
 document.getElementById(
 "editBeneficiary"
 ).value.trim();
 
-const newIban=
+
+payment.iban=
 document.getElementById(
 "editIban"
 ).value.trim();
 
-const newDate=
+
+payment.communication=
+document.getElementById(
+"editCommunication"
+).value.trim();
+
+
+inst.date=
 document.getElementById(
 "editDate"
 ).value;
 
-const newAmount=
+
+const amount=
 parseFloat(
 document.getElementById(
 "editAmount"
 ).value
 );
 
-const newCommunication=
-document.getElementById(
-"editCommunication"
-).value.trim();
-
-
-payment.alias=
-newAlias;
-
-payment.beneficiary=
-newBeneficiary;
-
-payment.iban=
-newIban;
-
-payment.communication=
-newCommunication;
-
-inst.date=
-newDate;
 
 inst.amount=
-isNaN(newAmount)
+isNaN(amount)
 ?0
-:newAmount;
+:amount;
 
 
 saveData();
@@ -2251,6 +2505,7 @@ content.innerHTML=
 `
 <div class="manualInfo">
 
+
 <div class="manualLine">
 
 <div class="manualLabel">
@@ -2266,7 +2521,9 @@ payment.beneficiary
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.beneficiary)}',
+'${escapeJs(
+payment.beneficiary
+)}',
 this
 )">
 
@@ -2292,7 +2549,9 @@ payment.iban || "-"
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.iban || "")}',
+'${escapeJs(
+payment.iban || ""
+)}',
 this
 )">
 
@@ -2357,13 +2616,16 @@ Copier
 
 </div>
 
+
 </div>
 `;
 
 
 document.getElementById(
 "manualModal"
-).classList.add("show");
+).classList.add(
+"show"
+);
 
 }
 
@@ -2372,7 +2634,9 @@ function closeManual(){
 
 document.getElementById(
 "manualModal"
-).classList.remove("show");
+).classList.remove(
+"show"
+);
 
 manualId=null;
 
@@ -2390,6 +2654,11 @@ text,
 button
 ){
 
+if(
+navigator.clipboard &&
+navigator.clipboard.writeText
+){
+
 navigator.clipboard.writeText(
 text
 ).then(()=>{
@@ -2402,6 +2671,36 @@ button.classList.add(
 );
 
 });
+
+}else{
+
+const textarea=
+document.createElement(
+"textarea"
+);
+
+textarea.value=text;
+
+document.body.appendChild(
+textarea
+);
+
+textarea.select();
+
+document.execCommand(
+"copy"
+);
+
+textarea.remove();
+
+button.textContent=
+"✓ Copié";
+
+button.classList.add(
+"copied"
+);
+
+}
 
 }
 
@@ -2439,36 +2738,39 @@ inst
 
 const date=
 inst.date.replaceAll(
-"-",""
+"-",
+""
 );
 
-const nextDate=
-addMonths(
-inst.date,
-0
-);
 
 const d2=
 new Date(
-nextDate+"T00:00:00"
+inst.date+
+"T00:00:00"
 );
 
 d2.setDate(
 d2.getDate()+1
 );
 
+
 const end=
 d2.toISOString()
 .substring(0,10)
-.replaceAll("-","");
+.replaceAll(
+"-",
+""
+);
 
 
 const title=
 (
 payment.alias
 ?
-payment.alias+" - "
-:""
+payment.alias+
+" - "
+:
+""
 )+
 payment.beneficiary;
 
@@ -2518,19 +2820,27 @@ data.find(
 p=>p.id===paymentId
 );
 
-if(!payment || !payment.photo)
+if(
+!payment ||
+!payment.photo
+)
 return;
 
+
 photoId=paymentId;
+
 
 document.getElementById(
 "photoModalImage"
 ).src=
 payment.photo;
 
+
 document.getElementById(
 "photoModal"
-).classList.add("show");
+).classList.add(
+"show"
+);
 
 }
 
@@ -2539,7 +2849,9 @@ function closePhoto(){
 
 document.getElementById(
 "photoModal"
-).classList.remove("show");
+).classList.remove(
+"show"
+);
 
 photoId=null;
 
@@ -2550,6 +2862,7 @@ function deletePhoto(){
 
 if(!photoId)
 return;
+
 
 const payment=
 data.find(
@@ -2563,6 +2876,7 @@ payment.photo="";
 saveData();
 
 }
+
 
 closePhoto();
 
@@ -2578,10 +2892,14 @@ render();
 function exportData(){
 
 const backup={
+
 version:1,
-date:new Date()
-.toISOString(),
+
+date:
+new Date().toISOString(),
+
 data:data
+
 };
 
 
@@ -2633,15 +2951,19 @@ document.getElementById(
 "change",
 function(){
 
-const file=this.files[0];
+const file=
+this.files[0];
 
 if(!file)
 return;
 
+
 const reader=
 new FileReader();
 
-reader.onload=function(e){
+
+reader.onload=
+function(e){
 
 try{
 
@@ -2650,6 +2972,7 @@ JSON.parse(
 e.target.result
 );
 
+
 if(
 backup.data &&
 Array.isArray(
@@ -2657,7 +2980,8 @@ backup.data
 )
 ){
 
-data=backup.data;
+data=
+backup.data;
 
 normalizeData();
 
@@ -2687,6 +3011,7 @@ alert(
 
 };
 
+
 reader.readAsText(file);
 
 }
@@ -2704,11 +3029,31 @@ value
 return String(
 value ?? ""
 )
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+
+.replaceAll(
+"&",
+"&amp;"
+)
+
+.replaceAll(
+"<",
+"&lt;"
+)
+
+.replaceAll(
+">",
+"&gt;"
+)
+
+.replaceAll(
+'"',
+"&quot;"
+)
+
+.replaceAll(
+"'",
+"&#039;"
+);
 
 }
 
@@ -2720,10 +3065,121 @@ value
 return String(
 value ?? ""
 )
-.replaceAll("\\","\\\\")
-.replaceAll("'","\\'")
-.replaceAll("\n","\\n")
-.replaceAll("\r","\\r");
+
+.replaceAll(
+"\\",
+"\\\\"
+)
+
+.replaceAll(
+"'",
+"\\'"
+)
+
+.replaceAll(
+"\n",
+"\\n"
+)
+
+.replaceAll(
+"\r",
+"\\r"
+);
+
+}
+
+
+/* =========================
+   CALCULETTE
+========================= */
+
+let calculatorValue="";
+
+
+function calcInput(
+value
+){
+
+calculatorValue+=value;
+
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
+
+}
+
+
+function calcClear(){
+
+calculatorValue="";
+
+document.getElementById(
+"calcDisplay"
+).value="";
+
+}
+
+
+function calcResult(){
+
+try{
+
+if(!calculatorValue)
+return;
+
+
+const safe=
+calculatorValue.replace(
+/[^0-9+\-*/().]/g,
+""
+);
+
+
+const result=
+Function(
+'"use strict";return ('+
+safe+
+')'
+)();
+
+
+if(
+typeof result!=="number" ||
+!isFinite(result)
+){
+
+throw new Error();
+
+}
+
+
+calculatorValue=
+String(
+Math.round(
+(result+
+Number.EPSILON)
+*100
+)/100
+);
+
+
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
+
+
+}catch(e){
+
+document.getElementById(
+"calcDisplay"
+).value=
+"Erreur";
+
+calculatorValue="";
+
+}
 
 }
 
