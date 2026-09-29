@@ -12,6 +12,9 @@ user-scalable=no">
 
 <title>Mes paiements</title>
 
+<!-- Générateur QR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <style>
 
 *{
@@ -111,6 +114,16 @@ color:white;
 
 .green{
 background:#34c759;
+color:white;
+}
+
+.bnpButton{
+background:#111;
+color:white;
+}
+
+.qrButton{
+background:#5856d6;
 color:white;
 }
 
@@ -461,6 +474,46 @@ margin-top:12px;
 
 .photoModalButtons button{
 flex:1;
+}
+
+
+/* =========================
+   QR
+========================= */
+
+.qrContainer{
+text-align:center;
+padding:10px 0;
+}
+
+#qrCode{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:10px;
+background:white;
+}
+
+#qrCode img,
+#qrCode canvas{
+margin:auto;
+}
+
+.qrInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-top:12px;
+font-size:13px;
+line-height:1.5;
+text-align:left;
+}
+
+.qrWarning{
+font-size:12px;
+color:#777;
+margin-top:10px;
+text-align:center;
 }
 
 
@@ -837,104 +890,25 @@ placeholder="0">
 
 <div class="calculatorGrid">
 
-<button
-class="secondary"
-onclick="calcInput('7')">
-7
-</button>
+<button class="secondary" onclick="calcInput('7')">7</button>
+<button class="secondary" onclick="calcInput('8')">8</button>
+<button class="secondary" onclick="calcInput('9')">9</button>
+<button class="secondary" onclick="calcInput('/')">÷</button>
 
-<button
-class="secondary"
-onclick="calcInput('8')">
-8
-</button>
+<button class="secondary" onclick="calcInput('4')">4</button>
+<button class="secondary" onclick="calcInput('5')">5</button>
+<button class="secondary" onclick="calcInput('6')">6</button>
+<button class="secondary" onclick="calcInput('*')">×</button>
 
-<button
-class="secondary"
-onclick="calcInput('9')">
-9
-</button>
+<button class="secondary" onclick="calcInput('1')">1</button>
+<button class="secondary" onclick="calcInput('2')">2</button>
+<button class="secondary" onclick="calcInput('3')">3</button>
+<button class="secondary" onclick="calcInput('-')">−</button>
 
-<button
-class="secondary"
-onclick="calcInput('/')">
-÷
-</button>
-
-
-<button
-class="secondary"
-onclick="calcInput('4')">
-4
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('5')">
-5
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('6')">
-6
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('*')">
-×
-</button>
-
-
-<button
-class="secondary"
-onclick="calcInput('1')">
-1
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('2')">
-2
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('3')">
-3
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('-')">
-−
-</button>
-
-
-<button
-class="secondary"
-onclick="calcInput('0')">
-0
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('.')">
-.
-</button>
-
-<button
-class="danger"
-onclick="calcClear()">
-C
-</button>
-
-<button
-class="secondary"
-onclick="calcInput('+')">
-+
-</button>
+<button class="secondary" onclick="calcInput('0')">0</button>
+<button class="secondary" onclick="calcInput('.')">.</button>
+<button class="danger" onclick="calcClear()">C</button>
+<button class="secondary" onclick="calcInput('+')">+</button>
 
 </div>
 
@@ -1055,20 +1029,12 @@ Communication
 
 <div class="modalActions">
 
-<button
-class="secondary"
-onclick="closeEdit()">
-
+<button class="secondary" onclick="closeEdit()">
 Annuler
-
 </button>
 
-<button
-class="primary"
-onclick="saveEdit()">
-
+<button class="primary" onclick="saveEdit()">
 Enregistrer
-
 </button>
 
 </div>
@@ -1092,14 +1058,60 @@ class="modal">
 Paiement manuel
 </div>
 
-<div
-id="manualContent"></div>
+<div id="manualContent"></div>
 
 <div class="modalActions">
 
 <button
 class="secondary"
 onclick="closeManual()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     MODALE QR
+========================= -->
+
+<div
+id="qrModal"
+class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+▣ QR paiement
+</div>
+
+<div class="qrContainer">
+
+<div id="qrCode"></div>
+
+<div
+id="qrInfo"
+class="qrInfo">
+</div>
+
+<div class="qrWarning">
+Scanne ce QR avec une application bancaire compatible.
+Vérifie toujours les informations avant de valider le paiement.
+</div>
+
+</div>
+
+<div class="modalActions">
+
+<button
+class="secondary"
+onclick="closeQR()">
 
 Fermer
 
@@ -1174,6 +1186,8 @@ let editId=null;
 let manualId=null;
 
 let photoId=null;
+
+let qrId=null;
 
 let addPhotoData="";
 
@@ -1503,7 +1517,9 @@ document.getElementById(
 const iban=
 document.getElementById(
 "iban"
-).value.trim();
+).value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
 
 const total=
 parseFloat(
@@ -1875,21 +1891,14 @@ i=>!i.paid
 header.innerHTML=
 `
 <div class="paymentGroupAlias">
-
 ${escapeHtml(alias)}
-
 </div>
 
 <div class="paymentGroupBeneficiary">
-
-${escapeHtml(
-payment.beneficiary
-)}
-
+${escapeHtml(payment.beneficiary)}
 </div>
 
 <div class="paymentGroupInfo">
-
 ${totalInstallments}
 échéance(s)
 •
@@ -1898,7 +1907,6 @@ payée(s)
 •
 ${remainingInstallments}
 restante(s)
-
 </div>
 `;
 
@@ -2048,6 +2056,10 @@ document.createElement("div");
 actions.className="actions";
 
 
+/* =========================
+   MODIFIER
+========================= */
+
 const editBtn=
 document.createElement("button");
 
@@ -2067,6 +2079,10 @@ inst.id
 
 };
 
+
+/* =========================
+   PAYE
+========================= */
 
 const paidBtn=
 document.createElement("button");
@@ -2092,6 +2108,10 @@ inst.id
 };
 
 
+/* =========================
+   PAIEMENT MANUEL
+========================= */
+
 const manualBtn=
 document.createElement("button");
 
@@ -2111,6 +2131,56 @@ inst.id
 
 };
 
+
+/* =========================
+   BNP
+========================= */
+
+const bnpBtn=
+document.createElement("button");
+
+bnpBtn.className=
+"bnpButton";
+
+bnpBtn.textContent=
+"🏦 BNP";
+
+bnpBtn.onclick=function(){
+
+openBNP(
+payment,
+inst
+);
+
+};
+
+
+/* =========================
+   QR
+========================= */
+
+const qrBtn=
+document.createElement("button");
+
+qrBtn.className=
+"qrButton";
+
+qrBtn.textContent=
+"▣ QR";
+
+qrBtn.onclick=function(){
+
+openQR(
+payment,
+inst
+);
+
+};
+
+
+/* =========================
+   CALENDRIER
+========================= */
 
 const calendarBtn=
 document.createElement("button");
@@ -2132,21 +2202,17 @@ inst
 };
 
 
-actions.appendChild(
-editBtn
-);
+actions.appendChild(editBtn);
 
-actions.appendChild(
-paidBtn
-);
+actions.appendChild(paidBtn);
 
-actions.appendChild(
-manualBtn
-);
+actions.appendChild(manualBtn);
 
-actions.appendChild(
-calendarBtn
-);
+actions.appendChild(bnpBtn);
+
+actions.appendChild(qrBtn);
+
+actions.appendChild(calendarBtn);
 
 
 if(payment.photo){
@@ -2169,9 +2235,7 @@ payment.id
 
 };
 
-actions.appendChild(
-photoBtn
-);
+actions.appendChild(photoBtn);
 
 }
 
@@ -2180,6 +2244,298 @@ card.appendChild(actions);
 
 
 return card;
+
+}
+
+
+/* =========================
+   BOUTON BNP
+========================= */
+
+function openBNP(
+payment,
+inst
+){
+
+const iban=
+String(
+payment.iban || ""
+)
+.replace(/\s/g,"")
+.toUpperCase();
+
+const beneficiary=
+String(
+payment.beneficiary || ""
+).trim();
+
+const communication=
+String(
+payment.communication || ""
+).trim();
+
+const amount=
+Number(inst.amount || 0)
+.toFixed(2);
+
+
+/*
+   On affiche d'abord les informations
+   que l'on veut envoyer à BNP.
+*/
+
+const ok=
+confirm(
+"Paiement préparé :\n\n"+
+"Bénéficiaire : "+
+beneficiary+
+"\nIBAN : "+
+iban+
+"\nMontant : "+
+amount+
+" €"+
+"\nCommunication : "+
+(communication || "-")+
+"\n\nOK = ouvrir BNP"
+);
+
+if(!ok)
+return;
+
+
+/*
+   Essai de passage par une URL de paiement.
+   
+   IMPORTANT :
+   BNP ne documente pas publiquement ce
+   deep-link pour les pages GitHub.
+   
+   On tente donc un lien expérimental.
+   S'il n'est pas reconnu par BNP/iOS,
+   on ouvre ensuite la page officielle BNP.
+*/
+
+const params=
+"beneficiary="+
+encodeURIComponent(beneficiary)+
+"&iban="+
+encodeURIComponent(iban)+
+"&amount="+
+encodeURIComponent(amount)+
+"&communication="+
+encodeURIComponent(communication);
+
+
+/*
+   Plusieurs schémas sont tentés.
+   Aucun identifiant bancaire n'est demandé.
+*/
+
+let attempted=false;
+
+try{
+
+window.location.href=
+"easybanking://payment?"+
+params;
+
+attempted=true;
+
+}catch(e){
+
+console.log(e);
+
+}
+
+
+/*
+   Après un court délai, si aucune app
+   n'a pris le lien, on ouvre BNP.
+*/
+
+setTimeout(
+function(){
+
+window.open(
+"https://www.bnpparibasfortis.be/fr/public/particuliers/comptes-operations",
+"_blank"
+);
+
+},
+1200
+);
+
+}
+
+
+/* =========================
+   QR SEPA
+========================= */
+
+function createEPCQR(
+payment,
+inst
+){
+
+const name=
+String(
+payment.beneficiary || ""
+)
+.trim()
+.substring(0,70);
+
+const iban=
+String(
+payment.iban || ""
+)
+.replace(/\s/g,"")
+.toUpperCase();
+
+const amount=
+Number(inst.amount || 0)
+.toFixed(2);
+
+const communication=
+String(
+payment.communication || ""
+)
+.trim()
+.substring(0,140);
+
+
+/*
+   Format EPC QR / SEPA Credit Transfer
+*/
+
+const payload=
+[
+"BCD",
+"002",
+"1",
+"SCT",
+"",
+name,
+iban,
+"EUR"+amount,
+"",
+communication,
+""
+].join("\n");
+
+return payload;
+
+}
+
+
+function openQR(
+payment,
+inst
+){
+
+const iban=
+String(
+payment.iban || ""
+)
+.replace(/\s/g,"")
+.toUpperCase();
+
+if(!iban){
+
+alert(
+"Il faut un IBAN pour générer le QR."
+);
+
+return;
+
+}
+
+
+if(
+typeof QRCode==="undefined"
+){
+
+alert(
+"Le générateur QR n'a pas pu être chargé. Vérifie ta connexion internet."
+);
+
+return;
+
+}
+
+
+qrId={
+paymentId:payment.id,
+installmentId:inst.id
+};
+
+
+const qrBox=
+document.getElementById(
+"qrCode"
+);
+
+qrBox.innerHTML="";
+
+
+const payload=
+createEPCQR(
+payment,
+inst
+);
+
+
+new QRCode(
+qrBox,
+{
+text:payload,
+width:240,
+height:240,
+correctLevel:QRCode.CorrectLevel.M
+}
+);
+
+
+document.getElementById(
+"qrInfo"
+).innerHTML=
+`
+<strong>${escapeHtml(
+payment.beneficiary
+)}</strong>
+<br>
+IBAN : ${escapeHtml(iban)}
+<br>
+Montant : ${euro(inst.amount)}
+<br>
+Communication :
+${escapeHtml(
+payment.communication || "-"
+)}
+`;
+
+
+document.getElementById(
+"qrModal"
+).classList.add(
+"show"
+);
+
+}
+
+
+function closeQR(){
+
+document.getElementById(
+"qrModal"
+).classList.remove(
+"show"
+);
+
+document.getElementById(
+"qrCode"
+).innerHTML="";
+
+qrId=null;
 
 }
 
@@ -2431,7 +2787,10 @@ document.getElementById(
 payment.iban=
 document.getElementById(
 "editIban"
-).value.trim();
+).value
+.trim()
+.toUpperCase()
+.replace(/\s/g,"");
 
 
 payment.communication=
@@ -2505,7 +2864,6 @@ content.innerHTML=
 `
 <div class="manualInfo">
 
-
 <div class="manualLine">
 
 <div class="manualLabel">
@@ -2513,22 +2871,16 @@ Bénéficiaire
 </div>
 
 <div class="manualValue">
-${escapeHtml(
-payment.beneficiary
-)}
+${escapeHtml(payment.beneficiary)}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(
-payment.beneficiary
-)}',
+'${escapeJs(payment.beneficiary)}',
 this
 )">
-
 Copier
-
 </button>
 
 </div>
@@ -2541,22 +2893,16 @@ IBAN
 </div>
 
 <div class="manualValue">
-${escapeHtml(
-payment.iban || "-"
-)}
+${escapeHtml(payment.iban || "-")}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(
-payment.iban || ""
-)}',
+'${escapeJs(payment.iban || "")}',
 this
 )">
-
 Copier
-
 </button>
 
 </div>
@@ -2576,14 +2922,11 @@ ${euro(inst.amount)}
 class="copyButton"
 onclick="copyText(
 '${escapeJs(
-Number(inst.amount)
-.toFixed(2)
+Number(inst.amount).toFixed(2)
 )}',
 this
 )">
-
 Copier
-
 </button>
 
 </div>
@@ -2609,13 +2952,10 @@ payment.communication || ""
 )}',
 this
 )">
-
 Copier
-
 </button>
 
 </div>
-
 
 </div>
 `;
@@ -3209,6 +3549,19 @@ function(e){
 
 if(e.target===this)
 closeManual();
+
+}
+);
+
+
+document.getElementById(
+"qrModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeQR();
 
 }
 );
