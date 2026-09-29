@@ -1,565 +1,577 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
 <title>Mes paiements</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
 
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+font-family:-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+Arial,
+sans-serif;
 background:#f2f2f7;
-color:#111
+color:#111;
 }
 
-header{
+button,
+input{
+font-family:inherit;
+}
+
+.header{
 background:#007aff;
 color:white;
-padding:18px 16px;
-text-align:center;
+padding:
+calc(env(safe-area-inset-top) + 15px)
+18px 16px;
 font-size:22px;
-font-weight:700
+font-weight:700;
 }
 
 .container{
+padding:15px;
+padding-bottom:40px;
 max-width:700px;
 margin:auto;
-padding:15px
 }
 
 .card{
 background:white;
-border-radius:16px;
+border-radius:18px;
 padding:16px;
 margin-bottom:15px;
-box-shadow:0 2px 8px rgba(0,0,0,.08)
+box-shadow:
+0 2px 8px rgba(0,0,0,.06);
 }
 
-h2{margin-top:0}
+h2{
+font-size:19px;
+margin:0 0 14px;
+}
+
+label{
+display:block;
+font-size:14px;
+font-weight:600;
+margin:
+12px 0 6px;
+}
 
 input{
 width:100%;
 padding:13px;
-margin:6px 0 10px;
-border:1px solid #ccc;
-border-radius:10px;
-font-size:16px
+border:1px solid #d1d1d6;
+border-radius:11px;
+font-size:16px;
+background:#fff;
 }
 
 button{
 border:0;
-border-radius:10px;
+border-radius:11px;
 padding:11px 14px;
 font-size:15px;
-cursor:pointer
+font-weight:600;
+cursor:pointer;
 }
 
-.primary{background:#007aff;color:white}
-.secondary{background:#e5e5ea;color:#111}
-.danger{background:#ff3b30;color:white}
-.success{background:#34c759;color:white}
-.warning{background:#ff9500;color:white}
+.primary{
+background:#007aff;
+color:white;
+width:100%;
+}
+
+.secondary{
+background:#e9e9ee;
+color:#111;
+}
+
+.danger{
+background:#ff3b30;
+color:white;
+}
+
+.green{
+background:#34c759;
+color:white;
+}
 
 .summary{
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:8px
+grid-template-columns:
+repeat(3,1fr);
+gap:8px;
+margin-bottom:15px;
 }
 
 .summaryBox{
-background:#f5f5f7;
-border-radius:12px;
-padding:12px 6px;
-text-align:center
+background:white;
+border-radius:15px;
+padding:12px 8px;
+text-align:center;
+box-shadow:
+0 2px 7px rgba(0,0,0,.05);
 }
 
-.summaryLabel{
-font-size:13px;
-color:#666
+.summaryTitle{
+font-size:12px;
+color:#666;
 }
 
 .summaryValue{
-margin-top:5px;
 font-size:18px;
-font-weight:700
+font-weight:700;
+margin-top:4px;
 }
 
 .tabs{
 display:flex;
-gap:8px;
-margin-bottom:12px
+background:#dddde2;
+border-radius:11px;
+padding:3px;
+margin-bottom:15px;
 }
 
 .tab{
 flex:1;
-background:#e5e5ea;
-padding:12px;
-border-radius:12px;
-font-weight:600
+text-align:center;
+padding:9px;
+border-radius:9px;
+font-weight:600;
+font-size:14px;
 }
 
 .tab.active{
-background:#007aff;
-color:white
+background:white;
+box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 
-.tabCount{opacity:.8}
+.selectionBar{
+display:none;
+background:#fff;
+border-radius:14px;
+padding:12px;
+margin-bottom:12px;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+}
 
+.selectionBar.show{
+display:flex;
+}
 
-/* =========================
-   CADRE DU PAIEMENT
-   ========================= */
+.selectionInfo{
+font-size:14px;
+font-weight:600;
+}
 
 .paymentGroup{
-background:white;
-border:2px solid #d9d9df;
+background:#fff;
 border-radius:18px;
-padding:14px;
-margin-bottom:16px;
-box-shadow:0 2px 8px rgba(0,0,0,.08)
+padding:0;
+margin-bottom:15px;
+overflow:hidden;
+box-shadow:
+0 2px 8px rgba(0,0,0,.07);
 }
 
 .paymentGroupHeader{
-background:#f2f2f7;
-border-radius:14px;
-padding:12px;
-margin-bottom:12px
+padding:15px;
+background:#f8f8fa;
+border-bottom:1px solid #e5e5ea;
 }
 
 .paymentGroupAlias{
-font-size:19px;
-font-weight:800;
-color:#111
+font-size:18px;
+font-weight:750;
+color:#007aff;
 }
 
 .paymentGroupBeneficiary{
 font-size:14px;
-color:#666;
-margin-top:3px
+font-weight:600;
+margin-top:4px;
 }
 
 .paymentGroupInfo{
-font-size:13px;
+font-size:12px;
 color:#777;
-margin-top:7px
+margin-top:4px;
 }
-
-
-/* =========================
-   CADRE ECHEANCE
-   ========================= */
 
 .installment{
-border:1px solid #ddd;
-border-radius:14px;
+margin:10px;
 padding:13px;
-margin-bottom:10px;
-background:white
-}
-
-.installment:last-child{
-margin-bottom:0
+border:1px solid #e1e1e6;
+border-radius:15px;
+background:#fff;
 }
 
 .installment.paid{
-opacity:.75;
-background:#f7fff8
+background:#f3fff5;
+border-color:#b7e5c0;
 }
 
 .installmentTop{
 display:flex;
+gap:10px;
 align-items:flex-start;
-gap:10px
 }
 
 .checkbox{
-width:22px;
-height:22px;
-margin:2px 0 0;
-flex-shrink:0
+width:21px;
+height:21px;
+margin-top:2px;
+flex-shrink:0;
 }
 
 .installmentInfo{
 flex:1;
-min-width:0
+min-width:0;
 }
 
 .beneficiary{
-font-size:17px;
-font-weight:700
+font-weight:700;
+font-size:15px;
 }
 
 .installmentDetails{
-color:#555;
-font-size:14px;
-margin-top:5px;
-line-height:1.5
+font-size:13px;
+color:#666;
+margin-top:4px;
+line-height:1.5;
 }
 
 .amount{
 font-size:18px;
-font-weight:700;
-white-space:nowrap
+font-weight:750;
+margin-top:6px;
 }
 
 .actions{
 display:flex;
 flex-wrap:wrap;
-gap:7px;
-margin-top:12px
+gap:6px;
+margin-top:10px;
+}
+
+.actions button{
+padding:8px 10px;
+font-size:13px;
 }
 
 .small{
-font-size:13px;
-padding:8px 10px
+font-size:12px;
+color:#777;
 }
 
 .badge{
 display:inline-block;
-padding:4px 8px;
-border-radius:20px;
-font-size:12px;
-font-weight:600;
-background:#ff9500;
-color:white
+font-size:11px;
+font-weight:700;
+padding:4px 7px;
+border-radius:7px;
+margin-left:5px;
 }
 
-.badge.paidBadge{
-background:#34c759
+.badgePaid{
+background:#d8f8df;
+color:#167c2e;
 }
 
-
-/* =========================
-   SELECTION
-   ========================= */
-
-.selectionBar{
-display:none;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-background:white;
-border-radius:14px;
-padding:10px 12px;
-margin-bottom:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.08)
+.badgeUnpaid{
+background:#ffe0dd;
+color:#c62820;
 }
 
-.selectionBar.visible{
-display:flex
-}
-
-.selectionLeft{
+.photoButtons{
 display:flex;
-align-items:center;
 gap:8px;
-font-size:14px;
-font-weight:600
 }
 
-.selectAll{
-width:20px;
-height:20px;
-margin:0
+.photoButtons button{
+flex:1;
 }
 
-.deleteButton{
-background:#ff3b30;
-color:white;
-font-weight:600
+.photoPreview{
+max-width:100%;
+max-height:180px;
+display:block;
+margin-top:10px;
+border-radius:10px;
 }
-
-.empty{
-text-align:center;
-color:#777;
-padding:25px 10px
-}
-
-
-/* =========================
-   MODALES
-   ========================= */
 
 .modal{
-display:none;
 position:fixed;
-z-index:1000;
 inset:0;
 background:rgba(0,0,0,.45);
-padding:20px;
+display:none;
 align-items:center;
-justify-content:center
+justify-content:center;
+padding:18px;
+z-index:1000;
 }
 
 .modal.show{
-display:flex
+display:flex;
 }
 
-.modalContent{
+.modalBox{
+background:white;
 width:100%;
 max-width:500px;
 max-height:90vh;
-overflow-y:auto;
-background:white;
-border-radius:18px;
-padding:18px
+overflow:auto;
+border-radius:20px;
+padding:18px;
 }
 
-.modalButtons{
-display:flex;
-gap:8px;
-margin-top:10px
-}
-
-.modalButtons button{
-flex:1
-}
-
-
-/* =========================
-   PAIEMENT MANUEL
-   ========================= */
-
-.manualPaymentTitle{
+.modalTitle{
 font-size:20px;
-font-weight:700;
-margin-bottom:4px
+font-weight:750;
+margin-bottom:12px;
 }
 
-.bankField{
-margin-top:14px
-}
-
-.bankLabel{
-font-size:13px;
-color:#666;
-margin-bottom:5px
-}
-
-.bankRow{
+.modalActions{
 display:flex;
 gap:8px;
-align-items:center
+margin-top:15px;
 }
 
-.bankValue{
+.modalActions button{
 flex:1;
+}
+
+.manualInfo{
 background:#f2f2f7;
-border-radius:10px;
+border-radius:12px;
 padding:12px;
+margin-bottom:10px;
+}
+
+.manualLine{
+margin-bottom:10px;
+}
+
+.manualLabel{
+font-size:12px;
+color:#777;
+}
+
+.manualValue{
+font-size:15px;
+font-weight:600;
 word-break:break-word;
-font-weight:600
+margin-top:2px;
 }
 
 .copyButton{
-background:#e5e5ea;
-white-space:nowrap
+margin-top:5px;
+background:#e9e9ee;
+font-size:12px;
+padding:7px 10px;
 }
 
 .copyButton.copied{
 background:#34c759;
-color:white
+color:white;
 }
 
-.bankHelp{
+.login{
+position:fixed;
+inset:0;
 background:#f2f2f7;
-border-radius:12px;
-padding:12px;
-margin-top:16px;
-font-size:14px;
-line-height:1.5
-}
-
-
-/* =========================
-   LOGIN
-   ========================= */
-
-#loginScreen{
-min-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-padding:20px
+padding:25px;
+z-index:2000;
 }
 
 .loginBox{
-width:100%;
-max-width:350px;
 background:white;
-border-radius:20px;
+width:100%;
+max-width:360px;
+border-radius:22px;
 padding:25px;
-box-shadow:0 4px 20px rgba(0,0,0,.12);
-text-align:center
+box-shadow:
+0 5px 25px rgba(0,0,0,.12);
+text-align:center;
 }
 
-.loginIcon{
-font-size:45px
+.loginTitle{
+font-size:25px;
+font-weight:800;
+margin-bottom:8px;
 }
 
-#errorMessage{
-color:#ff3b30;
-margin-top:8px;
-min-height:20px
+.loginText{
+font-size:14px;
+color:#777;
+margin-bottom:18px;
+}
+
+#pinInput{
+text-align:center;
+font-size:25px;
+letter-spacing:8px;
 }
 
 .hidden{
-display:none!important
+display:none !important;
 }
 
-
-/* =========================
-   PHOTOS
-   ========================= */
-
-.fileButtons{
-display:flex;
-gap:8px
+input[type="file"]{
+display:none;
 }
 
-.fileButtons button{
-flex:1
-}
-
-label{
-font-size:14px;
-font-weight:600
-}
-
-.photoBox{
-margin-top:10px;
-background:#f2f2f7;
-border-radius:14px;
-padding:10px
-}
-
-.photoPreview{
+.photoModalImage{
+max-width:100%;
+max-height:75vh;
 display:block;
-width:100%;
-max-height:220px;
-object-fit:contain;
-border-radius:10px;
-background:white;
-margin-bottom:8px
+margin:auto;
+border-radius:12px;
 }
 
-.photoActions{
+.photoModalButtons{
 display:flex;
 gap:8px;
-flex-wrap:wrap
+margin-top:12px;
 }
 
-.photoActions button{
+.photoModalButtons button{
 flex:1;
-min-width:120px
 }
 
-.documentBadge{
-display:inline-block;
-background:#5856d6;
-color:white;
-padding:4px 8px;
-border-radius:20px;
-font-size:12px;
-font-weight:600;
-margin-top:5px
+hr{
+border:0;
+border-top:1px solid #eee;
+margin:15px 0;
 }
 
-.photoInfo{
-font-size:13px;
-color:#666;
-margin-top:4px
-}
-
-.previewModalImage{
-display:block;
-width:100%;
-max-height:70vh;
-object-fit:contain;
-border-radius:12px;
-background:#111
-}
 </style>
+
 </head>
 
 <body>
 
+<!-- CONNEXION -->
 
-<!-- =========================
-     CONNEXION PIN
-     ========================= -->
-
-<div id="loginScreen">
+<div
+id="loginScreen"
+class="login">
 
 <div class="loginBox">
 
-<div class="loginIcon">🔐</div>
+<div class="loginTitle">
+Mes paiements
+</div>
 
-<h2>Mes paiements</h2>
-
-<p>Entre ton code PIN</p>
+<div class="loginText">
+Entrez votre code PIN
+</div>
 
 <input
 id="pinInput"
 type="password"
 inputmode="numeric"
 maxlength="4"
-placeholder="••••"
->
+placeholder="••••">
+
+<br><br>
 
 <button
 class="primary"
-style="width:100%;"
-onclick="checkPin()"
->
-🔓 Ouvrir
+onclick="checkPin()">
+
+Ouvrir
+
 </button>
 
-<div id="errorMessage"></div>
-
 </div>
 
 </div>
 
 
-<!-- =========================
-     APPLICATION
-     ========================= -->
+<!-- APPLICATION -->
 
-<div id="app" class="hidden">
+<div
+id="app"
+class="hidden">
 
-<header>
-💳 Mes paiements
-</header>
+<div class="header">
+
+Mes paiements
+
+</div>
 
 
 <div class="container">
 
 
-<!-- =========================
-     RESUME
-     ========================= -->
-
-<div class="card">
+<!-- RESUME -->
 
 <div class="summary">
 
 <div class="summaryBox">
-<div class="summaryLabel">Total</div>
-<div class="summaryValue" id="totalAmount">0,00 €</div>
+
+<div class="summaryTitle">
+Total
 </div>
+
+<div
+id="totalValue"
+class="summaryValue">
+0,00 €
+</div>
+
+</div>
+
 
 <div class="summaryBox">
-<div class="summaryLabel">Payé</div>
-<div class="summaryValue" id="paidAmount">0,00 €</div>
+
+<div class="summaryTitle">
+Payé
 </div>
+
+<div
+id="paidValue"
+class="summaryValue">
+0,00 €
+</div>
+
+</div>
+
 
 <div class="summaryBox">
-<div class="summaryLabel">Reste</div>
-<div class="summaryValue" id="remainingAmount">0,00 €</div>
+
+<div class="summaryTitle">
+Reste
+</div>
+
+<div
+id="remainingValue"
+class="summaryValue">
+0,00 €
 </div>
 
 </div>
@@ -567,362 +579,317 @@ onclick="checkPin()"
 </div>
 
 
-<!-- =========================
-     ONGLETS
-     ========================= -->
+<!-- ONGLETS -->
 
 <div class="tabs">
 
-<button
+<div
 id="tabUnpaid"
 class="tab active"
-onclick="showTab('unpaid')"
->
-🔴 À payer
-<span class="tabCount" id="unpaidCount">(0)</span>
-</button>
+onclick="showTab('unpaid')">
 
-<button
+À payer
+(<span id="unpaidCount">0</span>)
+
+</div>
+
+<div
 id="tabPaid"
 class="tab"
-onclick="showTab('paid')"
->
-🟢 Payé
-<span class="tabCount" id="paidCount">(0)</span>
-</button>
+onclick="showTab('paid')">
+
+Payé
+(<span id="paidCount">0</span>)
+
+</div>
 
 </div>
 
 
-<!-- =========================
-     SELECTION
-     ========================= -->
+<!-- SELECTION -->
 
-<div id="selectionBar" class="selectionBar">
+<div
+id="selectionBar"
+class="selectionBar">
 
-<div class="selectionLeft">
+<div
+id="selectionInfo"
+class="selectionInfo">
 
-<input
-type="checkbox"
-id="selectAll"
-class="selectAll"
-onchange="toggleSelectAll()"
->
-
-<span id="selectedText">
 0 sélectionné
-</span>
 
 </div>
 
 <button
-class="deleteButton"
-onclick="deleteSelected()"
->
-🗑️ Supprimer
-(<span id="selectedCount">0</span>)
+class="danger"
+onclick="deleteSelected()">
+
+Supprimer
+
 </button>
 
 </div>
 
 
-<!-- =========================
-     LISTE A PAYER
-     ========================= -->
-
-<div id="unpaidSection">
+<!-- LISTES -->
 
 <div id="unpaidList"></div>
 
-</div>
+<div
+id="paidList"
+class="hidden"></div>
 
 
-<!-- =========================
-     LISTE PAYE
-     ========================= -->
-
-<div id="paidSection" class="hidden">
-
-<div id="paidList"></div>
-
-</div>
-
-
-<!-- =========================
-     AJOUT PAIEMENT
-     ========================= -->
+<!-- AJOUT -->
 
 <div class="card">
 
-<h2>➕ Ajouter un paiement</h2>
+<h2>
+Ajouter un paiement
+</h2>
 
 
-<label>🏷️ Alias / nom raccourci</label>
+<label>
+Alias / raccourci
+</label>
 
 <input
 id="alias"
-type="text"
-placeholder="Ex : Gaz, Maison, Garage..."
->
+placeholder="Ex : EDF, Crédit maison...">
 
 
-<label>👤 Bénéficiaire</label>
+<label>
+Bénéficiaire
+</label>
 
 <input
 id="beneficiary"
-type="text"
-placeholder="Ex : ENGIE Belgique"
->
+placeholder="Nom du bénéficiaire">
 
 
-<label>🏦 IBAN</label>
+<label>
+IBAN
+</label>
 
 <input
 id="iban"
-type="text"
-placeholder="BE00 0000 0000 0000"
->
+placeholder="BE...">
 
 
-<label>💶 Montant total</label>
+<label>
+Montant total
+</label>
 
 <input
-id="totalInput"
+id="totalAmount"
 type="number"
 step="0.01"
-min="0"
-placeholder="1000"
->
+inputmode="decimal"
+placeholder="0,00">
 
 
-<label>🔢 Nombre d'échéances</label>
+<label>
+Nombre d'échéances
+</label>
 
 <input
-id="installmentsInput"
+id="installments"
 type="number"
 min="1"
-step="1"
-placeholder="12"
->
+value="1">
 
 
-<label>📅 Première date</label>
+<label>
+Première échéance
+</label>
 
 <input
 id="firstDate"
-type="date"
->
+type="date">
 
 
-<label>📝 Communication</label>
+<label>
+Communication
+</label>
 
 <input
 id="communication"
-type="text"
-placeholder="Ex : +++123/4567/89012+++"
->
+placeholder="Communication">
 
 
-<label>📷 Document / facture</label>
+<label>
+Document
+</label>
 
-<div class="photoActions">
+<div class="photoButtons">
 
 <button
-type="button"
 class="secondary"
-onclick="takePhoto()"
->
-📷 Prendre une photo
+onclick="
+document.getElementById('cameraInput').click()
+">
+
+📷 Appareil photo
+
 </button>
 
 <button
-type="button"
 class="secondary"
-onclick="choosePhoto()"
->
+onclick="
+document.getElementById('galleryInput').click()
+">
+
 🖼️ Mes photos
+
 </button>
 
 </div>
 
 
 <input
-id="cameraPhoto"
+id="cameraInput"
 type="file"
 accept="image/*"
-capture="environment"
-class="hidden"
->
+capture="environment">
 
 
 <input
-id="galleryPhoto"
+id="galleryInput"
 type="file"
-accept="image/*"
-class="hidden"
->
+accept="image/*">
 
 
-<div
-id="newPhotoPreview"
-class="photoBox hidden"
->
+<div id="addPhotoPreview"></div>
 
-<img
-id="newPhotoImage"
-class="photoPreview"
-alt="Aperçu du document"
->
 
-<div class="photoInfo">
-Photo prête à être enregistrée avec le paiement.
-</div>
-
-<div class="photoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="clearNewPhoto()"
->
-🗑️ Retirer la photo
-</button>
-
-</div>
-
-</div>
-
+<br>
 
 <button
 class="primary"
-style="width:100%;margin-top:8px"
-onclick="addPayment()"
->
-➕ Ajouter le paiement
+onclick="addPayment()">
+
+Ajouter le paiement
+
 </button>
 
 </div>
 
 
-<!-- =========================
-     SAUVEGARDE
-     ========================= -->
+<!-- SAUVEGARDE -->
 
 <div class="card">
 
-<h2>💾 Sauvegarde</h2>
-
-<div class="fileButtons">
+<h2>
+Sauvegarde
+</h2>
 
 <button
 class="secondary"
-onclick="exportData()"
->
-📤 Exporter
+onclick="exportData()">
+
+Exporter mes données
+
 </button>
 
 <button
 class="secondary"
-onclick="document.getElementById('importFile').click()"
->
-📥 Importer
-</button>
+onclick="
+document.getElementById('importInput').click()
+">
 
-</div>
+Importer une sauvegarde
+
+</button>
 
 <input
-id="importFile"
+id="importInput"
 type="file"
-accept=".json,application/json"
-class="hidden"
-onchange="importData(event)"
->
+accept=".json">
+
+</div>
+
 
 </div>
 
 </div>
 
+
+<!-- MODALE MODIFICATION -->
+
+<div
+id="editModal"
+class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+Modifier l'échéance
 </div>
 
 
-<!-- =========================
-     MODIFIER ECHEANCE
-     ========================= -->
+<label>
+Alias
+</label>
 
-<div id="editModal" class="modal">
-
-<div class="modalContent">
-
-<h2>✏️ Modifier</h2>
+<input id="editAlias">
 
 
-<label>🏷️ Alias / nom raccourci</label>
+<label>
+Bénéficiaire
+</label>
 
-<input
-id="editAlias"
-type="text"
-placeholder="Ex : Gaz"
->
+<input id="editBeneficiary">
 
 
-<label>👤 Bénéficiaire</label>
+<label>
+IBAN
+</label>
 
-<input
-id="editBeneficiary"
-type="text"
-placeholder="Ex : ENGIE Belgique"
->
+<input id="editIban">
 
 
-<label>🏦 IBAN</label>
-
-<input
-id="editIban"
-type="text"
-placeholder="BE00 0000 0000 0000"
->
-
-
-<label>📅 Date</label>
+<label>
+Date
+</label>
 
 <input
 id="editDate"
-type="date"
->
+type="date">
 
 
-<label>💶 Montant</label>
+<label>
+Montant
+</label>
 
 <input
 id="editAmount"
 type="number"
-step="0.01"
-min="0"
->
+step="0.01">
 
 
-<label>📝 Communication</label>
+<label>
+Communication
+</label>
 
-<input
-id="editCommunication"
-type="text"
->
+<input id="editCommunication">
 
 
-<div class="modalButtons">
+<div class="modalActions">
 
 <button
 class="secondary"
-onclick="closeEdit()"
->
+onclick="closeEdit()">
+
 Annuler
+
 </button>
 
 <button
 class="primary"
-onclick="saveEdit()"
->
-💾 Enregistrer
+onclick="saveEdit()">
+
+Enregistrer
+
 </button>
 
 </div>
@@ -932,141 +899,29 @@ onclick="saveEdit()"
 </div>
 
 
-<!-- =========================
-     PAIEMENT MANUEL
-     ========================= -->
-
-<div id="manualPaymentModal" class="modal">
-
-<div class="modalContent">
-
-<div class="manualPaymentTitle">
-🏦 Payer manuellement
-</div>
-
-<p id="manualPaymentSubtitle"></p>
-
-
-<div class="bankField">
-
-<div class="bankLabel">
-Bénéficiaire
-</div>
-
-<div class="bankRow">
+<!-- MODALE PAIEMENT MANUEL -->
 
 <div
-id="manualBeneficiary"
-class="bankValue"
-></div>
+id="manualModal"
+class="modal">
 
-<button
-class="copyButton"
-data-copy-type="beneficiary"
-onclick="copyBankField('beneficiary')"
->
-Copier
-</button>
+<div class="modalBox">
 
+<div class="modalTitle">
+Paiement manuel
 </div>
-
-</div>
-
-
-<div class="bankField">
-
-<div class="bankLabel">
-IBAN
-</div>
-
-<div class="bankRow">
 
 <div
-id="manualIban"
-class="bankValue"
-></div>
+id="manualContent"></div>
 
-<button
-class="copyButton"
-data-copy-type="iban"
-onclick="copyBankField('iban')"
->
-Copier
-</button>
-
-</div>
-
-</div>
-
-
-<div class="bankField">
-
-<div class="bankLabel">
-Montant
-</div>
-
-<div class="bankRow">
-
-<div
-id="manualAmount"
-class="bankValue"
-></div>
-
-<button
-class="copyButton"
-data-copy-type="amount"
-onclick="copyBankField('amount')"
->
-Copier
-</button>
-
-</div>
-
-</div>
-
-
-<div class="bankField">
-
-<div class="bankLabel">
-Communication
-</div>
-
-<div class="bankRow">
-
-<div
-id="manualCommunication"
-class="bankValue"
-></div>
-
-<button
-class="copyButton"
-data-copy-type="communication"
-onclick="copyBankField('communication')"
->
-Copier
-</button>
-
-</div>
-
-</div>
-
-
-<div class="bankHelp">
-
-💡 Ouvre ton app bancaire, crée un virement,
-et colle chaque information avec le bouton
-« Copier ».
-
-</div>
-
-
-<div class="modalButtons">
+<div class="modalActions">
 
 <button
 class="secondary"
-onclick="closeManualPayment()"
->
+onclick="closeManual()">
+
 Fermer
+
 </button>
 
 </div>
@@ -1076,36 +931,38 @@ Fermer
 </div>
 
 
-<!-- =========================
-     PHOTO
-     ========================= -->
+<!-- MODALE PHOTO -->
 
-<div id="photoModal" class="modal">
+<div
+id="photoModal"
+class="modal">
 
-<div class="modalContent">
+<div class="modalBox">
 
-<h2>📄 Document</h2>
+<div class="modalTitle">
+Document
+</div>
 
 <img
-id="fullPhoto"
-class="previewModalImage"
-alt="Document"
->
+id="photoModalImage"
+class="photoModalImage">
 
-<div class="modalButtons">
-
-<button
-class="secondary"
-onclick="closePhoto()"
->
-Fermer
-</button>
+<div class="photoModalButtons">
 
 <button
 class="danger"
-onclick="removeCurrentPhoto()"
->
-🗑️ Supprimer
+onclick="deletePhoto()">
+
+Supprimer
+
+</button>
+
+<button
+class="secondary"
+onclick="closePhoto()">
+
+Fermer
+
 </button>
 
 </div>
@@ -1117,148 +974,123 @@ onclick="removeCurrentPhoto()"
 
 <script>
 
-
 /* =========================
-   CONFIGURATION
-   ========================= */
+   DONNEES
+========================= */
 
 const PIN="1157";
 
-const STORAGE_KEY="mesPaiements";
-
-const BACKUP_VERSION=1;
-
-let payments=[];
-
-let editingPaymentId=null;
-
-let editingInstallmentIndex=null;
-
-let manualPaymentId=null;
-
-let manualInstallmentIndex=null;
-
-let photoPaymentId=null;
+let data=[];
 
 let currentTab="unpaid";
 
-let newPhotoData="";
+let selectedIds=new Set();
+
+let editId=null;
+
+let manualId=null;
+
+let photoId=null;
+
+let addPhotoData="";
 
 
 /* =========================
    OUTILS
-   ========================= */
+========================= */
 
 function euro(value){
 
-return Number(value||0).toLocaleString(
+return Number(value || 0)
+.toLocaleString(
 "fr-BE",
 {
-minimumFractionDigits:2,
-maximumFractionDigits:2
+style:"currency",
+currency:"EUR"
 }
-)+" €";
+);
 
 }
 
 
 function generateId(){
 
-return Date.now().toString(36)+
-Math.random().toString(36).substring(2);
+return Date.now().toString()
++
+Math.random()
+.toString(36)
+.substring(2,9);
 
 }
 
 
-function formatDate(s){
+function formatDate(date){
 
-if(!s)return"";
+if(!date) return "";
 
-const p=s.split("-");
+const d=new Date(date+"T00:00:00");
 
-return p.length===3
-?p[2]+"/"+p[1]+"/"+p[0]
-:s;
+return d.toLocaleDateString(
+"fr-BE"
+);
 
 }
 
 
-function addMonths(s,months){
+function addMonths(date,months){
 
-const p=s.split("-");
+const d=new Date(
+date+"T00:00:00"
+);
 
-let y=Number(p[0]);
+d.setMonth(
+d.getMonth()+months
+);
 
-let m=Number(p[1])-1;
-
-let d=Number(p[2]);
-
-const r=new Date(y,m+months,1);
-
-const last=
-new Date(
-r.getFullYear(),
-r.getMonth()+1,
-0
-).getDate();
-
-r.setDate(Math.min(d,last));
-
-return[
-r.getFullYear(),
-String(r.getMonth()+1).padStart(2,"0"),
-String(r.getDate()).padStart(2,"0")
-].join("-");
+return d.toISOString()
+.substring(0,10);
 
 }
 
 
 /* =========================
    NORMALISATION
-   ========================= */
+========================= */
 
-function normalizeData(data){
+function normalizeData(){
 
-if(!Array.isArray(data))return[];
+data.forEach(p=>{
 
-return data.map(p=>{
+if(!p.id)
+p.id=generateId();
 
-p.id=p.id||generateId();
+if(!p.alias)
+p.alias="";
 
-p.alias=p.alias||"";
+if(!p.beneficiary)
+p.beneficiary="";
 
-p.beneficiary=p.beneficiary||"";
+if(!p.iban)
+p.iban="";
 
-p.iban=(p.iban||"")
-.replace(/\s+/g,"")
-.toUpperCase();
+if(!p.communication)
+p.communication="";
 
-p.documentPhoto=p.documentPhoto||"";
-
-if(!Array.isArray(p.installments))
+if(!p.installments)
 p.installments=[];
 
-p.installments=p.installments.map(i=>({
+p.installments.forEach(i=>{
 
-number:Number(i.number||1),
+if(!i.id)
+i.id=generateId();
 
-date:i.date||"",
+if(typeof i.paid!=="boolean")
+i.paid=false;
 
-amount:Number(i.amount||0),
+if(!i.amount)
+i.amount=0;
 
-communication:i.communication||"",
-
-paid:Boolean(i.paid)
-
-}));
-
-p.totalAmount=
-p.installments.reduce(
-(s,i)=>s+Number(i.amount||0),
-0
-);
-
-return p;
+});
 
 });
 
@@ -1266,35 +1098,48 @@ return p;
 
 
 /* =========================
-   STOCKAGE
-   ========================= */
+   CHARGEMENT
+========================= */
 
 function loadData(){
 
 try{
 
-const s=
-localStorage.getItem(STORAGE_KEY);
+const saved=
+localStorage.getItem(
+"mesPaiements"
+);
 
-payments=
-s
-?normalizeData(JSON.parse(s))
-:[];
+if(saved){
+
+data=JSON.parse(saved);
+
+normalizeData();
+
+}
 
 }catch(e){
 
-payments=[];
+console.error(e);
+
+data=[];
 
 }
 
+render();
+
 }
 
+
+/* =========================
+   SAUVEGARDE
+========================= */
 
 function saveData(){
 
 localStorage.setItem(
-STORAGE_KEY,
-JSON.stringify(payments)
+"mesPaiements",
+JSON.stringify(data)
 );
 
 }
@@ -1302,352 +1147,224 @@ JSON.stringify(payments)
 
 /* =========================
    PIN
-   ========================= */
+========================= */
 
 function checkPin(){
 
-if(
-document.getElementById("pinInput").value
-===PIN
-){
+const value=
+document.getElementById(
+"pinInput"
+).value;
 
-document
-.getElementById("loginScreen")
-.classList.add("hidden");
+if(value===PIN){
 
-document
-.getElementById("app")
-.classList.remove("hidden");
+document.getElementById(
+"loginScreen"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"app"
+).classList.remove(
+"hidden"
+);
 
 loadData();
 
-render();
-
 }else{
 
-document
-.getElementById("errorMessage")
-.textContent=
-"❌ Code PIN incorrect";
+alert("Code PIN incorrect");
 
-document
-.getElementById("pinInput")
-.value="";
+document.getElementById(
+"pinInput"
+).value="";
 
 }
 
 }
-
-
-document
-.getElementById("pinInput")
-.addEventListener(
-"keydown",
-e=>{
-if(e.key==="Enter")
-checkPin();
-}
-);
 
 
 /* =========================
-   PHOTO APPAREIL / GALERIE
-   ========================= */
+   PHOTO
+========================= */
 
-document
-.getElementById("cameraPhoto")
-.addEventListener(
-"change",
-handlePhotoSelected
-);
+function handlePhoto(file){
 
-
-document
-.getElementById("galleryPhoto")
-.addEventListener(
-"change",
-handlePhotoSelected
-);
-
-
-function takePhoto(){
-
-document
-.getElementById("cameraPhoto")
-.click();
-
-}
-
-
-function choosePhoto(){
-
-document
-.getElementById("galleryPhoto")
-.click();
-
-}
-
-
-async function handlePhotoSelected(event){
-
-const file=
-event.target.files[0];
-
-if(!file){
-
+if(!file)
 return;
-
-}
-
-try{
-
-newPhotoData=
-await compressImage(
-file,
-1280,
-0.72
-);
-
-document
-.getElementById("newPhotoImage")
-.src=
-newPhotoData;
-
-document
-.getElementById("newPhotoPreview")
-.classList
-.remove("hidden");
-
-}catch(e){
-
-alert(
-"❌ Impossible de lire cette photo."
-);
-
-clearNewPhoto();
-
-}
-
-}
-
-
-function compressImage(
-file,
-maxSize=1280,
-quality=.72
-){
-
-return new Promise(
-(resolve,reject)=>{
 
 const reader=
 new FileReader();
 
-reader.onload=()=>{
+reader.onload=function(e){
 
-const img=new Image();
+const img=
+new Image();
 
-img.onload=()=>{
+img.onload=function(){
 
-let w=img.width;
-
-let h=img.height;
-
-if(
-w>maxSize ||
-h>maxSize
-){
-
-const scale=
-Math.min(
-maxSize/w,
-maxSize/h
+const canvas=
+document.createElement(
+"canvas"
 );
 
-w=Math.round(w*scale);
+const maxWidth=1400;
 
-h=Math.round(h*scale);
+let width=img.width;
+
+let height=img.height;
+
+if(width>maxWidth){
+
+height=
+height*
+(maxWidth/width);
+
+width=maxWidth;
 
 }
 
-const c=
-document.createElement("canvas");
+canvas.width=width;
 
-c.width=w;
+canvas.height=height;
 
-c.height=h;
+const ctx=
+canvas.getContext("2d");
 
-c
-.getContext("2d")
-.drawImage(
+ctx.drawImage(
 img,
 0,
 0,
-w,
-h
+width,
+height
 );
 
-resolve(
-c.toDataURL(
+addPhotoData=
+canvas.toDataURL(
 "image/jpeg",
-quality
-)
+0.75
 );
 
+document.getElementById(
+"addPhotoPreview"
+).innerHTML=
+`
+<img
+src="${addPhotoData}"
+class="photoPreview">
+`;
+
 };
 
-img.onerror=reject;
-
-img.src=reader.result;
+img.src=e.target.result;
 
 };
-
-reader.onerror=reject;
 
 reader.readAsDataURL(file);
 
-});
-
 }
 
 
-function clearNewPhoto(){
+document.getElementById(
+"cameraInput"
+).addEventListener(
+"change",
+function(){
 
-newPhotoData="";
-
-document
-.getElementById("cameraPhoto")
-.value="";
-
-document
-.getElementById("galleryPhoto")
-.value="";
-
-document
-.getElementById("newPhotoPreview")
-.classList
-.add("hidden");
-
-document
-.getElementById("newPhotoImage")
-.src="";
+handlePhoto(this.files[0]);
 
 }
+);
+
+
+document.getElementById(
+"galleryInput"
+).addEventListener(
+"change",
+function(){
+
+handlePhoto(this.files[0]);
+
+}
+);
 
 
 /* =========================
    AJOUT PAIEMENT
-   ========================= */
+========================= */
 
 function addPayment(){
 
 const alias=
-document
-.getElementById("alias")
-.value
-.trim();
+document.getElementById(
+"alias"
+).value.trim();
 
 const beneficiary=
-document
-.getElementById("beneficiary")
-.value
-.trim();
+document.getElementById(
+"beneficiary"
+).value.trim();
 
 const iban=
-document
-.getElementById("iban")
-.value
-.replace(/\s+/g,"")
-.toUpperCase();
+document.getElementById(
+"iban"
+).value.trim();
 
 const total=
-Number(
-document
-.getElementById("totalInput")
-.value
+parseFloat(
+document.getElementById(
+"totalAmount"
+).value
 );
 
 const count=
-Number(
-document
-.getElementById("installmentsInput")
-.value
+parseInt(
+document.getElementById(
+"installments"
+).value
 );
 
 const firstDate=
-document
-.getElementById("firstDate")
-.value;
+document.getElementById(
+"firstDate"
+).value;
 
 const communication=
-document
-.getElementById("communication")
-.value
-.trim();
+document.getElementById(
+"communication"
+).value.trim();
 
 
-if(!beneficiary){
+if(
+!beneficiary ||
+!total ||
+!count ||
+!firstDate
+){
 
 alert(
-"Indique le bénéficiaire."
+"Veuillez remplir les champs obligatoires."
 );
 
 return;
 
 }
 
-if(!iban){
-
-alert(
-"Indique l'IBAN."
-);
-
-return;
-
-}
-
-if(!total || total<=0){
-
-alert(
-"Indique un montant total valide."
-);
-
-return;
-
-}
-
-if(!count || count<1){
-
-alert(
-"Indique le nombre d'échéances."
-);
-
-return;
-
-}
-
-if(!firstDate){
-
-alert(
-"Indique la première date."
-);
-
-return;
-
-}
-
-
-const cents=
-Math.round(total*100);
 
 const base=
-Math.floor(cents/count);
+Math.floor(
+(total/count)*100
+)/100;
 
-const remainder=
-cents%count;
+const last=
+Math.round(
+(total-
+base*(count-1))*100
+)/100;
+
 
 const installments=[];
-
 
 for(
 let i=0;
@@ -1657,7 +1374,7 @@ i++
 
 installments.push({
 
-number:i+1,
+id:generateId(),
 
 date:addMonths(
 firstDate,
@@ -1665,17 +1382,9 @@ i
 ),
 
 amount:
-(
-base+
-(
 i===count-1
-?remainder
-:0
-)
-)/100,
-
-communication:
-communication,
+?last
+:base,
 
 paid:false
 
@@ -1684,7 +1393,7 @@ paid:false
 }
 
 
-payments.push({
+data.push({
 
 id:generateId(),
 
@@ -1694,9 +1403,9 @@ beneficiary:beneficiary,
 
 iban:iban,
 
-totalAmount:total,
+communication:communication,
 
-documentPhoto:newPhotoData,
+photo:addPhotoData,
 
 installments:installments
 
@@ -1705,212 +1414,212 @@ installments:installments
 
 saveData();
 
-
-[
-"alias",
-"beneficiary",
-"iban",
-"totalInput",
-"installmentsInput",
-"firstDate",
-"communication"
-]
-.forEach(
-id=>
-document
-.getElementById(id)
-.value=""
-);
-
-
-clearNewPhoto();
+resetAddForm();
 
 render();
 
 alert(
-"✅ Paiement ajouté !"
+"Paiement ajouté."
 );
+
+}
+
+
+/* =========================
+   RESET AJOUT
+========================= */
+
+function resetAddForm(){
+
+document.getElementById(
+"alias"
+).value="";
+
+document.getElementById(
+"beneficiary"
+).value="";
+
+document.getElementById(
+"iban"
+).value="";
+
+document.getElementById(
+"totalAmount"
+).value="";
+
+document.getElementById(
+"installments"
+).value="1";
+
+document.getElementById(
+"firstDate"
+).value="";
+
+document.getElementById(
+"communication"
+).value="";
+
+document.getElementById(
+"addPhotoPreview"
+).innerHTML="";
+
+document.getElementById(
+"cameraInput"
+).value="";
+
+document.getElementById(
+"galleryInput"
+).value="";
+
+addPhotoData="";
 
 }
 
 
 /* =========================
    ONGLETS
-   ========================= */
+========================= */
 
 function showTab(tab){
 
 currentTab=tab;
 
-document
-.getElementById("unpaidSection")
-.classList
-.toggle(
-"hidden",
-tab!=="unpaid"
-);
-
-document
-.getElementById("paidSection")
-.classList
-.toggle(
-"hidden",
-tab!=="paid"
-);
-
-document
-.getElementById("tabUnpaid")
-.classList
-.toggle(
+document.getElementById(
+"tabUnpaid"
+).classList.toggle(
 "active",
 tab==="unpaid"
 );
 
-document
-.getElementById("tabPaid")
-.classList
-.toggle(
+document.getElementById(
+"tabPaid"
+).classList.toggle(
 "active",
 tab==="paid"
 );
 
-updateSelectionBar();
+document.getElementById(
+"unpaidList"
+).classList.toggle(
+"hidden",
+tab!=="unpaid"
+);
+
+document.getElementById(
+"paidList"
+).classList.toggle(
+"hidden",
+tab!=="paid"
+);
+
+render();
 
 }
 
 
 /* =========================
    AFFICHAGE
-   ========================= */
+========================= */
 
 function render(){
+
+const unpaidList=
+document.getElementById(
+"unpaidList"
+);
+
+const paidList=
+document.getElementById(
+"paidList"
+);
+
+unpaidList.innerHTML="";
+
+paidList.innerHTML="";
+
 
 let total=0;
 
 let paid=0;
 
-let uc=0;
+let unpaidCount=0;
 
-let pc=0;
+let paidCount=0;
 
-const ul=
+
+data.forEach(payment=>{
+
+payment.installments.forEach(inst=>{
+
+total+=Number(inst.amount||0);
+
+if(inst.paid){
+
+paid+=Number(inst.amount||0);
+
+paidCount++;
+
+}else{
+
+unpaidCount++;
+
+}
+
+});
+
+});
+
+
 document.getElementById(
-"unpaidList"
-);
+"totalValue"
+).textContent=euro(total);
 
-const pl=
 document.getElementById(
-"paidList"
+"paidValue"
+).textContent=euro(paid);
+
+document.getElementById(
+"remainingValue"
+).textContent=
+euro(total-paid);
+
+document.getElementById(
+"unpaidCount"
+).textContent=
+unpaidCount;
+
+document.getElementById(
+"paidCount"
+).textContent=
+paidCount;
+
+
+data.forEach(payment=>{
+
+const visible=
+payment.installments
+.filter(i=>
+currentTab==="unpaid"
+? !i.paid
+: i.paid
 );
 
-ul.innerHTML="";
+if(!visible.length)
+return;
 
-pl.innerHTML="";
-
-
-payments.forEach(
-p=>{
-
-const unpaidItems=
-p.installments.filter(
-item=>!item.paid
-);
-
-const paidItems=
-p.installments.filter(
-item=>item.paid
-);
-
-
-unpaidItems.forEach(
-item=>{
-
-total+=
-Number(item.amount||0);
-
-uc++;
-
-}
-);
-
-
-paidItems.forEach(
-item=>{
-
-total+=
-Number(item.amount||0);
-
-paid+=
-Number(item.amount||0);
-
-pc++;
-
-}
-);
-
-
-if(unpaidItems.length){
-
-ul.appendChild(
+const group=
 createPaymentGroup(
-p,
-unpaidItems
-)
+payment,
+visible
 );
 
-}
+if(currentTab==="unpaid")
+unpaidList.appendChild(group);
+else
+paidList.appendChild(group);
 
+});
 
-if(paidItems.length){
-
-pl.appendChild(
-createPaymentGroup(
-p,
-paidItems
-)
-);
-
-}
-
-}
-);
-
-
-if(!uc){
-
-ul.innerHTML=
-'<div class="empty">🎉 Aucune échéance à payer.</div>';
-
-}
-
-
-if(!pc){
-
-pl.innerHTML=
-'<div class="empty">Aucun paiement marqué comme payé.</div>';
-
-}
-
-
-document
-.getElementById("totalAmount")
-.textContent=euro(total);
-
-document
-.getElementById("paidAmount")
-.textContent=euro(paid);
-
-document
-.getElementById("remainingAmount")
-.textContent=euro(total-paid);
-
-document
-.getElementById("unpaidCount")
-.textContent="("+uc+")";
-
-document
-.getElementById("paidCount")
-.textContent="("+pc+")";
 
 updateSelectionBar();
 
@@ -1918,12 +1627,12 @@ updateSelectionBar();
 
 
 /* =========================
-   GROUPE D'UN PAIEMENT
-   ========================= */
+   GROUPE PAIEMENT
+========================= */
 
 function createPaymentGroup(
 payment,
-items
+installments
 ){
 
 const group=
@@ -1941,76 +1650,42 @@ header.className=
 
 
 const alias=
-document.createElement("div");
-
-alias.className=
-"paymentGroupAlias";
-
-alias.textContent=
-payment.alias||
-payment.beneficiary||
-"Paiement";
-
-header.appendChild(alias);
+payment.alias ||
+"Sans alias";
 
 
-if(payment.alias){
+header.innerHTML=
+`
+<div class="paymentGroupAlias">
+${escapeHtml(alias)}
+</div>
 
-const beneficiary=
-document.createElement("div");
+<div class="paymentGroupBeneficiary">
+${escapeHtml(
+payment.beneficiary
+)}
+</div>
 
-beneficiary.className=
-"paymentGroupBeneficiary";
+<div class="paymentGroupInfo">
+${payment.installments.length}
+échéance(s)
+</div>
+`;
 
-beneficiary.textContent=
-payment.beneficiary;
-
-header.appendChild(beneficiary);
-
-}
-
-
-const info=
-document.createElement("div");
-
-info.className=
-"paymentGroupInfo";
-
-info.textContent=
-items.length+
-(
-items.length>1
-?" échéances"
-:" échéance"
-)+
-" affichée"+
-(
-items.length>1
-?"s"
-:""
-);
-
-header.appendChild(info);
 
 group.appendChild(header);
 
 
-items.forEach(
-item=>{
-
-const originalIndex=
-payment.installments.indexOf(item);
+installments.forEach(inst=>{
 
 group.appendChild(
 createInstallmentCard(
 payment,
-item,
-originalIndex
+inst
 )
 );
 
-}
-);
+});
 
 
 return group;
@@ -2019,25 +1694,22 @@ return group;
 
 
 /* =========================
-   ECHEANCE
-   ========================= */
+   CARTE ECHEANCE
+========================= */
 
 function createInstallmentCard(
 payment,
-item,
-index
+inst
 ){
 
 const card=
 document.createElement("div");
 
 card.className=
-"installment"+
-(
-item.paid
-?" paid"
-:""
-);
+"installment";
+
+if(inst.paid)
+card.classList.add("paid");
 
 
 const top=
@@ -2055,25 +1727,21 @@ checkbox.type="checkbox";
 checkbox.className=
 "checkbox";
 
-checkbox.dataset.paymentId=
-payment.id;
-
-checkbox.dataset.installmentIndex=
-index;
-
 checkbox.checked=
-isSelected(
-payment.id,
-index
-);
+selectedIds.has(inst.id);
 
 checkbox.addEventListener(
 "change",
-updateSelectionBar
-);
+function(){
 
-top.appendChild(
-checkbox
+if(this.checked)
+selectedIds.add(inst.id);
+else
+selectedIds.delete(inst.id);
+
+updateSelectionBar();
+
+}
 );
 
 
@@ -2084,72 +1752,59 @@ info.className=
 "installmentInfo";
 
 
-const ben=
-document.createElement("div");
-
-ben.className=
-"beneficiary";
-
-ben.textContent=
-"Échéance "+
-item.number;
-
-info.appendChild(ben);
-
-
-const details=
-document.createElement("div");
-
-details.className=
-"installmentDetails";
-
-
-details.innerHTML=
-formatDate(item.date)+
-" • "+
-(
-payment.alias
+const status=
+inst.paid
 ?
-payment.alias
+`<span class="badge badgePaid">
+PAYÉ
+</span>`
 :
+`<span class="badge badgeUnpaid">
+À PAYER
+</span>`;
+
+
+info.innerHTML=
+`
+<div class="beneficiary">
+
+${escapeHtml(
 payment.beneficiary
-)+
-"<br>Communication : "+
-escapeHtml(
-item.communication||"—"
+)}
+
+${status}
+
+</div>
+
+<div class="installmentDetails">
+
+Échéance :
+${formatDate(inst.date)}
+
+<br>
+
+Communication :
+${escapeHtml(
+payment.communication || "-"
+)}
+
+</div>
+
+<div class="amount">
+
+${euro(inst.amount)}
+
+</div>
+`;
+
+
+top.appendChild(
+checkbox
 );
 
-
-details.innerHTML+=
-item.paid
-?
-'<br><span class="badge paidBadge">PAYÉ</span>'
-:
-'<br><span class="badge">À PAYER</span>';
-
-
-if(payment.documentPhoto){
-
-details.innerHTML+=
-'<br><span class="documentBadge">📄 Document disponible</span>';
-
-}
-
-
-info.appendChild(details);
-
-top.appendChild(info);
-
-
-const amount=
-document.createElement("div");
-
-amount.className="amount";
-
-amount.textContent=
-euro(item.amount);
-
-top.appendChild(amount);
+top.appendChild(
+info
+);
 
 card.appendChild(top);
 
@@ -2157,117 +1812,133 @@ card.appendChild(top);
 const actions=
 document.createElement("div");
 
-actions.className=
-"actions";
+actions.className="actions";
 
 
-if(!item.paid){
-
-const b=
+const editBtn=
 document.createElement("button");
 
-b.className=
-"success small";
+editBtn.className=
+"secondary";
 
-b.textContent=
-"🏦 Payer";
+editBtn.textContent="✏️ Modifier";
 
-b.onclick=()=>
-openManualPayment(
+editBtn.onclick=function(){
+
+openEdit(
 payment.id,
-index
+inst.id
 );
 
-actions.appendChild(b);
-
-}
+};
 
 
-if(payment.documentPhoto){
-
-const b=
+const paidBtn=
 document.createElement("button");
 
-b.className=
-"secondary small";
+paidBtn.className=
+inst.paid
+?"secondary"
+:"green";
 
-b.textContent=
-"📄 Voir document";
+paidBtn.textContent=
+inst.paid
+?"↩️ À payer"
+:"✓ Payé";
 
-b.onclick=()=>
+paidBtn.onclick=function(){
+
+togglePaid(
+payment.id,
+inst.id
+);
+
+};
+
+
+const manualBtn=
+document.createElement("button");
+
+manualBtn.className=
+"secondary";
+
+manualBtn.textContent=
+"💳 Payer";
+
+manualBtn.onclick=function(){
+
+openManual(
+payment.id,
+inst.id
+);
+
+};
+
+
+const calendarBtn=
+document.createElement("button");
+
+calendarBtn.className=
+"secondary";
+
+calendarBtn.textContent=
+"📅 Calendrier";
+
+calendarBtn.onclick=function(){
+
+addCalendar(
+payment,
+inst
+);
+
+};
+
+
+actions.appendChild(
+editBtn
+);
+
+actions.appendChild(
+paidBtn
+);
+
+actions.appendChild(
+manualBtn
+);
+
+actions.appendChild(
+calendarBtn
+);
+
+
+if(payment.photo){
+
+const photoBtn=
+document.createElement("button");
+
+photoBtn.className=
+"secondary";
+
+photoBtn.textContent=
+"📄 Document";
+
+photoBtn.onclick=function(){
+
 openPhoto(
 payment.id
 );
 
-actions.appendChild(b);
+};
+
+actions.appendChild(
+photoBtn
+);
 
 }
 
 
-const eb=
-document.createElement("button");
-
-eb.className=
-"secondary small";
-
-eb.textContent=
-"✏️ Modifier";
-
-eb.onclick=()=>
-editInstallment(
-payment.id,
-index
-);
-
-actions.appendChild(eb);
-
-
-const gb=
-document.createElement("button");
-
-gb.className=
-"secondary small";
-
-gb.textContent=
-"📅 Google Agenda";
-
-gb.onclick=()=>
-addToGoogleCalendar(
-payment.id,
-index
-);
-
-actions.appendChild(gb);
-
-
-const pb=
-document.createElement("button");
-
-pb.className=
-(
-item.paid
-?"warning"
-:"success"
-)+
-" small";
-
-pb.textContent=
-item.paid
-?
-"↩️ Remettre à payer"
-:
-"✅ Marquer payé";
-
-pb.onclick=()=>
-togglePaid(
-payment.id,
-index
-);
-
-actions.appendChild(pb);
-
-
 card.appendChild(actions);
+
 
 return card;
 
@@ -2276,258 +1947,106 @@ return card;
 
 /* =========================
    SELECTION
-   ========================= */
-
-function isSelected(
-id,
-index
-){
-
-const box=
-document.querySelector(
-'input[type="checkbox"][data-payment-id="'+
-CSS.escape(id)+
-'"][data-installment-index="'+
-index+
-'"]'
-);
-
-return box?.checked||false;
-
-}
-
-
-function getSelectedItems(){
-
-return Array.from(
-document.querySelectorAll(
-".checkbox:checked"
-)
-)
-.map(
-b=>({
-
-paymentId:
-b.dataset.paymentId,
-
-installmentIndex:
-Number(
-b.dataset.installmentIndex
-)
-
-})
-);
-
-}
-
+========================= */
 
 function updateSelectionBar(){
 
-const selected=
-getSelectedItems();
+const bar=
+document.getElementById(
+"selectionBar"
+);
+
+const info=
+document.getElementById(
+"selectionInfo"
+);
 
 const count=
-selected.length;
+selectedIds.size;
 
+if(count>0){
 
-document
-.getElementById("selectionBar")
-.classList
-.toggle(
-"visible",
-count>0
-);
+bar.classList.add("show");
 
-
-document
-.getElementById("selectedCount")
-.textContent=count;
-
-
-document
-.getElementById("selectedText")
-.textContent=
-count===1
-?
-"1 sélectionné"
-:
+info.textContent=
 count+
-" sélectionnés";
-
-
-const boxes=
-Array.from(
-document.querySelectorAll(
-".checkbox"
-)
-);
-
-
-document
-.getElementById("selectAll")
-.checked=
-boxes.length>0 &&
-boxes.every(
-b=>b.checked
-);
-
-}
-
-
-function toggleSelectAll(){
-
-const value=
-document
-.getElementById("selectAll")
-.checked;
-
-
-document
-.querySelectorAll(
-".checkbox"
-)
-.forEach(
-b=>b.checked=value
-);
-
-
-updateSelectionBar();
-
-}
-
-
-/* =========================
-   SUPPRESSION
-   ========================= */
-
-function deleteSelected(){
-
-const selected=
-getSelectedItems();
-
-if(!selected.length)
-return;
-
-
-if(
-!confirm(
-(
-selected.length===1
-?
-"Supprimer cette échéance ?"
-:
-"Supprimer les "+
-selected.length+
-" échéances sélectionnées ?"
-)+
-"\n\nCette action est définitive."
-)
-)
-return;
-
-
-const grouped={};
-
-
-selected.forEach(
-x=>{
-
-if(!grouped[x.paymentId])
-grouped[x.paymentId]=[];
-
-grouped[x.paymentId]
-.push(
-x.installmentIndex
-);
-
-}
-);
-
-
-Object.keys(grouped)
-.forEach(
-id=>{
-
-const p=
-payments.find(
-x=>x.id===id
-);
-
-if(!p)return;
-
-
-grouped[id]
-.sort(
-(a,b)=>b-a
-)
-.forEach(
-i=>
-p.installments.splice(
-i,
-1
-)
-);
-
-
-if(!p.installments.length){
-
-payments=
-payments.filter(
-x=>x.id!==id
-);
+(count>1
+?" sélectionnés"
+:" sélectionné");
 
 }else{
 
-p.totalAmount=
-p.installments.reduce(
-(s,i)=>
-s+
-Number(
-i.amount||0
-),
-0
-);
+bar.classList.remove("show");
 
 }
 
 }
+
+
+function deleteSelected(){
+
+if(!selectedIds.size)
+return;
+
+if(
+!confirm(
+"Supprimer les échéances sélectionnées ?"
+)
+)
+return;
+
+
+data.forEach(payment=>{
+
+payment.installments=
+payment.installments.filter(
+inst=>
+!selectedIds.has(inst.id)
 );
 
+});
+
+
+data=
+data.filter(
+p=>p.installments.length>0
+);
+
+selectedIds.clear();
 
 saveData();
 
 render();
 
-alert(
-"🗑️ Suppression terminée."
-);
-
 }
 
 
 /* =========================
-   MARQUER PAYE
-   ========================= */
+   PAYE / NON PAYE
+========================= */
 
 function togglePaid(
-id,
-index
+paymentId,
+installmentId
 ){
 
-const p=
-payments.find(
-x=>x.id===id
+const payment=
+data.find(
+p=>p.id===paymentId
 );
 
-if(
-!p ||
-!p.installments[index]
-)
+if(!payment)
 return;
 
+const inst=
+payment.installments.find(
+i=>i.id===installmentId
+);
 
-p.installments[index].paid=
-!p.installments[index].paid;
+if(!inst)
+return;
+
+inst.paid=!inst.paid;
 
 saveData();
 
@@ -2537,248 +2056,154 @@ render();
 
 
 /* =========================
-   MODIFIER
-   ========================= */
+   MODIFICATION
+========================= */
 
-function editInstallment(
-id,
-index
+function openEdit(
+paymentId,
+installmentId
 ){
 
-const p=
-payments.find(
-x=>x.id===id
+editId={
+paymentId,
+installmentId
+};
+
+
+const payment=
+data.find(
+p=>p.id===paymentId
 );
 
-if(
-!p ||
-!p.installments[index]
-)
-return;
+const inst=
+payment.installments.find(
+i=>i.id===installmentId
+);
 
 
-editingPaymentId=id;
+document.getElementById(
+"editAlias"
+).value=
+payment.alias || "";
 
-editingInstallmentIndex=
-index;
+document.getElementById(
+"editBeneficiary"
+).value=
+payment.beneficiary || "";
 
+document.getElementById(
+"editIban"
+).value=
+payment.iban || "";
 
-const i=
-p.installments[index];
+document.getElementById(
+"editDate"
+).value=
+inst.date || "";
 
+document.getElementById(
+"editAmount"
+).value=
+inst.amount || "";
 
-/* Alias */
-
-document
-.getElementById("editAlias")
-.value=
-p.alias||"";
-
-
-/* Bénéficiaire */
-
-document
-.getElementById("editBeneficiary")
-.value=
-p.beneficiary||"";
-
-
-/* IBAN */
-
-document
-.getElementById("editIban")
-.value=
-p.iban||"";
+document.getElementById(
+"editCommunication"
+).value=
+payment.communication || "";
 
 
-/* Date */
-
-document
-.getElementById("editDate")
-.value=
-i.date||"";
-
-
-/* Montant */
-
-document
-.getElementById("editAmount")
-.value=
-i.amount;
-
-
-/* Communication */
-
-document
-.getElementById("editCommunication")
-.value=
-i.communication||"";
-
-
-document
-.getElementById("editModal")
-.classList
-.add("show");
+document.getElementById(
+"editModal"
+).classList.add("show");
 
 }
 
 
 function closeEdit(){
 
-document
-.getElementById("editModal")
-.classList
-.remove("show");
+document.getElementById(
+"editModal"
+).classList.remove("show");
 
-editingPaymentId=null;
-
-editingInstallmentIndex=null;
+editId=null;
 
 }
 
 
 function saveEdit(){
 
-const p=
-payments.find(
-x=>x.id===editingPaymentId
-);
-
-if(!p)return;
-
-
-const i=
-p.installments[
-editingInstallmentIndex
-];
-
-if(!i)return;
-
-
-/* Récupération des nouvelles valeurs */
-
-const alias=
-document
-.getElementById("editAlias")
-.value
-.trim();
-
-
-const beneficiary=
-document
-.getElementById("editBeneficiary")
-.value
-.trim();
-
-
-const iban=
-document
-.getElementById("editIban")
-.value
-.replace(/\s+/g,"")
-.toUpperCase();
-
-
-const date=
-document
-.getElementById("editDate")
-.value;
-
-
-const amount=
-Number(
-document
-.getElementById("editAmount")
-.value
-);
-
-
-const communication=
-document
-.getElementById("editCommunication")
-.value
-.trim();
-
-
-/* Vérifications */
-
-if(!beneficiary){
-
-alert(
-"Indique le bénéficiaire."
-);
-
+if(!editId)
 return;
 
-}
-
-
-if(!iban){
-
-alert(
-"Indique l'IBAN."
+const payment=
+data.find(
+p=>p.id===editId.paymentId
 );
 
+if(!payment)
 return;
 
-}
-
-
-if(!date){
-
-alert(
-"Indique une date."
+const inst=
+payment.installments.find(
+i=>i.id===editId.installmentId
 );
 
+if(!inst)
 return;
 
-}
 
+const newAlias=
+document.getElementById(
+"editAlias"
+).value.trim();
 
-if(
-isNaN(amount) ||
-amount<0
-){
+const newBeneficiary=
+document.getElementById(
+"editBeneficiary"
+).value.trim();
 
-alert(
-"Indique un montant valide."
+const newIban=
+document.getElementById(
+"editIban"
+).value.trim();
+
+const newDate=
+document.getElementById(
+"editDate"
+).value;
+
+const newAmount=
+parseFloat(
+document.getElementById(
+"editAmount"
+).value
 );
 
-return;
-
-}
-
-
-/* Enregistrement */
-
-p.alias=
-alias;
-
-p.beneficiary=
-beneficiary;
-
-p.iban=
-iban;
-
-i.date=
-date;
-
-i.amount=
-amount;
-
-i.communication=
-communication;
+const newCommunication=
+document.getElementById(
+"editCommunication"
+).value.trim();
 
 
-/* Recalcul du total */
+payment.alias=
+newAlias;
 
-p.totalAmount=
-p.installments.reduce(
-(s,x)=>
-s+
-Number(x.amount||0),
-0
-);
+payment.beneficiary=
+newBeneficiary;
+
+payment.iban=
+newIban;
+
+payment.communication=
+newCommunication;
+
+inst.date=
+newDate;
+
+inst.amount=
+isNaN(newAmount)
+?0
+:newAmount;
 
 
 saveData();
@@ -2792,219 +2217,191 @@ render();
 
 /* =========================
    PAIEMENT MANUEL
-   ========================= */
+========================= */
 
-function openManualPayment(
-id,
-index
+function openManual(
+paymentId,
+installmentId
 ){
 
-const p=
-payments.find(
-x=>x.id===id
+manualId={
+paymentId,
+installmentId
+};
+
+
+const payment=
+data.find(
+p=>p.id===paymentId
 );
 
-if(
-!p ||
-!p.installments[index]
-)
-return;
+const inst=
+payment.installments.find(
+i=>i.id===installmentId
+);
 
 
-const i=
-p.installments[index];
+const content=
+document.getElementById(
+"manualContent"
+);
 
 
-manualPaymentId=id;
+content.innerHTML=
+`
+<div class="manualInfo">
 
-manualInstallmentIndex=
-index;
+<div class="manualLine">
 
+<div class="manualLabel">
+Bénéficiaire
+</div>
 
-document
-.getElementById(
-"manualPaymentSubtitle"
-)
-.textContent=
-(
-p.alias
-?
-p.alias+" • "
-:""
-)+
-"Échéance "+
-i.number+
-" • "+
-formatDate(i.date);
+<div class="manualValue">
+${escapeHtml(
+payment.beneficiary
+)}
+</div>
 
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.beneficiary)}',
+this
+)">
 
-document
-.getElementById(
-"manualBeneficiary"
-)
-.textContent=
-p.beneficiary;
+Copier
 
+</button>
 
-document
-.getElementById(
-"manualIban"
-)
-.textContent=
-p.iban||"—";
+</div>
 
 
-document
-.getElementById(
-"manualAmount"
-)
-.textContent=
-euro(i.amount);
+<div class="manualLine">
+
+<div class="manualLabel">
+IBAN
+</div>
+
+<div class="manualValue">
+${escapeHtml(
+payment.iban || "-"
+)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.iban || "")}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
 
 
-document
-.getElementById(
-"manualCommunication"
-)
-.textContent=
-i.communication||"—";
+<div class="manualLine">
 
+<div class="manualLabel">
+Montant
+</div>
+
+<div class="manualValue">
+${euro(inst.amount)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(
+Number(inst.amount)
+.toFixed(2)
+)}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Communication
+</div>
+
+<div class="manualValue">
+${escapeHtml(
+payment.communication || "-"
+)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(
+payment.communication || ""
+)}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+</div>
+`;
+
+
+document.getElementById(
+"manualModal"
+).classList.add("show");
+
+}
+
+
+function closeManual(){
+
+document.getElementById(
+"manualModal"
+).classList.remove("show");
+
+manualId=null;
 
 resetCopyButtons();
 
-
-document
-.getElementById(
-"manualPaymentModal"
-)
-.classList
-.add("show");
-
 }
 
 
-function closeManualPayment(){
+/* =========================
+   COPIER
+========================= */
 
-document
-.getElementById(
-"manualPaymentModal"
-)
-.classList
-.remove("show");
-
-manualPaymentId=null;
-
-manualInstallmentIndex=null;
-
-}
-
-
-function getCopyValue(type){
-
-const p=
-payments.find(
-x=>x.id===manualPaymentId
-);
-
-const i=
-p?.installments[
-manualInstallmentIndex
-];
-
-if(!p||!i)
-return"";
-
-
-if(type==="beneficiary")
-return p.beneficiary;
-
-if(type==="iban")
-return p.iban;
-
-if(type==="amount")
-return Number(i.amount)
-.toFixed(2)
-.replace(
-".",
-","
-);
-
-if(type==="communication")
-return i.communication;
-
-return"";
-
-}
-
-
-async function copyBankField(
-type
+function copyText(
+text,
+button
 ){
 
-const value=
-getCopyValue(type);
+navigator.clipboard.writeText(
+text
+).then(()=>{
 
-if(!value)return;
-
-
-try{
-
-await navigator.clipboard
-.writeText(value);
-
-}catch(e){
-
-const t=
-document.createElement(
-"textarea"
-);
-
-t.value=value;
-
-document.body.appendChild(t);
-
-t.select();
-
-document.execCommand(
-"copy"
-);
-
-t.remove();
-
-}
-
-
-const b=
-document.querySelector(
-'.copyButton[data-copy-type="'+
-type+
-'"]'
-);
-
-if(!b)return;
-
-
-b.textContent=
+button.textContent=
 "✓ Copié";
 
-b.classList.add(
+button.classList.add(
 "copied"
 );
 
-
-setTimeout(
-()=>{
-
-b.textContent=
-"Copier";
-
-b.classList.remove(
-"copied"
-);
-
-},
-1500
-);
+});
 
 }
 
@@ -3028,79 +2425,72 @@ b.classList.remove(
 }
 );
 
+}
+
 
 /* =========================
    GOOGLE CALENDAR
-   ========================= */
+========================= */
 
-function addToGoogleCalendar(
-id,
-index
+function addCalendar(
+payment,
+inst
 ){
 
-const p=
-payments.find(
-x=>x.id===id
+const date=
+inst.date.replaceAll(
+"-",""
 );
 
-if(
-!p ||
-!p.installments[index]
-)
-return;
+const nextDate=
+addMonths(
+inst.date,
+0
+);
 
+const d2=
+new Date(
+nextDate+"T00:00:00"
+);
 
-const i=
-p.installments[index];
-
-
-const start=
-i.date.replace(
-/-/g,
-""
-)+
-"T090000";
-
+d2.setDate(
+d2.getDate()+1
+);
 
 const end=
-i.date.replace(
-/-/g,
-""
-)+
-"T100000";
+d2.toISOString()
+.substring(0,10)
+.replaceAll("-","");
 
 
 const title=
-"Paiement - "+
 (
-p.alias
+payment.alias
 ?
-p.alias+" - "
+payment.alias+" - "
 :""
 )+
-p.beneficiary+
-" - Échéance "+
-i.number;
+payment.beneficiary;
 
 
 const details=
 "Montant : "+
-euro(i.amount)+
-"\nBénéficiaire : "+
-p.beneficiary+
-"\nIBAN : "+
-p.iban+
-"\nCommunication : "+
-i.communication;
+Number(inst.amount)
+.toFixed(2)+
+" €\n"+
+"IBAN : "+
+(payment.iban||"")+
+"\n"+
+"Communication : "+
+(payment.communication||"");
 
 
 const url=
-"https://calendar.google.com/calendar/render"+
-"?action=TEMPLATE"+
+"https://calendar.google.com/calendar/render?action=TEMPLATE"+
 "&text="+
 encodeURIComponent(title)+
 "&dates="+
-start+
+date+
 "/"+
 end+
 "&details="+
@@ -3116,81 +2506,63 @@ url,
 
 
 /* =========================
-   PHOTO DOCUMENT
-   ========================= */
+   PHOTO
+========================= */
 
-function openPhoto(id){
+function openPhoto(
+paymentId
+){
 
-const p=
-payments.find(
-x=>x.id===id
+const payment=
+data.find(
+p=>p.id===paymentId
 );
 
-if(
-!p ||
-!p.documentPhoto
-)
+if(!payment || !payment.photo)
 return;
 
+photoId=paymentId;
 
-photoPaymentId=id;
+document.getElementById(
+"photoModalImage"
+).src=
+payment.photo;
 
-
-document
-.getElementById("fullPhoto")
-.src=
-p.documentPhoto;
-
-
-document
-.getElementById("photoModal")
-.classList
-.add("show");
+document.getElementById(
+"photoModal"
+).classList.add("show");
 
 }
 
 
 function closePhoto(){
 
-document
-.getElementById("photoModal")
-.classList
-.remove("show");
+document.getElementById(
+"photoModal"
+).classList.remove("show");
 
-document
-.getElementById("fullPhoto")
-.src="";
-
-photoPaymentId=null;
+photoId=null;
 
 }
 
 
-function removeCurrentPhoto(){
+function deletePhoto(){
 
-if(!photoPaymentId)
+if(!photoId)
 return;
 
-
-if(
-!confirm(
-"Supprimer le document de ce paiement ?"
-)
-)
-return;
-
-
-const p=
-payments.find(
-x=>x.id===photoPaymentId
+const payment=
+data.find(
+p=>p.id===photoId
 );
 
+if(payment){
 
-if(p)
-p.documentPhoto="";
-
+payment.photo="";
 
 saveData();
+
+}
 
 closePhoto();
 
@@ -3201,21 +2573,15 @@ render();
 
 /* =========================
    EXPORT
-   ========================= */
+========================= */
 
 function exportData(){
 
 const backup={
-
-app:"Mes paiements",
-
-version:BACKUP_VERSION,
-
-exportedAt:
-new Date().toISOString(),
-
-payments:payments
-
+version:1,
+date:new Date()
+.toISOString(),
+data:data
 };
 
 
@@ -3235,36 +2601,20 @@ type:"application/json"
 
 
 const url=
-URL.createObjectURL(blob);
-
-
-const link=
-document.createElement(
-"a"
+URL.createObjectURL(
+blob
 );
 
 
-link.href=url;
+const a=
+document.createElement("a");
 
+a.href=url;
 
-link.download=
-"mes-paiements-sauvegarde-"+
-new Date()
-.toISOString()
-.slice(
-0,
-10
-)+
-".json";
+a.download=
+"mes-paiements-backup.json";
 
-
-document.body.appendChild(
-link
-);
-
-link.click();
-
-link.remove();
+a.click();
 
 URL.revokeObjectURL(
 url
@@ -3275,21 +2625,23 @@ url
 
 /* =========================
    IMPORT
-   ========================= */
+========================= */
 
-function importData(event){
+document.getElementById(
+"importInput"
+).addEventListener(
+"change",
+function(){
 
-const file=
-event.target.files[0];
+const file=this.files[0];
 
-if(!file)return;
-
+if(!file)
+return;
 
 const reader=
 new FileReader();
 
-
-reader.onload=e=>{
+reader.onload=function(e){
 
 try{
 
@@ -3298,148 +2650,139 @@ JSON.parse(
 e.target.result
 );
 
-
 if(
-!backup ||
-backup.app!=="Mes paiements" ||
-!Array.isArray(
-backup.payments
+backup.data &&
+Array.isArray(
+backup.data
 )
 ){
 
-alert(
-"❌ Fichier de sauvegarde invalide."
-);
+data=backup.data;
 
-return;
-
-}
-
-
-if(
-!confirm(
-"Importer cette sauvegarde ?\n\n"+
-"Les paiements actuellement présents seront remplacés."
-)
-)
-return;
-
-
-payments=
-normalizeData(
-backup.payments
-);
-
+normalizeData();
 
 saveData();
 
-currentTab="unpaid";
-
 render();
 
-showTab("unpaid");
-
 alert(
-"✅ Sauvegarde importée."
+"Importation réussie."
 );
 
+}else{
+
+alert(
+"Fichier de sauvegarde invalide."
+);
+
+}
 
 }catch(err){
 
 alert(
-"❌ Impossible de lire la sauvegarde."
+"Impossible de lire la sauvegarde."
 );
 
 }
 
 };
 
-
 reader.readAsText(file);
 
-event.target.value="";
-
 }
+);
 
 
 /* =========================
    SECURITE HTML
-   ========================= */
+========================= */
 
-function escapeHtml(v){
+function escapeHtml(
+value
+){
 
-return String(v||"")
-.replace(
-/&/g,
-"&amp;"
+return String(
+value ?? ""
 )
-.replace(
-/</g,
-"&lt;"
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+function escapeJs(
+value
+){
+
+return String(
+value ?? ""
 )
-.replace(
-/>/g,
-"&gt;"
-)
-.replace(
-/"/g,
-"&quot;"
-)
-.replace(
-/'/g,
-"&#039;"
-);
+.replaceAll("\\","\\\\")
+.replaceAll("'","\\'")
+.replaceAll("\n","\\n")
+.replaceAll("\r","\\r");
 
 }
 
 
 /* =========================
-   FERMETURE MODALES
-   ========================= */
+   MODALES
+========================= */
 
-document
-.getElementById("editModal")
-.addEventListener(
+document.getElementById(
+"editModal"
+).addEventListener(
 "click",
-e=>{
+function(e){
 
-if(
-e.target===
-e.currentTarget
-)
+if(e.target===this)
 closeEdit();
 
 }
 );
 
 
-document
-.getElementById("manualPaymentModal")
-.addEventListener(
+document.getElementById(
+"manualModal"
+).addEventListener(
 "click",
-e=>{
+function(e){
 
-if(
-e.target===
-e.currentTarget
-)
-closeManualPayment();
+if(e.target===this)
+closeManual();
 
 }
 );
 
 
-document
-.getElementById("photoModal")
-.addEventListener(
+document.getElementById(
+"photoModal"
+).addEventListener(
 "click",
-e=>{
+function(e){
 
-if(
-e.target===
-e.currentTarget
-)
+if(e.target===this)
 closePhoto();
+
+}
+);
+
+
+/* =========================
+   ENTREE PIN
+========================= */
+
+document.getElementById(
+"pinInput"
+).addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter")
+checkPin();
 
 }
 );
