@@ -3,571 +3,2958 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mes Paiements</title>
+<title>Mes paiements</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:#f2f2f7;
+color:#111
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f2f2f7;
-    color: #222;
+header{
+background:#007aff;
+color:white;
+padding:18px 16px;
+text-align:center;
+font-size:22px;
+font-weight:700
 }
 
-header {
-    background: #007aff;
-    color: white;
-    padding: 20px;
-    text-align: center;
+.container{
+max-width:700px;
+margin:auto;
+padding:15px
 }
 
-header h1 {
-    margin: 0;
-    font-size: 25px;
+.card{
+background:white;
+border-radius:16px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.08)
 }
 
-.container {
-    padding: 15px;
-    max-width: 700px;
-    margin: auto;
+h2{margin-top:0}
+
+input{
+width:100%;
+padding:13px;
+margin:6px 0 10px;
+border:1px solid #ccc;
+border-radius:10px;
+font-size:16px
 }
 
-button {
-    border: none;
-    border-radius: 10px;
-    padding: 12px 15px;
-    font-size: 16px;
-    cursor: pointer;
+button{
+border:0;
+border-radius:10px;
+padding:11px 14px;
+font-size:15px;
+cursor:pointer
 }
 
-.add-btn {
-    width: 100%;
-    background: #34c759;
-    color: white;
-    margin-bottom: 15px;
+.primary{background:#007aff;color:white}
+.secondary{background:#e5e5ea;color:#111}
+.danger{background:#ff3b30;color:white}
+.success{background:#34c759;color:white}
+.warning{background:#ff9500;color:white}
+
+.summary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px
 }
 
-.delete-btn {
-    width: 100%;
-    background: #ff3b30;
-    color: white;
-    margin-top: 10px;
-    display: none;
+.summaryBox{
+background:#f5f5f7;
+border-radius:12px;
+padding:12px 6px;
+text-align:center
 }
 
-.payment {
-    background: white;
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.summaryLabel{
+font-size:13px;
+color:#666
 }
 
-.payment-info {
-    flex: 1;
+.summaryValue{
+margin-top:5px;
+font-size:18px;
+font-weight:700
 }
 
-.payment-name {
-    font-size: 18px;
-    font-weight: bold;
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:12px
 }
 
-.payment-date {
-    color: #666;
-    margin-top: 4px;
+.tab{
+flex:1;
+background:#e5e5ea;
+padding:12px;
+border-radius:12px;
+font-weight:600
 }
 
-.payment-amount {
-    font-weight: bold;
-    margin-top: 5px;
+.tab.active{
+background:#007aff;
+color:white
 }
 
-.edit-btn {
-    background: #e5e5ea;
-    padding: 9px 12px;
+.tabCount{opacity:.8}
+
+.installment{
+border:1px solid #ddd;
+border-radius:14px;
+padding:13px;
+margin-bottom:10px;
+background:white
 }
 
-.photo-btn {
-    background: #007aff;
-    color: white;
-    margin-top: 10px;
+.installment.paid{
+opacity:.75;
+background:#f7fff8
 }
 
-.photo-preview {
-    max-width: 100%;
-    max-height: 250px;
-    border-radius: 10px;
-    margin-top: 10px;
-    display: none;
+.installmentTop{
+display:flex;
+align-items:flex-start;
+gap:10px
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 1000;
-    padding: 20px;
-    overflow-y: auto;
+.checkbox{
+width:22px;
+height:22px;
+margin:2px 0 0;
+flex-shrink:0
 }
 
-.modal-content {
-    background: white;
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 20px;
-    border-radius: 20px;
+.installmentInfo{
+flex:1;
+min-width:0
 }
 
-.modal h2 {
-    margin-top: 0;
+.beneficiary{
+font-size:17px;
+font-weight:700
 }
 
-label {
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
+.installmentDetails{
+color:#555;
+font-size:14px;
+margin-top:5px;
+line-height:1.5
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
+.amount{
+font-size:18px;
+font-weight:700;
+white-space:nowrap
 }
 
-.save-btn {
-    background: #007aff;
-    color: white;
-    width: 100%;
-    margin-top: 18px;
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:7px;
+margin-top:12px
 }
 
-.cancel-btn {
-    background: #e5e5ea;
-    width: 100%;
-    margin-top: 10px;
+.small{
+font-size:13px;
+padding:8px 10px
 }
 
-.photo-options {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+.badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+background:#ff9500;
+color:white
 }
 
-.photo-options button {
-    flex: 1;
-    background: #007aff;
-    color: white;
+.badge.paidBadge{
+background:#34c759
 }
 
-.file-input {
-    display: none;
+.selectionBar{
+display:none;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+background:white;
+border-radius:14px;
+padding:10px 12px;
+margin-bottom:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.08)
 }
 
-.empty {
-    text-align: center;
-    color: #777;
-    margin-top: 40px;
+.selectionBar.visible{
+display:flex
+}
+
+.selectionLeft{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:14px;
+font-weight:600
+}
+
+.selectAll{
+width:20px;
+height:20px;
+margin:0
+}
+
+.deleteButton{
+background:#ff3b30;
+color:white;
+font-weight:600
+}
+
+.empty{
+text-align:center;
+color:#777;
+padding:25px 10px
+}
+
+.modal{
+display:none;
+position:fixed;
+z-index:1000;
+inset:0;
+background:rgba(0,0,0,.45);
+padding:20px;
+align-items:center;
+justify-content:center
+}
+
+.modal.show{
+display:flex
+}
+
+.modalContent{
+width:100%;
+max-width:500px;
+max-height:90vh;
+overflow-y:auto;
+background:white;
+border-radius:18px;
+padding:18px
+}
+
+.modalButtons{
+display:flex;
+gap:8px;
+margin-top:10px
+}
+
+.modalButtons button{
+flex:1
+}
+
+.manualPaymentTitle{
+font-size:20px;
+font-weight:700;
+margin-bottom:4px
+}
+
+.bankField{
+margin-top:14px
+}
+
+.bankLabel{
+font-size:13px;
+color:#666;
+margin-bottom:5px
+}
+
+.bankRow{
+display:flex;
+gap:8px;
+align-items:center
+}
+
+.bankValue{
+flex:1;
+background:#f2f2f7;
+border-radius:10px;
+padding:12px;
+word-break:break-word;
+font-weight:600
+}
+
+.copyButton{
+background:#e5e5ea;
+white-space:nowrap
+}
+
+.copyButton.copied{
+background:#34c759;
+color:white
+}
+
+.bankHelp{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-top:16px;
+font-size:14px;
+line-height:1.5
+}
+
+#loginScreen{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.loginBox{
+width:100%;
+max-width:350px;
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 4px 20px rgba(0,0,0,.12);
+text-align:center
+}
+
+.loginIcon{
+font-size:45px
+}
+
+#errorMessage{
+color:#ff3b30;
+margin-top:8px;
+min-height:20px
+}
+
+.hidden{
+display:none!important
+}
+
+.fileButtons{
+display:flex;
+gap:8px
+}
+
+.fileButtons button{
+flex:1
+}
+
+label{
+font-size:14px;
+font-weight:600
+}
+
+.photoBox{
+margin-top:10px;
+background:#f2f2f7;
+border-radius:14px;
+padding:10px
+}
+
+.photoPreview{
+display:block;
+width:100%;
+max-height:220px;
+object-fit:contain;
+border-radius:10px;
+background:white;
+margin-bottom:8px
+}
+
+.photoActions{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.photoActions button{
+flex:1;
+min-width:120px
+}
+
+.documentBadge{
+display:inline-block;
+background:#5856d6;
+color:white;
+padding:4px 8px;
+border-radius:20px;
+font-size:12px;
+font-weight:600;
+margin-top:5px
+}
+
+.photoInfo{
+font-size:13px;
+color:#666;
+margin-top:4px
+}
+
+.previewModalImage{
+display:block;
+width:100%;
+max-height:70vh;
+object-fit:contain;
+border-radius:12px;
+background:#111
 }
 </style>
 </head>
 
 <body>
 
+<div id="loginScreen">
+
+<div class="loginBox">
+
+<div class="loginIcon">🔐</div>
+
+<h2>Mes paiements</h2>
+
+<p>Entre ton code PIN</p>
+
+<input
+id="pinInput"
+type="password"
+inputmode="numeric"
+maxlength="4"
+placeholder="••••"
+>
+
+<button
+class="primary"
+style="width:100%;"
+onclick="checkPin()"
+>
+🔓 Ouvrir
+</button>
+
+<div id="errorMessage"></div>
+
+</div>
+
+</div>
+
+
+<div id="app" class="hidden">
+
 <header>
-    <h1>💶 Mes Paiements</h1>
+💳 Mes paiements
 </header>
+
 
 <div class="container">
 
-    <button class="add-btn" onclick="openModal()">
-        ➕ Ajouter un paiement
-    </button>
 
-    <div id="payments"></div>
+<div class="card">
 
-    <button id="deleteBtn" class="delete-btn" onclick="deleteSelected()">
-        🗑️ Supprimer la sélection
-    </button>
+<div class="summary">
+
+<div class="summaryBox">
+<div class="summaryLabel">Total</div>
+<div class="summaryValue" id="totalAmount">0,00 €</div>
+</div>
+
+<div class="summaryBox">
+<div class="summaryLabel">Payé</div>
+<div class="summaryValue" id="paidAmount">0,00 €</div>
+</div>
+
+<div class="summaryBox">
+<div class="summaryLabel">Reste</div>
+<div class="summaryValue" id="remainingAmount">0,00 €</div>
+</div>
 
 </div>
 
-<!-- MODALE -->
-<div id="modal" class="modal">
+</div>
 
-    <div class="modal-content">
 
-        <h2 id="modalTitle">Ajouter un paiement</h2>
+<div class="tabs">
 
-        <label>Nom du paiement</label>
-        <input type="text" id="name" placeholder="Ex : Électricité">
+<button
+id="tabUnpaid"
+class="tab active"
+onclick="showTab('unpaid')"
+>
+🔴 À payer
+<span class="tabCount" id="unpaidCount">(0)</span>
+</button>
 
-        <label>Montant (€)</label>
-        <input type="number" id="amount" step="0.01" placeholder="Ex : 120">
-
-        <label>Date</label>
-        <input type="date" id="date">
-
-        <label>Photo du document</label>
-
-        <div class="photo-options">
-
-            <!-- Prendre une photo avec l'appareil -->
-            <button type="button" onclick="takePhoto()">
-                📷 Prendre une photo
-            </button>
-
-            <!-- Choisir dans les photos du téléphone -->
-            <button type="button" onclick="choosePhoto()">
-                🖼️ Mes photos
-            </button>
-
-        </div>
-
-        <!-- Input appareil photo -->
-        <input
-            type="file"
-            id="cameraInput"
-            class="file-input"
-            accept="image/*"
-            capture="environment"
-            onchange="photoSelected(event)"
-        >
-
-        <!-- Input galerie -->
-        <input
-            type="file"
-            id="galleryInput"
-            class="file-input"
-            accept="image/*"
-            onchange="photoSelected(event)"
-        >
-
-        <img id="photoPreview" class="photo-preview">
-
-        <button class="save-btn" onclick="savePayment()">
-            💾 Enregistrer
-        </button>
-
-        <button class="cancel-btn" onclick="closeModal()">
-            Annuler
-        </button>
-
-    </div>
+<button
+id="tabPaid"
+class="tab"
+onclick="showTab('paid')"
+>
+🟢 Payé
+<span class="tabCount" id="paidCount">(0)</span>
+</button>
 
 </div>
+
+
+<div id="selectionBar" class="selectionBar">
+
+<div class="selectionLeft">
+
+<input
+type="checkbox"
+id="selectAll"
+class="selectAll"
+onchange="toggleSelectAll()"
+>
+
+<span id="selectedText">
+0 sélectionné
+</span>
+
+</div>
+
+<button
+class="deleteButton"
+onclick="deleteSelected()"
+>
+🗑️ Supprimer
+(<span id="selectedCount">0</span>)
+</button>
+
+</div>
+
+
+<div id="unpaidSection">
+
+<div id="unpaidList"></div>
+
+</div>
+
+
+<div id="paidSection" class="hidden">
+
+<div id="paidList"></div>
+
+</div>
+
+
+<div class="card">
+
+<h2>➕ Ajouter un paiement</h2>
+
+
+<label>Bénéficiaire</label>
+
+<input
+id="beneficiary"
+type="text"
+placeholder="Ex : EDF"
+>
+
+
+<label>IBAN</label>
+
+<input
+id="iban"
+type="text"
+placeholder="BE00 0000 0000 0000"
+>
+
+
+<label>Montant total</label>
+
+<input
+id="totalInput"
+type="number"
+step="0.01"
+min="0"
+placeholder="1000"
+>
+
+
+<label>Nombre d'échéances</label>
+
+<input
+id="installmentsInput"
+type="number"
+min="1"
+step="1"
+placeholder="12"
+>
+
+
+<label>Première date</label>
+
+<input
+id="firstDate"
+type="date"
+>
+
+
+<label>Communication</label>
+
+<input
+id="communication"
+type="text"
+placeholder="Ex : +++123/4567/89012+++"
+>
+
+
+<label>📷 Document / facture</label>
+
+<div class="photoActions">
+
+<button
+type="button"
+class="secondary"
+onclick="takePhoto()"
+>
+📷 Prendre une photo
+</button>
+
+<button
+type="button"
+class="secondary"
+onclick="choosePhoto()"
+>
+🖼️ Mes photos
+</button>
+
+</div>
+
+<input
+id="cameraPhoto"
+type="file"
+accept="image/*"
+capture="environment"
+class="hidden"
+>
+
+<input
+id="galleryPhoto"
+type="file"
+accept="image/*"
+class="hidden"
+>
+
+
+<div
+id="newPhotoPreview"
+class="photoBox hidden"
+>
+
+<img
+id="newPhotoImage"
+class="photoPreview"
+alt="Aperçu du document"
+>
+
+<div class="photoInfo">
+Photo prête à être enregistrée avec le paiement.
+</div>
+
+<div class="photoActions">
+
+<button
+class="secondary"
+onclick="clearNewPhoto()"
+>
+🗑️ Retirer la photo
+</button>
+
+</div>
+
+</div>
+
+
+<button
+class="primary"
+style="width:100%;margin-top:8px"
+onclick="addPayment()"
+>
+➕ Ajouter le paiement
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>💾 Sauvegarde</h2>
+
+<div class="fileButtons">
+
+<button
+class="secondary"
+onclick="exportData()"
+>
+📤 Exporter
+</button>
+
+<button
+class="secondary"
+onclick="document.getElementById('importFile').click()"
+>
+📥 Importer
+</button>
+
+</div>
+
+<input
+id="importFile"
+type="file"
+accept=".json,application/json"
+class="hidden"
+onchange="importData(event)"
+>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="editModal" class="modal">
+
+<div class="modalContent">
+
+<h2>✏️ Modifier l'échéance</h2>
+
+<label>Date</label>
+
+<input
+id="editDate"
+type="date"
+>
+
+<label>Montant</label>
+
+<input
+id="editAmount"
+type="number"
+step="0.01"
+min="0"
+>
+
+<label>Communication</label>
+
+<input
+id="editCommunication"
+type="text"
+>
+
+<div class="modalButtons">
+
+<button
+class="secondary"
+onclick="closeEdit()"
+>
+Annuler
+</button>
+
+<button
+class="primary"
+onclick="saveEdit()"
+>
+💾 Enregistrer
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="manualPaymentModal" class="modal">
+
+<div class="modalContent">
+
+<div class="manualPaymentTitle">
+🏦 Payer manuellement
+</div>
+
+<p id="manualPaymentSubtitle"></p>
+
+
+<div class="bankField">
+
+<div class="bankLabel">
+Bénéficiaire
+</div>
+
+<div class="bankRow">
+
+<div
+id="manualBeneficiary"
+class="bankValue"
+></div>
+
+<button
+class="copyButton"
+data-copy-type="beneficiary"
+onclick="copyBankField('beneficiary')"
+>
+Copier
+</button>
+
+</div>
+
+</div>
+
+
+<div class="bankField">
+
+<div class="bankLabel">
+IBAN
+</div>
+
+<div class="bankRow">
+
+<div
+id="manualIban"
+class="bankValue"
+></div>
+
+<button
+class="copyButton"
+data-copy-type="iban"
+onclick="copyBankField('iban')"
+>
+Copier
+</button>
+
+</div>
+
+</div>
+
+
+<div class="bankField">
+
+<div class="bankLabel">
+Montant
+</div>
+
+<div class="bankRow">
+
+<div
+id="manualAmount"
+class="bankValue"
+></div>
+
+<button
+class="copyButton"
+data-copy-type="amount"
+onclick="copyBankField('amount')"
+>
+Copier
+</button>
+
+</div>
+
+</div>
+
+
+<div class="bankField">
+
+<div class="bankLabel">
+Communication
+</div>
+
+<div class="bankRow">
+
+<div
+id="manualCommunication"
+class="bankValue"
+></div>
+
+<button
+class="copyButton"
+data-copy-type="communication"
+onclick="copyBankField('communication')"
+>
+Copier
+</button>
+
+</div>
+
+</div>
+
+
+<div class="bankHelp">
+
+💡 Ouvre ton app bancaire, crée un virement,
+et colle chaque information avec le bouton
+« Copier ».
+
+</div>
+
+
+<div class="modalButtons">
+
+<button
+class="secondary"
+onclick="closeManualPayment()"
+>
+Fermer
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="photoModal" class="modal">
+
+<div class="modalContent">
+
+<h2>📄 Document</h2>
+
+<img
+id="fullPhoto"
+class="previewModalImage"
+alt="Document"
+>
+
+<div class="modalButtons">
+
+<button
+class="secondary"
+onclick="closePhoto()"
+>
+Fermer
+</button>
+
+<button
+class="danger"
+onclick="removeCurrentPhoto()"
+>
+🗑️ Supprimer
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 
 <script>
 
-let payments = JSON.parse(localStorage.getItem("payments")) || [];
+const PIN="1157";
 
-let editIndex = null;
-let selectedPhoto = null;
+const STORAGE_KEY="mesPaiements";
 
-/* AFFICHAGE */
+const BACKUP_VERSION=1;
 
-function displayPayments() {
+let payments=[];
 
-    const container = document.getElementById("payments");
+let editingPaymentId=null;
 
-    container.innerHTML = "";
+let editingInstallmentIndex=null;
 
-    if (payments.length === 0) {
+let manualPaymentId=null;
 
-        container.innerHTML =
-            '<div class="empty">Aucun paiement enregistré.</div>';
+let manualInstallmentIndex=null;
 
-        document.getElementById("deleteBtn").style.display = "none";
+let photoPaymentId=null;
 
-        return;
-    }
+let currentTab="unpaid";
 
-    payments.forEach((payment, index) => {
+let newPhotoData="";
 
-        const div = document.createElement("div");
 
-        div.className = "payment";
+function euro(value){
 
-        div.innerHTML = `
+return Number(value||0).toLocaleString(
+"fr-BE",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)+" €";
 
-            <input
-                type="checkbox"
-                class="selectPayment"
-                data-index="${index}"
-                onchange="updateDeleteButton()"
-            >
-
-            <div class="payment-info">
-
-                <div class="payment-name">
-                    ${escapeHtml(payment.name)}
-                </div>
-
-                <div class="payment-date">
-                    📅 ${payment.date || "Date non indiquée"}
-                </div>
-
-                <div class="payment-amount">
-                    💶 ${Number(payment.amount).toFixed(2)} €
-                </div>
-
-                ${
-                    payment.photo
-                    ?
-                    `<img
-                        src="${payment.photo}"
-                        class="photo-preview"
-                        style="display:block"
-                    >`
-                    :
-                    ""
-                }
-
-            </div>
-
-            <button
-                class="edit-btn"
-                onclick="editPayment(${index})"
-            >
-                ✏️
-            </button>
-
-        `;
-
-        container.appendChild(div);
-    });
-
-    updateDeleteButton();
 }
 
-/* AJOUT */
 
-function openModal() {
+function generateId(){
 
-    editIndex = null;
-    selectedPhoto = null;
+return Date.now().toString(36)+
+Math.random().toString(36).substring(2);
 
-    document.getElementById("modalTitle").innerText =
-        "Ajouter un paiement";
-
-    document.getElementById("name").value = "";
-    document.getElementById("amount").value = "";
-    document.getElementById("date").value = "";
-
-    document.getElementById("photoPreview").style.display = "none";
-    document.getElementById("photoPreview").src = "";
-
-    document.getElementById("modal").style.display = "block";
 }
 
-/* MODIFICATION */
 
-function editPayment(index) {
+function formatDate(s){
 
-    editIndex = index;
+if(!s)return"";
 
-    const payment = payments[index];
+const p=s.split("-");
 
-    selectedPhoto = payment.photo || null;
+return p.length===3
+?p[2]+"/"+p[1]+"/"+p[0]
+:s;
 
-    document.getElementById("modalTitle").innerText =
-        "Modifier le paiement";
-
-    document.getElementById("name").value =
-        payment.name;
-
-    document.getElementById("amount").value =
-        payment.amount;
-
-    document.getElementById("date").value =
-        payment.date;
-
-    const preview =
-        document.getElementById("photoPreview");
-
-    if (payment.photo) {
-
-        preview.src = payment.photo;
-        preview.style.display = "block";
-
-    } else {
-
-        preview.style.display = "none";
-
-    }
-
-    document.getElementById("modal").style.display = "block";
 }
 
-/* FERMER */
 
-function closeModal() {
+function addMonths(s,months){
 
-    document.getElementById("modal").style.display = "none";
+const p=s.split("-");
+
+let y=Number(p[0]);
+
+let m=Number(p[1])-1;
+
+let d=Number(p[2]);
+
+const r=new Date(y,m+months,1);
+
+const last=
+new Date(
+r.getFullYear(),
+r.getMonth()+1,
+0
+).getDate();
+
+r.setDate(Math.min(d,last));
+
+return[
+r.getFullYear(),
+String(r.getMonth()+1).padStart(2,"0"),
+String(r.getDate()).padStart(2,"0")
+].join("-");
+
 }
 
-/* PHOTO APPAREIL */
 
-function takePhoto() {
+function normalizeData(data){
 
-    document.getElementById("cameraInput").click();
+if(!Array.isArray(data))return[];
+
+return data.map(p=>{
+
+p.id=p.id||generateId();
+
+p.beneficiary=p.beneficiary||"";
+
+p.iban=(p.iban||"")
+.replace(/\s+/g,"")
+.toUpperCase();
+
+p.documentPhoto=p.documentPhoto||"";
+
+if(!Array.isArray(p.installments))
+p.installments=[];
+
+p.installments=p.installments.map(i=>({
+
+number:Number(i.number||1),
+
+date:i.date||"",
+
+amount:Number(i.amount||0),
+
+communication:i.communication||"",
+
+paid:Boolean(i.paid)
+
+}));
+
+p.totalAmount=
+p.installments.reduce(
+(s,i)=>s+Number(i.amount||0),
+0
+);
+
+return p;
+
+});
+
 }
 
-/* PHOTO GALERIE */
 
-function choosePhoto() {
+function loadData(){
 
-    document.getElementById("galleryInput").click();
+try{
+
+const s=
+localStorage.getItem(STORAGE_KEY);
+
+payments=
+s
+?normalizeData(JSON.parse(s))
+:[];
+
+}catch(e){
+
+payments=[];
+
 }
 
-/* PHOTO SÉLECTIONNÉE */
-
-function photoSelected(event) {
-
-    const file = event.target.files[0];
-
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-
-        selectedPhoto = e.target.result;
-
-        const preview =
-            document.getElementById("photoPreview");
-
-        preview.src = selectedPhoto;
-        preview.style.display = "block";
-
-    };
-
-    reader.readAsDataURL(file);
 }
 
-/* SAUVEGARDER */
 
-function savePayment() {
+function saveData(){
 
-    const name =
-        document.getElementById("name").value.trim();
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(payments)
+);
 
-    const amount =
-        document.getElementById("amount").value;
-
-    const date =
-        document.getElementById("date").value;
-
-    if (!name) {
-
-        alert("Merci d'indiquer le nom du paiement.");
-
-        return;
-    }
-
-    if (!amount) {
-
-        alert("Merci d'indiquer le montant.");
-
-        return;
-    }
-
-    const payment = {
-
-        name: name,
-
-        amount: parseFloat(amount),
-
-        date: date,
-
-        photo: selectedPhoto
-
-    };
-
-    if (editIndex === null) {
-
-        payments.push(payment);
-
-    } else {
-
-        payments[editIndex] = payment;
-
-    }
-
-    localStorage.setItem(
-        "payments",
-        JSON.stringify(payments)
-    );
-
-    closeModal();
-
-    displayPayments();
 }
 
-/* SUPPRESSION */
 
-function updateDeleteButton() {
+function checkPin(){
 
-    const checked =
-        document.querySelectorAll(
-            ".selectPayment:checked"
-        ).length;
+if(
+document.getElementById("pinInput").value
+===PIN
+){
 
-    document.getElementById("deleteBtn").style.display =
-        checked > 0 ? "block" : "none";
+document
+.getElementById("loginScreen")
+.classList.add("hidden");
+
+document
+.getElementById("app")
+.classList.remove("hidden");
+
+loadData();
+
+render();
+
+}else{
+
+document
+.getElementById("errorMessage")
+.textContent=
+"❌ Code PIN incorrect";
+
+document
+.getElementById("pinInput")
+.value="";
+
 }
 
-function deleteSelected() {
-
-    const selected =
-        Array.from(
-            document.querySelectorAll(
-                ".selectPayment:checked"
-            )
-        ).map(cb => Number(cb.dataset.index));
-
-    if (selected.length === 0) return;
-
-    if (!confirm(
-        "Supprimer les paiements sélectionnés ?"
-    )) return;
-
-    payments =
-        payments.filter(
-            (_, index) => !selected.includes(index)
-        );
-
-    localStorage.setItem(
-        "payments",
-        JSON.stringify(payments)
-    );
-
-    displayPayments();
 }
 
-/* SÉCURITÉ AFFICHAGE */
 
-function escapeHtml(text) {
+document
+.getElementById("pinInput")
+.addEventListener(
+"keydown",
+e=>{
+if(e.key==="Enter")
+checkPin();
+}
+);
 
-    const div = document.createElement("div");
 
-    div.textContent = text;
+/* =========================
+   PHOTO — APPAREIL / GALERIE
+   ========================= */
 
-    return div.innerHTML;
+document
+.getElementById("cameraPhoto")
+.addEventListener(
+"change",
+handlePhotoSelected
+);
+
+
+document
+.getElementById("galleryPhoto")
+.addEventListener(
+"change",
+handlePhotoSelected
+);
+
+
+function takePhoto(){
+
+document
+.getElementById("cameraPhoto")
+.click();
+
 }
 
-/* DÉMARRAGE */
 
-displayPayments();
+function choosePhoto(){
+
+document
+.getElementById("galleryPhoto")
+.click();
+
+}
+
+
+async function handlePhotoSelected(event){
+
+const file=
+event.target.files[0];
+
+if(!file){
+
+return;
+
+}
+
+try{
+
+newPhotoData=
+await compressImage(
+file,
+1280,
+0.72
+);
+
+document
+.getElementById("newPhotoImage")
+.src=
+newPhotoData;
+
+document
+.getElementById("newPhotoPreview")
+.classList
+.remove("hidden");
+
+}catch(e){
+
+alert(
+"❌ Impossible de lire cette photo."
+);
+
+clearNewPhoto();
+
+}
+
+}
+
+
+function compressImage(
+file,
+maxSize=1280,
+quality=.72
+){
+
+return new Promise(
+(resolve,reject)=>{
+
+const reader=
+new FileReader();
+
+reader.onload=()=>{
+
+const img=new Image();
+
+img.onload=()=>{
+
+let w=img.width;
+
+let h=img.height;
+
+if(
+w>maxSize ||
+h>maxSize
+){
+
+const scale=
+Math.min(
+maxSize/w,
+maxSize/h
+);
+
+w=Math.round(w*scale);
+
+h=Math.round(h*scale);
+
+}
+
+const c=
+document.createElement("canvas");
+
+c.width=w;
+
+c.height=h;
+
+c
+.getContext("2d")
+.drawImage(
+img,
+0,
+0,
+w,
+h
+);
+
+resolve(
+c.toDataURL(
+"image/jpeg",
+quality
+)
+);
+
+};
+
+img.onerror=reject;
+
+img.src=reader.result;
+
+};
+
+reader.onerror=reject;
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+
+function clearNewPhoto(){
+
+newPhotoData="";
+
+document
+.getElementById("cameraPhoto")
+.value="";
+
+document
+.getElementById("galleryPhoto")
+.value="";
+
+document
+.getElementById("newPhotoPreview")
+.classList
+.add("hidden");
+
+document
+.getElementById("newPhotoImage")
+.src="";
+
+}
+
+
+function addPayment(){
+
+const beneficiary=
+document
+.getElementById("beneficiary")
+.value
+.trim();
+
+const iban=
+document
+.getElementById("iban")
+.value
+.replace(/\s+/g,"")
+.toUpperCase();
+
+const total=
+Number(
+document
+.getElementById("totalInput")
+.value
+);
+
+const count=
+Number(
+document
+.getElementById("installmentsInput")
+.value
+);
+
+const firstDate=
+document
+.getElementById("firstDate")
+.value;
+
+const communication=
+document
+.getElementById("communication")
+.value
+.trim();
+
+
+if(!beneficiary){
+
+alert(
+"Indique le bénéficiaire."
+);
+
+return;
+
+}
+
+if(!iban){
+
+alert(
+"Indique l'IBAN."
+);
+
+return;
+
+}
+
+if(!total || total<=0){
+
+alert(
+"Indique un montant total valide."
+);
+
+return;
+
+}
+
+if(!count || count<1){
+
+alert(
+"Indique le nombre d'échéances."
+);
+
+return;
+
+}
+
+if(!firstDate){
+
+alert(
+"Indique la première date."
+);
+
+return;
+
+}
+
+
+const cents=
+Math.round(total*100);
+
+const base=
+Math.floor(cents/count);
+
+const remainder=
+cents%count;
+
+const installments=[];
+
+
+for(
+let i=0;
+i<count;
+i++
+){
+
+installments.push({
+
+number:i+1,
+
+date:addMonths(
+firstDate,
+i
+),
+
+amount:
+(
+base+
+(
+i===count-1
+?remainder
+:0
+)
+)/100,
+
+communication:
+
+communication,
+
+paid:false
+
+});
+
+}
+
+
+payments.push({
+
+id:generateId(),
+
+beneficiary:beneficiary,
+
+iban:iban,
+
+totalAmount:total,
+
+documentPhoto:newPhotoData,
+
+installments:installments
+
+});
+
+
+saveData();
+
+
+[
+"beneficiary",
+"iban",
+"totalInput",
+"installmentsInput",
+"firstDate",
+"communication"
+]
+.forEach(
+id=>
+document
+.getElementById(id)
+.value=""
+);
+
+
+clearNewPhoto();
+
+render();
+
+alert(
+"✅ Paiement ajouté !"
+);
+
+}
+
+
+function showTab(tab){
+
+currentTab=tab;
+
+document
+.getElementById("unpaidSection")
+.classList
+.toggle(
+"hidden",
+tab!=="unpaid"
+);
+
+document
+.getElementById("paidSection")
+.classList
+.toggle(
+"hidden",
+tab!=="paid"
+);
+
+document
+.getElementById("tabUnpaid")
+.classList
+.toggle(
+"active",
+tab==="unpaid"
+);
+
+document
+.getElementById("tabPaid")
+.classList
+.toggle(
+"active",
+tab==="paid"
+);
+
+updateSelectionBar();
+
+}
+
+
+function render(){
+
+let total=0;
+
+let paid=0;
+
+let uc=0;
+
+let pc=0;
+
+const ul=
+document.getElementById(
+"unpaidList"
+);
+
+const pl=
+document.getElementById(
+"paidList"
+);
+
+ul.innerHTML="";
+
+pl.innerHTML="";
+
+
+payments.forEach(
+p=>
+p.installments.forEach(
+(item,index)=>{
+
+total+=
+Number(item.amount||0);
+
+
+if(item.paid){
+
+paid+=
+Number(item.amount||0);
+
+pc++;
+
+pl.appendChild(
+createInstallmentCard(
+p,
+item,
+index
+)
+);
+
+}else{
+
+uc++;
+
+ul.appendChild(
+createInstallmentCard(
+p,
+item,
+index
+)
+);
+
+}
+
+}
+)
+);
+
+
+if(!uc){
+
+ul.innerHTML=
+'<div class="empty">🎉 Aucune échéance à payer.</div>';
+
+}
+
+
+if(!pc){
+
+pl.innerHTML=
+'<div class="empty">Aucun paiement marqué comme payé.</div>';
+
+}
+
+
+document
+.getElementById("totalAmount")
+.textContent=euro(total);
+
+document
+.getElementById("paidAmount")
+.textContent=euro(paid);
+
+document
+.getElementById("remainingAmount")
+.textContent=euro(total-paid);
+
+document
+.getElementById("unpaidCount")
+.textContent="("+uc+")";
+
+document
+.getElementById("paidCount")
+.textContent="("+pc+")";
+
+updateSelectionBar();
+
+}
+
+
+function createInstallmentCard(
+payment,
+item,
+index
+){
+
+const card=
+document.createElement("div");
+
+card.className=
+"installment"+
+(
+item.paid
+?" paid"
+:""
+);
+
+
+const top=
+document.createElement("div");
+
+top.className=
+"installmentTop";
+
+
+const checkbox=
+document.createElement("input");
+
+checkbox.type="checkbox";
+
+checkbox.className=
+"checkbox";
+
+checkbox.dataset.paymentId=
+payment.id;
+
+checkbox.dataset.installmentIndex=
+index;
+
+checkbox.checked=
+isSelected(
+payment.id,
+index
+);
+
+checkbox.addEventListener(
+"change",
+updateSelectionBar
+);
+
+top.appendChild(
+checkbox
+);
+
+
+const info=
+document.createElement("div");
+
+info.className=
+"installmentInfo";
+
+
+const ben=
+document.createElement("div");
+
+ben.className=
+"beneficiary";
+
+ben.textContent=
+payment.beneficiary;
+
+info.appendChild(ben);
+
+
+const details=
+document.createElement("div");
+
+details.className=
+"installmentDetails";
+
+
+details.innerHTML=
+"Échéance "+
+item.number+
+" • "+
+formatDate(item.date)+
+"<br>Communication : "+
+escapeHtml(
+item.communication||"—"
+);
+
+
+details.innerHTML+=
+item.paid
+?
+'<br><span class="badge paidBadge">PAYÉ</span>'
+:
+'<br><span class="badge">À PAYER</span>';
+
+
+if(payment.documentPhoto){
+
+details.innerHTML+=
+'<br><span class="documentBadge">📄 Document disponible</span>';
+
+}
+
+
+info.appendChild(
+details
+);
+
+top.appendChild(
+info
+);
+
+
+const amount=
+document.createElement("div");
+
+amount.className="amount";
+
+amount.textContent=
+euro(item.amount);
+
+top.appendChild(
+amount
+);
+
+card.appendChild(
+top
+);
+
+
+const actions=
+document.createElement("div");
+
+actions.className=
+"actions";
+
+
+if(!item.paid){
+
+const b=
+document.createElement("button");
+
+b.className=
+"success small";
+
+b.textContent=
+"🏦 Payer";
+
+b.onclick=()=>
+openManualPayment(
+payment.id,
+index
+);
+
+actions.appendChild(b);
+
+}
+
+
+if(payment.documentPhoto){
+
+const b=
+document.createElement("button");
+
+b.className=
+"secondary small";
+
+b.textContent=
+"📄 Voir document";
+
+b.onclick=()=>
+openPhoto(
+payment.id
+);
+
+actions.appendChild(b);
+
+}
+
+
+const eb=
+document.createElement("button");
+
+eb.className=
+"secondary small";
+
+eb.textContent=
+"✏️ Modifier";
+
+eb.onclick=()=>
+editInstallment(
+payment.id,
+index
+);
+
+actions.appendChild(eb);
+
+
+const gb=
+document.createElement("button");
+
+gb.className=
+"secondary small";
+
+gb.textContent=
+"📅 Google Agenda";
+
+gb.onclick=()=>
+addToGoogleCalendar(
+payment.id,
+index
+);
+
+actions.appendChild(gb);
+
+
+const pb=
+document.createElement("button");
+
+pb.className=
+(
+item.paid
+?"warning"
+:"success"
+)+
+" small";
+
+pb.textContent=
+item.paid
+?
+"↩️ Remettre à payer"
+:
+"✅ Marquer payé";
+
+pb.onclick=()=>
+togglePaid(
+payment.id,
+index
+);
+
+actions.appendChild(pb);
+
+
+card.appendChild(
+actions
+);
+
+return card;
+
+}
+
+
+function isSelected(
+id,
+index
+){
+
+const box=
+document.querySelector(
+'input[type="checkbox"][data-payment-id="'+
+CSS.escape(id)+
+'"][data-installment-index="'+
+index+
+'"]'
+);
+
+return box?.checked||false;
+
+}
+
+
+function getSelectedItems(){
+
+return Array.from(
+document.querySelectorAll(
+".checkbox:checked"
+)
+)
+.map(
+b=>({
+
+paymentId:
+b.dataset.paymentId,
+
+installmentIndex:
+Number(
+b.dataset.installmentIndex
+)
+
+})
+);
+
+}
+
+
+function updateSelectionBar(){
+
+const selected=
+getSelectedItems();
+
+const count=
+selected.length;
+
+
+document
+.getElementById("selectionBar")
+.classList
+.toggle(
+"visible",
+count>0
+);
+
+
+document
+.getElementById("selectedCount")
+.textContent=count;
+
+
+document
+.getElementById("selectedText")
+.textContent=
+count===1
+?
+"1 sélectionné"
+:
+count+
+" sélectionnés";
+
+
+const boxes=
+Array.from(
+document.querySelectorAll(
+".checkbox"
+)
+);
+
+
+document
+.getElementById("selectAll")
+.checked=
+boxes.length>0 &&
+boxes.every(
+b=>b.checked
+);
+
+}
+
+
+function toggleSelectAll(){
+
+const value=
+document
+.getElementById("selectAll")
+.checked;
+
+
+document
+.querySelectorAll(
+".checkbox"
+)
+.forEach(
+b=>b.checked=value
+);
+
+
+updateSelectionBar();
+
+}
+
+
+function deleteSelected(){
+
+const selected=
+getSelectedItems();
+
+if(!selected.length)
+return;
+
+
+if(
+!confirm(
+(
+selected.length===1
+?
+"Supprimer cette échéance ?"
+:
+"Supprimer les "+
+selected.length+
+" échéances sélectionnées ?"
+)+
+"\n\nCette action est définitive."
+)
+)
+return;
+
+
+const grouped={};
+
+
+selected.forEach(
+x=>{
+
+if(!grouped[x.paymentId])
+grouped[x.paymentId]=[];
+
+grouped[x.paymentId]
+.push(
+x.installmentIndex
+);
+
+}
+);
+
+
+Object.keys(grouped)
+.forEach(
+id=>{
+
+const p=
+payments.find(
+x=>x.id===id
+);
+
+if(!p)return;
+
+
+grouped[id]
+.sort(
+(a,b)=>b-a
+)
+.forEach(
+i=>
+p.installments.splice(
+i,
+1
+)
+);
+
+
+if(!p.installments.length){
+
+payments=
+payments.filter(
+x=>x.id!==id
+);
+
+}else{
+
+p.totalAmount=
+p.installments.reduce(
+(s,i)=>
+s+
+Number(
+i.amount||0
+),
+0
+);
+
+}
+
+}
+);
+
+
+saveData();
+
+render();
+
+alert(
+"🗑️ Suppression terminée."
+);
+
+}
+
+
+function togglePaid(
+id,
+index
+){
+
+const p=
+payments.find(
+x=>x.id===id
+);
+
+if(
+!p ||
+!p.installments[index]
+)
+return;
+
+
+p.installments[index].paid=
+!p.installments[index].paid;
+
+saveData();
+
+render();
+
+}
+
+
+function editInstallment(
+id,
+index
+){
+
+const p=
+payments.find(
+x=>x.id===id
+);
+
+if(
+!p ||
+!p.installments[index]
+)
+return;
+
+
+editingPaymentId=id;
+
+editingInstallmentIndex=
+index;
+
+
+const i=
+p.installments[index];
+
+
+document
+.getElementById("editDate")
+.value=i.date;
+
+
+document
+.getElementById("editAmount")
+.value=i.amount;
+
+
+document
+.getElementById("editCommunication")
+.value=i.communication;
+
+
+document
+.getElementById("editModal")
+.classList
+.add("show");
+
+}
+
+
+function closeEdit(){
+
+document
+.getElementById("editModal")
+.classList
+.remove("show");
+
+editingPaymentId=null;
+
+editingInstallmentIndex=null;
+
+}
+
+
+function saveEdit(){
+
+const p=
+payments.find(
+x=>x.id===editingPaymentId
+);
+
+if(!p)return;
+
+
+const i=
+p.installments[
+editingInstallmentIndex
+];
+
+if(!i)return;
+
+
+const date=
+document
+.getElementById("editDate")
+.value;
+
+const amount=
+Number(
+document
+.getElementById("editAmount")
+.value
+);
+
+const communication=
+document
+.getElementById("editCommunication")
+.value
+.trim();
+
+
+if(!date){
+
+alert(
+"Indique une date."
+);
+
+return;
+
+}
+
+
+if(
+isNaN(amount) ||
+amount<0
+){
+
+alert(
+"Indique un montant valide."
+);
+
+return;
+
+}
+
+
+i.date=date;
+
+i.amount=amount;
+
+i.communication=
+communication;
+
+
+p.totalAmount=
+p.installments.reduce(
+(s,x)=>
+s+
+Number(x.amount||0),
+0
+);
+
+
+saveData();
+
+closeEdit();
+
+render();
+
+}
+
+
+function openManualPayment(
+id,
+index
+){
+
+const p=
+payments.find(
+x=>x.id===id
+);
+
+if(
+!p ||
+!p.installments[index]
+)
+return;
+
+
+const i=
+p.installments[index];
+
+
+manualPaymentId=id;
+
+manualInstallmentIndex=
+index;
+
+
+document
+.getElementById(
+"manualPaymentSubtitle"
+)
+.textContent=
+"Échéance "+
+i.number+
+" • "+
+formatDate(i.date);
+
+
+document
+.getElementById(
+"manualBeneficiary"
+)
+.textContent=
+p.beneficiary;
+
+
+document
+.getElementById(
+"manualIban"
+)
+.textContent=
+p.iban||"—";
+
+
+document
+.getElementById(
+"manualAmount"
+)
+.textContent=
+euro(i.amount);
+
+
+document
+.getElementById(
+"manualCommunication"
+)
+.textContent=
+i.communication||"—";
+
+
+resetCopyButtons();
+
+
+document
+.getElementById(
+"manualPaymentModal"
+)
+.classList
+.add("show");
+
+}
+
+
+function closeManualPayment(){
+
+document
+.getElementById(
+"manualPaymentModal"
+)
+.classList
+.remove("show");
+
+manualPaymentId=null;
+
+manualInstallmentIndex=null;
+
+}
+
+
+function getCopyValue(type){
+
+const p=
+payments.find(
+x=>x.id===manualPaymentId
+);
+
+const i=
+p?.installments[
+manualInstallmentIndex
+];
+
+if(!p||!i)
+return"";
+
+
+if(type==="beneficiary")
+return p.beneficiary;
+
+if(type==="iban")
+return p.iban;
+
+if(type==="amount")
+return Number(i.amount)
+.toFixed(2)
+.replace(
+".",
+","
+);
+
+if(type==="communication")
+return i.communication;
+
+return"";
+
+}
+
+
+async function copyBankField(
+type
+){
+
+const value=
+getCopyValue(type);
+
+if(!value)return;
+
+
+try{
+
+await navigator.clipboard
+.writeText(value);
+
+}catch(e){
+
+const t=
+document.createElement(
+"textarea"
+);
+
+t.value=value;
+
+document.body.appendChild(t);
+
+t.select();
+
+document.execCommand(
+"copy"
+);
+
+t.remove();
+
+}
+
+
+const b=
+document.querySelector(
+'.copyButton[data-copy-type="'+
+type+
+'"]'
+);
+
+if(!b)return;
+
+
+b.textContent=
+"✓ Copié";
+
+b.classList.add(
+"copied"
+);
+
+
+setTimeout(
+()=>{
+
+b.textContent=
+"Copier";
+
+b.classList.remove(
+"copied"
+);
+
+},
+1500
+);
+
+}
+
+
+function resetCopyButtons(){
+
+document
+.querySelectorAll(
+".copyButton"
+)
+.forEach(
+b=>{
+
+b.textContent=
+"Copier";
+
+b.classList.remove(
+"copied"
+);
+
+}
+);
+
+}
+
+
+function addToGoogleCalendar(
+id,
+index
+){
+
+const p=
+payments.find(
+x=>x.id===id
+);
+
+if(
+!p ||
+!p.installments[index]
+)
+return;
+
+
+const i=
+p.installments[index];
+
+
+const start=
+i.date.replace(
+/-/g,
+""
+)+
+"T090000";
+
+
+const end=
+i.date.replace(
+/-/g,
+""
+)+
+"T100000";
+
+
+const title=
+"Paiement - "+
+p.beneficiary+
+" - Échéance "+
+i.number;
+
+
+const details=
+"Montant : "+
+euro(i.amount)+
+"\nIBAN : "+
+p.iban+
+"\nCommunication : "+
+i.communication;
+
+
+const url=
+"https://calendar.google.com/calendar/render"+
+"?action=TEMPLATE"+
+"&text="+
+encodeURIComponent(title)+
+"&dates="+
+start+
+"/"+
+end+
+"&details="+
+encodeURIComponent(details);
+
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+
+function openPhoto(id){
+
+const p=
+payments.find(
+x=>x.id===id
+);
+
+if(
+!p ||
+!p.documentPhoto
+)
+return;
+
+
+photoPaymentId=id;
+
+
+document
+.getElementById("fullPhoto")
+.src=
+p.documentPhoto;
+
+
+document
+.getElementById("photoModal")
+.classList
+.add("show");
+
+}
+
+
+function closePhoto(){
+
+document
+.getElementById("photoModal")
+.classList
+.remove("show");
+
+document
+.getElementById("fullPhoto")
+.src="";
+
+photoPaymentId=null;
+
+}
+
+
+function removeCurrentPhoto(){
+
+if(!photoPaymentId)
+return;
+
+
+if(
+!confirm(
+"Supprimer le document de ce paiement ?"
+)
+)
+return;
+
+
+const p=
+payments.find(
+x=>x.id===photoPaymentId
+);
+
+
+if(p)
+p.documentPhoto="";
+
+
+saveData();
+
+closePhoto();
+
+render();
+
+}
+
+
+function exportData(){
+
+const backup={
+
+app:"Mes paiements",
+
+version:BACKUP_VERSION,
+
+exportedAt:
+new Date().toISOString(),
+
+payments:payments
+
+};
+
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+
+const url=
+URL.createObjectURL(blob);
+
+
+const link=
+document.createElement(
+"a"
+);
+
+
+link.href=url;
+
+
+link.download=
+"mes-paiements-sauvegarde-"+
+new Date()
+.toISOString()
+.slice(
+0,
+10
+)+
+".json";
+
+
+document.body.appendChild(
+link
+);
+
+link.click();
+
+link.remove();
+
+URL.revokeObjectURL(
+url
+);
+
+}
+
+
+function importData(event){
+
+const file=
+event.target.files[0];
+
+if(!file)return;
+
+
+const reader=
+new FileReader();
+
+
+reader.onload=e=>{
+
+try{
+
+const backup=
+JSON.parse(
+e.target.result
+);
+
+
+if(
+!backup ||
+backup.app!=="Mes paiements" ||
+!Array.isArray(
+backup.payments
+)
+){
+
+alert(
+"❌ Fichier de sauvegarde invalide."
+);
+
+return;
+
+}
+
+
+if(
+!confirm(
+"Importer cette sauvegarde ?\n\n"+
+"Les paiements actuellement présents seront remplacés."
+)
+)
+return;
+
+
+payments=
+normalizeData(
+backup.payments
+);
+
+
+saveData();
+
+currentTab="unpaid";
+
+render();
+
+showTab("unpaid");
+
+alert(
+"✅ Sauvegarde importée."
+);
+
+
+}catch(err){
+
+alert(
+"❌ Impossible de lire la sauvegarde."
+);
+
+}
+
+};
+
+
+reader.readAsText(file);
+
+event.target.value="";
+
+}
+
+
+function escapeHtml(v){
+
+return String(v||"")
+.replace(
+/&/g,
+"&amp;"
+)
+.replace(
+/</g,
+"&lt;"
+)
+.replace(
+/>/g,
+"&gt;"
+)
+.replace(
+/"/g,
+"&quot;"
+)
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
+
+
+document
+.getElementById("editModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target===
+e.currentTarget
+)
+closeEdit();
+
+}
+);
+
+
+document
+.getElementById("manualPaymentModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target===
+e.currentTarget
+)
+closeManualPayment();
+
+}
+);
+
+
+document
+.getElementById("photoModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target===
+e.currentTarget
+)
+closePhoto();
+
+}
+);
 
 </script>
 
