@@ -23,27 +23,19 @@ box-sizing:border-box;
 
 body{
 margin:0;
-font-family:-apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-Arial,
-sans-serif;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 background:#f2f2f7;
 color:#111;
 }
 
-button,
-input{
+button,input{
 font-family:inherit;
 }
 
 .header{
 background:#007aff;
 color:white;
-padding:
-calc(env(safe-area-inset-top) + 15px)
-18px 16px;
+padding:calc(env(safe-area-inset-top) + 15px) 18px 16px;
 font-size:22px;
 font-weight:700;
 }
@@ -468,9 +460,6 @@ margin-top:12px;
 flex:1;
 }
 
-
-/* QR */
-
 .qrContainer{
 text-align:center;
 padding:10px 0;
@@ -506,9 +495,6 @@ margin-top:10px;
 text-align:center;
 }
 
-
-/* CALCULETTE */
-
 .calculatorDisplay{
 font-size:25px;
 font-weight:700;
@@ -533,9 +519,6 @@ margin-top:8px;
 width:100%;
 font-size:18px;
 }
-
-
-/* BNP */
 
 .bnpInfo{
 background:#f2f2f7;
@@ -573,15 +556,24 @@ color:white;
 width:100%;
 }
 
+.bnpTest{
+background:#111;
+color:white;
+width:100%;
+text-align:left;
+}
+
+.bnpTest span{
+float:right;
+opacity:.7;
+}
+
 .bnpNote{
 font-size:12px;
 color:#777;
 line-height:1.5;
 margin-top:12px;
 }
-
-
-/* ERREUR / VIDE */
 
 .empty{
 background:white;
@@ -593,15 +585,9 @@ margin-bottom:15px;
 }
 
 </style>
-
 </head>
 
 <body>
-
-
-<!-- =========================
-     CONNEXION
-========================= -->
 
 <div id="loginScreen" class="login">
 
@@ -637,66 +623,33 @@ Ouvrir
 </div>
 
 
-<!-- =========================
-     APPLICATION
-========================= -->
-
 <div id="app" class="hidden">
 
 <div class="header">
 Mes paiements
 </div>
 
-
 <div class="container">
-
-
-<!-- RESUME -->
 
 <div class="summary">
 
 <div class="summaryBox">
-
-<div class="summaryTitle">
-Total
+<div class="summaryTitle">Total</div>
+<div id="totalValue" class="summaryValue">0,00 €</div>
 </div>
-
-<div id="totalValue" class="summaryValue">
-0,00 €
-</div>
-
-</div>
-
 
 <div class="summaryBox">
-
-<div class="summaryTitle">
-Payé
+<div class="summaryTitle">Payé</div>
+<div id="paidValue" class="summaryValue">0,00 €</div>
 </div>
-
-<div id="paidValue" class="summaryValue">
-0,00 €
-</div>
-
-</div>
-
 
 <div class="summaryBox">
-
-<div class="summaryTitle">
-Reste
-</div>
-
-<div id="remainingValue" class="summaryValue">
-0,00 €
+<div class="summaryTitle">Reste</div>
+<div id="remainingValue" class="summaryValue">0,00 €</div>
 </div>
 
 </div>
 
-</div>
-
-
-<!-- ONGLETS -->
 
 <div class="tabs">
 
@@ -723,18 +676,10 @@ Payé
 </div>
 
 
-<!-- SELECTION -->
+<div id="selectionBar" class="selectionBar">
 
-<div
-id="selectionBar"
-class="selectionBar">
-
-<div
-id="selectionInfo"
-class="selectionInfo">
-
+<div id="selectionInfo" class="selectionInfo">
 0 sélectionné
-
 </div>
 
 <button
@@ -753,47 +698,29 @@ Supprimer
 <div id="paidList" class="hidden"></div>
 
 
-<!-- =========================
-     AJOUT PAIEMENT
-========================= -->
-
 <div class="card">
 
-<h2>
-Ajouter un paiement
-</h2>
+<h2>Ajouter un paiement</h2>
 
-
-<label>
-Alias / raccourci
-</label>
+<label>Alias / raccourci</label>
 
 <input
 id="alias"
 placeholder="Ex : Taxe maison">
 
-
-<label>
-Bénéficiaire
-</label>
+<label>Bénéficiaire</label>
 
 <input
 id="beneficiary"
 placeholder="Nom du bénéficiaire">
 
-
-<label>
-IBAN
-</label>
+<label>IBAN</label>
 
 <input
 id="iban"
 placeholder="BE...">
 
-
-<label>
-Montant total
-</label>
+<label>Montant total</label>
 
 <input
 id="totalAmount"
@@ -802,10 +729,7 @@ step="0.01"
 inputmode="decimal"
 placeholder="0,00">
 
-
-<label>
-Nombre d'échéances
-</label>
+<label>Nombre d'échéances</label>
 
 <input
 id="installments"
@@ -813,28 +737,19 @@ type="number"
 min="1"
 value="1">
 
-
-<label>
-Première échéance
-</label>
+<label>Première échéance</label>
 
 <input
 id="firstDate"
 type="date">
 
-
-<label>
-Communication
-</label>
+<label>Communication</label>
 
 <input
 id="communication"
 placeholder="Communication">
 
-
-<label>
-Document
-</label>
+<label>Document</label>
 
 <div class="photoButtons">
 
@@ -856,19 +771,16 @@ onclick="document.getElementById('galleryInput').click()">
 
 </div>
 
-
 <input
 id="cameraInput"
 type="file"
 accept="image/*"
 capture="environment">
 
-
 <input
 id="galleryInput"
 type="file"
 accept="image/*">
-
 
 <div id="addPhotoPreview"></div>
 
@@ -885,15 +797,9 @@ Ajouter le paiement
 </div>
 
 
-<!-- =========================
-     CALCULETTE
-========================= -->
-
 <div class="card">
 
-<h2>
-🧮 Calculette
-</h2>
+<h2>🧮 Calculette</h2>
 
 <input
 id="calcDisplay"
@@ -901,7 +807,6 @@ class="calculatorDisplay"
 type="text"
 readonly
 placeholder="0">
-
 
 <div class="calculatorGrid">
 
@@ -938,15 +843,9 @@ onclick="calcResult()">
 </div>
 
 
-<!-- =========================
-     SAUVEGARDE
-========================= -->
-
 <div class="card">
 
-<h2>
-Sauvegarde
-</h2>
+<h2>Sauvegarde</h2>
 
 <button
 class="secondary"
@@ -971,15 +870,9 @@ accept=".json">
 
 </div>
 
-
+</div>
 </div>
 
-</div>
-
-
-<!-- =========================
-     MODALE MODIFICATION
-========================= -->
 
 <div id="editModal" class="modal">
 
@@ -989,73 +882,39 @@ accept=".json">
 Modifier l'échéance
 </div>
 
-<label>
-Alias
-</label>
-
+<label>Alias</label>
 <input id="editAlias">
 
-<label>
-Bénéficiaire
-</label>
-
+<label>Bénéficiaire</label>
 <input id="editBeneficiary">
 
-<label>
-IBAN
-</label>
-
+<label>IBAN</label>
 <input id="editIban">
 
-<label>
-Date
-</label>
-
+<label>Date</label>
 <input id="editDate" type="date">
 
-<label>
-Montant
-</label>
+<label>Montant</label>
+<input id="editAmount" type="number" step="0.01">
 
-<input
-id="editAmount"
-type="number"
-step="0.01">
-
-<label>
-Communication
-</label>
-
+<label>Communication</label>
 <input id="editCommunication">
 
 <div class="modalActions">
 
-<button
-class="secondary"
-onclick="closeEdit()">
-
+<button class="secondary" onclick="closeEdit()">
 Annuler
-
 </button>
 
-<button
-class="primary"
-onclick="saveEdit()">
-
+<button class="primary" onclick="saveEdit()">
 Enregistrer
-
 </button>
 
 </div>
 
 </div>
-
 </div>
 
-
-<!-- =========================
-     MODALE PAIEMENT MANUEL
-========================= -->
 
 <div id="manualModal" class="modal">
 
@@ -1080,28 +939,29 @@ Fermer
 </div>
 
 </div>
-
 </div>
 
-
-<!-- =========================
-     MODALE BNP
-========================= -->
 
 <div id="bnpModal" class="modal">
 
 <div class="modalBox">
 
 <div class="modalTitle">
-🏦 Préparer le virement BNP
+🏦 Tests Easy Banking BNP
 </div>
 
 <div id="bnpContent"></div>
 
 <div class="bnpNote">
-Les informations ci-dessus sont simplement préparées pour ton virement.
-Tu peux copier chaque élément puis ouvrir BNP Paribas Fortis et introduire le virement dans Easy Banking.
-Vérifie toujours les informations avant de valider.
+
+Nous testons ici différents chemins possibles
+pour ouvrir une fonction de l'application BNP.
+
+Aucun site internet BNP ne sera ouvert.
+
+Après chaque test, note simplement sur quel écran
+l'application BNP arrive.
+
 </div>
 
 <div class="modalActions">
@@ -1117,13 +977,8 @@ Fermer
 </div>
 
 </div>
-
 </div>
 
-
-<!-- =========================
-     MODALE QR
-========================= -->
 
 <div id="qrModal" class="modal">
 
@@ -1159,13 +1014,8 @@ Fermer
 </div>
 
 </div>
-
 </div>
 
-
-<!-- =========================
-     MODALE PHOTO
-========================= -->
 
 <div id="photoModal" class="modal">
 
@@ -1200,45 +1050,27 @@ Fermer
 </div>
 
 </div>
-
 </div>
 
 
 <script>
 
-/* =========================
-   DONNEES
-========================= */
-
 const PIN="1157";
 
 let data=[];
-
 let currentTab="unpaid";
-
 let selectedIds=new Set();
-
 let editId=null;
-
 let manualId=null;
-
 let photoId=null;
-
 let qrId=null;
-
 let bnpId=null;
-
 let addPhotoData="";
 
 
-/* =========================
-   OUTILS
-========================= */
-
 function euro(value){
 
-return Number(value || 0)
-.toLocaleString(
+return Number(value||0).toLocaleString(
 "fr-BE",
 {
 style:"currency",
@@ -1251,67 +1083,40 @@ currency:"EUR"
 
 function generateId(){
 
-return Date.now().toString()
-+
-Math.random()
-.toString(36)
-.substring(2,9);
+return Date.now().toString()+
+Math.random().toString(36).substring(2,9);
 
 }
 
 
 function formatDate(date){
 
-if(!date)
-return "";
+if(!date)return "";
 
-const d=
-new Date(
-date+"T00:00:00"
-);
+const d=new Date(date+"T00:00:00");
 
-return d.toLocaleDateString(
-"fr-BE"
-);
+return d.toLocaleDateString("fr-BE");
 
 }
 
 
 function addMonths(date,months){
 
-const d=
-new Date(
-date+"T00:00:00"
-);
+const d=new Date(date+"T00:00:00");
 
-d.setMonth(
-d.getMonth()+months
-);
+d.setMonth(d.getMonth()+months);
 
-return d.toISOString()
-.substring(0,10);
+return d.toISOString().substring(0,10);
 
 }
 
 
-/* ID unique pour sélection */
+function selectionKey(paymentId,installmentId){
 
-function selectionKey(
-paymentId,
-installmentId
-){
-
-return String(paymentId)
-+
-"::"+
-String(installmentId);
+return String(paymentId)+"::"+String(installmentId);
 
 }
 
-
-/* =========================
-   NORMALISATION
-========================= */
 
 function normalizeData(){
 
@@ -1320,37 +1125,24 @@ data=[];
 
 data.forEach(p=>{
 
-if(!p.id)
-p.id=generateId();
-
-if(!p.alias)
-p.alias="";
-
-if(!p.beneficiary)
-p.beneficiary="";
-
-if(!p.iban)
-p.iban="";
-
-if(!p.communication)
-p.communication="";
-
-if(!p.photo)
-p.photo="";
-
+if(!p.id)p.id=generateId();
+if(!p.alias)p.alias="";
+if(!p.beneficiary)p.beneficiary="";
+if(!p.iban)p.iban="";
+if(!p.communication)p.communication="";
+if(!p.photo)p.photo="";
 if(!Array.isArray(p.installments))
 p.installments=[];
 
 p.installments.forEach(i=>{
 
-if(!i.id)
-i.id=generateId();
+if(!i.id)i.id=generateId();
 
 if(typeof i.paid!=="boolean")
 i.paid=false;
 
-if(i.amount===undefined ||
-i.amount===null ||
+if(i.amount===undefined||
+i.amount===null||
 i.amount==="")
 i.amount=0;
 
@@ -1361,34 +1153,22 @@ i.amount=0;
 }
 
 
-/* =========================
-   CHARGEMENT
-========================= */
-
 function loadData(){
 
 try{
 
-const saved=
-localStorage.getItem(
-"mesPaiements"
-);
+const saved=localStorage.getItem("mesPaiements");
 
 if(saved){
 
 data=JSON.parse(saved);
-
 normalizeData();
 
 }
 
 }catch(e){
 
-console.error(
-"Erreur chargement :",
-e
-);
-
+console.error("Erreur chargement :",e);
 data=[];
 
 }
@@ -1397,10 +1177,6 @@ render();
 
 }
 
-
-/* =========================
-   SAUVEGARDE
-========================= */
 
 function saveData(){
 
@@ -1413,10 +1189,7 @@ JSON.stringify(data)
 
 }catch(e){
 
-console.error(
-"Erreur sauvegarde :",
-e
-);
+console.error("Erreur sauvegarde :",e);
 
 alert(
 "Impossible de sauvegarder les données."
@@ -1427,94 +1200,64 @@ alert(
 }
 
 
-/* =========================
-   PIN
-========================= */
-
 function checkPin(){
 
 const value=
-document.getElementById(
-"pinInput"
-).value;
+document.getElementById("pinInput").value;
 
 if(value===PIN){
 
 document.getElementById(
 "loginScreen"
-).classList.add(
-"hidden"
-);
+).classList.add("hidden");
 
 document.getElementById(
 "app"
-).classList.remove(
-"hidden"
-);
+).classList.remove("hidden");
 
 loadData();
 
 }else{
 
-alert(
-"Code PIN incorrect"
-);
+alert("Code PIN incorrect");
 
-document.getElementById(
-"pinInput"
-).value="";
+document.getElementById("pinInput").value="";
 
 }
 
 }
 
-
-/* =========================
-   PHOTO
-========================= */
 
 function handlePhoto(file){
 
-if(!file)
-return;
+if(!file)return;
 
-const reader=
-new FileReader();
+const reader=new FileReader();
 
 reader.onload=function(e){
 
-const img=
-new Image();
+const img=new Image();
 
 img.onload=function(){
 
-const canvas=
-document.createElement(
-"canvas"
-);
+const canvas=document.createElement("canvas");
 
 const maxWidth=1400;
 
 let width=img.width;
-
 let height=img.height;
 
 if(width>maxWidth){
 
-height=
-height*
-(maxWidth/width);
-
+height=height*(maxWidth/width);
 width=maxWidth;
 
 }
 
 canvas.width=width;
-
 canvas.height=height;
 
-const ctx=
-canvas.getContext("2d");
+const ctx=canvas.getContext("2d");
 
 ctx.drawImage(
 img,
@@ -1524,8 +1267,7 @@ width,
 height
 );
 
-addPhotoData=
-canvas.toDataURL(
+addPhotoData=canvas.toDataURL(
 "image/jpeg",
 0.75
 );
@@ -1550,9 +1292,8 @@ reader.readAsDataURL(file);
 }
 
 
-document.getElementById(
-"cameraInput"
-).addEventListener(
+document.getElementById("cameraInput")
+.addEventListener(
 "change",
 function(){
 
@@ -1562,9 +1303,8 @@ handlePhoto(this.files[0]);
 );
 
 
-document.getElementById(
-"galleryInput"
-).addEventListener(
+document.getElementById("galleryInput")
+.addEventListener(
 "change",
 function(){
 
@@ -1573,61 +1313,41 @@ handlePhoto(this.files[0]);
 }
 );
 
-
-/* =========================
-   AJOUT PAIEMENT
-========================= */
 
 function addPayment(){
 
 const alias=
-document.getElementById(
-"alias"
-).value.trim();
+document.getElementById("alias").value.trim();
 
 const beneficiary=
-document.getElementById(
-"beneficiary"
-).value.trim();
+document.getElementById("beneficiary").value.trim();
 
 const iban=
-document.getElementById(
-"iban"
-).value.trim()
+document.getElementById("iban").value.trim()
 .toUpperCase()
 .replace(/\s/g,"");
 
-const total=
-parseFloat(
-document.getElementById(
-"totalAmount"
-).value
+const total=parseFloat(
+document.getElementById("totalAmount").value
 );
 
-const count=
-parseInt(
-document.getElementById(
-"installments"
-).value
+const count=parseInt(
+document.getElementById("installments").value
 );
 
 const firstDate=
-document.getElementById(
-"firstDate"
-).value;
+document.getElementById("firstDate").value;
 
 const communication=
-document.getElementById(
-"communication"
-).value.trim();
+document.getElementById("communication").value.trim();
 
 
 if(
-!beneficiary ||
-isNaN(total) ||
-total<=0 ||
-isNaN(count) ||
-count<1 ||
+!beneficiary||
+isNaN(total)||
+total<=0||
+isNaN(count)||
+count<1||
 !firstDate
 ){
 
@@ -1640,28 +1360,18 @@ return;
 }
 
 
-const base=
-Math.floor(
+const base=Math.floor(
 (total/count)*100
 )/100;
 
-const last=
-Math.round(
-(
-total-
-base*(count-1)
-)*100
+const last=Math.round(
+(total-base*(count-1))*100
 )/100;
-
 
 const installments=[];
 
 
-for(
-let i=0;
-i<count;
-i++
-){
+for(let i=0;i<count;i++){
 
 installments.push({
 
@@ -1672,8 +1382,7 @@ firstDate,
 i
 ),
 
-amount:
-i===count-1
+amount:i===count-1
 ?last
 :base,
 
@@ -1711,67 +1420,28 @@ selectedIds.clear();
 
 render();
 
-alert(
-"Paiement ajouté."
-);
+alert("Paiement ajouté.");
 
 }
 
 
-/* =========================
-   RESET AJOUT
-========================= */
-
 function resetAddForm(){
 
-document.getElementById(
-"alias"
-).value="";
-
-document.getElementById(
-"beneficiary"
-).value="";
-
-document.getElementById(
-"iban"
-).value="";
-
-document.getElementById(
-"totalAmount"
-).value="";
-
-document.getElementById(
-"installments"
-).value="1";
-
-document.getElementById(
-"firstDate"
-).value="";
-
-document.getElementById(
-"communication"
-).value="";
-
-document.getElementById(
-"addPhotoPreview"
-).innerHTML="";
-
-document.getElementById(
-"cameraInput"
-).value="";
-
-document.getElementById(
-"galleryInput"
-).value="";
+document.getElementById("alias").value="";
+document.getElementById("beneficiary").value="";
+document.getElementById("iban").value="";
+document.getElementById("totalAmount").value="";
+document.getElementById("installments").value="1";
+document.getElementById("firstDate").value="";
+document.getElementById("communication").value="";
+document.getElementById("addPhotoPreview").innerHTML="";
+document.getElementById("cameraInput").value="";
+document.getElementById("galleryInput").value="";
 
 addPhotoData="";
 
 }
 
-
-/* =========================
-   ONGLETS
-========================= */
 
 function showTab(tab){
 
@@ -1810,35 +1480,22 @@ render();
 }
 
 
-/* =========================
-   AFFICHAGE
-========================= */
-
 function render(){
 
 normalizeData();
 
 const unpaidList=
-document.getElementById(
-"unpaidList"
-);
+document.getElementById("unpaidList");
 
 const paidList=
-document.getElementById(
-"paidList"
-);
+document.getElementById("paidList");
 
 unpaidList.innerHTML="";
-
 paidList.innerHTML="";
 
-
 let total=0;
-
 let paid=0;
-
 let unpaidCount=0;
-
 let paidCount=0;
 
 
@@ -1846,14 +1503,11 @@ data.forEach(payment=>{
 
 payment.installments.forEach(inst=>{
 
-total+=
-Number(inst.amount||0);
+total+=Number(inst.amount||0);
 
 if(inst.paid){
 
-paid+=
-Number(inst.amount||0);
-
+paid+=Number(inst.amount||0);
 paidCount++;
 
 }else{
@@ -1867,47 +1521,24 @@ unpaidCount++;
 });
 
 
-document.getElementById(
-"totalValue"
-).textContent=
-euro(total);
-
-document.getElementById(
-"paidValue"
-).textContent=
-euro(paid);
-
-document.getElementById(
-"remainingValue"
-).textContent=
-euro(total-paid);
-
-document.getElementById(
-"unpaidCount"
-).textContent=
-unpaidCount;
-
-document.getElementById(
-"paidCount"
-).textContent=
-paidCount;
+document.getElementById("totalValue").textContent=euro(total);
+document.getElementById("paidValue").textContent=euro(paid);
+document.getElementById("remainingValue").textContent=euro(total-paid);
+document.getElementById("unpaidCount").textContent=unpaidCount;
+document.getElementById("paidCount").textContent=paidCount;
 
 
 data.forEach(payment=>{
 
-const visible=
-payment.installments.filter(
-i=>
-currentTab==="unpaid"
-? !i.paid
-: i.paid
+const visible=payment.installments.filter(
+i=>currentTab==="unpaid"
+?!i.paid
+:i.paid
 );
 
-if(!visible.length)
-return;
+if(!visible.length)return;
 
-const group=
-createPaymentGroup(
+const group=createPaymentGroup(
 payment,
 visible
 );
@@ -1925,46 +1556,26 @@ updateSelectionBar();
 }
 
 
-/* =========================
-   GROUPE PAIEMENT
-========================= */
+function createPaymentGroup(payment,installments){
 
-function createPaymentGroup(
-payment,
-installments
-){
+const group=document.createElement("div");
 
-const group=
-document.createElement("div");
+group.className="paymentGroup";
 
-group.className=
-"paymentGroup";
+const header=document.createElement("div");
 
+header.className="paymentGroupHeader";
 
-const header=
-document.createElement("div");
-
-header.className=
-"paymentGroupHeader";
-
-
-const alias=
-payment.alias ||
-"Sans alias";
-
+const alias=payment.alias||"Sans alias";
 
 const totalInstallments=
 payment.installments.length;
 
 const paidInstallments=
-payment.installments.filter(
-i=>i.paid
-).length;
+payment.installments.filter(i=>i.paid).length;
 
 const remainingInstallments=
-payment.installments.filter(
-i=>!i.paid
-).length;
+payment.installments.filter(i=>!i.paid).length;
 
 
 header.innerHTML=
@@ -1989,72 +1600,47 @@ restante(s)
 </div>
 `;
 
-
 group.appendChild(header);
-
 
 installments.forEach(inst=>{
 
 group.appendChild(
-createInstallmentCard(
-payment,
-inst
-)
+createInstallmentCard(payment,inst)
 );
 
 });
-
 
 return group;
 
 }
 
 
-/* =========================
-   CARTE ECHEANCE
-========================= */
+function createInstallmentCard(payment,inst){
 
-function createInstallmentCard(
-payment,
-inst
-){
+const card=document.createElement("div");
 
-const card=
-document.createElement("div");
-
-card.className=
-"installment";
+card.className="installment";
 
 if(inst.paid)
 card.classList.add("paid");
 
 
-const top=
-document.createElement("div");
+const top=document.createElement("div");
 
-top.className=
-"installmentTop";
+top.className="installmentTop";
 
 
-/* CASE DE SELECTION */
-
-const checkbox=
-document.createElement("input");
+const checkbox=document.createElement("input");
 
 checkbox.type="checkbox";
+checkbox.className="checkbox";
 
-checkbox.className=
-"checkbox";
-
-const key=
-selectionKey(
+const key=selectionKey(
 payment.id,
 inst.id
 );
 
-checkbox.checked=
-selectedIds.has(key);
-
+checkbox.checked=selectedIds.has(key);
 
 checkbox.addEventListener(
 "change",
@@ -2071,32 +1657,23 @@ updateSelectionBar();
 );
 
 
-const info=
-document.createElement("div");
+const info=document.createElement("div");
 
-info.className=
-"installmentInfo";
+info.className="installmentInfo";
 
 
-const status=
-inst.paid
+const status=inst.paid
 ?
-`<span class="badge badgePaid">
-PAYÉ
-</span>`
+`<span class="badge badgePaid">PAYÉ</span>`
 :
-`<span class="badge badgeUnpaid">
-À PAYER
-</span>`;
+`<span class="badge badgeUnpaid">À PAYER</span>`;
 
 
 info.innerHTML=
 `
 <div class="beneficiary">
 
-${escapeHtml(
-payment.beneficiary
-)}
+${escapeHtml(payment.beneficiary)}
 
 ${status}
 
@@ -2110,9 +1687,7 @@ ${formatDate(inst.date)}
 <br>
 
 Communication :
-${escapeHtml(
-payment.communication || "-"
-)}
+${escapeHtml(payment.communication||"-")}
 
 </div>
 
@@ -2124,33 +1699,21 @@ ${euro(inst.amount)}
 `;
 
 
-top.appendChild(
-checkbox
-);
-
-top.appendChild(
-info
-);
+top.appendChild(checkbox);
+top.appendChild(info);
 
 card.appendChild(top);
 
 
-const actions=
-document.createElement("div");
+const actions=document.createElement("div");
 
 actions.className="actions";
 
 
-/* MODIFIER */
+const editBtn=document.createElement("button");
 
-const editBtn=
-document.createElement("button");
-
-editBtn.className=
-"secondary";
-
-editBtn.textContent=
-"✏️ Modifier";
+editBtn.className="secondary";
+editBtn.textContent="✏️ Modifier";
 
 editBtn.onclick=function(){
 
@@ -2162,10 +1725,7 @@ inst.id
 };
 
 
-/* PAYE */
-
-const paidBtn=
-document.createElement("button");
+const paidBtn=document.createElement("button");
 
 paidBtn.className=
 inst.paid
@@ -2187,16 +1747,10 @@ inst.id
 };
 
 
-/* PAYER */
+const manualBtn=document.createElement("button");
 
-const manualBtn=
-document.createElement("button");
-
-manualBtn.className=
-"secondary";
-
-manualBtn.textContent=
-"💳 Payer";
+manualBtn.className="secondary";
+manualBtn.textContent="💳 Payer";
 
 manualBtn.onclick=function(){
 
@@ -2208,16 +1762,10 @@ inst.id
 };
 
 
-/* BNP */
+const bnpBtn=document.createElement("button");
 
-const bnpBtn=
-document.createElement("button");
-
-bnpBtn.className=
-"bnpButton";
-
-bnpBtn.textContent=
-"🏦 BNP";
+bnpBtn.className="bnpButton";
+bnpBtn.textContent="🏦 BNP";
 
 bnpBtn.onclick=function(){
 
@@ -2229,16 +1777,10 @@ inst.id
 };
 
 
-/* QR */
+const qrBtn=document.createElement("button");
 
-const qrBtn=
-document.createElement("button");
-
-qrBtn.className=
-"qrButton";
-
-qrBtn.textContent=
-"▣ QR";
+qrBtn.className="qrButton";
+qrBtn.textContent="▣ QR";
 
 qrBtn.onclick=function(){
 
@@ -2250,16 +1792,10 @@ inst
 };
 
 
-/* CALENDRIER */
+const calendarBtn=document.createElement("button");
 
-const calendarBtn=
-document.createElement("button");
-
-calendarBtn.className=
-"secondary";
-
-calendarBtn.textContent=
-"📅 Calendrier";
+calendarBtn.className="secondary";
+calendarBtn.textContent="📅 Calendrier";
 
 calendarBtn.onclick=function(){
 
@@ -2271,16 +1807,10 @@ inst
 };
 
 
-/* SUPPRIMER */
+const deleteBtn=document.createElement("button");
 
-const deleteBtn=
-document.createElement("button");
-
-deleteBtn.className=
-"danger";
-
-deleteBtn.textContent=
-"🗑️ Supprimer";
+deleteBtn.className="danger";
+deleteBtn.textContent="🗑️ Supprimer";
 
 deleteBtn.onclick=function(){
 
@@ -2293,36 +1823,24 @@ inst.id
 
 
 actions.appendChild(editBtn);
-
 actions.appendChild(paidBtn);
-
 actions.appendChild(manualBtn);
-
 actions.appendChild(bnpBtn);
-
 actions.appendChild(qrBtn);
-
 actions.appendChild(calendarBtn);
-
 actions.appendChild(deleteBtn);
 
 
 if(payment.photo){
 
-const photoBtn=
-document.createElement("button");
+const photoBtn=document.createElement("button");
 
-photoBtn.className=
-"secondary";
-
-photoBtn.textContent=
-"📄 Document";
+photoBtn.className="secondary";
+photoBtn.textContent="📄 Document";
 
 photoBtn.onclick=function(){
 
-openPhoto(
-payment.id
-);
+openPhoto(payment.id);
 
 };
 
@@ -2338,36 +1856,21 @@ return card;
 }
 
 
-/* =========================
-   SUPPRESSION INDIVIDUELLE
-========================= */
+function deleteInstallment(paymentId,installmentId){
 
-function deleteInstallment(
-paymentId,
-installmentId
-){
-
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(paymentId)
 );
 
-if(!payment)
-return;
+if(!payment)return;
 
-if(
-!confirm(
-"Supprimer cette échéance ?"
-)
-)
+if(!confirm("Supprimer cette échéance ?"))
 return;
-
 
 payment.installments=
 payment.installments.filter(
 i=>String(i.id)!==String(installmentId)
 );
-
 
 selectedIds.delete(
 selectionKey(
@@ -2376,16 +1879,13 @@ installmentId
 )
 );
 
-
 if(payment.installments.length===0){
 
-data=
-data.filter(
+data=data.filter(
 p=>String(p.id)!==String(paymentId)
 );
 
 }
-
 
 saveData();
 
@@ -2394,30 +1894,23 @@ render();
 }
 
 
-/* =========================
-   BNP
-========================= */
+/* =====================================================
+   BNP - MODE TEST
+===================================================== */
 
-function openBNP(
-paymentId,
-installmentId
-){
+function openBNP(paymentId,installmentId){
 
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(paymentId)
 );
 
-if(!payment)
-return;
+if(!payment)return;
 
-const inst=
-payment.installments.find(
+const inst=payment.installments.find(
 i=>String(i.id)===String(installmentId)
 );
 
-if(!inst)
-return;
+if(!inst)return;
 
 
 bnpId={
@@ -2427,25 +1920,18 @@ installmentId:installmentId
 
 
 const beneficiary=
-String(
-payment.beneficiary || ""
-).trim();
+String(payment.beneficiary||"").trim();
 
 const iban=
-String(
-payment.iban || ""
-)
+String(payment.iban||"")
 .replace(/\s/g,"")
 .toUpperCase();
 
 const amount=
-Number(inst.amount || 0)
-.toFixed(2);
+Number(inst.amount||0).toFixed(2);
 
 const communication=
-String(
-payment.communication || ""
-).trim();
+String(payment.communication||"").trim();
 
 
 document.getElementById(
@@ -2462,7 +1948,7 @@ Bénéficiaire
 </div>
 
 <div class="bnpValue">
-${escapeHtml(beneficiary || "-")}
+${escapeHtml(beneficiary||"-")}
 </div>
 
 <button
@@ -2486,7 +1972,7 @@ IBAN
 </div>
 
 <div class="bnpValue">
-${escapeHtml(iban || "-")}
+${escapeHtml(iban||"-")}
 </div>
 
 <button
@@ -2534,7 +2020,7 @@ Communication
 </div>
 
 <div class="bnpValue">
-${escapeHtml(communication || "-")}
+${escapeHtml(communication||"-")}
 </div>
 
 <button
@@ -2553,22 +2039,117 @@ Copier
 </div>
 
 
-<button
-class="bnpOpen"
-onclick="openBNPSite()">
+<div style="
+display:grid;
+gap:8px;
+margin-top:12px;
+">
 
-🏦 Ouvrir BNP Paribas Fortis
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://')">
+
+🏦 Test 1 — Ouvrir BNP
+<span>›</span>
 
 </button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://payment')">
+
+🏦 Test 2 — payment
+<span>›</span>
+
+</button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://transfer')">
+
+🏦 Test 3 — transfer
+<span>›</span>
+
+</button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://transfers')">
+
+🏦 Test 4 — transfers
+<span>›</span>
+
+</button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://newtransfer')">
+
+🏦 Test 5 — newtransfer
+<span>›</span>
+
+</button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://newpayment')">
+
+🏦 Test 6 — newpayment
+<span>›</span>
+
+</button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://payments')">
+
+🏦 Test 7 — payments
+<span>›</span>
+
+</button>
+
+
+<button
+class="bnpTest"
+onclick="testBNP('easybanking://virements')">
+
+🏦 Test 8 — virements
+<span>›</span>
+
+</button>
+
+</div>
 
 `;
 
 
 document.getElementById(
 "bnpModal"
-).classList.add(
-"show"
+).classList.add("show");
+
+}
+
+
+function testBNP(url){
+
+try{
+
+window.location.href=url;
+
+}catch(e){
+
+console.log(
+"Erreur ouverture BNP :",
+e
 );
+
+}
 
 }
 
@@ -2577,9 +2158,7 @@ function closeBNP(){
 
 document.getElementById(
 "bnpModal"
-).classList.remove(
-"show"
-);
+).classList.remove("show");
 
 bnpId=null;
 
@@ -2588,53 +2167,31 @@ resetCopyButtons();
 }
 
 
-function openBNPSite(){
-
-window.open(
-"https://www.bnpparibasfortis.be/",
-"_blank"
-);
-
-}
-
-
 /* =========================
-   QR SEPA
+   QR
 ========================= */
 
-function createEPCQR(
-payment,
-inst
-){
+function createEPCQR(payment,inst){
 
 const name=
-String(
-payment.beneficiary || ""
-)
+String(payment.beneficiary||"")
 .trim()
 .substring(0,70);
 
 const iban=
-String(
-payment.iban || ""
-)
+String(payment.iban||"")
 .replace(/\s/g,"")
 .toUpperCase();
 
 const amount=
-Number(inst.amount || 0)
-.toFixed(2);
+Number(inst.amount||0).toFixed(2);
 
 const communication=
-String(
-payment.communication || ""
-)
+String(payment.communication||"")
 .trim()
 .substring(0,140);
 
-
-const payload=
-[
+return[
 "BCD",
 "002",
 "1",
@@ -2648,20 +2205,13 @@ communication,
 ""
 ].join("\n");
 
-return payload;
-
 }
 
 
-function openQR(
-payment,
-inst
-){
+function openQR(payment,inst){
 
 const iban=
-String(
-payment.iban || ""
-)
+String(payment.iban||"")
 .replace(/\s/g,"")
 .toUpperCase();
 
@@ -2675,10 +2225,7 @@ return;
 
 }
 
-
-if(
-typeof QRCode==="undefined"
-){
+if(typeof QRCode==="undefined"){
 
 alert(
 "Le générateur QR n'a pas pu être chargé. Vérifie ta connexion internet."
@@ -2694,21 +2241,14 @@ paymentId:payment.id,
 installmentId:inst.id
 };
 
-
-const qrBox=
-document.getElementById(
-"qrCode"
-);
+const qrBox=document.getElementById("qrCode");
 
 qrBox.innerHTML="";
 
-
-const payload=
-createEPCQR(
+const payload=createEPCQR(
 payment,
 inst
 );
-
 
 new QRCode(
 qrBox,
@@ -2742,17 +2282,13 @@ ${euro(inst.amount)}
 <br>
 
 Communication :
-${escapeHtml(
-payment.communication || "-"
-)}
+${escapeHtml(payment.communication||"-")}
 `;
 
 
 document.getElementById(
 "qrModal"
-).classList.add(
-"show"
-);
+).classList.add("show");
 
 }
 
@@ -2761,9 +2297,7 @@ function closeQR(){
 
 document.getElementById(
 "qrModal"
-).classList.remove(
-"show"
-);
+).classList.remove("show");
 
 document.getElementById(
 "qrCode"
@@ -2780,20 +2314,15 @@ qrId=null;
 
 function updateSelectionBar(){
 
-const bar=
-document.getElementById(
+const bar=document.getElementById(
 "selectionBar"
 );
 
-const info=
-document.getElementById(
+const info=document.getElementById(
 "selectionInfo"
 );
 
-
-const count=
-selectedIds.size;
-
+const count=selectedIds.size;
 
 if(count>0){
 
@@ -2801,13 +2330,9 @@ bar.classList.add("show");
 
 info.textContent=
 count+
-(
-count>1
-?
-" sélectionnés"
-:
-" sélectionné"
-);
+(count>1
+?" sélectionnés"
+:" sélectionné");
 
 }else{
 
@@ -2818,31 +2343,22 @@ bar.classList.remove("show");
 }
 
 
-/* =========================
-   SUPPRESSION SELECTION
-========================= */
-
 function deleteSelected(){
 
 if(!selectedIds.size)
 return;
 
-
-if(
-!confirm(
+if(!confirm(
 "Supprimer les échéances sélectionnées ?"
-)
-)
+))
 return;
-
 
 data.forEach(payment=>{
 
 payment.installments=
 payment.installments.filter(inst=>{
 
-const key=
-selectionKey(
+const key=selectionKey(
 payment.id,
 inst.id
 );
@@ -2854,12 +2370,9 @@ return !selectedIds.has(key);
 });
 
 
-data=
-data.filter(
-p=>
-p.installments.length>0
+data=data.filter(
+p=>p.installments.length>0
 );
-
 
 selectedIds.clear();
 
@@ -2870,32 +2383,19 @@ render();
 }
 
 
-/* =========================
-   PAYE / NON PAYE
-========================= */
+function togglePaid(paymentId,installmentId){
 
-function togglePaid(
-paymentId,
-installmentId
-){
-
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(paymentId)
 );
 
-if(!payment)
-return;
+if(!payment)return;
 
-
-const inst=
-payment.installments.find(
+const inst=payment.installments.find(
 i=>String(i.id)===String(installmentId)
 );
 
-if(!inst)
-return;
-
+if(!inst)return;
 
 inst.paid=!inst.paid;
 
@@ -2910,37 +2410,27 @@ render();
    MODIFICATION
 ========================= */
 
-function openEdit(
-paymentId,
-installmentId
-){
+function openEdit(paymentId,installmentId){
 
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(paymentId)
 );
 
 if(!payment){
 
-alert(
-"Paiement introuvable."
-);
+alert("Paiement introuvable.");
 
 return;
 
 }
 
-
-const inst=
-payment.installments.find(
+const inst=payment.installments.find(
 i=>String(i.id)===String(installmentId)
 );
 
 if(!inst){
 
-alert(
-"Échéance introuvable."
-);
+alert("Échéance introuvable.");
 
 return;
 
@@ -2955,45 +2445,33 @@ installmentId:installmentId
 
 document.getElementById(
 "editAlias"
-).value=
-payment.alias || "";
-
+).value=payment.alias||"";
 
 document.getElementById(
 "editBeneficiary"
-).value=
-payment.beneficiary || "";
-
+).value=payment.beneficiary||"";
 
 document.getElementById(
 "editIban"
-).value=
-payment.iban || "";
-
+).value=payment.iban||"";
 
 document.getElementById(
 "editDate"
-).value=
-inst.date || "";
-
+).value=inst.date||"";
 
 document.getElementById(
 "editAmount"
-).value=
-inst.amount ?? "";
-
+).value=inst.amount??"";
 
 document.getElementById(
 "editCommunication"
 ).value=
-payment.communication || "";
+payment.communication||"";
 
 
 document.getElementById(
 "editModal"
-).classList.add(
-"show"
-);
+).classList.add("show");
 
 }
 
@@ -3002,9 +2480,7 @@ function closeEdit(){
 
 document.getElementById(
 "editModal"
-).classList.remove(
-"show"
-);
+).classList.remove("show");
 
 editId=null;
 
@@ -3013,36 +2489,27 @@ editId=null;
 
 function saveEdit(){
 
-if(!editId)
-return;
+if(!editId)return;
 
-
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(editId.paymentId)
 );
 
 if(!payment){
 
-alert(
-"Paiement introuvable."
-);
+alert("Paiement introuvable.");
 
 return;
 
 }
 
-
-const inst=
-payment.installments.find(
+const inst=payment.installments.find(
 i=>String(i.id)===String(editId.installmentId)
 );
 
 if(!inst){
 
-alert(
-"Échéance introuvable."
-);
+alert("Échéance introuvable.");
 
 return;
 
@@ -3054,55 +2521,43 @@ document.getElementById(
 "editAlias"
 ).value.trim();
 
-
 payment.beneficiary=
 document.getElementById(
 "editBeneficiary"
 ).value.trim();
 
-
 payment.iban=
 document.getElementById(
 "editIban"
-).value
-.trim()
+).value.trim()
 .toUpperCase()
 .replace(/\s/g,"");
-
 
 payment.communication=
 document.getElementById(
 "editCommunication"
 ).value.trim();
 
-
 inst.date=
 document.getElementById(
 "editDate"
 ).value;
 
-
-const amount=
-parseFloat(
+const amount=parseFloat(
 document.getElementById(
 "editAmount"
 ).value
 );
 
+if(isNaN(amount)||amount<0){
 
-if(isNaN(amount) || amount<0){
-
-alert(
-"Montant incorrect."
-);
+alert("Montant incorrect.");
 
 return;
 
 }
 
-
 inst.amount=amount;
-
 
 saveData();
 
@@ -3110,9 +2565,7 @@ closeEdit();
 
 render();
 
-alert(
-"Modification enregistrée."
-);
+alert("Modification enregistrée.");
 
 }
 
@@ -3121,28 +2574,19 @@ alert(
    PAIEMENT MANUEL
 ========================= */
 
-function openManual(
-paymentId,
-installmentId
-){
+function openManual(paymentId,installmentId){
 
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(paymentId)
 );
 
-if(!payment)
-return;
+if(!payment)return;
 
-
-const inst=
-payment.installments.find(
+const inst=payment.installments.find(
 i=>String(i.id)===String(installmentId)
 );
 
-if(!inst)
-return;
-
+if(!inst)return;
 
 manualId={
 paymentId,
@@ -3150,8 +2594,7 @@ installmentId
 };
 
 
-const content=
-document.getElementById(
+const content=document.getElementById(
 "manualContent"
 );
 
@@ -3191,13 +2634,13 @@ IBAN
 </div>
 
 <div class="manualValue">
-${escapeHtml(payment.iban || "-")}
+${escapeHtml(payment.iban||"-")}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.iban || "")}',
+'${escapeJs(payment.iban||"")}',
 this
 )">
 
@@ -3239,13 +2682,13 @@ Communication
 </div>
 
 <div class="manualValue">
-${escapeHtml(payment.communication || "-")}
+${escapeHtml(payment.communication||"-")}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.communication || "")}',
+'${escapeJs(payment.communication||"")}',
 this
 )">
 
@@ -3261,9 +2704,7 @@ Copier
 
 document.getElementById(
 "manualModal"
-).classList.add(
-"show"
-);
+).classList.add("show");
 
 }
 
@@ -3272,9 +2713,7 @@ function closeManual(){
 
 document.getElementById(
 "manualModal"
-).classList.remove(
-"show"
-);
+).classList.remove("show");
 
 manualId=null;
 
@@ -3283,88 +2722,55 @@ resetCopyButtons();
 }
 
 
-/* =========================
-   COPIER
-========================= */
-
-function copyText(
-text,
-button
-){
+function copyText(text,button){
 
 if(
-navigator.clipboard &&
+navigator.clipboard&&
 navigator.clipboard.writeText
 ){
 
-navigator.clipboard.writeText(
-text
-).then(()=>{
+navigator.clipboard.writeText(text)
+.then(()=>{
 
-button.textContent=
-"✓ Copié";
+button.textContent="✓ Copié";
+button.classList.add("copied");
 
-button.classList.add(
-"copied"
-);
+})
+.catch(()=>{
 
-}).catch(()=>{
-
-fallbackCopy(
-text,
-button
-);
+fallbackCopy(text,button);
 
 });
 
 }else{
 
-fallbackCopy(
-text,
-button
-);
+fallbackCopy(text,button);
 
 }
 
 }
 
 
-function fallbackCopy(
-text,
-button
-){
+function fallbackCopy(text,button){
 
-const textarea=
-document.createElement(
-"textarea"
-);
+const textarea=document.createElement("textarea");
 
 textarea.value=text;
 
-document.body.appendChild(
-textarea
-);
+document.body.appendChild(textarea);
 
 textarea.select();
 
 try{
 
-document.execCommand(
-"copy"
-);
+document.execCommand("copy");
 
-button.textContent=
-"✓ Copié";
-
-button.classList.add(
-"copied"
-);
+button.textContent="✓ Copié";
+button.classList.add("copied");
 
 }catch(e){
 
-alert(
-"Impossible de copier."
-);
+alert("Impossible de copier.");
 
 }
 
@@ -3375,18 +2781,13 @@ textarea.remove();
 
 function resetCopyButtons(){
 
-document
-.querySelectorAll(
-".copyButton, .bnpCopy"
-)
-.forEach(b=>{
+document.querySelectorAll(
+".copyButton,.bnpCopy"
+).forEach(b=>{
 
-b.textContent=
-"Copier";
+b.textContent="Copier";
 
-b.classList.remove(
-"copied"
-);
+b.classList.remove("copied");
 
 });
 
@@ -3394,61 +2795,36 @@ b.classList.remove(
 
 
 /* =========================
-   GOOGLE CALENDAR
+   CALENDRIER
 ========================= */
 
-function addCalendar(
-payment,
-inst
-){
+function addCalendar(payment,inst){
 
-if(!inst.date)
-return;
+if(!inst.date)return;
 
+const date=inst.date.replaceAll("-","");
 
-const date=
-inst.date.replaceAll(
-"-",
-""
+const d2=new Date(
+inst.date+"T00:00:00"
 );
 
+d2.setDate(d2.getDate()+1);
 
-const d2=
-new Date(
-inst.date+
-"T00:00:00"
-);
-
-d2.setDate(
-d2.getDate()+1
-);
-
-
-const end=
-d2.toISOString()
+const end=d2.toISOString()
 .substring(0,10)
-.replaceAll(
-"-",
-""
-);
+.replaceAll("-","");
 
 
 const title=
-(
-payment.alias
-?
-payment.alias+
-" - "
-:
-""
-)+
+(payment.alias
+?payment.alias+" - "
+:"")+
 payment.beneficiary;
 
 
 const details=
 "Montant : "+
-Number(inst.amount)
-.toFixed(2)+
+Number(inst.amount).toFixed(2)+
 " €\n"+
 "IBAN : "+
 (payment.iban||"")+
@@ -3459,20 +2835,12 @@ Number(inst.amount)
 
 const url=
 "https://calendar.google.com/calendar/render?action=TEMPLATE"+
-"&text="+
-encodeURIComponent(title)+
-"&dates="+
-date+
-"/"+
-end+
-"&details="+
-encodeURIComponent(details);
+"&text="+encodeURIComponent(title)+
+"&dates="+date+"/"+end+
+"&details="+encodeURIComponent(details);
 
 
-window.open(
-url,
-"_blank"
-);
+window.open(url,"_blank");
 
 }
 
@@ -3481,36 +2849,24 @@ url,
    PHOTO
 ========================= */
 
-function openPhoto(
-paymentId
-){
+function openPhoto(paymentId){
 
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(paymentId)
 );
 
-if(
-!payment ||
-!payment.photo
-)
+if(!payment||!payment.photo)
 return;
-
 
 photoId=paymentId;
 
-
 document.getElementById(
 "photoModalImage"
-).src=
-payment.photo;
-
+).src=payment.photo;
 
 document.getElementById(
 "photoModal"
-).classList.add(
-"show"
-);
+).classList.add("show");
 
 }
 
@@ -3519,9 +2875,7 @@ function closePhoto(){
 
 document.getElementById(
 "photoModal"
-).classList.remove(
-"show"
-);
+).classList.remove("show");
 
 photoId=null;
 
@@ -3530,22 +2884,15 @@ photoId=null;
 
 function deletePhoto(){
 
-if(!photoId)
-return;
+if(!photoId)return;
 
-
-const payment=
-data.find(
+const payment=data.find(
 p=>String(p.id)===String(photoId)
 );
 
 if(payment){
 
-if(
-!confirm(
-"Supprimer ce document ?"
-)
-)
+if(!confirm("Supprimer ce document ?"))
 return;
 
 payment.photo="";
@@ -3553,7 +2900,6 @@ payment.photo="";
 saveData();
 
 }
-
 
 closePhoto();
 
@@ -3569,19 +2915,12 @@ render();
 function exportData(){
 
 const backup={
-
 version:1,
-
-date:
-new Date().toISOString(),
-
+date:new Date().toISOString(),
 data:data
-
 };
 
-
-const blob=
-new Blob(
+const blob=new Blob(
 [
 JSON.stringify(
 backup,
@@ -3594,15 +2933,9 @@ type:"application/json"
 }
 );
 
+const url=URL.createObjectURL(blob);
 
-const url=
-URL.createObjectURL(
-blob
-);
-
-
-const a=
-document.createElement("a");
+const a=document.createElement("a");
 
 a.href=url;
 
@@ -3635,37 +2968,26 @@ document.getElementById(
 "change",
 function(){
 
-const file=
-this.files[0];
+const file=this.files[0];
 
-if(!file)
-return;
+if(!file)return;
 
+const reader=new FileReader();
 
-const reader=
-new FileReader();
-
-
-reader.onload=
-function(e){
+reader.onload=function(e){
 
 try{
 
-const backup=
-JSON.parse(
+const backup=JSON.parse(
 e.target.result
 );
 
-
 if(
-backup.data &&
-Array.isArray(
-backup.data
-)
+backup.data&&
+Array.isArray(backup.data)
 ){
 
-data=
-backup.data;
+data=backup.data;
 
 normalizeData();
 
@@ -3675,9 +2997,7 @@ saveData();
 
 render();
 
-alert(
-"Importation réussie."
-);
+alert("Importation réussie.");
 
 }else{
 
@@ -3699,7 +3019,6 @@ alert(
 
 };
 
-
 reader.readAsText(file);
 
 this.value="";
@@ -3709,68 +3028,28 @@ this.value="";
 
 
 /* =========================
-   SECURITE HTML
+   SECURITE
 ========================= */
 
 function escapeHtml(value){
 
-return String(
-value ?? ""
-)
-
-.replaceAll(
-"&",
-"&amp;"
-)
-
-.replaceAll(
-"<",
-"&lt;"
-)
-
-.replaceAll(
-">",
-"&gt;"
-)
-
-.replaceAll(
-'"',
-"&quot;"
-)
-
-.replaceAll(
-"'",
-"&#039;"
-);
+return String(value??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
 
 function escapeJs(value){
 
-return String(
-value ?? ""
-)
-
-.replaceAll(
-"\\",
-"\\\\"
-)
-
-.replaceAll(
-"'",
-"\\'"
-)
-
-.replaceAll(
-"\n",
-"\\n"
-)
-
-.replaceAll(
-"\r",
-"\\r"
-);
+return String(value??"")
+.replaceAll("\\","\\\\")
+.replaceAll("'","\\'")
+.replaceAll("\n","\\n")
+.replaceAll("\r","\\r");
 
 }
 
@@ -3788,8 +3067,7 @@ calculatorValue+=value;
 
 document.getElementById(
 "calcDisplay"
-).value=
-calculatorValue;
+).value=calculatorValue;
 
 }
 
@@ -3809,31 +3087,24 @@ function calcResult(){
 
 try{
 
-if(!calculatorValue)
-return;
+if(!calculatorValue)return;
 
-
-const safe=
-calculatorValue.replace(
+const safe=calculatorValue.replace(
 /[^0-9+\-*/().]/g,
 ""
 );
 
-
 if(!safe)
 throw new Error();
 
-
-const result=
-Function(
+const result=Function(
 '"use strict";return ('+
 safe+
 ')'
 )();
 
-
 if(
-typeof result!=="number" ||
+typeof result!=="number"||
 !isFinite(result)
 ){
 
@@ -3841,29 +3112,21 @@ throw new Error();
 
 }
 
-
-calculatorValue=
-String(
+calculatorValue=String(
 Math.round(
-(result+
-Number.EPSILON)
-*100
+(result+Number.EPSILON)*100
 )/100
 );
 
-
 document.getElementById(
 "calcDisplay"
-).value=
-calculatorValue;
-
+).value=calculatorValue;
 
 }catch(e){
 
 document.getElementById(
 "calcDisplay"
-).value=
-"Erreur";
+).value="Erreur";
 
 calculatorValue="";
 
