@@ -550,22 +550,15 @@ font-size:12px;
 padding:7px 10px;
 }
 
+.bnpCopy.copied{
+background:#34c759;
+color:white;
+}
+
 .bnpOpen{
 background:#111;
 color:white;
 width:100%;
-}
-
-.bnpTest{
-background:#111;
-color:white;
-width:100%;
-text-align:left;
-}
-
-.bnpTest span{
-float:right;
-opacity:.7;
 }
 
 .bnpNote{
@@ -947,20 +940,17 @@ Fermer
 <div class="modalBox">
 
 <div class="modalTitle">
-🏦 Tests Easy Banking BNP
+🏦 Virement BNP
 </div>
 
 <div id="bnpContent"></div>
 
 <div class="bnpNote">
 
-Nous testons ici différents chemins possibles
-pour ouvrir une fonction de l'application BNP.
-
-Aucun site internet BNP ne sera ouvert.
-
-Après chaque test, note simplement sur quel écran
-l'application BNP arrive.
+Copie les informations du virement une par une,
+puis ouvre l'application BNP Paribas Fortis.
+Tu pourras ensuite choisir manuellement
+la fonction Virement.
 
 </div>
 
@@ -1895,7 +1885,7 @@ render();
 
 
 /* =====================================================
-   BNP - MODE TEST
+   BNP
 ===================================================== */
 
 function openBNP(paymentId,installmentId){
@@ -2039,92 +2029,13 @@ Copier
 </div>
 
 
-<div style="
-display:grid;
-gap:8px;
-margin-top:12px;
-">
-
 <button
-class="bnpTest"
-onclick="testBNP('easybanking://')">
+class="bnpOpen"
+onclick="openBNPSite()">
 
-🏦 Test 1 — Ouvrir BNP
-<span>›</span>
+🏦 Ouvrir BNP Paribas Fortis
 
 </button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://payment')">
-
-🏦 Test 2 — payment
-<span>›</span>
-
-</button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://transfer')">
-
-🏦 Test 3 — transfer
-<span>›</span>
-
-</button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://transfers')">
-
-🏦 Test 4 — transfers
-<span>›</span>
-
-</button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://newtransfer')">
-
-🏦 Test 5 — newtransfer
-<span>›</span>
-
-</button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://newpayment')">
-
-🏦 Test 6 — newpayment
-<span>›</span>
-
-</button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://payments')">
-
-🏦 Test 7 — payments
-<span>›</span>
-
-</button>
-
-
-<button
-class="bnpTest"
-onclick="testBNP('easybanking://virements')">
-
-🏦 Test 8 — virements
-<span>›</span>
-
-</button>
-
-</div>
 
 `;
 
@@ -2136,20 +2047,9 @@ document.getElementById(
 }
 
 
-function testBNP(url){
+function openBNPSite(){
 
-try{
-
-window.location.href=url;
-
-}catch(e){
-
-console.log(
-"Erreur ouverture BNP :",
-e
-);
-
-}
+window.location.href="easybanking://";
 
 }
 
