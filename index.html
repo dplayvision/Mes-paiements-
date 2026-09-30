@@ -22,7 +22,7 @@ body{
 header{
     background:#007aff;
     color:white;
-    padding:18px 15px 15px;
+    padding:18px 15px 18px;
     text-align:center;
     position:sticky;
     top:0;
@@ -30,13 +30,14 @@ header{
 }
 
 header h1{
-    margin:0 0 6px;
+    margin:0 0 7px;
     font-size:25px;
 }
 
 .userCount{
-    font-size:15px;
-    font-weight:600;
+    font-size:24px;
+    font-weight:800;
+    line-height:1.2;
 }
 
 .container{
@@ -207,10 +208,11 @@ button{
 
 .countdown{
     margin:12px 0;
-    padding:12px;
+    padding:13px;
     border-radius:12px;
-    font-weight:700;
+    font-weight:800;
     text-align:center;
+    font-size:17px;
 }
 
 .countdown.ok{
@@ -281,16 +283,6 @@ button{
     min-width:130px;
 }
 
-.photoButtons{
-    display:flex;
-    gap:8px;
-    margin-top:8px;
-}
-
-.photoButtons button{
-    flex:1;
-}
-
 .empty{
     text-align:center;
     color:#777;
@@ -306,6 +298,23 @@ hr{
 small{
     color:#666;
 }
+
+.emailInfo{
+    background:#eef6ff;
+    border-radius:12px;
+    padding:12px;
+    margin-top:12px;
+    color:#155a9c;
+    font-size:14px;
+}
+
+.expirationInfo{
+    background:#f7f7f8;
+    border-radius:10px;
+    padding:10px;
+    margin-top:8px;
+    font-size:14px;
+}
 </style>
 </head>
 
@@ -313,8 +322,11 @@ small{
 
 <!-- CONNEXION -->
 <div class="login" id="loginScreen">
+
     <div class="loginBox">
+
         <h1>🔐 Mes accès</h1>
+
         <p>Entrez votre code PIN</p>
 
         <input
@@ -326,24 +338,34 @@ small{
             autocomplete="off"
         >
 
-        <button class="primary" onclick="login()">Se connecter</button>
+        <button class="primary" onclick="login()">
+            Se connecter
+        </button>
 
         <div id="loginError" class="loginError hidden">
             Code incorrect
         </div>
+
     </div>
+
 </div>
 
+
 <header>
+
     <h1>🔐 Mes accès</h1>
+
     <div class="userCount" id="userCount">
         👥 0 utilisateurs
     </div>
+
 </header>
+
 
 <div class="container">
 
     <div class="topButtons">
+
         <button class="secondary" onclick="showAddForm()">
             ➕ Ajouter
         </button>
@@ -352,7 +374,10 @@ small{
             💾 Sauvegarder
         </button>
 
-        <button class="secondary" onclick="document.getElementById('importFile').click()">
+        <button
+            class="secondary"
+            onclick="document.getElementById('importFile').click()"
+        >
             📂 Restaurer
         </button>
 
@@ -363,7 +388,9 @@ small{
             class="hidden"
             onchange="importData(event)"
         >
+
     </div>
+
 
     <input
         class="search"
@@ -372,45 +399,135 @@ small{
         oninput="renderAccounts()"
     >
 
+
     <!-- FORMULAIRE -->
+
     <div class="card hidden" id="formCard">
 
-        <h2 id="formTitle">➕ Nouvel accès</h2>
+        <h2 id="formTitle">
+            ➕ Nouvel accès
+        </h2>
 
-        <label>Nom / Prénom</label>
-        <input id="name" placeholder="Exemple : Jean Dupont">
 
-        <label>Utilisateur</label>
+        <label>
+            Nom / Prénom
+        </label>
+
+        <input
+            id="name"
+            placeholder="Exemple : Jean Dupont"
+        >
+
+
+        <label>
+            Utilisateur
+        </label>
+
         <div class="fieldRow">
-            <input id="username" placeholder="Utilisateur">
-            <button class="copyBtn" onclick="copyField('username')">Copier</button>
+
+            <input
+                id="username"
+                placeholder="Utilisateur"
+            >
+
+            <button
+                class="copyBtn"
+                onclick="copyField('username')"
+            >
+                Copier
+            </button>
+
         </div>
 
-        <label>Mot de passe</label>
+
+        <label>
+            Mot de passe
+        </label>
+
         <div class="fieldRow">
-            <input id="password" type="password" placeholder="Mot de passe">
-            <button class="copyBtn" onclick="togglePassword()">👁️</button>
-            <button class="copyBtn" onclick="copyField('password')">Copier</button>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Mot de passe"
+            >
+
+            <button
+                class="copyBtn"
+                onclick="togglePassword()"
+            >
+                👁️
+            </button>
+
+            <button
+                class="copyBtn"
+                onclick="copyField('password')"
+            >
+                Copier
+            </button>
+
         </div>
 
-        <label>URL 1</label>
+
+        <label>
+            URL 1
+        </label>
+
         <div class="fieldRow">
-            <input id="url1" placeholder="https://...">
-            <button class="copyBtn" onclick="copyField('url1')">Copier</button>
+
+            <input
+                id="url1"
+                placeholder="https://..."
+            >
+
+            <button
+                class="copyBtn"
+                onclick="copyField('url1')"
+            >
+                Copier
+            </button>
+
         </div>
 
-        <label>URL 2</label>
+
+        <label>
+            URL 2
+        </label>
+
         <div class="fieldRow">
-            <input id="url2" placeholder="https://...">
-            <button class="copyBtn" onclick="copyField('url2')">Copier</button>
+
+            <input
+                id="url2"
+                placeholder="https://..."
+            >
+
+            <button
+                class="copyBtn"
+                onclick="copyField('url2')"
+            >
+                Copier
+            </button>
+
         </div>
 
-        <label>Remarque</label>
-        <textarea id="remark" placeholder="Remarque..."></textarea>
+
+        <label>
+            Remarque
+        </label>
+
+        <textarea
+            id="remark"
+            placeholder="Remarque..."
+        ></textarea>
+
 
         <hr>
 
-        <label>⏳ Durée en jours</label>
+
+        <label>
+            ⏳ Durée en jours
+        </label>
+
         <input
             id="duration"
             type="number"
@@ -420,41 +537,119 @@ small{
         >
 
         <small>
-            Le décompte commencera automatiquement à partir de la date d'ajout.
+            Exemple : 365 = un an de durée.
         </small>
 
+
+        <label>
+            📧 E-mail pour le rappel
+        </label>
+
+        <input
+            id="reminderEmail"
+            type="email"
+            placeholder="exemple@email.com"
+        >
+
+        <div class="emailInfo">
+            📧 Le bouton « Rappel » ouvrira votre application e-mail avec le message déjà préparé lorsque l'accès arrive à 2 jours ou moins.
+        </div>
+
+
         <div class="checkRow">
-            <input type="checkbox" id="isApplication" onchange="toggleApplicationFields()">
-            <label for="isApplication" style="margin:0;">
+
+            <input
+                type="checkbox"
+                id="isApplication"
+                onchange="toggleApplicationFields()"
+            >
+
+            <label
+                for="isApplication"
+                style="margin:0;"
+            >
                 📱 Application
             </label>
-        </div>
-
-        <div id="applicationFields" class="hidden">
-
-            <label>URL de l'application</label>
-            <div class="fieldRow">
-                <input id="appUrl1" placeholder="https://...">
-                <button class="copyBtn" onclick="copyField('appUrl1')">Copier</button>
-            </div>
-
-            <label>MAC</label>
-            <div class="fieldRow">
-                <input id="mac" placeholder="MAC">
-                <button class="copyBtn" onclick="copyField('mac')">Copier</button>
-            </div>
-
-            <label>Clé</label>
-            <div class="fieldRow">
-                <input id="appKey" placeholder="Clé">
-                <button class="copyBtn" onclick="copyField('appKey')">Copier</button>
-            </div>
 
         </div>
+
+
+        <div
+            id="applicationFields"
+            class="hidden"
+        >
+
+            <label>
+                URL de l'application
+            </label>
+
+            <div class="fieldRow">
+
+                <input
+                    id="appUrl1"
+                    placeholder="https://..."
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('appUrl1')"
+                >
+                    Copier
+                </button>
+
+            </div>
+
+
+            <label>
+                MAC
+            </label>
+
+            <div class="fieldRow">
+
+                <input
+                    id="mac"
+                    placeholder="MAC"
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('mac')"
+                >
+                    Copier
+                </button>
+
+            </div>
+
+
+            <label>
+                Clé
+            </label>
+
+            <div class="fieldRow">
+
+                <input
+                    id="appKey"
+                    placeholder="Clé"
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('appKey')"
+                >
+                    Copier
+                </button>
+
+            </div>
+
+        </div>
+
 
         <hr>
 
-        <label>📷 Photo</label>
+
+        <label>
+            📷 Photo
+        </label>
 
         <input
             type="file"
@@ -464,8 +659,17 @@ small{
             onchange="handlePhoto(event)"
         >
 
-        <div id="photoContainer" class="hidden">
-            <img id="photoPreview" class="photoPreview">
+
+        <div
+            id="photoContainer"
+            class="hidden"
+        >
+
+            <img
+                id="photoPreview"
+                class="photoPreview"
+            >
+
             <button
                 class="danger"
                 style="width:100%;margin-top:8px;"
@@ -473,11 +677,17 @@ small{
             >
                 🗑️ Supprimer la photo
             </button>
+
         </div>
 
-        <button class="primary" onclick="saveAccount()">
+
+        <button
+            class="primary"
+            onclick="saveAccount()"
+        >
             💾 Enregistrer
         </button>
+
 
         <button
             class="secondary"
@@ -489,9 +699,11 @@ small{
 
     </div>
 
+
     <div id="accountsList"></div>
 
 </div>
+
 
 <script>
 
@@ -510,22 +722,31 @@ let currentPhoto = "";
 function loadData(){
 
     try{
-        const saved = localStorage.getItem(STORAGE_KEY);
+
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
 
         if(saved){
+
             accounts = JSON.parse(saved);
 
             if(!Array.isArray(accounts)){
                 accounts = [];
             }
+
         }else{
+
             accounts = [];
+
         }
 
     }catch(e){
+
         console.error(e);
+
         accounts = [];
     }
+
 
     updateUserCount();
     renderAccounts();
@@ -537,7 +758,11 @@ function loadData(){
 // ==============================
 
 function saveData(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(accounts)
+    );
 }
 
 
@@ -547,47 +772,73 @@ function saveData(){
 
 function login(){
 
-    const pin = document.getElementById("pinInput").value;
+    const pin =
+        document.getElementById("pinInput").value;
+
 
     if(pin === PIN){
 
-        document.getElementById("loginScreen").classList.add("hidden");
-        document.getElementById("loginError").classList.add("hidden");
+        document
+            .getElementById("loginScreen")
+            .classList
+            .add("hidden");
+
+        document
+            .getElementById("loginError")
+            .classList
+            .add("hidden");
 
         loadData();
 
     }else{
 
-        document.getElementById("loginError").classList.remove("hidden");
+        document
+            .getElementById("loginError")
+            .classList
+            .remove("hidden");
 
-        document.getElementById("pinInput").value = "";
-        document.getElementById("pinInput").focus();
+        document
+            .getElementById("pinInput")
+            .value = "";
+
+        document
+            .getElementById("pinInput")
+            .focus();
     }
 }
 
 
-document.getElementById("pinInput").addEventListener("keydown", function(e){
+document
+    .getElementById("pinInput")
+    .addEventListener(
+        "keydown",
+        function(e){
 
-    if(e.key === "Enter"){
-        login();
-    }
+            if(e.key === "Enter"){
+                login();
+            }
 
-});
+        }
+    );
 
 
 // ==============================
-// COMPTE UTILISATEURS
+// NOMBRE UTILISATEURS
 // ==============================
 
 function updateUserCount(){
 
-    const count = accounts.length;
+    const count =
+        accounts.length;
 
-    document.getElementById("userCount").textContent =
-        "👥 " +
-        count +
-        " utilisateur" +
-        (count > 1 ? "s" : "");
+
+    document
+        .getElementById("userCount")
+        .textContent =
+            "👥 " +
+            count +
+            " utilisateur" +
+            (count > 1 ? "s" : "");
 }
 
 
@@ -599,11 +850,20 @@ function showAddForm(){
 
     editIndex = -1;
 
-    document.getElementById("formTitle").textContent = "➕ Nouvel accès";
+    document
+        .getElementById("formTitle")
+        .textContent =
+            "➕ Nouvel accès";
+
 
     clearForm();
 
-    document.getElementById("formCard").classList.remove("hidden");
+
+    document
+        .getElementById("formCard")
+        .classList
+        .remove("hidden");
+
 
     window.scrollTo({
         top:0,
@@ -621,6 +881,7 @@ function clearForm(){
     document.getElementById("url2").value = "";
     document.getElementById("remark").value = "";
     document.getElementById("duration").value = "";
+    document.getElementById("reminderEmail").value = "";
 
     document.getElementById("isApplication").checked = false;
 
@@ -628,22 +889,33 @@ function clearForm(){
     document.getElementById("mac").value = "";
     document.getElementById("appKey").value = "";
 
-    document.getElementById("applicationFields").classList.add("hidden");
+    document
+        .getElementById("applicationFields")
+        .classList
+        .add("hidden");
 
     currentPhoto = "";
 
     document.getElementById("photoInput").value = "";
 
-    document.getElementById("photoContainer").classList.add("hidden");
+    document
+        .getElementById("photoContainer")
+        .classList
+        .add("hidden");
+
     document.getElementById("photoPreview").src = "";
 }
 
 
 function cancelForm(){
 
-    document.getElementById("formCard").classList.add("hidden");
+    document
+        .getElementById("formCard")
+        .classList
+        .add("hidden");
 
     editIndex = -1;
+
     clearForm();
 }
 
@@ -655,11 +927,18 @@ function cancelForm(){
 function toggleApplicationFields(){
 
     const checked =
-        document.getElementById("isApplication").checked;
+        document
+            .getElementById("isApplication")
+            .checked;
+
 
     document
         .getElementById("applicationFields")
-        .classList.toggle("hidden", !checked);
+        .classList
+        .toggle(
+            "hidden",
+            !checked
+        );
 }
 
 
@@ -669,11 +948,16 @@ function toggleApplicationFields(){
 
 function togglePassword(){
 
-    const field = document.getElementById("password");
+    const field =
+        document.getElementById("password");
+
 
     if(field.type === "password"){
+
         field.type = "text";
+
     }else{
+
         field.type = "password";
     }
 }
@@ -686,37 +970,53 @@ function togglePassword(){
 async function copyText(text){
 
     if(!text){
+
         alert("Rien à copier.");
+
         return;
     }
+
 
     try{
 
         if(navigator.clipboard){
+
             await navigator.clipboard.writeText(text);
+
             return;
         }
 
     }catch(e){}
 
-    const textarea = document.createElement("textarea");
+
+    const textarea =
+        document.createElement("textarea");
+
 
     textarea.value = text;
 
     textarea.style.position = "fixed";
     textarea.style.opacity = "0";
 
+
     document.body.appendChild(textarea);
+
 
     textarea.focus();
     textarea.select();
 
+
     try{
+
         document.execCommand("copy");
+
         alert("Copié !");
+
     }catch(e){
+
         alert("Impossible de copier.");
     }
+
 
     document.body.removeChild(textarea);
 }
@@ -724,9 +1024,12 @@ async function copyText(text){
 
 function copyField(id){
 
-    const field = document.getElementById(id);
+    const field =
+        document.getElementById(id);
+
 
     if(field){
+
         copyText(field.value);
     }
 }
@@ -738,24 +1041,38 @@ function copyField(id){
 
 function handlePhoto(event){
 
-    const file = event.target.files[0];
+    const file =
+        event.target.files[0];
+
 
     if(!file){
         return;
     }
 
-    const reader = new FileReader();
 
-    reader.onload = function(e){
+    const reader =
+        new FileReader();
 
-        currentPhoto = e.target.result;
 
-        document.getElementById("photoPreview").src = currentPhoto;
+    reader.onload =
+        function(e){
 
-        document
-            .getElementById("photoContainer")
-            .classList.remove("hidden");
-    };
+            currentPhoto =
+                e.target.result;
+
+
+            document
+                .getElementById("photoPreview")
+                .src =
+                    currentPhoto;
+
+
+            document
+                .getElementById("photoContainer")
+                .classList
+                .remove("hidden");
+        };
+
 
     reader.readAsDataURL(file);
 }
@@ -765,13 +1082,18 @@ function removePhoto(){
 
     currentPhoto = "";
 
-    document.getElementById("photoInput").value = "";
+    document
+        .getElementById("photoInput")
+        .value = "";
 
-    document.getElementById("photoPreview").src = "";
+    document
+        .getElementById("photoPreview")
+        .src = "";
 
     document
         .getElementById("photoContainer")
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
 }
 
 
@@ -782,45 +1104,107 @@ function removePhoto(){
 function saveAccount(){
 
     const name =
-        document.getElementById("name").value.trim();
+        document
+            .getElementById("name")
+            .value
+            .trim();
+
 
     const username =
-        document.getElementById("username").value.trim();
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
 
     const password =
-        document.getElementById("password").value;
+        document
+            .getElementById("password")
+            .value;
+
 
     const url1 =
-        document.getElementById("url1").value.trim();
+        document
+            .getElementById("url1")
+            .value
+            .trim();
+
 
     const url2 =
-        document.getElementById("url2").value.trim();
+        document
+            .getElementById("url2")
+            .value
+            .trim();
+
 
     const remark =
-        document.getElementById("remark").value.trim();
+        document
+            .getElementById("remark")
+            .value
+            .trim();
+
 
     const durationValue =
-        document.getElementById("duration").value;
+        document
+            .getElementById("duration")
+            .value;
+
 
     const duration =
-        durationValue ? parseInt(durationValue,10) : 0;
+        durationValue
+            ? parseInt(durationValue,10)
+            : 0;
+
+
+    const reminderEmail =
+        document
+            .getElementById("reminderEmail")
+            .value
+            .trim();
+
 
     const isApplication =
-        document.getElementById("isApplication").checked;
+        document
+            .getElementById("isApplication")
+            .checked;
+
 
     const appUrl1 =
-        document.getElementById("appUrl1").value.trim();
+        document
+            .getElementById("appUrl1")
+            .value
+            .trim();
+
 
     const mac =
-        document.getElementById("mac").value.trim();
+        document
+            .getElementById("mac")
+            .value
+            .trim();
+
 
     const appKey =
-        document.getElementById("appKey").value.trim();
+        document
+            .getElementById("appKey")
+            .value
+            .trim();
 
 
     if(!name){
 
-        alert("Veuillez mettre un Nom / Prénom.");
+        alert(
+            "Veuillez mettre un Nom / Prénom."
+        );
+
+        return;
+    }
+
+
+    if(durationValue && duration < 1){
+
+        alert(
+            "La durée doit être d'au moins 1 jour."
+        );
 
         return;
     }
@@ -828,63 +1212,159 @@ function saveAccount(){
 
     let account;
 
+
+    // ==========================
+    // NOUVEL ACCÈS
+    // ==========================
+
     if(editIndex === -1){
 
-        const startDate = new Date();
+        const startDate =
+            new Date();
+
 
         account = {
+
             name:name,
+
             username:username,
+
             password:password,
+
             url1:url1,
+
             url2:url2,
+
             remark:remark,
 
             duration:duration,
 
-            startDate:startDate.toISOString(),
+            startDate:
+                duration
+                    ? startDate.toISOString()
+                    : "",
 
-            isApplication:isApplication,
+            reminderEmail:
+                reminderEmail,
+
+            isApplication:
+                isApplication,
 
             appUrl1:appUrl1,
+
             mac:mac,
+
             appKey:appKey,
 
             photo:currentPhoto,
 
             reminder2Sent:false,
+
             reminder1Sent:false,
+
             reminder0Sent:false
         };
 
+
         accounts.push(account);
+
+
+    // ==========================
+    // MODIFICATION
+    // ==========================
 
     }else{
 
-        account = accounts[editIndex];
+        account =
+            accounts[editIndex];
 
-        account.name = name;
-        account.username = username;
-        account.password = password;
-        account.url1 = url1;
-        account.url2 = url2;
-        account.remark = remark;
 
-        account.duration = duration;
+        const oldDuration =
+            Number(account.duration || 0);
 
-        account.isApplication = isApplication;
 
-        account.appUrl1 = appUrl1;
-        account.mac = mac;
-        account.appKey = appKey;
+        account.name =
+            name;
 
-        account.photo = currentPhoto;
+        account.username =
+            username;
+
+        account.password =
+            password;
+
+        account.url1 =
+            url1;
+
+        account.url2 =
+            url2;
+
+        account.remark =
+            remark;
+
+        account.duration =
+            duration;
+
+        account.reminderEmail =
+            reminderEmail;
+
+        account.isApplication =
+            isApplication;
+
+        account.appUrl1 =
+            appUrl1;
+
+        account.mac =
+            mac;
+
+        account.appKey =
+            appKey;
+
+        account.photo =
+            currentPhoto;
+
+
+        /*
+         * Si on ajoute une durée à un ancien accès
+         * qui n'avait pas encore de date,
+         * le compteur démarre aujourd'hui.
+         *
+         * Si on change la durée,
+         * le nouveau compteur repart aujourd'hui.
+         */
+
+        if(
+            duration > 0 &&
+            (
+                !account.startDate ||
+                oldDuration !== duration
+            )
+        ){
+
+            account.startDate =
+                new Date().toISOString();
+
+
+            account.reminder2Sent = false;
+            account.reminder1Sent = false;
+            account.reminder0Sent = false;
+        }
+
+
+        if(duration === 0){
+
+            account.startDate = "";
+
+            account.reminder2Sent = false;
+            account.reminder1Sent = false;
+            account.reminder0Sent = false;
+        }
     }
 
 
     saveData();
 
     updateUserCount();
+
     renderAccounts();
 
     cancelForm();
@@ -897,69 +1377,103 @@ function saveAccount(){
 
 function editAccount(index){
 
-    const account = accounts[index];
+    const account =
+        accounts[index];
+
 
     editIndex = index;
 
-    document.getElementById("formTitle").textContent =
-        "✏️ Modifier l'accès";
+
+    document
+        .getElementById("formTitle")
+        .textContent =
+            "✏️ Modifier l'accès";
+
 
     document.getElementById("name").value =
         account.name || "";
 
+
     document.getElementById("username").value =
         account.username || "";
+
 
     document.getElementById("password").value =
         account.password || "";
 
+
     document.getElementById("url1").value =
         account.url1 || "";
+
 
     document.getElementById("url2").value =
         account.url2 || "";
 
+
     document.getElementById("remark").value =
         account.remark || "";
+
 
     document.getElementById("duration").value =
         account.duration || "";
 
-    document.getElementById("isApplication").checked =
-        !!account.isApplication;
+
+    document.getElementById("reminderEmail").value =
+        account.reminderEmail || "";
+
+
+    document
+        .getElementById("isApplication")
+        .checked =
+            !!account.isApplication;
+
 
     document.getElementById("appUrl1").value =
         account.appUrl1 || "";
 
+
     document.getElementById("mac").value =
         account.mac || "";
+
 
     document.getElementById("appKey").value =
         account.appKey || "";
 
+
     toggleApplicationFields();
 
-    currentPhoto = account.photo || "";
+
+    currentPhoto =
+        account.photo || "";
+
 
     if(currentPhoto){
 
-        document.getElementById("photoPreview").src =
-            currentPhoto;
+        document
+            .getElementById("photoPreview")
+            .src =
+                currentPhoto;
+
 
         document
             .getElementById("photoContainer")
-            .classList.remove("hidden");
+            .classList
+            .remove("hidden");
 
     }else{
 
         document
             .getElementById("photoContainer")
-            .classList.add("hidden");
+            .classList
+            .add("hidden");
     }
+
 
     document
         .getElementById("formCard")
-        .classList.remove("hidden");
+        .classList
+        .remove("hidden");
+
 
     window.scrollTo({
         top:0,
@@ -974,77 +1488,132 @@ function editAccount(index){
 
 function deleteAccount(index){
 
-    const account = accounts[index];
+    const account =
+        accounts[index];
+
 
     if(!confirm(
         "Supprimer l'accès de " +
         (account.name || "cet utilisateur") +
         " ?"
     )){
+
         return;
     }
 
-    accounts.splice(index,1);
+
+    accounts.splice(
+        index,
+        1
+    );
+
 
     saveData();
 
     updateUserCount();
+
     renderAccounts();
 }
 
 
 // ==============================
-// DATE / COMPTE À REBOURS
+// COMPTE À REBOURS
 // ==============================
 
 function getCountdown(account){
 
-    if(!account.duration || !account.startDate){
+    if(
+        !account.duration ||
+        !account.startDate
+    ){
 
         return {
-            text:"⏳ Aucune durée définie",
-            className:"none",
+
+            text:
+                "⏳ Aucune durée définie",
+
+            className:
+                "none",
+
             days:null
         };
     }
 
 
-    const start = new Date(account.startDate);
+    const start =
+        new Date(
+            account.startDate
+        );
 
-    start.setHours(0,0,0,0);
 
-
-    const expiry = new Date(start);
-
-    expiry.setDate(
-        expiry.getDate() + Number(account.duration)
+    start.setHours(
+        0,
+        0,
+        0,
+        0
     );
 
 
-    const today = new Date();
+    const expiry =
+        new Date(start);
 
-    today.setHours(0,0,0,0);
+
+    expiry.setDate(
+        expiry.getDate() +
+        Number(account.duration)
+    );
+
+
+    const today =
+        new Date();
+
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
 
     const difference =
         Math.ceil(
-            (expiry - today) /
-            (1000 * 60 * 60 * 24)
+            (
+                expiry -
+                today
+            ) /
+            (
+                1000 *
+                60 *
+                60 *
+                24
+            )
         );
 
 
     if(difference < 0){
 
-        const days = Math.abs(difference);
+        const days =
+            Math.abs(difference);
+
 
         return {
+
             text:
                 "❌ Expiré depuis " +
                 days +
                 " jour" +
-                (days > 1 ? "s" : ""),
-            className:"expired",
-            days:difference
+                (
+                    days > 1
+                        ? "s"
+                        : ""
+                ),
+
+            className:
+                "expired",
+
+            days:
+                difference
         };
     }
 
@@ -1052,8 +1621,13 @@ function getCountdown(account){
     if(difference === 0){
 
         return {
-            text:"⚠️ Expire aujourd'hui",
-            className:"danger",
+
+            text:
+                "⚠️ Expire aujourd'hui",
+
+            className:
+                "danger",
+
             days:0
         };
     }
@@ -1062,8 +1636,13 @@ function getCountdown(account){
     if(difference === 1){
 
         return {
-            text:"🔴 1 jour restant",
-            className:"danger",
+
+            text:
+                "🔴 1 jour restant",
+
+            className:
+                "danger",
+
             days:1
         };
     }
@@ -1072,8 +1651,13 @@ function getCountdown(account){
     if(difference === 2){
 
         return {
-            text:"🔴 2 jours restants",
-            className:"danger",
+
+            text:
+                "🔴 2 jours restants",
+
+            className:
+                "danger",
+
             days:2
         };
     }
@@ -1082,23 +1666,33 @@ function getCountdown(account){
     if(difference <= 7){
 
         return {
+
             text:
                 "🟠 " +
                 difference +
                 " jours restants",
-            className:"warning",
-            days:difference
+
+            className:
+                "warning",
+
+            days:
+                difference
         };
     }
 
 
     return {
+
         text:
             "🟢 " +
             difference +
             " jours restants",
-        className:"ok",
-        days:difference
+
+        className:
+            "ok",
+
+        days:
+            difference
     };
 }
 
@@ -1109,21 +1703,42 @@ function getCountdown(account){
 
 function getExpirationDate(account){
 
-    if(!account.duration || !account.startDate){
+    if(
+        !account.duration ||
+        !account.startDate
+    ){
+
         return "";
     }
 
-    const start = new Date(account.startDate);
 
-    start.setHours(0,0,0,0);
+    const start =
+        new Date(
+            account.startDate
+        );
 
-    const expiry = new Date(start);
 
-    expiry.setDate(
-        expiry.getDate() + Number(account.duration)
+    start.setHours(
+        0,
+        0,
+        0,
+        0
     );
 
-    return expiry.toLocaleDateString("fr-BE");
+
+    const expiry =
+        new Date(start);
+
+
+    expiry.setDate(
+        expiry.getDate() +
+        Number(account.duration)
+    );
+
+
+    return expiry.toLocaleDateString(
+        "fr-BE"
+    );
 }
 
 
@@ -1137,14 +1752,19 @@ function normalizeUrl(url){
         return "";
     }
 
-    url = url.trim();
+
+    url =
+        url.trim();
+
 
     if(
         url.startsWith("http://") ||
         url.startsWith("https://")
     ){
+
         return url;
     }
+
 
     return "https://" + url;
 }
@@ -1156,80 +1776,161 @@ function createUrlLink(url){
         return "";
     }
 
-    const normalized = normalizeUrl(url);
 
-    const a = document.createElement("a");
+    const normalized =
+        normalizeUrl(url);
 
-    a.className = "urlLink";
-    a.href = normalized;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.textContent = url;
+
+    const a =
+        document.createElement("a");
+
+
+    a.className =
+        "urlLink";
+
+    a.href =
+        normalized;
+
+    a.target =
+        "_blank";
+
+    a.rel =
+        "noopener noreferrer";
+
+    a.textContent =
+        url;
+
 
     return a.outerHTML;
 }
 
 
 // ==============================
-// E-MAIL RAPPEL
+// RAPPEL PAR MAIL
 // ==============================
 
 function sendReminderEmail(index){
 
-    const account = accounts[index];
+    const account =
+        accounts[index];
 
-    const countdown = getCountdown(account);
+
+    const countdown =
+        getCountdown(account);
+
 
     if(countdown.days === null){
-        alert("Aucune durée n'est définie pour cet accès.");
-        return;
-    }
-
-    if(countdown.days > 2){
 
         alert(
-            "Le rappel sera nécessaire lorsqu'il restera 2 jours."
+            "Aucune durée n'est définie pour cet accès."
         );
 
         return;
     }
 
+
+    if(countdown.days > 2){
+
+        alert(
+            "Le rappel sera disponible lorsqu'il restera 2 jours ou moins."
+        );
+
+        return;
+    }
+
+
+    let recipient =
+        account.reminderEmail || "";
+
+
+    if(!recipient){
+
+        recipient =
+            prompt(
+                "Adresse e-mail pour recevoir le rappel :"
+            );
+
+
+        if(!recipient){
+            return;
+        }
+
+
+        account.reminderEmail =
+            recipient;
+
+
+        saveData();
+    }
+
+
+    let remainingText;
+
+
+    if(countdown.days === 0){
+
+        remainingText =
+            "Expire aujourd'hui";
+
+    }else{
+
+        remainingText =
+            countdown.days +
+            " jour" +
+            (
+                countdown.days > 1
+                    ? "s"
+                    : ""
+            ) +
+            " restant" +
+            (
+                countdown.days > 1
+                    ? "s"
+                    : ""
+            );
+    }
+
+
     const subject =
-        "Rappel : accès bientôt expiré - " +
-        (account.name || "");
+        "⚠️ Rappel - accès bientôt expiré - " +
+        account.name;
+
 
     const body =
-        "Bonjour,%0D%0A%0D%0A" +
+        "Bonjour,\n\n" +
 
         "L'accès de " +
-        encodeURIComponent(account.name || "") +
-        " arrive à expiration.%0D%0A%0D%0A" +
+        account.name +
+        " arrive bientôt à expiration.\n\n" +
+
+        "Utilisateur : " +
+        (account.username || "") +
+        "\n" +
 
         "Durée : " +
-        encodeURIComponent(account.duration || "") +
-        " jours%0D%0A" +
+        account.duration +
+        " jours\n" +
 
         "Jours restants : " +
-        encodeURIComponent(
-            countdown.days === 0
-                ? "Expire aujourd'hui"
-                : countdown.days + " jour(s)"
-        ) +
-        "%0D%0A" +
+        remainingText +
+        "\n" +
 
         "Date d'expiration : " +
-        encodeURIComponent(
-            getExpirationDate(account)
-        ) +
-        "%0D%0A%0D%0A" +
+        getExpirationDate(account) +
+        "\n\n" +
 
         "Mes accès";
 
+
     window.location.href =
-        "mailto:?subject=" +
+        "mailto:" +
+        encodeURIComponent(recipient) +
+
+        "?subject=" +
         encodeURIComponent(subject) +
+
         "&body=" +
-        body;
+        encodeURIComponent(body);
 }
 
 
@@ -1240,11 +1941,16 @@ function sendReminderEmail(index){
 function renderAccounts(){
 
     const list =
-        document.getElementById("accountsList");
+        document.getElementById(
+            "accountsList"
+        );
+
 
     const search =
         document
-            .getElementById("searchInput")
+            .getElementById(
+                "searchInput"
+            )
             .value
             .toLowerCase()
             .trim();
@@ -1255,31 +1961,42 @@ function renderAccounts(){
 
     const filtered =
         accounts
-            .map((account,index)=>({
-                account,
-                index
-            }))
-            .filter(item => {
+            .map(
+                (account,index)=>({
+                    account,
+                    index
+                })
+            )
+            .filter(
+                item => {
 
-                if(!search){
-                    return true;
+                    if(!search){
+                        return true;
+                    }
+
+
+                    const a =
+                        item.account;
+
+
+                    const text =
+                        [
+                            a.name,
+                            a.username,
+                            a.url1,
+                            a.url2,
+                            a.remark,
+                            a.mac
+                        ]
+                        .join(" ")
+                        .toLowerCase();
+
+
+                    return text.includes(
+                        search
+                    );
                 }
-
-                const a = item.account;
-
-                const text = [
-                    a.name,
-                    a.username,
-                    a.url1,
-                    a.url2,
-                    a.remark,
-                    a.mac
-                ]
-                .join(" ")
-                .toLowerCase();
-
-                return text.includes(search);
-            });
+            );
 
 
     if(filtered.length === 0){
@@ -1293,241 +2010,417 @@ function renderAccounts(){
     }
 
 
-    filtered.forEach(item => {
+    filtered.forEach(
+        item => {
 
-        const account = item.account;
-        const index = item.index;
+            const account =
+                item.account;
 
-        const countdown =
-            getCountdown(account);
-
-
-        const div =
-            document.createElement("div");
-
-        div.className = "account";
+            const index =
+                item.index;
 
 
-        let html = "";
+            const countdown =
+                getCountdown(
+                    account
+                );
 
 
-        html +=
-            "<h2>👤 " +
-            escapeHtml(account.name || "") +
-            "</h2>";
+            const div =
+                document.createElement(
+                    "div"
+                );
 
 
-        html +=
-            '<div class="countdown ' +
-            countdown.className +
-            '">' +
-            escapeHtml(countdown.text) +
-            "</div>";
+            div.className =
+                "account";
 
 
-        if(account.duration){
+            let html = "";
+
 
             html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">⏳ Durée</div>' +
-                '<div class="accountValue">' +
+                "<h2>👤 " +
                 escapeHtml(
-                    account.duration + " jours"
+                    account.name || ""
                 ) +
-                "</div>" +
-                "</div>";
+                "</h2>";
 
+
+            // COMPTE À REBOURS
 
             html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">📅 Expiration</div>' +
-                '<div class="accountValue">' +
+                '<div class="countdown ' +
+                countdown.className +
+                '">' +
                 escapeHtml(
-                    getExpirationDate(account)
+                    countdown.text
                 ) +
-                "</div>" +
                 "</div>";
-        }
 
 
-        if(account.username){
+            // DURÉE
 
-            html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">Utilisateur</div>' +
-                '<div class="accountValue">' +
-                escapeHtml(account.username) +
-                ' <button class="copyBtn" onclick="copyText(' +
-                jsString(account.username) +
-                ')">Copier</button>' +
-                "</div>" +
-                "</div>";
-        }
-
-
-        if(account.password){
-
-            html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">Mot de passe</div>' +
-                '<div class="accountValue">' +
-                '<span id="pass-' +
-                index +
-                '">••••••••</span>' +
-
-                ' <button class="copyBtn" onclick="toggleDisplayedPassword(' +
-                index +
-                ')">👁️</button>' +
-
-                ' <button class="copyBtn" onclick="copyText(' +
-                jsString(account.password) +
-                ')">Copier</button>' +
-
-                "</div>" +
-                "</div>";
-        }
-
-
-        if(account.url1){
-
-            html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">URL 1</div>' +
-                createUrlLink(account.url1) +
-                '<button class="copyBtn" onclick="copyText(' +
-                jsString(account.url1) +
-                ')">Copier</button>' +
-                "</div>";
-        }
-
-
-        if(account.url2){
-
-            html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">URL 2</div>' +
-                createUrlLink(account.url2) +
-                '<button class="copyBtn" onclick="copyText(' +
-                jsString(account.url2) +
-                ')">Copier</button>' +
-                "</div>";
-        }
-
-
-        if(account.remark){
-
-            html +=
-                '<div class="accountLine">' +
-                '<div class="accountLabel">📝 Remarque</div>' +
-                '<div class="accountValue">' +
-                escapeHtml(account.remark) +
-                "</div>" +
-                "</div>";
-        }
-
-
-        if(account.isApplication){
-
-            html +=
-                "<hr>" +
-
-                '<div class="accountLabel">📱 APPLICATION</div>';
-
-
-            if(account.appUrl1){
+            if(account.duration){
 
                 html +=
                     '<div class="accountLine">' +
-                    '<div class="accountLabel">URL</div>' +
-                    createUrlLink(account.appUrl1) +
+
+                    '<div class="accountLabel">' +
+                    '⏳ Durée' +
+                    '</div>' +
+
+                    '<div class="accountValue">' +
+                    escapeHtml(
+                        account.duration +
+                        " jours"
+                    ) +
+                    "</div>" +
+
+                    "</div>";
+
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    '📅 Expiration' +
+                    '</div>' +
+
+                    '<div class="accountValue">' +
+                    escapeHtml(
+                        getExpirationDate(
+                            account
+                        )
+                    ) +
+                    "</div>" +
+
+                    "</div>";
+            }
+
+
+            // UTILISATEUR
+
+            if(account.username){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    'Utilisateur' +
+                    '</div>' +
+
+                    '<div class="accountValue">' +
+
+                    escapeHtml(
+                        account.username
+                    ) +
+
+                    ' <button class="copyBtn" onclick="copyText(' +
+
+                    jsString(
+                        account.username
+                    ) +
+
+                    ')">Copier</button>' +
+
+                    "</div>" +
+
+                    "</div>";
+            }
+
+
+            // MOT DE PASSE
+
+            if(account.password){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    'Mot de passe' +
+                    '</div>' +
+
+                    '<div class="accountValue">' +
+
+                    '<span id="pass-' +
+                    index +
+                    '">••••••••</span>' +
+
+                    ' <button class="copyBtn" onclick="toggleDisplayedPassword(' +
+                    index +
+                    ')">👁️</button>' +
+
+                    ' <button class="copyBtn" onclick="copyText(' +
+                    jsString(
+                        account.password
+                    ) +
+                    ')">Copier</button>' +
+
+                    "</div>" +
+
+                    "</div>";
+            }
+
+
+            // URL 1
+
+            if(account.url1){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    'URL 1' +
+                    '</div>' +
+
+                    createUrlLink(
+                        account.url1
+                    ) +
+
                     '<button class="copyBtn" onclick="copyText(' +
-                    jsString(account.appUrl1) +
+                    jsString(
+                        account.url1
+                    ) +
                     ')">Copier</button>' +
+
                     "</div>";
             }
 
 
-            if(account.mac){
+            // URL 2
+
+            if(account.url2){
 
                 html +=
                     '<div class="accountLine">' +
-                    '<div class="accountLabel">MAC</div>' +
-                    '<div class="accountValue">' +
-                    escapeHtml(account.mac) +
-                    ' <button class="copyBtn" onclick="copyText(' +
-                    jsString(account.mac) +
+
+                    '<div class="accountLabel">' +
+                    'URL 2' +
+                    '</div>' +
+
+                    createUrlLink(
+                        account.url2
+                    ) +
+
+                    '<button class="copyBtn" onclick="copyText(' +
+                    jsString(
+                        account.url2
+                    ) +
                     ')">Copier</button>' +
-                    "</div>" +
+
                     "</div>";
             }
 
 
-            if(account.appKey){
+            // REMARQUE
+
+            if(account.remark){
 
                 html +=
                     '<div class="accountLine">' +
-                    '<div class="accountLabel">Clé</div>' +
+
+                    '<div class="accountLabel">' +
+                    '📝 Remarque' +
+                    '</div>' +
+
                     '<div class="accountValue">' +
-                    escapeHtml(account.appKey) +
-                    ' <button class="copyBtn" onclick="copyText(' +
-                    jsString(account.appKey) +
-                    ')">Copier</button>' +
+
+                    escapeHtml(
+                        account.remark
+                    ) +
+
                     "</div>" +
+
                     "</div>";
             }
-        }
 
 
-        if(account.photo){
+            // APPLICATION
+
+            if(account.isApplication){
+
+                html +=
+                    "<hr>" +
+
+                    '<div class="accountLabel">' +
+                    '📱 APPLICATION' +
+                    '</div>';
+
+
+                if(account.appUrl1){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        'URL' +
+                        '</div>' +
+
+                        createUrlLink(
+                            account.appUrl1
+                        ) +
+
+                        '<button class="copyBtn" onclick="copyText(' +
+                        jsString(
+                            account.appUrl1
+                        ) +
+                        ')">Copier</button>' +
+
+                        "</div>";
+                }
+
+
+                if(account.mac){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        'MAC' +
+                        '</div>' +
+
+                        '<div class="accountValue">' +
+
+                        escapeHtml(
+                            account.mac
+                        ) +
+
+                        ' <button class="copyBtn" onclick="copyText(' +
+                        jsString(
+                            account.mac
+                        ) +
+                        ')">Copier</button>' +
+
+                        "</div>" +
+
+                        "</div>";
+                }
+
+
+                if(account.appKey){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        'Clé' +
+                        '</div>' +
+
+                        '<div class="accountValue">' +
+
+                        escapeHtml(
+                            account.appKey
+                        ) +
+
+                        ' <button class="copyBtn" onclick="copyText(' +
+                        jsString(
+                            account.appKey
+                        ) +
+                        ')">Copier</button>' +
+
+                        "</div>" +
+
+                        "</div>";
+                }
+            }
+
+
+            // EMAIL
+
+            if(account.reminderEmail){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    '📧 E-mail rappel' +
+                    '</div>' +
+
+                    '<div class="accountValue">' +
+
+                    escapeHtml(
+                        account.reminderEmail
+                    ) +
+
+                    "</div>" +
+
+                    "</div>";
+            }
+
+
+            // PHOTO
+
+            if(account.photo){
+
+                html +=
+                    "<hr>" +
+
+                    '<img src="' +
+                    account.photo +
+                    '" class="photoPreview">';
+            }
+
+
+            // BOUTONS
 
             html +=
-                "<hr>" +
+                '<div class="actions">' +
 
-                '<img src="' +
-                account.photo +
-                '" class="photoPreview">';
+                '<button class="secondary" onclick="editAccount(' +
+                index +
+                ')">' +
+                '✏️ Modifier' +
+                '</button>' +
+
+                '<button class="orange" onclick="sendReminderEmail(' +
+                index +
+                ')">' +
+                '📧 Rappel' +
+                '</button>' +
+
+                '<button class="danger" onclick="deleteAccount(' +
+                index +
+                ')">' +
+                '🗑️ Supprimer' +
+                '</button>' +
+
+                "</div>";
+
+
+            div.innerHTML =
+                html;
+
+
+            list.appendChild(
+                div
+            );
         }
-
-
-        html +=
-            '<div class="actions">' +
-
-            '<button class="secondary" onclick="editAccount(' +
-            index +
-            ')">✏️ Modifier</button>' +
-
-            '<button class="orange" onclick="sendReminderEmail(' +
-            index +
-            ')">📧 Rappel</button>' +
-
-            '<button class="danger" onclick="deleteAccount(' +
-            index +
-            ')">🗑️ Supprimer</button>' +
-
-            "</div>";
-
-
-        div.innerHTML = html;
-
-        list.appendChild(div);
-    });
+    );
 }
 
 
 // ==============================
-// MOT DE PASSE AFFICHÉ
+// AFFICHER MOT DE PASSE
 // ==============================
 
 function toggleDisplayedPassword(index){
 
     const element =
-        document.getElementById("pass-" + index);
+        document.getElementById(
+            "pass-" + index
+        );
+
 
     if(!element){
         return;
     }
 
-    if(element.textContent === "••••••••"){
+
+    if(
+        element.textContent ===
+        "••••••••"
+    ){
 
         element.textContent =
             accounts[index].password || "";
@@ -1547,18 +2440,46 @@ function toggleDisplayedPassword(index){
 function escapeHtml(value){
 
     return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
 
 function jsString(value){
 
-    return JSON.stringify(String(value || ""))
-        .replace(/</g,"\\u003c");
+    return JSON
+        .stringify(
+            String(
+                value || ""
+            )
+        )
+        .replace(
+            /</g,
+            "\\u003c"
+        );
 }
 
 
@@ -1569,32 +2490,59 @@ function jsString(value){
 function exportData(){
 
     const data =
-        JSON.stringify(accounts,null,2);
+        JSON.stringify(
+            accounts,
+            null,
+            2
+        );
+
 
     const blob =
         new Blob(
             [data],
-            {type:"application/json"}
+            {
+                type:
+                    "application/json"
+            }
         );
 
+
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
+
 
     const a =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
-    a.href = url;
+
+    a.href =
+        url;
+
 
     a.download =
         "mes-acces-sauvegarde.json";
 
-    document.body.appendChild(a);
+
+    document
+        .body
+        .appendChild(a);
+
 
     a.click();
 
-    document.body.removeChild(a);
 
-    URL.revokeObjectURL(url);
+    document
+        .body
+        .removeChild(a);
+
+
+    URL.revokeObjectURL(
+        url
+    );
 }
 
 
@@ -1607,6 +2555,7 @@ function importData(event){
     const file =
         event.target.files[0];
 
+
     if(!file){
         return;
     }
@@ -1616,103 +2565,140 @@ function importData(event){
         new FileReader();
 
 
-    reader.onload = function(e){
+    reader.onload =
+        function(e){
 
-        try{
+            try{
 
-            const imported =
-                JSON.parse(e.target.result);
+                const imported =
+                    JSON.parse(
+                        e.target.result
+                    );
 
 
-            if(!Array.isArray(imported)){
+                if(
+                    !Array.isArray(
+                        imported
+                    )
+                ){
+
+                    alert(
+                        "Fichier de sauvegarde invalide."
+                    );
+
+                    return;
+                }
+
+
+                if(
+                    !confirm(
+                        "Remplacer les accès actuels par cette sauvegarde ?"
+                    )
+                ){
+
+                    return;
+                }
+
+
+                accounts =
+                    imported;
+
+
+                saveData();
+
+                updateUserCount();
+
+                renderAccounts();
+
 
                 alert(
-                    "Fichier de sauvegarde invalide."
+                    "Sauvegarde restaurée."
                 );
 
-                return;
+            }catch(error){
+
+                alert(
+                    "Impossible de lire cette sauvegarde."
+                );
             }
+        };
 
 
-            if(!confirm(
-                "Remplacer les accès actuels par cette sauvegarde ?"
-            )){
-                return;
-            }
+    reader.readAsText(
+        file
+    );
 
-
-            accounts = imported;
-
-            saveData();
-
-            updateUserCount();
-            renderAccounts();
-
-            alert("Sauvegarde restaurée.");
-
-        }catch(error){
-
-            alert(
-                "Impossible de lire cette sauvegarde."
-            );
-        }
-    };
-
-
-    reader.readAsText(file);
 
     event.target.value = "";
 }
 
 
 // ==============================
-// ACTUALISATION DU COMPTE À REBOURS
+// ACTUALISATION
 // ==============================
 
-setInterval(function(){
+setInterval(
+    function(){
 
-    if(
-        !document
-            .getElementById("loginScreen")
-            .classList
-            .contains("hidden")
-    ){
-        return;
-    }
+        if(
+            !document
+                .getElementById(
+                    "loginScreen"
+                )
+                .classList
+                .contains(
+                    "hidden"
+                )
+        ){
 
-    renderAccounts();
+            return;
+        }
 
-},60000);
+
+        renderAccounts();
+
+    },
+    60000
+);
 
 
 // ==============================
-// RAPPELS LOCAUX
+// RAPPELS
 // ==============================
 
 function checkReminders(){
 
-    accounts.forEach((account,index)=>{
+    accounts.forEach(
+        (account,index)=>{
 
-        const countdown =
-            getCountdown(account);
+            const countdown =
+                getCountdown(
+                    account
+                );
 
-        if(
-            countdown.days !== null &&
-            countdown.days <= 2 &&
-            countdown.days >= 0
-        ){
 
-            console.log(
-                "⚠️ Rappel nécessaire pour :",
-                account.name
-            );
+            if(
+                countdown.days !== null &&
+                countdown.days <= 2 &&
+                countdown.days >= 0
+            ){
+
+                console.log(
+                    "⚠️ Rappel nécessaire pour :",
+                    account.name
+                );
+            }
         }
-    });
+    );
 }
 
 
-// Démarrage
+// ==============================
+// DÉMARRAGE
+// ==============================
+
 loadData();
+
 checkReminders();
 
 </script>
