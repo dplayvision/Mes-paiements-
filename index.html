@@ -35,8 +35,8 @@ header h1{
 }
 
 .userCount{
-    font-size:21px;
-    font-weight:700;
+    font-size:23px;
+    font-weight:800;
 }
 
 .container{
@@ -45,7 +45,8 @@ header h1{
     padding:15px;
 }
 
-.card{
+.card,
+.account{
     background:white;
     border-radius:16px;
     padding:16px;
@@ -155,10 +156,11 @@ button{
 
 .countdown{
     margin:12px 0;
-    padding:12px;
+    padding:14px;
     border-radius:12px;
-    font-weight:700;
+    font-weight:800;
     text-align:center;
+    font-size:17px;
 }
 
 .countdown.ok{
@@ -263,14 +265,6 @@ small{
     font-size:14px;
 }
 
-.account{
-    background:white;
-    border-radius:16px;
-    padding:16px;
-    margin-bottom:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
 .account h2{
     margin:0 0 12px;
     font-size:20px;
@@ -302,21 +296,56 @@ small{
     flex:1;
     min-width:100px;
 }
+
+.durationBox{
+    background:#f2f2f7;
+    border-radius:14px;
+    padding:14px;
+    margin-top:12px;
+}
+
+.durationBoxTitle{
+    font-weight:800;
+    font-size:16px;
+    margin-bottom:8px;
+}
+
+.durationRow{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.durationRow input{
+    margin:0;
+    flex:1;
+}
+
+.durationUnit{
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.dateInfo{
+    margin-top:8px;
+    font-size:14px;
+    color:#555;
+}
+
+.photoButtonText{
+    margin-top:8px;
+    display:block;
+    color:#666;
+    font-size:14px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- ========================= -->
-<!-- CONNEXION -->
-<!-- ========================= -->
-
 <div class="login" id="loginScreen">
-
     <div class="loginBox">
-
         <h1>🔐 Mes accès</h1>
-
         <p>Entrez votre code PIN</p>
 
         <input
@@ -335,35 +364,19 @@ small{
         <div id="loginError" class="loginError hidden">
             Code incorrect
         </div>
-
     </div>
-
 </div>
 
-
-<!-- ========================= -->
-<!-- HEADER -->
-<!-- ========================= -->
-
 <header>
-
     <h1>🔐 Mes accès</h1>
-
     <div class="userCount" id="userCount">
         👥 0 utilisateurs
     </div>
-
 </header>
-
 
 <div class="container">
 
-    <!-- ========================= -->
-    <!-- BOUTONS -->
-    <!-- ========================= -->
-
     <div class="topButtons">
-
         <button class="secondary" onclick="showAddForm()">
             ➕ Ajouter
         </button>
@@ -386,13 +399,7 @@ small{
             class="hidden"
             onchange="importData(event)"
         >
-
     </div>
-
-
-    <!-- ========================= -->
-    <!-- RECHERCHE -->
-    <!-- ========================= -->
 
     <input
         class="search"
@@ -401,34 +408,21 @@ small{
         oninput="renderAccounts()"
     >
 
-
-    <!-- ========================= -->
-    <!-- FORMULAIRE -->
-    <!-- ========================= -->
-
     <div class="card hidden" id="formCard">
 
         <h2 id="formTitle">
             ➕ Nouvel accès
         </h2>
 
-
-        <label>
-            Nom / Prénom
-        </label>
-
+        <label>Nom / Prénom</label>
         <input
             id="name"
             placeholder="Exemple : Jean Dupont"
         >
 
-
-        <label>
-            Utilisateur
-        </label>
+        <label>Utilisateur</label>
 
         <div class="fieldRow">
-
             <input
                 id="username"
                 placeholder="Utilisateur"
@@ -440,16 +434,11 @@ small{
             >
                 Copier
             </button>
-
         </div>
 
-
-        <label>
-            Mot de passe
-        </label>
+        <label>Mot de passe</label>
 
         <div class="fieldRow">
-
             <input
                 id="password"
                 type="password"
@@ -469,16 +458,11 @@ small{
             >
                 Copier
             </button>
-
         </div>
 
-
-        <label>
-            URL 1
-        </label>
+        <label>URL 1</label>
 
         <div class="fieldRow">
-
             <input
                 id="url1"
                 placeholder="https://..."
@@ -490,16 +474,11 @@ small{
             >
                 Copier
             </button>
-
         </div>
 
-
-        <label>
-            URL 2
-        </label>
+        <label>URL 2</label>
 
         <div class="fieldRow">
-
             <input
                 id="url2"
                 placeholder="https://..."
@@ -511,53 +490,56 @@ small{
             >
                 Copier
             </button>
-
         </div>
 
-
-        <label>
-            Remarque
-        </label>
+        <label>Remarque</label>
 
         <textarea
             id="remark"
             placeholder="Remarque..."
         ></textarea>
 
-
         <hr>
 
+        <!-- NOUVELLE PARTIE DURÉE -->
 
-        <!-- ========================= -->
-        <!-- DUREE -->
-        <!-- ========================= -->
+        <div class="durationBox">
 
-        <label>
-            ⏳ Durée en jours
-        </label>
+            <div class="durationBoxTitle">
+                ⏳ Durée de l'accès
+            </div>
 
-        <input
-            id="duration"
-            type="number"
-            min="1"
-            inputmode="numeric"
-            placeholder="Exemple : 365"
-        >
+            <div class="durationRow">
 
-        <small>
-            Le décompte commence à partir de la date d'ajout.
-            Lors d'une modification, la date de départ est conservée.
-        </small>
+                <input
+                    id="duration"
+                    type="number"
+                    min="1"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="Exemple : 365"
+                >
 
-        <div class="reminderInfo">
-            📧 Le rappel est prévu lorsque l'accès arrive à
-            <strong>2 jours ou moins</strong> de l'expiration.
+                <span class="durationUnit">
+                    jours
+                </span>
+
+            </div>
+
+            <div class="dateInfo" id="startDateInfo">
+                📅 La date de début sera enregistrée à l'ajout.
+            </div>
+
+            <div class="dateInfo" id="expiryPreview">
+                📅 La date d'expiration sera calculée automatiquement.
+            </div>
+
         </div>
 
-
-        <!-- ========================= -->
-        <!-- APPLICATION -->
-        <!-- ========================= -->
+        <div class="reminderInfo">
+            📧 Le rappel est disponible lorsqu'il reste
+            <strong>2 jours ou moins</strong>.
+        </div>
 
         <div class="checkRow">
 
@@ -576,15 +558,12 @@ small{
 
         </div>
 
-
         <div
             id="applicationFields"
             class="hidden"
         >
 
-            <label>
-                URL de l'application
-            </label>
+            <label>URL de l'application</label>
 
             <div class="fieldRow">
 
@@ -602,10 +581,7 @@ small{
 
             </div>
 
-
-            <label>
-                MAC
-            </label>
+            <label>MAC</label>
 
             <div class="fieldRow">
 
@@ -623,10 +599,7 @@ small{
 
             </div>
 
-
-            <label>
-                Clé
-            </label>
+            <label>Clé</label>
 
             <div class="fieldRow">
 
@@ -646,17 +619,9 @@ small{
 
         </div>
 
-
         <hr>
 
-
-        <!-- ========================= -->
-        <!-- PHOTO -->
-        <!-- ========================= -->
-
-        <label>
-            📷 Photo
-        </label>
+        <label>📷 Photo</label>
 
         <input
             type="file"
@@ -666,11 +631,10 @@ small{
             onchange="handlePhoto(event)"
         >
 
-        <small>
+        <span class="photoButtonText">
             Tu peux choisir une photo déjà présente dans tes photos
             ou prendre une nouvelle photo.
-        </small>
-
+        </span>
 
         <div
             id="photoContainer"
@@ -692,14 +656,12 @@ small{
 
         </div>
 
-
         <button
             class="primary"
             onclick="saveAccount()"
         >
             💾 Enregistrer
         </button>
-
 
         <button
             class="secondary"
@@ -711,32 +673,23 @@ small{
 
     </div>
 
-
-    <!-- ========================= -->
-    <!-- LISTE -->
-    <!-- ========================= -->
-
     <div id="accountsList"></div>
 
 </div>
 
-
 <script>
 
 const PIN = "1157";
-
 const STORAGE_KEY = "mesAcces";
 
 let accounts = [];
-
 let editIndex = -1;
-
 let currentPhoto = "";
 
 
-// =====================================================
-// CHARGEMENT
-// =====================================================
+/* =========================
+   CHARGEMENT
+========================= */
 
 function loadData(){
 
@@ -747,8 +700,7 @@ function loadData(){
 
         if(saved){
 
-            accounts =
-                JSON.parse(saved);
+            accounts = JSON.parse(saved);
 
             if(!Array.isArray(accounts)){
                 accounts = [];
@@ -763,21 +715,19 @@ function loadData(){
     }catch(error){
 
         console.error(error);
-
         accounts = [];
 
     }
 
     updateUserCount();
-
     renderAccounts();
 
 }
 
 
-// =====================================================
-// SAUVEGARDE
-// =====================================================
+/* =========================
+   SAUVEGARDE
+========================= */
 
 function saveData(){
 
@@ -792,17 +742,19 @@ function saveData(){
 
         alert(
             "Impossible de sauvegarder les données. " +
-            "Il est possible que le stockage soit plein."
+            "Le stockage est peut-être plein."
         );
 
         console.error(error);
+
     }
+
 }
 
 
-// =====================================================
-// CONNEXION
-// =====================================================
+/* =========================
+   CONNEXION
+========================= */
 
 function login(){
 
@@ -813,13 +765,11 @@ function login(){
 
         document
             .getElementById("loginScreen")
-            .classList
-            .add("hidden");
+            .classList.add("hidden");
 
         document
             .getElementById("loginError")
-            .classList
-            .add("hidden");
+            .classList.add("hidden");
 
         loadData();
 
@@ -827,12 +777,9 @@ function login(){
 
         document
             .getElementById("loginError")
-            .classList
-            .remove("hidden");
+            .classList.remove("hidden");
 
-        document
-            .getElementById("pinInput")
-            .value = "";
+        document.getElementById("pinInput").value = "";
 
         document
             .getElementById("pinInput")
@@ -854,29 +801,28 @@ document
     });
 
 
-// =====================================================
-// NOMBRE D'UTILISATEURS
-// =====================================================
+/* =========================
+   COMPTEUR
+========================= */
 
 function updateUserCount(){
 
-    const count =
-        accounts.length;
+    const count = accounts.length;
 
     document
         .getElementById("userCount")
         .textContent =
-            "👥 " +
-            count +
-            " utilisateur" +
-            (count > 1 ? "s" : "");
+        "👥 " +
+        count +
+        " utilisateur" +
+        (count > 1 ? "s" : "");
 
 }
 
 
-// =====================================================
-// FORMULAIRE AJOUT
-// =====================================================
+/* =========================
+   FORMULAIRE
+========================= */
 
 function showAddForm(){
 
@@ -884,15 +830,15 @@ function showAddForm(){
 
     document
         .getElementById("formTitle")
-        .textContent =
-            "➕ Nouvel accès";
+        .textContent = "➕ Nouvel accès";
 
     clearForm();
 
     document
         .getElementById("formCard")
-        .classList
-        .remove("hidden");
+        .classList.remove("hidden");
+
+    updateDatePreview();
 
     window.scrollTo({
         top:0,
@@ -902,22 +848,13 @@ function showAddForm(){
 }
 
 
-// =====================================================
-// VIDER FORMULAIRE
-// =====================================================
-
 function clearForm(){
 
     document.getElementById("name").value = "";
-
     document.getElementById("username").value = "";
-
     document.getElementById("password").value = "";
-
     document.getElementById("url1").value = "";
-
     document.getElementById("url2").value = "";
-
     document.getElementById("remark").value = "";
 
     document.getElementById("duration").value = "";
@@ -925,15 +862,12 @@ function clearForm(){
     document.getElementById("isApplication").checked = false;
 
     document.getElementById("appUrl1").value = "";
-
     document.getElementById("mac").value = "";
-
     document.getElementById("appKey").value = "";
 
     document
         .getElementById("applicationFields")
-        .classList
-        .add("hidden");
+        .classList.add("hidden");
 
     currentPhoto = "";
 
@@ -941,26 +875,30 @@ function clearForm(){
 
     document
         .getElementById("photoContainer")
-        .classList
-        .add("hidden");
+        .classList.add("hidden");
 
     document
         .getElementById("photoPreview")
-        .src = "";
+        .removeAttribute("src");
+
+    document
+        .getElementById("startDateInfo")
+        .textContent =
+        "📅 La date de début sera enregistrée à l'ajout.";
+
+    document
+        .getElementById("expiryPreview")
+        .textContent =
+        "📅 La date d'expiration sera calculée automatiquement.";
 
 }
 
-
-// =====================================================
-// ANNULER
-// =====================================================
 
 function cancelForm(){
 
     document
         .getElementById("formCard")
-        .classList
-        .add("hidden");
+        .classList.add("hidden");
 
     editIndex = -1;
 
@@ -969,21 +907,14 @@ function cancelForm(){
 }
 
 
-// =====================================================
-// APPLICATION
-// =====================================================
-
 function toggleApplicationFields(){
 
     const checked =
-        document
-            .getElementById("isApplication")
-            .checked;
+        document.getElementById("isApplication").checked;
 
     document
         .getElementById("applicationFields")
-        .classList
-        .toggle(
+        .classList.toggle(
             "hidden",
             !checked
         );
@@ -991,9 +922,9 @@ function toggleApplicationFields(){
 }
 
 
-// =====================================================
-// MOT DE PASSE FORMULAIRE
-// =====================================================
+/* =========================
+   MOT DE PASSE
+========================= */
 
 function togglePassword(){
 
@@ -1013,17 +944,17 @@ function togglePassword(){
 }
 
 
-// =====================================================
-// COPIER
-// =====================================================
+/* =========================
+   COPIER
+========================= */
 
 async function copyText(text){
 
     if(!text){
 
         alert("Rien à copier.");
-
         return;
+
     }
 
     try{
@@ -1032,11 +963,12 @@ async function copyText(text){
 
             await navigator.clipboard.writeText(text);
 
+            alert("Copié !");
             return;
+
         }
 
     }catch(error){}
-
 
     const textarea =
         document.createElement("textarea");
@@ -1044,13 +976,11 @@ async function copyText(text){
     textarea.value = text;
 
     textarea.style.position = "fixed";
-
     textarea.style.opacity = "0";
 
     document.body.appendChild(textarea);
 
     textarea.focus();
-
     textarea.select();
 
     try{
@@ -1076,17 +1006,15 @@ function copyField(id){
         document.getElementById(id);
 
     if(field){
-
         copyText(field.value);
-
     }
 
 }
 
 
-// =====================================================
-// PHOTO
-// =====================================================
+/* =========================
+   PHOTO
+========================= */
 
 function handlePhoto(event){
 
@@ -1097,7 +1025,6 @@ function handlePhoto(event){
         return;
     }
 
-
     if(!file.type.startsWith("image/")){
 
         alert("Veuillez sélectionner une image.");
@@ -1105,12 +1032,11 @@ function handlePhoto(event){
         event.target.value = "";
 
         return;
-    }
 
+    }
 
     const reader =
         new FileReader();
-
 
     reader.onload = function(e){
 
@@ -1119,16 +1045,13 @@ function handlePhoto(event){
 
         document
             .getElementById("photoPreview")
-            .src =
-                currentPhoto;
+            .src = currentPhoto;
 
         document
             .getElementById("photoContainer")
-            .classList
-            .remove("hidden");
+            .classList.remove("hidden");
 
     };
-
 
     reader.onerror = function(){
 
@@ -1136,15 +1059,10 @@ function handlePhoto(event){
 
     };
 
-
     reader.readAsDataURL(file);
 
 }
 
-
-// =====================================================
-// SUPPRIMER PHOTO
-// =====================================================
 
 function removePhoto(){
 
@@ -1156,62 +1074,59 @@ function removePhoto(){
 
     document
         .getElementById("photoPreview")
-        .src = "";
+        .removeAttribute("src");
 
     document
         .getElementById("photoContainer")
-        .classList
-        .add("hidden");
+        .classList.add("hidden");
 
 }
 
 
-// =====================================================
-// ENREGISTRER
-// =====================================================
+/* =========================
+   DATE / DURÉE
+========================= */
 
-function saveAccount(){
+function calculateExpiryDate(startDate,duration){
 
-    const name =
-        document
-            .getElementById("name")
-            .value
-            .trim();
+    if(!startDate || !duration){
+        return null;
+    }
 
+    const start =
+        new Date(startDate);
 
-    const username =
-        document
-            .getElementById("username")
-            .value
-            .trim();
+    if(isNaN(start.getTime())){
+        return null;
+    }
 
+    start.setHours(0,0,0,0);
 
-    const password =
-        document
-            .getElementById("password")
-            .value;
+    const expiry =
+        new Date(start);
 
+    expiry.setDate(
+        expiry.getDate() +
+        Number(duration)
+    );
 
-    const url1 =
-        document
-            .getElementById("url1")
-            .value
-            .trim();
+    return expiry;
 
-
-    const url2 =
-        document
-            .getElementById("url2")
-            .value
-            .trim();
+}
 
 
-    const remark =
-        document
-            .getElementById("remark")
-            .value
-            .trim();
+function formatDate(date){
 
+    if(!date){
+        return "";
+    }
+
+    return date.toLocaleDateString("fr-BE");
+
+}
+
+
+function updateDatePreview(){
 
     const durationValue =
         document
@@ -1219,38 +1134,158 @@ function saveAccount(){
             .value
             .trim();
 
+    const duration =
+        parseInt(durationValue,10);
+
+    const startInfo =
+        document.getElementById("startDateInfo");
+
+    const expiryInfo =
+        document.getElementById("expiryPreview");
+
+    if(editIndex === -1){
+
+        startInfo.textContent =
+            "📅 Début : aujourd'hui";
+
+        if(
+            Number.isInteger(duration) &&
+            duration > 0
+        ){
+
+            const expiry =
+                calculateExpiryDate(
+                    new Date(),
+                    duration
+                );
+
+            expiryInfo.textContent =
+                "📅 Expiration prévue : " +
+                formatDate(expiry);
+
+        }else{
+
+            expiryInfo.textContent =
+                "📅 La date d'expiration sera calculée automatiquement.";
+
+        }
+
+        return;
+
+    }
+
+    const account =
+        accounts[editIndex];
+
+    if(account && account.startDate){
+
+        const start =
+            new Date(account.startDate);
+
+        startInfo.textContent =
+            "📅 Début conservé : " +
+            formatDate(start);
+
+        if(
+            Number.isInteger(duration) &&
+            duration > 0
+        ){
+
+            const expiry =
+                calculateExpiryDate(
+                    account.startDate,
+                    duration
+                );
+
+            expiryInfo.textContent =
+                "📅 Nouvelle expiration : " +
+                formatDate(expiry);
+
+        }else{
+
+            expiryInfo.textContent =
+                "📅 Entrez une durée pour calculer l'expiration.";
+
+        }
+
+    }else{
+
+        startInfo.textContent =
+            "📅 Cet ancien accès n'a pas encore de date de début.";
+
+        if(
+            Number.isInteger(duration) &&
+            duration > 0
+        ){
+
+            expiryInfo.textContent =
+                "📅 La date de début sera créée maintenant.";
+
+        }else{
+
+            expiryInfo.textContent =
+                "📅 Entrez une durée.";
+
+        }
+
+    }
+
+}
+
+
+document
+    .getElementById("duration")
+    .addEventListener(
+        "input",
+        updateDatePreview
+    );
+
+
+/* =========================
+   ENREGISTRER
+========================= */
+
+function saveAccount(){
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const url1 =
+        document.getElementById("url1").value.trim();
+
+    const url2 =
+        document.getElementById("url2").value.trim();
+
+    const remark =
+        document.getElementById("remark").value.trim();
+
+    const durationValue =
+        document.getElementById("duration").value.trim();
 
     const duration =
         durationValue
             ? parseInt(durationValue,10)
             : 0;
 
-
     const isApplication =
         document
             .getElementById("isApplication")
             .checked;
 
-
     const appUrl1 =
-        document
-            .getElementById("appUrl1")
-            .value
-            .trim();
-
+        document.getElementById("appUrl1").value.trim();
 
     const mac =
-        document
-            .getElementById("mac")
-            .value
-            .trim();
-
+        document.getElementById("mac").value.trim();
 
     const appKey =
-        document
-            .getElementById("appKey")
-            .value
-            .trim();
+        document.getElementById("appKey").value.trim();
 
 
     if(!name){
@@ -1260,123 +1295,101 @@ function saveAccount(){
         );
 
         return;
+
     }
 
 
-    if(durationValue && (!Number.isInteger(duration) || duration < 1)){
+    if(
+        durationValue &&
+        (
+            !Number.isInteger(duration) ||
+            duration < 1
+        )
+    ){
 
         alert(
-            "La durée doit être un nombre de jours supérieur à 0."
+            "La durée doit être un nombre entier supérieur à 0."
         );
 
         return;
+
     }
 
 
-    // =================================================
-    // NOUVEL ACCES
-    // =================================================
+    /* NOUVEL ACCÈS */
 
     if(editIndex === -1){
 
         const startDate =
-            new Date();
+            new Date().toISOString();
 
-
-        const account = {
+        accounts.push({
 
             name:name,
-
             username:username,
-
             password:password,
-
             url1:url1,
-
             url2:url2,
-
             remark:remark,
 
             duration:duration,
 
-            startDate:
-                startDate.toISOString(),
+            startDate:startDate,
 
-            isApplication:
-                isApplication,
+            isApplication:isApplication,
 
             appUrl1:appUrl1,
-
             mac:mac,
-
             appKey:appKey,
 
             photo:currentPhoto,
 
             reminder2Sent:false,
-
             reminder1Sent:false,
-
             reminder0Sent:false
 
-        };
-
-
-        accounts.push(account);
+        });
 
     }
 
-
-    // =================================================
-    // MODIFICATION
-    // =================================================
+    /* MODIFICATION */
 
     else{
 
         const account =
             accounts[editIndex];
 
-
-        account.name =
-            name;
-
-        account.username =
-            username;
-
-        account.password =
-            password;
-
-        account.url1 =
-            url1;
-
-        account.url2 =
-            url2;
-
-        account.remark =
-            remark;
-
-        account.duration =
-            duration;
-
+        account.name = name;
+        account.username = username;
+        account.password = password;
+        account.url1 = url1;
+        account.url2 = url2;
+        account.remark = remark;
 
         /*
          IMPORTANT :
-
-         On conserve la date de départ
-         lors d'une modification.
-
-         Si un ancien accès n'avait
-         aucune date de départ,
-         on lui en crée une maintenant.
+         on modifie la durée MAIS
+         on NE CHANGE PAS startDate.
         */
 
-        if(!account.startDate){
+        account.duration = duration;
+
+        /*
+         Pour les anciens accès créés
+         avant le système de durée :
+         on crée une date maintenant,
+         une seule fois.
+        */
+
+        if(
+            !account.startDate ||
+            isNaN(new Date(account.startDate).getTime())
+        ){
 
             account.startDate =
                 new Date().toISOString();
 
         }
-
 
         account.isApplication =
             isApplication;
@@ -1393,16 +1406,13 @@ function saveAccount(){
         account.photo =
             currentPhoto;
 
-
         /*
-         Les anciens rappels sont remis à zéro
-         lorsque l'accès est modifié.
+         Le rappel est recalculé après
+         une modification.
         */
 
         account.reminder2Sent = false;
-
         account.reminder1Sent = false;
-
         account.reminder0Sent = false;
 
     }
@@ -1419,95 +1429,70 @@ function saveAccount(){
 }
 
 
-// =====================================================
-// MODIFIER
-// =====================================================
+/* =========================
+   MODIFIER
+========================= */
 
 function editAccount(index){
 
     const account =
         accounts[index];
 
-
-    editIndex =
-        index;
+    editIndex = index;
 
 
     document
         .getElementById("formTitle")
         .textContent =
-            "✏️ Modifier l'accès";
+        "✏️ Modifier l'accès";
 
 
-    document
-        .getElementById("name")
-        .value =
-            account.name || "";
+    document.getElementById("name").value =
+        account.name || "";
 
+    document.getElementById("username").value =
+        account.username || "";
 
-    document
-        .getElementById("username")
-        .value =
-            account.username || "";
+    document.getElementById("password").value =
+        account.password || "";
 
+    document.getElementById("url1").value =
+        account.url1 || "";
 
-    document
-        .getElementById("password")
-        .value =
-            account.password || "";
+    document.getElementById("url2").value =
+        account.url2 || "";
 
-
-    document
-        .getElementById("url1")
-        .value =
-            account.url1 || "";
-
-
-    document
-        .getElementById("url2")
-        .value =
-            account.url2 || "";
-
-
-    document
-        .getElementById("remark")
-        .value =
-            account.remark || "";
+    document.getElementById("remark").value =
+        account.remark || "";
 
 
     /*
-     Le nombre de jours est bien
-     modifiable ici.
+     ICI :
+     On récupère la durée existante.
+     Si elle n'existe pas, le champ reste
+     simplement vide.
     */
 
-    document
-        .getElementById("duration")
-        .value =
-            account.duration || "";
+    document.getElementById("duration").value =
+        account.duration
+            ? Number(account.duration)
+            : "";
 
 
     document
         .getElementById("isApplication")
         .checked =
-            !!account.isApplication;
+        !!account.isApplication;
 
 
-    document
-        .getElementById("appUrl1")
-        .value =
-            account.appUrl1 || "";
+    document.getElementById("appUrl1").value =
+        account.appUrl1 || "";
 
+    document.getElementById("mac").value =
+        account.mac || "";
 
-    document
-        .getElementById("mac")
-        .value =
-            account.mac || "";
-
-
-    document
-        .getElementById("appKey")
-        .value =
-            account.appKey || "";
+    document.getElementById("appKey").value =
+        account.appKey || "";
 
 
     toggleApplicationFields();
@@ -1522,27 +1507,36 @@ function editAccount(index){
         document
             .getElementById("photoPreview")
             .src =
-                currentPhoto;
+            currentPhoto;
 
         document
             .getElementById("photoContainer")
-            .classList
-            .remove("hidden");
+            .classList.remove("hidden");
 
     }else{
 
         document
             .getElementById("photoContainer")
-            .classList
-            .add("hidden");
+            .classList.add("hidden");
+
+        document
+            .getElementById("photoPreview")
+            .removeAttribute("src");
 
     }
 
 
     document
         .getElementById("formCard")
-        .classList
-        .remove("hidden");
+        .classList.remove("hidden");
+
+
+    /*
+     Met à jour immédiatement
+     les informations de date.
+    */
+
+    updateDatePreview();
 
 
     window.scrollTo({
@@ -1553,21 +1547,22 @@ function editAccount(index){
 }
 
 
-// =====================================================
-// SUPPRIMER
-// =====================================================
+/* =========================
+   SUPPRIMER
+========================= */
 
 function deleteAccount(index){
 
     const account =
         accounts[index];
 
-
-    if(!confirm(
-        "Supprimer l'accès de " +
-        (account.name || "cet utilisateur") +
-        " ?"
-    )){
+    if(
+        !confirm(
+            "Supprimer l'accès de " +
+            (account.name || "cet utilisateur") +
+            " ?"
+        )
+    ){
 
         return;
 
@@ -1585,9 +1580,9 @@ function deleteAccount(index){
 }
 
 
-// =====================================================
-// COMPTE A REBOURS
-// =====================================================
+/* =========================
+   COMPTE À REBOURS
+========================= */
 
 function getCountdown(account){
 
@@ -1598,11 +1593,9 @@ function getCountdown(account){
 
         return {
 
-            text:
-                "⏳ Aucune durée définie",
+            text:"⏳ Aucune durée définie",
 
-            className:
-                "none",
+            className:"none",
 
             days:null
 
@@ -1619,11 +1612,9 @@ function getCountdown(account){
 
         return {
 
-            text:
-                "⏳ Date de départ invalide",
+            text:"⏳ Date de départ invalide",
 
-            className:
-                "none",
+            className:"none",
 
             days:null
 
@@ -1632,14 +1623,11 @@ function getCountdown(account){
     }
 
 
-    start.setHours(
-        0,0,0,0
-    );
+    start.setHours(0,0,0,0);
 
 
     const expiry =
         new Date(start);
-
 
     expiry.setDate(
         expiry.getDate() +
@@ -1650,24 +1638,13 @@ function getCountdown(account){
     const today =
         new Date();
 
-
-    today.setHours(
-        0,0,0,0
-    );
+    today.setHours(0,0,0,0);
 
 
     const difference =
         Math.ceil(
-            (
-                expiry -
-                today
-            ) /
-            (
-                1000 *
-                60 *
-                60 *
-                24
-            )
+            (expiry - today) /
+            (1000 * 60 * 60 * 24)
         );
 
 
@@ -1675,7 +1652,6 @@ function getCountdown(account){
 
         const days =
             Math.abs(difference);
-
 
         return {
 
@@ -1685,11 +1661,9 @@ function getCountdown(account){
                 " jour" +
                 (days > 1 ? "s" : ""),
 
-            className:
-                "expired",
+            className:"expired",
 
-            days:
-                difference
+            days:difference
 
         };
 
@@ -1703,8 +1677,7 @@ function getCountdown(account){
             text:
                 "⚠️ Expire aujourd'hui",
 
-            className:
-                "danger",
+            className:"danger",
 
             days:0
 
@@ -1720,8 +1693,7 @@ function getCountdown(account){
             text:
                 "🔴 1 jour restant",
 
-            className:
-                "danger",
+            className:"danger",
 
             days:1
 
@@ -1737,8 +1709,7 @@ function getCountdown(account){
             text:
                 "🔴 2 jours restants",
 
-            className:
-                "danger",
+            className:"danger",
 
             days:2
 
@@ -1756,11 +1727,9 @@ function getCountdown(account){
                 difference +
                 " jours restants",
 
-            className:
-                "warning",
+            className:"warning",
 
-            days:
-                difference
+            days:difference
 
         };
 
@@ -1774,69 +1743,39 @@ function getCountdown(account){
             difference +
             " jours restants",
 
-        className:
-            "ok",
+        className:"ok",
 
-        days:
-            difference
+        days:difference
 
     };
 
 }
 
 
-// =====================================================
-// DATE EXPIRATION
-// =====================================================
+/* =========================
+   DATE EXPIRATION
+========================= */
 
 function getExpirationDate(account){
 
-    if(
-        !account.duration ||
-        !account.startDate
-    ){
-
-        return "";
-
-    }
-
-
-    const start =
-        new Date(account.startDate);
-
-
-    if(isNaN(start.getTime())){
-
-        return "";
-
-    }
-
-
-    start.setHours(
-        0,0,0,0
-    );
-
-
     const expiry =
-        new Date(start);
+        calculateExpiryDate(
+            account.startDate,
+            account.duration
+        );
 
+    if(!expiry){
+        return "";
+    }
 
-    expiry.setDate(
-        expiry.getDate() +
-        Number(account.duration)
-    );
-
-
-    return expiry.toLocaleDateString(
-        "fr-BE"
-    );
+    return formatDate(expiry);
 
 }
 
 
-// =====================================================
-// URL
-// =====================================================
+/* =========================
+   URL
+========================= */
 
 function normalizeUrl(url){
 
@@ -1844,10 +1783,8 @@ function normalizeUrl(url){
         return "";
     }
 
-
     url =
         url.trim();
-
 
     if(
         url.startsWith("http://") ||
@@ -1857,7 +1794,6 @@ function normalizeUrl(url){
         return url;
 
     }
-
 
     return "https://" + url;
 
@@ -1870,49 +1806,40 @@ function createUrlLink(url){
         return "";
     }
 
-
     const normalized =
         normalizeUrl(url);
-
 
     const a =
         document.createElement("a");
 
-
     a.className =
         "urlLink";
-
 
     a.href =
         normalized;
 
-
     a.target =
         "_blank";
-
 
     a.rel =
         "noopener noreferrer";
 
-
     a.textContent =
         url;
-
 
     return a.outerHTML;
 
 }
 
 
-// =====================================================
-// RAPPEL EMAIL
-// =====================================================
+/* =========================
+   RAPPEL EMAIL
+========================= */
 
 function sendReminderEmail(index){
 
     const account =
         accounts[index];
-
 
     const countdown =
         getCountdown(account);
@@ -1971,23 +1898,18 @@ function sendReminderEmail(index){
 
     const body =
         "Bonjour,\n\n" +
-
         "L'accès de " +
         (account.name || "") +
         " arrive à expiration.\n\n" +
-
         "Durée : " +
         (account.duration || "") +
         " jours\n" +
-
         "Jours restants : " +
         remainingText +
         "\n" +
-
         "Date d'expiration : " +
         getExpirationDate(account) +
         "\n\n" +
-
         "Mes accès";
 
 
@@ -2000,9 +1922,9 @@ function sendReminderEmail(index){
 }
 
 
-// =====================================================
-// AFFICHAGE
-// =====================================================
+/* =========================
+   AFFICHAGE
+========================= */
 
 function renderAccounts(){
 
@@ -2029,31 +1951,23 @@ function renderAccounts(){
                     index
                 })
             )
-            .filter(item => {
+            .filter(item=>{
 
                 if(!search){
                     return true;
                 }
 
-
                 const a =
                     item.account;
-
 
                 const text = [
 
                     a.name,
-
                     a.username,
-
                     a.url1,
-
                     a.url2,
-
                     a.remark,
-
                     a.mac,
-
                     a.appKey
 
                 ]
@@ -2070,23 +1984,21 @@ function renderAccounts(){
 
         list.innerHTML =
             '<div class="card empty">' +
-            'Aucun accès trouvé.' +
-            '</div>';
+            "Aucun accès trouvé." +
+            "</div>";
 
         return;
 
     }
 
 
-    filtered.forEach(item => {
+    filtered.forEach(item=>{
 
         const account =
             item.account;
 
-
         const index =
             item.index;
-
 
         const countdown =
             getCountdown(account);
@@ -2095,15 +2007,12 @@ function renderAccounts(){
         const div =
             document.createElement("div");
 
-
         div.className =
             "account";
 
 
         let html = "";
 
-
-        // NOM
 
         html +=
             "<h2>👤 " +
@@ -2112,8 +2021,6 @@ function renderAccounts(){
             ) +
             "</h2>";
 
-
-        // COMPTE A REBOURS
 
         html +=
             '<div class="countdown ' +
@@ -2125,16 +2032,14 @@ function renderAccounts(){
             "</div>";
 
 
-        // DUREE
-
         if(account.duration){
 
             html +=
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                '⏳ Durée' +
-                '</div>' +
+                "⏳ Durée" +
+                "</div>" +
 
                 '<div class="accountValue">' +
                 escapeHtml(
@@ -2146,14 +2051,12 @@ function renderAccounts(){
                 "</div>";
 
 
-            // EXPIRATION
-
             html +=
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                '📅 Expiration' +
-                '</div>' +
+                "📅 Expiration" +
+                "</div>" +
 
                 '<div class="accountValue">' +
                 escapeHtml(
@@ -2166,16 +2069,14 @@ function renderAccounts(){
         }
 
 
-        // UTILISATEUR
-
         if(account.username){
 
             html +=
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                'Utilisateur' +
-                '</div>' +
+                "Utilisateur" +
+                "</div>" +
 
                 '<div class="accountValue">' +
 
@@ -2184,10 +2085,12 @@ function renderAccounts(){
                 ) +
 
                 ' <button class="copyBtn" onclick="copyText(' +
-                jsString(account.username) +
-                ')">' +
-                'Copier' +
-                '</button>' +
+
+                jsString(
+                    account.username
+                ) +
+
+                ')">Copier</button>' +
 
                 "</div>" +
 
@@ -2195,8 +2098,6 @@ function renderAccounts(){
 
         }
 
-
-        // MOT DE PASSE
 
         if(account.password){
 
@@ -2204,28 +2105,26 @@ function renderAccounts(){
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                'Mot de passe' +
-                '</div>' +
+                "Mot de passe" +
+                "</div>" +
 
                 '<div class="accountValue">' +
 
                 '<span id="pass-' +
                 index +
-                '">' +
-                '••••••••' +
-                '</span>' +
+                '">••••••••</span>' +
 
                 ' <button class="copyBtn" onclick="toggleDisplayedPassword(' +
                 index +
-                ')">' +
-                '👁️' +
-                '</button>' +
+                ')">👁️</button>' +
 
                 ' <button class="copyBtn" onclick="copyText(' +
-                jsString(account.password) +
-                ')">' +
-                'Copier' +
-                '</button>' +
+
+                jsString(
+                    account.password
+                ) +
+
+                ')">Copier</button>' +
 
                 "</div>" +
 
@@ -2233,8 +2132,6 @@ function renderAccounts(){
 
         }
 
-
-        // URL 1
 
         if(account.url1){
 
@@ -2242,25 +2139,25 @@ function renderAccounts(){
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                'URL 1' +
-                '</div>' +
+                "URL 1" +
+                "</div>" +
 
                 createUrlLink(
                     account.url1
                 ) +
 
                 '<button class="copyBtn" onclick="copyText(' +
-                jsString(account.url1) +
-                ')">' +
-                'Copier' +
-                '</button>' +
+
+                jsString(
+                    account.url1
+                ) +
+
+                ')">Copier</button>' +
 
                 "</div>";
 
         }
 
-
-        // URL 2
 
         if(account.url2){
 
@@ -2268,25 +2165,25 @@ function renderAccounts(){
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                'URL 2' +
-                '</div>' +
+                "URL 2" +
+                "</div>" +
 
                 createUrlLink(
                     account.url2
                 ) +
 
                 '<button class="copyBtn" onclick="copyText(' +
-                jsString(account.url2) +
-                ')">' +
-                'Copier' +
-                '</button>' +
+
+                jsString(
+                    account.url2
+                ) +
+
+                ')">Copier</button>' +
 
                 "</div>";
 
         }
 
-
-        // REMARQUE
 
         if(account.remark){
 
@@ -2294,13 +2191,15 @@ function renderAccounts(){
                 '<div class="accountLine">' +
 
                 '<div class="accountLabel">' +
-                '📝 Remarque' +
-                '</div>' +
+                "📝 Remarque" +
+                "</div>" +
 
                 '<div class="accountValue">' +
+
                 escapeHtml(
                     account.remark
                 ) +
+
                 "</div>" +
 
                 "</div>";
@@ -2308,16 +2207,14 @@ function renderAccounts(){
         }
 
 
-        // APPLICATION
-
         if(account.isApplication){
 
             html +=
                 "<hr>" +
 
                 '<div class="accountLabel">' +
-                '📱 APPLICATION' +
-                '</div>';
+                "📱 APPLICATION" +
+                "</div>";
 
 
             if(account.appUrl1){
@@ -2326,18 +2223,20 @@ function renderAccounts(){
                     '<div class="accountLine">' +
 
                     '<div class="accountLabel">' +
-                    'URL' +
-                    '</div>' +
+                    "URL" +
+                    "</div>" +
 
                     createUrlLink(
                         account.appUrl1
                     ) +
 
                     '<button class="copyBtn" onclick="copyText(' +
-                    jsString(account.appUrl1) +
-                    ')">' +
-                    'Copier' +
-                    '</button>' +
+
+                    jsString(
+                        account.appUrl1
+                    ) +
+
+                    ')">Copier</button>' +
 
                     "</div>";
 
@@ -2350,8 +2249,8 @@ function renderAccounts(){
                     '<div class="accountLine">' +
 
                     '<div class="accountLabel">' +
-                    'MAC' +
-                    '</div>' +
+                    "MAC" +
+                    "</div>" +
 
                     '<div class="accountValue">' +
 
@@ -2360,10 +2259,12 @@ function renderAccounts(){
                     ) +
 
                     ' <button class="copyBtn" onclick="copyText(' +
-                    jsString(account.mac) +
-                    ')">' +
-                    'Copier' +
-                    '</button>' +
+
+                    jsString(
+                        account.mac
+                    ) +
+
+                    ')">Copier</button>' +
 
                     "</div>" +
 
@@ -2378,8 +2279,8 @@ function renderAccounts(){
                     '<div class="accountLine">' +
 
                     '<div class="accountLabel">' +
-                    'Clé' +
-                    '</div>' +
+                    "Clé" +
+                    "</div>" +
 
                     '<div class="accountValue">' +
 
@@ -2388,10 +2289,12 @@ function renderAccounts(){
                     ) +
 
                     ' <button class="copyBtn" onclick="copyText(' +
-                    jsString(account.appKey) +
-                    ')">' +
-                    'Copier' +
-                    '</button>' +
+
+                    jsString(
+                        account.appKey
+                    ) +
+
+                    ')">Copier</button>' +
 
                     "</div>" +
 
@@ -2402,21 +2305,19 @@ function renderAccounts(){
         }
 
 
-        // PHOTO
-
         if(account.photo){
 
             html +=
                 "<hr>" +
 
                 '<img src="' +
-                escapeHtml(account.photo) +
+                escapeHtml(
+                    account.photo
+                ) +
                 '" class="photoPreview">';
 
         }
 
-
-        // BOUTONS
 
         html +=
             '<div class="actions">' +
@@ -2424,27 +2325,26 @@ function renderAccounts(){
             '<button class="secondary" onclick="editAccount(' +
             index +
             ')">' +
-            '✏️ Modifier' +
-            '</button>' +
+            "✏️ Modifier" +
+            "</button>" +
 
             '<button class="orange" onclick="sendReminderEmail(' +
             index +
             ')">' +
-            '📧 Rappel' +
-            '</button>' +
+            "📧 Rappel" +
+            "</button>" +
 
             '<button class="danger" onclick="deleteAccount(' +
             index +
             ')">' +
-            '🗑️ Supprimer' +
-            '</button>' +
+            "🗑️ Supprimer" +
+            "</button>" +
 
             "</div>";
 
 
         div.innerHTML =
             html;
-
 
         list.appendChild(div);
 
@@ -2453,9 +2353,9 @@ function renderAccounts(){
 }
 
 
-// =====================================================
-// AFFICHER / CACHER MOT DE PASSE
-// =====================================================
+/* =========================
+   AFFICHER MOT DE PASSE
+========================= */
 
 function toggleDisplayedPassword(index){
 
@@ -2488,9 +2388,9 @@ function toggleDisplayedPassword(index){
 }
 
 
-// =====================================================
-// SECURITE HTML
-// =====================================================
+/* =========================
+   SÉCURITÉ HTML
+========================= */
 
 function escapeHtml(value){
 
@@ -2518,9 +2418,9 @@ function jsString(value){
 }
 
 
-// =====================================================
-// SAUVEGARDE JSON
-// =====================================================
+/* =========================
+   SAUVEGARDE JSON
+========================= */
 
 function exportData(){
 
@@ -2536,8 +2436,7 @@ function exportData(){
         new Blob(
             [data],
             {
-                type:
-                    "application/json"
+                type:"application/json"
             }
         );
 
@@ -2549,32 +2448,29 @@ function exportData(){
     const a =
         document.createElement("a");
 
-
-    a.href =
-        url;
-
+    a.href = url;
 
     a.download =
         "mes-acces-sauvegarde.json";
 
-
-    document.body.appendChild(a);
-
+    document
+        .body
+        .appendChild(a);
 
     a.click();
 
-
-    document.body.removeChild(a);
-
+    document
+        .body
+        .removeChild(a);
 
     URL.revokeObjectURL(url);
 
 }
 
 
-// =====================================================
-// RESTAURATION
-// =====================================================
+/* =========================
+   RESTAURATION
+========================= */
 
 function importData(event){
 
@@ -2613,9 +2509,11 @@ function importData(event){
                 }
 
 
-                if(!confirm(
-                    "Remplacer les accès actuels par cette sauvegarde ?"
-                )){
+                if(
+                    !confirm(
+                        "Remplacer les accès actuels par cette sauvegarde ?"
+                    )
+                ){
 
                     return;
 
@@ -2651,15 +2549,14 @@ function importData(event){
 
     reader.readAsText(file);
 
-
     event.target.value = "";
 
 }
 
 
-// =====================================================
-// ACTUALISATION DU COMPTE A REBOURS
-// =====================================================
+/* =========================
+   ACTUALISATION
+========================= */
 
 setInterval(
     function(){
@@ -2671,9 +2568,9 @@ setInterval(
 
 
         if(
-            !loginScreen
-                .classList
-                .contains("hidden")
+            !loginScreen.classList.contains(
+                "hidden"
+            )
         ){
 
             return;
@@ -2688,9 +2585,9 @@ setInterval(
 );
 
 
-// =====================================================
-// RAPPELS LOCAUX
-// =====================================================
+/* =========================
+   RAPPELS
+========================= */
 
 function checkReminders(){
 
@@ -2720,12 +2617,11 @@ function checkReminders(){
 }
 
 
-// =====================================================
-// DEMARRAGE
-// =====================================================
+/* =========================
+   DÉMARRAGE
+========================= */
 
 loadData();
-
 checkReminders();
 
 </script>
