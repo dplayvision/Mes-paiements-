@@ -1,1013 +1,2458 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Mes accès</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>Mes paiements</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
+
 *{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
 body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-    background:#f2f2f7;
-    color:#111;
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+background:#f2f2f7;
+color:#111;
 }
 
-header{
-    background:#007aff;
-    color:white;
-    padding:18px 15px 15px;
-    text-align:center;
-    position:sticky;
-    top:0;
-    z-index:20;
+button,input{
+font-family:inherit;
 }
 
-header h1{
-    margin:0 0 8px;
-    font-size:25px;
-}
-
-.userCount{
-    font-size:23px;
-    font-weight:800;
+.header{
+background:#007aff;
+color:white;
+padding:calc(env(safe-area-inset-top) + 15px) 18px 16px;
+font-size:22px;
+font-weight:700;
 }
 
 .container{
-    max-width:700px;
-    margin:auto;
-    padding:15px;
+padding:15px;
+padding-bottom:40px;
+max-width:700px;
+margin:auto;
 }
 
-.card,
-.account{
-    background:white;
-    border-radius:16px;
-    padding:16px;
-    margin-bottom:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+.card{
+background:white;
+border-radius:18px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-input,
-textarea{
-    width:100%;
-    border:1px solid #d1d1d6;
-    border-radius:10px;
-    padding:12px;
-    font-size:16px;
-    background:#fff;
-    margin-top:6px;
-}
-
-textarea{
-    min-height:80px;
-    resize:vertical;
+h2{
+font-size:19px;
+margin:0 0 14px;
 }
 
 label{
-    display:block;
-    font-weight:600;
-    margin-top:12px;
+display:block;
+font-size:14px;
+font-weight:600;
+margin:12px 0 6px;
+}
+
+input{
+width:100%;
+padding:13px;
+border:1px solid #d1d1d6;
+border-radius:11px;
+font-size:16px;
+background:#fff;
 }
 
 button{
-    border:0;
-    border-radius:10px;
-    padding:11px 14px;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
+border:0;
+border-radius:11px;
+padding:11px 14px;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
 }
 
 .primary{
-    background:#007aff;
-    color:white;
-    width:100%;
-    margin-top:15px;
+background:#007aff;
+color:white;
+width:100%;
 }
 
 .secondary{
-    background:#e5e5ea;
-    color:#111;
+background:#e9e9ee;
+color:#111;
 }
 
 .danger{
-    background:#ff3b30;
-    color:white;
+background:#ff3b30;
+color:white;
 }
 
 .green{
-    background:#34c759;
-    color:white;
+background:#34c759;
+color:white;
 }
 
-.orange{
-    background:#ff9500;
-    color:white;
+.qrButton{
+background:#5856d6;
+color:white;
 }
 
-.copyBtn{
-    background:#e5e5ea;
-    padding:8px 10px;
-    font-size:13px;
-    margin-left:6px;
-    white-space:nowrap;
+.summary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-bottom:15px;
 }
 
-.fieldRow{
-    display:flex;
-    align-items:center;
-    gap:5px;
+.summaryBox{
+background:white;
+border-radius:15px;
+padding:12px 8px;
+text-align:center;
+box-shadow:0 2px 7px rgba(0,0,0,.05);
 }
 
-.fieldRow input{
-    flex:1;
+.summaryTitle{
+font-size:12px;
+color:#666;
 }
 
-.urlLink{
-    display:block;
-    color:#007aff;
-    text-decoration:underline;
-    word-break:break-all;
-    margin-top:8px;
+.summaryValue{
+font-size:18px;
+font-weight:700;
+margin-top:4px;
 }
 
-.hidden{
-    display:none !important;
+.tabs{
+display:flex;
+background:#dddde2;
+border-radius:11px;
+padding:3px;
+margin-bottom:15px;
 }
 
-.checkRow{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-top:15px;
+.tab{
+flex:1;
+text-align:center;
+padding:9px;
+border-radius:9px;
+font-weight:600;
+font-size:14px;
 }
 
-.checkRow input{
-    width:auto;
-    margin:0;
+.tab.active{
+background:white;
+box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 
-.countdown{
-    margin:12px 0;
-    padding:14px;
-    border-radius:12px;
-    font-weight:800;
-    text-align:center;
-    font-size:17px;
+.selectionBar{
+display:none;
+background:#fff;
+border-radius:14px;
+padding:12px;
+margin-bottom:12px;
+align-items:center;
+justify-content:space-between;
+gap:8px;
 }
 
-.countdown.ok{
-    background:#e8f8ed;
-    color:#16803c;
+.selectionBar.show{
+display:flex;
 }
 
-.countdown.warning{
-    background:#fff3cd;
-    color:#9a6700;
+.selectionInfo{
+font-size:14px;
+font-weight:600;
 }
 
-.countdown.danger{
-    background:#ffe5e5;
-    color:#c62828;
+.paymentGroup{
+background:#fff;
+border-radius:18px;
+padding:0;
+margin-bottom:15px;
+overflow:hidden;
+box-shadow:0 2px 8px rgba(0,0,0,.07);
 }
 
-.countdown.expired{
-    background:#e5e5ea;
-    color:#555;
+.paymentGroupHeader{
+padding:15px;
+background:#f8f8fa;
+border-bottom:1px solid #e5e5ea;
 }
 
-.countdown.none{
-    background:#f2f2f7;
-    color:#777;
+.paymentGroupAlias{
+font-size:18px;
+font-weight:750;
+color:#007aff;
 }
 
-.login{
-    position:fixed;
-    inset:0;
-    background:#f2f2f7;
-    z-index:100;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+.paymentGroupBeneficiary{
+font-size:14px;
+font-weight:600;
+margin-top:4px;
 }
 
-.loginBox{
-    background:white;
-    width:100%;
-    max-width:360px;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 5px 25px rgba(0,0,0,.15);
-    text-align:center;
+.paymentGroupInfo{
+font-size:12px;
+color:#777;
+margin-top:5px;
 }
 
-.loginBox h1{
-    margin-top:0;
+.installment{
+margin:10px;
+padding:13px;
+border:1px solid #e1e1e6;
+border-radius:15px;
+background:#fff;
 }
 
-.loginError{
-    color:#ff3b30;
-    font-weight:600;
-    margin-top:10px;
+.installment.paid{
+background:#f3fff5;
+border-color:#b7e5c0;
 }
 
-.topButtons{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:15px;
+.installmentTop{
+display:flex;
+gap:10px;
+align-items:flex-start;
 }
 
-.topButtons button{
-    flex:1;
-    min-width:130px;
+.checkbox{
+width:21px;
+height:21px;
+margin-top:2px;
+flex-shrink:0;
 }
 
-.photoPreview{
-    width:100%;
-    max-height:250px;
-    object-fit:contain;
-    border-radius:12px;
-    margin-top:10px;
-    background:#f2f2f7;
+.installmentInfo{
+flex:1;
+min-width:0;
 }
 
-.empty{
-    text-align:center;
-    color:#777;
-    padding:30px 10px;
+.beneficiary{
+font-weight:700;
+font-size:15px;
 }
 
-hr{
-    border:0;
-    border-top:1px solid #e5e5ea;
-    margin:18px 0;
+.installmentDetails{
+font-size:13px;
+color:#666;
+margin-top:4px;
+line-height:1.5;
 }
 
-small{
-    color:#666;
-}
-
-.reminderInfo{
-    margin-top:10px;
-    padding:10px;
-    border-radius:10px;
-    background:#fff3cd;
-    color:#856404;
-    font-size:14px;
-}
-
-.account h2{
-    margin:0 0 12px;
-    font-size:20px;
-}
-
-.accountLine{
-    margin:9px 0;
-    word-break:break-word;
-}
-
-.accountLabel{
-    font-size:13px;
-    color:#666;
-    font-weight:600;
-}
-
-.accountValue{
-    margin-top:3px;
+.amount{
+font-size:18px;
+font-weight:750;
+margin-top:6px;
 }
 
 .actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:14px;
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+margin-top:10px;
 }
 
 .actions button{
-    flex:1;
-    min-width:100px;
+padding:8px 10px;
+font-size:13px;
 }
 
-.durationBox{
-    background:#f2f2f7;
-    border-radius:14px;
-    padding:14px;
-    margin-top:12px;
+.small{
+font-size:12px;
+color:#777;
 }
 
-.durationBoxTitle{
-    font-weight:800;
-    font-size:16px;
-    margin-bottom:8px;
+.badge{
+display:inline-block;
+font-size:11px;
+font-weight:700;
+padding:4px 7px;
+border-radius:7px;
+margin-left:5px;
 }
 
-.durationRow{
-    display:flex;
-    align-items:center;
-    gap:8px;
+.badgePaid{
+background:#d8f8df;
+color:#167c2e;
 }
 
-.durationRow input{
-    margin:0;
-    flex:1;
+.badgeUnpaid{
+background:#ffe0dd;
+color:#c62820;
 }
 
-.durationUnit{
-    font-weight:700;
-    white-space:nowrap;
+.photoButtons{
+display:flex;
+gap:8px;
 }
 
-.dateInfo{
-    margin-top:8px;
-    font-size:14px;
-    color:#555;
+.photoButtons button{
+flex:1;
 }
 
-.photoButtonText{
-    margin-top:8px;
-    display:block;
-    color:#666;
-    font-size:14px;
+.photoPreview{
+max-width:100%;
+max-height:180px;
+display:block;
+margin-top:10px;
+border-radius:10px;
 }
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+z-index:1000;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modalBox{
+background:white;
+width:100%;
+max-width:500px;
+max-height:90vh;
+overflow:auto;
+border-radius:20px;
+padding:18px;
+}
+
+.modalTitle{
+font-size:20px;
+font-weight:750;
+margin-bottom:12px;
+}
+
+.modalActions{
+display:flex;
+gap:8px;
+margin-top:15px;
+}
+
+.modalActions button{
+flex:1;
+}
+
+.manualInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-bottom:10px;
+}
+
+.manualLine{
+margin-bottom:12px;
+}
+
+.manualLabel{
+font-size:12px;
+color:#777;
+}
+
+.manualValue{
+font-size:15px;
+font-weight:600;
+word-break:break-word;
+margin-top:2px;
+}
+
+.copyButton{
+margin-top:5px;
+background:#e9e9ee;
+font-size:12px;
+padding:7px 10px;
+}
+
+.copyButton.copied{
+background:#34c759;
+color:white;
+}
+
+.login{
+position:fixed;
+inset:0;
+background:#f2f2f7;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:25px;
+z-index:2000;
+}
+
+.loginBox{
+background:white;
+width:100%;
+max-width:360px;
+border-radius:22px;
+padding:25px;
+box-shadow:0 5px 25px rgba(0,0,0,.12);
+text-align:center;
+}
+
+.loginTitle{
+font-size:25px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+.loginText{
+font-size:14px;
+color:#777;
+margin-bottom:18px;
+}
+
+#pinInput{
+text-align:center;
+font-size:25px;
+letter-spacing:8px;
+}
+
+.hidden{
+display:none !important;
+}
+
+input[type="file"]{
+display:none;
+}
+
+.photoModalImage{
+max-width:100%;
+max-height:75vh;
+display:block;
+margin:auto;
+border-radius:12px;
+}
+
+.photoModalButtons{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.photoModalButtons button{
+flex:1;
+}
+
+.qrContainer{
+text-align:center;
+padding:10px 0;
+}
+
+#qrCode{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:10px;
+background:white;
+}
+
+#qrCode img,
+#qrCode canvas{
+margin:auto;
+}
+
+.qrInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-top:12px;
+font-size:13px;
+line-height:1.5;
+text-align:left;
+}
+
+.qrWarning{
+font-size:12px;
+color:#777;
+margin-top:10px;
+text-align:center;
+}
+
+.calculatorDisplay{
+font-size:25px;
+font-weight:700;
+text-align:right;
+background:#f2f2f7;
+margin-bottom:10px;
+}
+
+.calculatorGrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px;
+}
+
+.calculatorGrid button{
+font-size:18px;
+padding:14px 5px;
+}
+
+.calculatorEquals{
+margin-top:8px;
+width:100%;
+font-size:18px;
+}
+
+.empty{
+background:white;
+border-radius:15px;
+padding:20px;
+text-align:center;
+color:#777;
+margin-bottom:15px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="login" id="loginScreen">
-    <div class="loginBox">
-        <h1>🔐 Mes accès</h1>
-        <p>Entrez votre code PIN</p>
+<div id="loginScreen" class="login">
 
-        <input
-            type="password"
-            id="pinInput"
-            inputmode="numeric"
-            maxlength="4"
-            placeholder="PIN"
-            autocomplete="off"
-        >
+<div class="loginBox">
 
-        <button class="primary" onclick="login()">
-            Se connecter
-        </button>
-
-        <div id="loginError" class="loginError hidden">
-            Code incorrect
-        </div>
-    </div>
+<div class="loginTitle">
+Mes paiements
 </div>
 
-<header>
-    <h1>🔐 Mes accès</h1>
-    <div class="userCount" id="userCount">
-        👥 0 utilisateurs
-    </div>
-</header>
+<div class="loginText">
+Entrez votre code PIN
+</div>
+
+<input
+id="pinInput"
+type="password"
+inputmode="numeric"
+maxlength="4"
+placeholder="••••">
+
+<br><br>
+
+<button
+class="primary"
+onclick="checkPin()">
+
+Ouvrir
+
+</button>
+
+</div>
+
+</div>
+
+
+<div id="app" class="hidden">
+
+<div class="header">
+Mes paiements
+</div>
 
 <div class="container">
 
-    <div class="topButtons">
-        <button class="secondary" onclick="showAddForm()">
-            ➕ Ajouter
-        </button>
-
-        <button class="secondary" onclick="exportData()">
-            💾 Sauvegarder
-        </button>
-
-        <button
-            class="secondary"
-            onclick="document.getElementById('importFile').click()"
-        >
-            📂 Restaurer
-        </button>
-
-        <input
-            type="file"
-            id="importFile"
-            accept=".json,application/json"
-            class="hidden"
-            onchange="importData(event)"
-        >
-    </div>
-
-    <input
-        class="search"
-        id="searchInput"
-        placeholder="🔎 Rechercher un utilisateur..."
-        oninput="renderAccounts()"
-    >
-
-    <div class="card hidden" id="formCard">
-
-        <h2 id="formTitle">
-            ➕ Nouvel accès
-        </h2>
-
-        <label>Nom / Prénom</label>
-        <input
-            id="name"
-            placeholder="Exemple : Jean Dupont"
-        >
-
-        <label>Utilisateur</label>
-
-        <div class="fieldRow">
-            <input
-                id="username"
-                placeholder="Utilisateur"
-            >
-
-            <button
-                class="copyBtn"
-                onclick="copyField('username')"
-            >
-                Copier
-            </button>
-        </div>
-
-        <label>Mot de passe</label>
-
-        <div class="fieldRow">
-            <input
-                id="password"
-                type="password"
-                placeholder="Mot de passe"
-            >
-
-            <button
-                class="copyBtn"
-                onclick="togglePassword()"
-            >
-                👁️
-            </button>
-
-            <button
-                class="copyBtn"
-                onclick="copyField('password')"
-            >
-                Copier
-            </button>
-        </div>
-
-        <label>URL 1</label>
-
-        <div class="fieldRow">
-            <input
-                id="url1"
-                placeholder="https://..."
-            >
-
-            <button
-                class="copyBtn"
-                onclick="copyField('url1')"
-            >
-                Copier
-            </button>
-        </div>
-
-        <label>URL 2</label>
-
-        <div class="fieldRow">
-            <input
-                id="url2"
-                placeholder="https://..."
-            >
-
-            <button
-                class="copyBtn"
-                onclick="copyField('url2')"
-            >
-                Copier
-            </button>
-        </div>
-
-        <label>Remarque</label>
-
-        <textarea
-            id="remark"
-            placeholder="Remarque..."
-        ></textarea>
-
-        <hr>
-
-        <!-- NOUVELLE PARTIE DURÉE -->
-
-        <div class="durationBox">
-
-            <div class="durationBoxTitle">
-                ⏳ Durée de l'accès
-            </div>
-
-            <div class="durationRow">
-
-                <input
-                    id="duration"
-                    type="number"
-                    min="1"
-                    step="1"
-                    inputmode="numeric"
-                    placeholder="Exemple : 365"
-                >
-
-                <span class="durationUnit">
-                    jours
-                </span>
-
-            </div>
-
-            <div class="dateInfo" id="startDateInfo">
-                📅 La date de début sera enregistrée à l'ajout.
-            </div>
-
-            <div class="dateInfo" id="expiryPreview">
-                📅 La date d'expiration sera calculée automatiquement.
-            </div>
-
-        </div>
-
-        <div class="reminderInfo">
-            📧 Le rappel est disponible lorsqu'il reste
-            <strong>2 jours ou moins</strong>.
-        </div>
-
-        <div class="checkRow">
-
-            <input
-                type="checkbox"
-                id="isApplication"
-                onchange="toggleApplicationFields()"
-            >
-
-            <label
-                for="isApplication"
-                style="margin:0;"
-            >
-                📱 Application
-            </label>
-
-        </div>
-
-        <div
-            id="applicationFields"
-            class="hidden"
-        >
-
-            <label>URL de l'application</label>
-
-            <div class="fieldRow">
-
-                <input
-                    id="appUrl1"
-                    placeholder="https://..."
-                >
-
-                <button
-                    class="copyBtn"
-                    onclick="copyField('appUrl1')"
-                >
-                    Copier
-                </button>
-
-            </div>
-
-            <label>MAC</label>
-
-            <div class="fieldRow">
-
-                <input
-                    id="mac"
-                    placeholder="MAC"
-                >
-
-                <button
-                    class="copyBtn"
-                    onclick="copyField('mac')"
-                >
-                    Copier
-                </button>
-
-            </div>
-
-            <label>Clé</label>
-
-            <div class="fieldRow">
-
-                <input
-                    id="appKey"
-                    placeholder="Clé"
-                >
-
-                <button
-                    class="copyBtn"
-                    onclick="copyField('appKey')"
-                >
-                    Copier
-                </button>
-
-            </div>
-
-        </div>
-
-        <hr>
-
-        <label>📷 Photo</label>
-
-        <input
-            type="file"
-            id="photoInput"
-            accept="image/*"
-            capture="environment"
-            onchange="handlePhoto(event)"
-        >
-
-        <span class="photoButtonText">
-            Tu peux choisir une photo déjà présente dans tes photos
-            ou prendre une nouvelle photo.
-        </span>
-
-        <div
-            id="photoContainer"
-            class="hidden"
-        >
-
-            <img
-                id="photoPreview"
-                class="photoPreview"
-            >
-
-            <button
-                class="danger"
-                style="width:100%;margin-top:8px;"
-                onclick="removePhoto()"
-            >
-                🗑️ Supprimer la photo
-            </button>
-
-        </div>
-
-        <button
-            class="primary"
-            onclick="saveAccount()"
-        >
-            💾 Enregistrer
-        </button>
-
-        <button
-            class="secondary"
-            style="width:100%;margin-top:8px;"
-            onclick="cancelForm()"
-        >
-            Annuler
-        </button>
-
-    </div>
-
-    <div id="accountsList"></div>
+<div class="summary">
+
+<div class="summaryBox">
+<div class="summaryTitle">Total</div>
+<div id="totalValue" class="summaryValue">0,00 €</div>
+</div>
+
+<div class="summaryBox">
+<div class="summaryTitle">Payé</div>
+<div id="paidValue" class="summaryValue">0,00 €</div>
+</div>
+
+<div class="summaryBox">
+<div class="summaryTitle">Reste</div>
+<div id="remainingValue" class="summaryValue">0,00 €</div>
+</div>
 
 </div>
 
+
+<div class="tabs">
+
+<div
+id="tabUnpaid"
+class="tab active"
+onclick="showTab('unpaid')">
+
+À payer
+(<span id="unpaidCount">0</span>)
+
+</div>
+
+<div
+id="tabPaid"
+class="tab"
+onclick="showTab('paid')">
+
+Payé
+(<span id="paidCount">0</span>)
+
+</div>
+
+</div>
+
+
+<div id="selectionBar" class="selectionBar">
+
+<div id="selectionInfo" class="selectionInfo">
+0 sélectionné
+</div>
+
+<button
+class="danger"
+onclick="deleteSelected()">
+
+Supprimer
+
+</button>
+
+</div>
+
+
+<div id="unpaidList"></div>
+
+<div id="paidList" class="hidden"></div>
+
+
+<div class="card">
+
+<h2>Ajouter un paiement</h2>
+
+<label>Alias / raccourci</label>
+
+<input
+id="alias"
+placeholder="Ex : Taxe maison">
+
+<label>Bénéficiaire</label>
+
+<input
+id="beneficiary"
+placeholder="Nom du bénéficiaire">
+
+<label>IBAN</label>
+
+<input
+id="iban"
+placeholder="BE...">
+
+<label>Montant total</label>
+
+<input
+id="totalAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="0,00">
+
+<label>Nombre d'échéances</label>
+
+<input
+id="installments"
+type="number"
+min="1"
+value="1">
+
+<label>Première échéance</label>
+
+<input
+id="firstDate"
+type="date">
+
+<label>Communication</label>
+
+<input
+id="communication"
+placeholder="Communication">
+
+<label>Document</label>
+
+<div class="photoButtons">
+
+<button
+class="secondary"
+onclick="document.getElementById('cameraInput').click()">
+
+📷 Appareil photo
+
+</button>
+
+<button
+class="secondary"
+onclick="document.getElementById('galleryInput').click()">
+
+🖼️ Mes photos
+
+</button>
+
+</div>
+
+<input
+id="cameraInput"
+type="file"
+accept="image/*"
+capture="environment">
+
+<input
+id="galleryInput"
+type="file"
+accept="image/*">
+
+<div id="addPhotoPreview"></div>
+
+<br>
+
+<button
+class="primary"
+onclick="addPayment()">
+
+Ajouter le paiement
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>🧮 Calculette</h2>
+
+<input
+id="calcDisplay"
+class="calculatorDisplay"
+type="text"
+readonly
+placeholder="0">
+
+<div class="calculatorGrid">
+
+<button class="secondary" onclick="calcInput('7')">7</button>
+<button class="secondary" onclick="calcInput('8')">8</button>
+<button class="secondary" onclick="calcInput('9')">9</button>
+<button class="secondary" onclick="calcInput('/')">÷</button>
+
+<button class="secondary" onclick="calcInput('4')">4</button>
+<button class="secondary" onclick="calcInput('5')">5</button>
+<button class="secondary" onclick="calcInput('6')">6</button>
+<button class="secondary" onclick="calcInput('*')">×</button>
+
+<button class="secondary" onclick="calcInput('1')">1</button>
+<button class="secondary" onclick="calcInput('2')">2</button>
+<button class="secondary" onclick="calcInput('3')">3</button>
+<button class="secondary" onclick="calcInput('-')">−</button>
+
+<button class="secondary" onclick="calcInput('0')">0</button>
+<button class="secondary" onclick="calcInput('.')">.</button>
+<button class="danger" onclick="calcClear()">C</button>
+<button class="secondary" onclick="calcInput('+')">+</button>
+
+</div>
+
+<button
+class="primary calculatorEquals"
+onclick="calcResult()">
+
+= Calculer
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>Sauvegarde</h2>
+
+<button
+class="secondary"
+onclick="exportData()">
+
+Exporter mes données
+
+</button>
+
+<button
+class="secondary"
+onclick="document.getElementById('importInput').click()">
+
+Importer une sauvegarde
+
+</button>
+
+<input
+id="importInput"
+type="file"
+accept=".json">
+
+</div>
+
+</div>
+</div>
+
+
+<div id="editModal" class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+Modifier l'échéance
+</div>
+
+<label>Alias</label>
+<input id="editAlias">
+
+<label>Bénéficiaire</label>
+<input id="editBeneficiary">
+
+<label>IBAN</label>
+<input id="editIban">
+
+<label>Date</label>
+<input id="editDate" type="date">
+
+<label>Montant</label>
+<input id="editAmount" type="number" step="0.01">
+
+<label>Communication</label>
+<input id="editCommunication">
+
+<div class="modalActions">
+
+<button class="secondary" onclick="closeEdit()">
+Annuler
+</button>
+
+<button class="primary" onclick="saveEdit()">
+Enregistrer
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="manualModal" class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+Paiement manuel
+</div>
+
+<div id="manualContent"></div>
+
+<div class="modalActions">
+
+<button
+class="secondary"
+onclick="closeManual()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="qrModal" class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+▣ QR paiement
+</div>
+
+<div class="qrContainer">
+
+<div id="qrCode"></div>
+
+<div id="qrInfo" class="qrInfo"></div>
+
+<div class="qrWarning">
+Scanne ce QR avec une application bancaire compatible.
+Vérifie toujours les informations avant de valider le paiement.
+</div>
+
+</div>
+
+<div class="modalActions">
+
+<button
+class="secondary"
+onclick="closeQR()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="photoModal" class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+Document
+</div>
+
+<img
+id="photoModalImage"
+class="photoModalImage">
+
+<div class="photoModalButtons">
+
+<button
+class="danger"
+onclick="deletePhoto()">
+
+Supprimer
+
+</button>
+
+<button
+class="secondary"
+onclick="closePhoto()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
+</div>
+
+
 <script>
 
-const PIN = "1157";
-const STORAGE_KEY = "mesAcces";
+const PIN="1157";
 
-let accounts = [];
-let editIndex = -1;
-let currentPhoto = "";
+let data=[];
+let currentTab="unpaid";
+let selectedIds=new Set();
+let editId=null;
+let manualId=null;
+let photoId=null;
+let qrId=null;
+let addPhotoData="";
 
 
-/* =========================
-   CHARGEMENT
-========================= */
+function euro(value){
+
+return Number(value||0).toLocaleString(
+"fr-BE",
+{
+style:"currency",
+currency:"EUR"
+}
+);
+
+}
+
+
+function generateId(){
+
+return Date.now().toString()+
+Math.random().toString(36).substring(2,9);
+
+}
+
+
+function formatDate(date){
+
+if(!date)return "";
+
+const d=new Date(date+"T00:00:00");
+
+return d.toLocaleDateString("fr-BE");
+
+}
+
+
+function addMonths(date,months){
+
+const d=new Date(date+"T00:00:00");
+
+d.setMonth(d.getMonth()+months);
+
+return d.toISOString().substring(0,10);
+
+}
+
+
+function selectionKey(paymentId,installmentId){
+
+return String(paymentId)+"::"+String(installmentId);
+
+}
+
+
+function normalizeData(){
+
+if(!Array.isArray(data))
+data=[];
+
+data.forEach(p=>{
+
+if(!p.id)p.id=generateId();
+if(!p.alias)p.alias="";
+if(!p.beneficiary)p.beneficiary="";
+if(!p.iban)p.iban="";
+if(!p.communication)p.communication="";
+if(!p.photo)p.photo="";
+if(!Array.isArray(p.installments))
+p.installments=[];
+
+p.installments.forEach(i=>{
+
+if(!i.id)i.id=generateId();
+
+if(typeof i.paid!=="boolean")
+i.paid=false;
+
+if(i.amount===undefined||
+i.amount===null||
+i.amount==="")
+i.amount=0;
+
+});
+
+});
+
+}
+
 
 function loadData(){
 
-    try{
+try{
 
-        const saved =
-            localStorage.getItem(STORAGE_KEY);
+const saved=localStorage.getItem("mesPaiements");
 
-        if(saved){
+if(saved){
 
-            accounts = JSON.parse(saved);
-
-            if(!Array.isArray(accounts)){
-                accounts = [];
-            }
-
-        }else{
-
-            accounts = [];
-
-        }
-
-    }catch(error){
-
-        console.error(error);
-        accounts = [];
-
-    }
-
-    updateUserCount();
-    renderAccounts();
+data=JSON.parse(saved);
+normalizeData();
 
 }
 
+}catch(e){
 
-/* =========================
-   SAUVEGARDE
-========================= */
+console.error("Erreur chargement :",e);
+data=[];
+
+}
+
+render();
+
+}
+
 
 function saveData(){
 
-    try{
+try{
 
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(accounts)
-        );
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(data)
+);
 
-    }catch(error){
+}catch(e){
 
-        alert(
-            "Impossible de sauvegarder les données. " +
-            "Le stockage est peut-être plein."
-        );
+console.error("Erreur sauvegarde :",e);
 
-        console.error(error);
+alert(
+"Impossible de sauvegarder les données."
+);
 
-    }
+}
+
+}
+
+
+function checkPin(){
+
+const value=
+document.getElementById("pinInput").value;
+
+if(value===PIN){
+
+document.getElementById(
+"loginScreen"
+).classList.add("hidden");
+
+document.getElementById(
+"app"
+).classList.remove("hidden");
+
+loadData();
+
+}else{
+
+alert("Code PIN incorrect");
+
+document.getElementById("pinInput").value="";
+
+}
+
+}
+
+
+function handlePhoto(file){
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const img=new Image();
+
+img.onload=function(){
+
+const canvas=document.createElement("canvas");
+
+const maxWidth=1400;
+
+let width=img.width;
+let height=img.height;
+
+if(width>maxWidth){
+
+height=height*(maxWidth/width);
+width=maxWidth;
+
+}
+
+canvas.width=width;
+canvas.height=height;
+
+const ctx=canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0,
+width,
+height
+);
+
+addPhotoData=canvas.toDataURL(
+"image/jpeg",
+0.75
+);
+
+document.getElementById(
+"addPhotoPreview"
+).innerHTML=
+`
+<img
+src="${addPhotoData}"
+class="photoPreview">
+`;
+
+};
+
+img.src=e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+
+document.getElementById("cameraInput")
+.addEventListener(
+"change",
+function(){
+
+handlePhoto(this.files[0]);
+
+}
+);
+
+
+document.getElementById("galleryInput")
+.addEventListener(
+"change",
+function(){
+
+handlePhoto(this.files[0]);
+
+}
+);
+
+
+function addPayment(){
+
+const alias=
+document.getElementById("alias").value.trim();
+
+const beneficiary=
+document.getElementById("beneficiary").value.trim();
+
+const iban=
+document.getElementById("iban").value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+const total=parseFloat(
+document.getElementById("totalAmount").value
+);
+
+const count=parseInt(
+document.getElementById("installments").value
+);
+
+const firstDate=
+document.getElementById("firstDate").value;
+
+const communication=
+document.getElementById("communication").value.trim();
+
+
+if(
+!beneficiary||
+isNaN(total)||
+total<=0||
+isNaN(count)||
+count<1||
+!firstDate
+){
+
+alert(
+"Veuillez remplir les champs obligatoires."
+);
+
+return;
+
+}
+
+
+const base=Math.floor(
+(total/count)*100
+)/100;
+
+const last=Math.round(
+(total-base*(count-1))*100
+)/100;
+
+const installments=[];
+
+
+for(let i=0;i<count;i++){
+
+installments.push({
+
+id:generateId(),
+
+date:addMonths(
+firstDate,
+i
+),
+
+amount:i===count-1
+?last
+:base,
+
+paid:false
+
+});
+
+}
+
+
+data.push({
+
+id:generateId(),
+
+alias:alias,
+
+beneficiary:beneficiary,
+
+iban:iban,
+
+communication:communication,
+
+photo:addPhotoData,
+
+installments:installments
+
+});
+
+
+saveData();
+
+resetAddForm();
+
+selectedIds.clear();
+
+render();
+
+alert("Paiement ajouté.");
+
+}
+
+
+function resetAddForm(){
+
+document.getElementById("alias").value="";
+document.getElementById("beneficiary").value="";
+document.getElementById("iban").value="";
+document.getElementById("totalAmount").value="";
+document.getElementById("installments").value="1";
+document.getElementById("firstDate").value="";
+document.getElementById("communication").value="";
+document.getElementById("addPhotoPreview").innerHTML="";
+document.getElementById("cameraInput").value="";
+document.getElementById("galleryInput").value="";
+
+addPhotoData="";
+
+}
+
+
+function showTab(tab){
+
+currentTab=tab;
+
+document.getElementById(
+"tabUnpaid"
+).classList.toggle(
+"active",
+tab==="unpaid"
+);
+
+document.getElementById(
+"tabPaid"
+).classList.toggle(
+"active",
+tab==="paid"
+);
+
+document.getElementById(
+"unpaidList"
+).classList.toggle(
+"hidden",
+tab!=="unpaid"
+);
+
+document.getElementById(
+"paidList"
+).classList.toggle(
+"hidden",
+tab!=="paid"
+);
+
+render();
+
+}
+
+
+function render(){
+
+normalizeData();
+
+const unpaidList=
+document.getElementById("unpaidList");
+
+const paidList=
+document.getElementById("paidList");
+
+unpaidList.innerHTML="";
+paidList.innerHTML="";
+
+let total=0;
+let paid=0;
+let unpaidCount=0;
+let paidCount=0;
+
+
+data.forEach(payment=>{
+
+payment.installments.forEach(inst=>{
+
+total+=Number(inst.amount||0);
+
+if(inst.paid){
+
+paid+=Number(inst.amount||0);
+paidCount++;
+
+}else{
+
+unpaidCount++;
+
+}
+
+});
+
+});
+
+
+document.getElementById("totalValue").textContent=euro(total);
+document.getElementById("paidValue").textContent=euro(paid);
+document.getElementById("remainingValue").textContent=euro(total-paid);
+document.getElementById("unpaidCount").textContent=unpaidCount;
+document.getElementById("paidCount").textContent=paidCount;
+
+
+data.forEach(payment=>{
+
+const visible=payment.installments.filter(
+i=>currentTab==="unpaid"
+?!i.paid
+:i.paid
+);
+
+if(!visible.length)return;
+
+const group=createPaymentGroup(
+payment,
+visible
+);
+
+if(currentTab==="unpaid")
+unpaidList.appendChild(group);
+else
+paidList.appendChild(group);
+
+});
+
+
+updateSelectionBar();
+
+}
+
+
+function createPaymentGroup(payment,installments){
+
+const group=document.createElement("div");
+
+group.className="paymentGroup";
+
+const header=document.createElement("div");
+
+header.className="paymentGroupHeader";
+
+const alias=payment.alias||"Sans alias";
+
+const totalInstallments=
+payment.installments.length;
+
+const paidInstallments=
+payment.installments.filter(i=>i.paid).length;
+
+const remainingInstallments=
+payment.installments.filter(i=>!i.paid).length;
+
+
+header.innerHTML=
+`
+<div class="paymentGroupAlias">
+${escapeHtml(alias)}
+</div>
+
+<div class="paymentGroupBeneficiary">
+${escapeHtml(payment.beneficiary)}
+</div>
+
+<div class="paymentGroupInfo">
+${totalInstallments}
+échéance(s)
+•
+${paidInstallments}
+payée(s)
+•
+${remainingInstallments}
+restante(s)
+</div>
+`;
+
+group.appendChild(header);
+
+installments.forEach(inst=>{
+
+group.appendChild(
+createInstallmentCard(payment,inst)
+);
+
+});
+
+return group;
+
+}
+
+
+function createInstallmentCard(payment,inst){
+
+const card=document.createElement("div");
+
+card.className="installment";
+
+if(inst.paid)
+card.classList.add("paid");
+
+
+const top=document.createElement("div");
+
+top.className="installmentTop";
+
+
+const checkbox=document.createElement("input");
+
+checkbox.type="checkbox";
+checkbox.className="checkbox";
+
+const key=selectionKey(
+payment.id,
+inst.id
+);
+
+checkbox.checked=selectedIds.has(key);
+
+checkbox.addEventListener(
+"change",
+function(){
+
+if(this.checked)
+selectedIds.add(key);
+else
+selectedIds.delete(key);
+
+updateSelectionBar();
+
+}
+);
+
+
+const info=document.createElement("div");
+
+info.className="installmentInfo";
+
+
+const status=inst.paid
+?
+`<span class="badge badgePaid">PAYÉ</span>`
+:
+`<span class="badge badgeUnpaid">À PAYER</span>`;
+
+
+info.innerHTML=
+`
+<div class="beneficiary">
+
+${escapeHtml(payment.beneficiary)}
+
+${status}
+
+</div>
+
+<div class="installmentDetails">
+
+Échéance :
+${formatDate(inst.date)}
+
+<br>
+
+Communication :
+${escapeHtml(payment.communication||"-")}
+
+</div>
+
+<div class="amount">
+
+${euro(inst.amount)}
+
+</div>
+`;
+
+
+top.appendChild(checkbox);
+top.appendChild(info);
+
+card.appendChild(top);
+
+
+const actions=document.createElement("div");
+
+actions.className="actions";
+
+
+const editBtn=document.createElement("button");
+
+editBtn.className="secondary";
+editBtn.textContent="✏️ Modifier";
+
+editBtn.onclick=function(){
+
+openEdit(
+payment.id,
+inst.id
+);
+
+};
+
+
+const paidBtn=document.createElement("button");
+
+paidBtn.className=
+inst.paid
+?"secondary"
+:"green";
+
+paidBtn.textContent=
+inst.paid
+?"↩️ À payer"
+:"✓ Payé";
+
+paidBtn.onclick=function(){
+
+togglePaid(
+payment.id,
+inst.id
+);
+
+};
+
+
+const manualBtn=document.createElement("button");
+
+manualBtn.className="secondary";
+manualBtn.textContent="💳 Payer";
+
+manualBtn.onclick=function(){
+
+openManual(
+payment.id,
+inst.id
+);
+
+};
+
+
+const qrBtn=document.createElement("button");
+
+qrBtn.className="qrButton";
+qrBtn.textContent="▣ QR";
+
+qrBtn.onclick=function(){
+
+openQR(
+payment,
+inst
+);
+
+};
+
+
+const calendarBtn=document.createElement("button");
+
+calendarBtn.className="secondary";
+calendarBtn.textContent="📅 Calendrier";
+
+calendarBtn.onclick=function(){
+
+addCalendar(
+payment,
+inst
+);
+
+};
+
+
+const deleteBtn=document.createElement("button");
+
+deleteBtn.className="danger";
+deleteBtn.textContent="🗑️ Supprimer";
+
+deleteBtn.onclick=function(){
+
+deleteInstallment(
+payment.id,
+inst.id
+);
+
+};
+
+
+actions.appendChild(editBtn);
+actions.appendChild(paidBtn);
+actions.appendChild(manualBtn);
+actions.appendChild(qrBtn);
+actions.appendChild(calendarBtn);
+actions.appendChild(deleteBtn);
+
+
+if(payment.photo){
+
+const photoBtn=document.createElement("button");
+
+photoBtn.className="secondary";
+photoBtn.textContent="📄 Document";
+
+photoBtn.onclick=function(){
+
+openPhoto(payment.id);
+
+};
+
+actions.appendChild(photoBtn);
+
+}
+
+
+card.appendChild(actions);
+
+return card;
+
+}
+
+
+function deleteInstallment(paymentId,installmentId){
+
+const payment=data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)return;
+
+if(!confirm("Supprimer cette échéance ?"))
+return;
+
+payment.installments=
+payment.installments.filter(
+i=>String(i.id)!==String(installmentId)
+);
+
+selectedIds.delete(
+selectionKey(
+paymentId,
+installmentId
+)
+);
+
+if(payment.installments.length===0){
+
+data=data.filter(
+p=>String(p.id)!==String(paymentId)
+);
+
+}
+
+saveData();
+
+render();
 
 }
 
 
 /* =========================
-   CONNEXION
+   QR
 ========================= */
 
-function login(){
+function createEPCQR(payment,inst){
 
-    const pin =
-        document.getElementById("pinInput").value;
+const name=
+String(payment.beneficiary||"")
+.trim()
+.substring(0,70);
 
-    if(pin === PIN){
+const iban=
+String(payment.iban||"")
+.replace(/\s/g,"")
+.toUpperCase();
 
-        document
-            .getElementById("loginScreen")
-            .classList.add("hidden");
+const amount=
+Number(inst.amount||0).toFixed(2);
 
-        document
-            .getElementById("loginError")
-            .classList.add("hidden");
+const communication=
+String(payment.communication||"")
+.trim()
+.substring(0,140);
 
-        loadData();
-
-    }else{
-
-        document
-            .getElementById("loginError")
-            .classList.remove("hidden");
-
-        document.getElementById("pinInput").value = "";
-
-        document
-            .getElementById("pinInput")
-            .focus();
-
-    }
-
-}
-
-
-document
-    .getElementById("pinInput")
-    .addEventListener("keydown",function(e){
-
-        if(e.key === "Enter"){
-            login();
-        }
-
-    });
-
-
-/* =========================
-   COMPTEUR
-========================= */
-
-function updateUserCount(){
-
-    const count = accounts.length;
-
-    document
-        .getElementById("userCount")
-        .textContent =
-        "👥 " +
-        count +
-        " utilisateur" +
-        (count > 1 ? "s" : "");
+return[
+"BCD",
+"002",
+"1",
+"SCT",
+"",
+name,
+iban,
+"EUR"+amount,
+"",
+communication,
+""
+].join("\n");
 
 }
 
 
-/* =========================
-   FORMULAIRE
-========================= */
+function openQR(payment,inst){
 
-function showAddForm(){
+const iban=
+String(payment.iban||"")
+.replace(/\s/g,"")
+.toUpperCase();
 
-    editIndex = -1;
+if(!iban){
 
-    document
-        .getElementById("formTitle")
-        .textContent = "➕ Nouvel accès";
+alert(
+"Il faut un IBAN pour générer le QR."
+);
 
-    clearForm();
+return;
 
-    document
-        .getElementById("formCard")
-        .classList.remove("hidden");
+}
 
-    updateDatePreview();
+if(typeof QRCode==="undefined"){
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+alert(
+"Le générateur QR n'a pas pu être chargé. Vérifie ta connexion internet."
+);
+
+return;
 
 }
 
 
-function clearForm(){
+qrId={
+paymentId:payment.id,
+installmentId:inst.id
+};
 
-    document.getElementById("name").value = "";
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("url1").value = "";
-    document.getElementById("url2").value = "";
-    document.getElementById("remark").value = "";
+const qrBox=document.getElementById("qrCode");
 
-    document.getElementById("duration").value = "";
+qrBox.innerHTML="";
 
-    document.getElementById("isApplication").checked = false;
+const payload=createEPCQR(
+payment,
+inst
+);
 
-    document.getElementById("appUrl1").value = "";
-    document.getElementById("mac").value = "";
-    document.getElementById("appKey").value = "";
+new QRCode(
+qrBox,
+{
+text:payload,
+width:240,
+height:240,
+correctLevel:QRCode.CorrectLevel.M
+}
+);
 
-    document
-        .getElementById("applicationFields")
-        .classList.add("hidden");
 
-    currentPhoto = "";
+document.getElementById(
+"qrInfo"
+).innerHTML=
+`
+<strong>
+${escapeHtml(payment.beneficiary)}
+</strong>
 
-    document.getElementById("photoInput").value = "";
+<br>
 
-    document
-        .getElementById("photoContainer")
-        .classList.add("hidden");
+IBAN :
+${escapeHtml(iban)}
 
-    document
-        .getElementById("photoPreview")
-        .removeAttribute("src");
+<br>
 
-    document
-        .getElementById("startDateInfo")
-        .textContent =
-        "📅 La date de début sera enregistrée à l'ajout.";
+Montant :
+${euro(inst.amount)}
 
-    document
-        .getElementById("expiryPreview")
-        .textContent =
-        "📅 La date d'expiration sera calculée automatiquement.";
+<br>
+
+Communication :
+${escapeHtml(payment.communication||"-")}
+`;
+
+
+document.getElementById(
+"qrModal"
+).classList.add("show");
 
 }
 
 
-function cancelForm(){
+function closeQR(){
 
-    document
-        .getElementById("formCard")
-        .classList.add("hidden");
+document.getElementById(
+"qrModal"
+).classList.remove("show");
 
-    editIndex = -1;
+document.getElementById(
+"qrCode"
+).innerHTML="";
 
-    clearForm();
-
-}
-
-
-function toggleApplicationFields(){
-
-    const checked =
-        document.getElementById("isApplication").checked;
-
-    document
-        .getElementById("applicationFields")
-        .classList.toggle(
-            "hidden",
-            !checked
-        );
+qrId=null;
 
 }
 
 
 /* =========================
-   MOT DE PASSE
+   SELECTION
 ========================= */
 
-function togglePassword(){
+function updateSelectionBar(){
 
-    const field =
-        document.getElementById("password");
+const bar=document.getElementById(
+"selectionBar"
+);
 
-    if(field.type === "password"){
+const info=document.getElementById(
+"selectionInfo"
+);
 
-        field.type = "text";
+const count=selectedIds.size;
 
-    }else{
+if(count>0){
 
-        field.type = "password";
+bar.classList.add("show");
 
-    }
+info.textContent=
+count+
+(count>1
+?" sélectionnés"
+:" sélectionné");
+
+}else{
+
+bar.classList.remove("show");
+
+}
+
+}
+
+
+function deleteSelected(){
+
+if(!selectedIds.size)
+return;
+
+if(!confirm(
+"Supprimer les échéances sélectionnées ?"
+))
+return;
+
+data.forEach(payment=>{
+
+payment.installments=
+payment.installments.filter(inst=>{
+
+const key=selectionKey(
+payment.id,
+inst.id
+);
+
+return !selectedIds.has(key);
+
+});
+
+});
+
+
+data=data.filter(
+p=>p.installments.length>0
+);
+
+selectedIds.clear();
+
+saveData();
+
+render();
+
+}
+
+
+function togglePaid(paymentId,installmentId){
+
+const payment=data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)return;
+
+const inst=payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst)return;
+
+inst.paid=!inst.paid;
+
+saveData();
+
+render();
 
 }
 
 
 /* =========================
-   COPIER
+   MODIFICATION
 ========================= */
 
-async function copyText(text){
+function openEdit(paymentId,installmentId){
 
-    if(!text){
+const payment=data.find(
+p=>String(p.id)===String(paymentId)
+);
 
-        alert("Rien à copier.");
-        return;
+if(!payment){
 
-    }
+alert("Paiement introuvable.");
 
-    try{
+return;
 
-        if(navigator.clipboard){
+}
 
-            await navigator.clipboard.writeText(text);
+const inst=payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
 
-            alert("Copié !");
-            return;
+if(!inst){
 
-        }
+alert("Échéance introuvable.");
 
-    }catch(error){}
-
-    const textarea =
-        document.createElement("textarea");
-
-    textarea.value = text;
-
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-
-    document.body.appendChild(textarea);
-
-    textarea.focus();
-    textarea.select();
-
-    try{
-
-        document.execCommand("copy");
-
-        alert("Copié !");
-
-    }catch(error){
-
-        alert("Impossible de copier.");
-
-    }
-
-    document.body.removeChild(textarea);
+return;
 
 }
 
 
-function copyField(id){
+editId={
+paymentId:paymentId,
+installmentId:installmentId
+};
 
-    const field =
-        document.getElementById(id);
 
-    if(field){
-        copyText(field.value);
-    }
+document.getElementById(
+"editAlias"
+).value=payment.alias||"";
+
+document.getElementById(
+"editBeneficiary"
+).value=payment.beneficiary||"";
+
+document.getElementById(
+"editIban"
+).value=payment.iban||"";
+
+document.getElementById(
+"editDate"
+).value=inst.date||"";
+
+document.getElementById(
+"editAmount"
+).value=inst.amount??"";
+
+document.getElementById(
+"editCommunication"
+).value=
+payment.communication||"";
+
+
+document.getElementById(
+"editModal"
+).classList.add("show");
+
+}
+
+
+function closeEdit(){
+
+document.getElementById(
+"editModal"
+).classList.remove("show");
+
+editId=null;
+
+}
+
+
+function saveEdit(){
+
+if(!editId)return;
+
+const payment=data.find(
+p=>String(p.id)===String(editId.paymentId)
+);
+
+if(!payment){
+
+alert("Paiement introuvable.");
+
+return;
+
+}
+
+const inst=payment.installments.find(
+i=>String(i.id)===String(editId.installmentId)
+);
+
+if(!inst){
+
+alert("Échéance introuvable.");
+
+return;
+
+}
+
+
+payment.alias=
+document.getElementById(
+"editAlias"
+).value.trim();
+
+payment.beneficiary=
+document.getElementById(
+"editBeneficiary"
+).value.trim();
+
+payment.iban=
+document.getElementById(
+"editIban"
+).value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+payment.communication=
+document.getElementById(
+"editCommunication"
+).value.trim();
+
+inst.date=
+document.getElementById(
+"editDate"
+).value;
+
+const amount=parseFloat(
+document.getElementById(
+"editAmount"
+).value
+);
+
+if(isNaN(amount)||amount<0){
+
+alert("Montant incorrect.");
+
+return;
+
+}
+
+inst.amount=amount;
+
+saveData();
+
+closeEdit();
+
+render();
+
+alert("Modification enregistrée.");
+
+}
+
+
+/* =========================
+   PAIEMENT MANUEL
+========================= */
+
+function openManual(paymentId,installmentId){
+
+const payment=data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)return;
+
+const inst=payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst)return;
+
+manualId={
+paymentId,
+installmentId
+};
+
+
+const content=document.getElementById(
+"manualContent"
+);
+
+
+content.innerHTML=
+`
+<div class="manualInfo">
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Bénéficiaire
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.beneficiary)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.beneficiary)}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+IBAN
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.iban||"-")}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.iban||"")}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Montant
+</div>
+
+<div class="manualValue">
+${euro(inst.amount)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(Number(inst.amount).toFixed(2))}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Communication
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.communication||"-")}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.communication||"")}',
+this
+)">
+
+Copier
+
+</button>
+
+</div>
+
+</div>
+`;
+
+
+document.getElementById(
+"manualModal"
+).classList.add("show");
+
+}
+
+
+function closeManual(){
+
+document.getElementById(
+"manualModal"
+).classList.remove("show");
+
+manualId=null;
+
+resetCopyButtons();
+
+}
+
+
+function copyText(text,button){
+
+if(
+navigator.clipboard&&
+navigator.clipboard.writeText
+){
+
+navigator.clipboard.writeText(text)
+.then(()=>{
+
+button.textContent="✓ Copié";
+button.classList.add("copied");
+
+})
+.catch(()=>{
+
+fallbackCopy(text,button);
+
+});
+
+}else{
+
+fallbackCopy(text,button);
+
+}
+
+}
+
+
+function fallbackCopy(text,button){
+
+const textarea=document.createElement("textarea");
+
+textarea.value=text;
+
+document.body.appendChild(textarea);
+
+textarea.select();
+
+try{
+
+document.execCommand("copy");
+
+button.textContent="✓ Copié";
+button.classList.add("copied");
+
+}catch(e){
+
+alert("Impossible de copier.");
+
+}
+
+textarea.remove();
+
+}
+
+
+function resetCopyButtons(){
+
+document.querySelectorAll(
+".copyButton"
+).forEach(b=>{
+
+b.textContent="Copier";
+
+b.classList.remove("copied");
+
+});
+
+}
+
+
+/* =========================
+   CALENDRIER
+========================= */
+
+function addCalendar(payment,inst){
+
+if(!inst.date)return;
+
+const date=inst.date.replaceAll("-","");
+
+const d2=new Date(
+inst.date+"T00:00:00"
+);
+
+d2.setDate(d2.getDate()+1);
+
+const end=d2.toISOString()
+.substring(0,10)
+.replaceAll("-","");
+
+
+const title=
+(payment.alias
+?payment.alias+" - "
+:"")+
+payment.beneficiary;
+
+
+const details=
+"Montant : "+
+Number(inst.amount).toFixed(2)+
+" €\n"+
+"IBAN : "+
+(payment.iban||"")+
+"\n"+
+"Communication : "+
+(payment.communication||"");
+
+
+const url=
+"https://calendar.google.com/calendar/render?action=TEMPLATE"+
+"&text="+encodeURIComponent(title)+
+"&dates="+date+"/"+end+
+"&details="+encodeURIComponent(details);
+
+
+window.open(url,"_blank");
 
 }
 
@@ -1016,1613 +2461,363 @@ function copyField(id){
    PHOTO
 ========================= */
 
-function handlePhoto(event){
+function openPhoto(paymentId){
 
-    const file =
-        event.target.files[0];
+const payment=data.find(
+p=>String(p.id)===String(paymentId)
+);
 
-    if(!file){
-        return;
-    }
+if(!payment||!payment.photo)
+return;
 
-    if(!file.type.startsWith("image/")){
+photoId=paymentId;
 
-        alert("Veuillez sélectionner une image.");
+document.getElementById(
+"photoModalImage"
+).src=payment.photo;
 
-        event.target.value = "";
-
-        return;
-
-    }
-
-    const reader =
-        new FileReader();
-
-    reader.onload = function(e){
-
-        currentPhoto =
-            e.target.result;
-
-        document
-            .getElementById("photoPreview")
-            .src = currentPhoto;
-
-        document
-            .getElementById("photoContainer")
-            .classList.remove("hidden");
-
-    };
-
-    reader.onerror = function(){
-
-        alert("Impossible de lire la photo.");
-
-    };
-
-    reader.readAsDataURL(file);
+document.getElementById(
+"photoModal"
+).classList.add("show");
 
 }
 
 
-function removePhoto(){
+function closePhoto(){
 
-    currentPhoto = "";
+document.getElementById(
+"photoModal"
+).classList.remove("show");
 
-    document
-        .getElementById("photoInput")
-        .value = "";
+photoId=null;
 
-    document
-        .getElementById("photoPreview")
-        .removeAttribute("src");
+}
 
-    document
-        .getElementById("photoContainer")
-        .classList.add("hidden");
+
+function deletePhoto(){
+
+if(!photoId)return;
+
+const payment=data.find(
+p=>String(p.id)===String(photoId)
+);
+
+if(payment){
+
+if(!confirm("Supprimer ce document ?"))
+return;
+
+payment.photo="";
+
+saveData();
+
+}
+
+closePhoto();
+
+render();
 
 }
 
 
 /* =========================
-   DATE / DURÉE
-========================= */
-
-function calculateExpiryDate(startDate,duration){
-
-    if(!startDate || !duration){
-        return null;
-    }
-
-    const start =
-        new Date(startDate);
-
-    if(isNaN(start.getTime())){
-        return null;
-    }
-
-    start.setHours(0,0,0,0);
-
-    const expiry =
-        new Date(start);
-
-    expiry.setDate(
-        expiry.getDate() +
-        Number(duration)
-    );
-
-    return expiry;
-
-}
-
-
-function formatDate(date){
-
-    if(!date){
-        return "";
-    }
-
-    return date.toLocaleDateString("fr-BE");
-
-}
-
-
-function updateDatePreview(){
-
-    const durationValue =
-        document
-            .getElementById("duration")
-            .value
-            .trim();
-
-    const duration =
-        parseInt(durationValue,10);
-
-    const startInfo =
-        document.getElementById("startDateInfo");
-
-    const expiryInfo =
-        document.getElementById("expiryPreview");
-
-    if(editIndex === -1){
-
-        startInfo.textContent =
-            "📅 Début : aujourd'hui";
-
-        if(
-            Number.isInteger(duration) &&
-            duration > 0
-        ){
-
-            const expiry =
-                calculateExpiryDate(
-                    new Date(),
-                    duration
-                );
-
-            expiryInfo.textContent =
-                "📅 Expiration prévue : " +
-                formatDate(expiry);
-
-        }else{
-
-            expiryInfo.textContent =
-                "📅 La date d'expiration sera calculée automatiquement.";
-
-        }
-
-        return;
-
-    }
-
-    const account =
-        accounts[editIndex];
-
-    if(account && account.startDate){
-
-        const start =
-            new Date(account.startDate);
-
-        startInfo.textContent =
-            "📅 Début conservé : " +
-            formatDate(start);
-
-        if(
-            Number.isInteger(duration) &&
-            duration > 0
-        ){
-
-            const expiry =
-                calculateExpiryDate(
-                    account.startDate,
-                    duration
-                );
-
-            expiryInfo.textContent =
-                "📅 Nouvelle expiration : " +
-                formatDate(expiry);
-
-        }else{
-
-            expiryInfo.textContent =
-                "📅 Entrez une durée pour calculer l'expiration.";
-
-        }
-
-    }else{
-
-        startInfo.textContent =
-            "📅 Cet ancien accès n'a pas encore de date de début.";
-
-        if(
-            Number.isInteger(duration) &&
-            duration > 0
-        ){
-
-            expiryInfo.textContent =
-                "📅 La date de début sera créée maintenant.";
-
-        }else{
-
-            expiryInfo.textContent =
-                "📅 Entrez une durée.";
-
-        }
-
-    }
-
-}
-
-
-document
-    .getElementById("duration")
-    .addEventListener(
-        "input",
-        updateDatePreview
-    );
-
-
-/* =========================
-   ENREGISTRER
-========================= */
-
-function saveAccount(){
-
-    const name =
-        document.getElementById("name").value.trim();
-
-    const username =
-        document.getElementById("username").value.trim();
-
-    const password =
-        document.getElementById("password").value;
-
-    const url1 =
-        document.getElementById("url1").value.trim();
-
-    const url2 =
-        document.getElementById("url2").value.trim();
-
-    const remark =
-        document.getElementById("remark").value.trim();
-
-    const durationValue =
-        document.getElementById("duration").value.trim();
-
-    const duration =
-        durationValue
-            ? parseInt(durationValue,10)
-            : 0;
-
-    const isApplication =
-        document
-            .getElementById("isApplication")
-            .checked;
-
-    const appUrl1 =
-        document.getElementById("appUrl1").value.trim();
-
-    const mac =
-        document.getElementById("mac").value.trim();
-
-    const appKey =
-        document.getElementById("appKey").value.trim();
-
-
-    if(!name){
-
-        alert(
-            "Veuillez mettre un Nom / Prénom."
-        );
-
-        return;
-
-    }
-
-
-    if(
-        durationValue &&
-        (
-            !Number.isInteger(duration) ||
-            duration < 1
-        )
-    ){
-
-        alert(
-            "La durée doit être un nombre entier supérieur à 0."
-        );
-
-        return;
-
-    }
-
-
-    /* NOUVEL ACCÈS */
-
-    if(editIndex === -1){
-
-        const startDate =
-            new Date().toISOString();
-
-        accounts.push({
-
-            name:name,
-            username:username,
-            password:password,
-            url1:url1,
-            url2:url2,
-            remark:remark,
-
-            duration:duration,
-
-            startDate:startDate,
-
-            isApplication:isApplication,
-
-            appUrl1:appUrl1,
-            mac:mac,
-            appKey:appKey,
-
-            photo:currentPhoto,
-
-            reminder2Sent:false,
-            reminder1Sent:false,
-            reminder0Sent:false
-
-        });
-
-    }
-
-    /* MODIFICATION */
-
-    else{
-
-        const account =
-            accounts[editIndex];
-
-        account.name = name;
-        account.username = username;
-        account.password = password;
-        account.url1 = url1;
-        account.url2 = url2;
-        account.remark = remark;
-
-        /*
-         IMPORTANT :
-         on modifie la durée MAIS
-         on NE CHANGE PAS startDate.
-        */
-
-        account.duration = duration;
-
-        /*
-         Pour les anciens accès créés
-         avant le système de durée :
-         on crée une date maintenant,
-         une seule fois.
-        */
-
-        if(
-            !account.startDate ||
-            isNaN(new Date(account.startDate).getTime())
-        ){
-
-            account.startDate =
-                new Date().toISOString();
-
-        }
-
-        account.isApplication =
-            isApplication;
-
-        account.appUrl1 =
-            appUrl1;
-
-        account.mac =
-            mac;
-
-        account.appKey =
-            appKey;
-
-        account.photo =
-            currentPhoto;
-
-        /*
-         Le rappel est recalculé après
-         une modification.
-        */
-
-        account.reminder2Sent = false;
-        account.reminder1Sent = false;
-        account.reminder0Sent = false;
-
-    }
-
-
-    saveData();
-
-    updateUserCount();
-
-    renderAccounts();
-
-    cancelForm();
-
-}
-
-
-/* =========================
-   MODIFIER
-========================= */
-
-function editAccount(index){
-
-    const account =
-        accounts[index];
-
-    editIndex = index;
-
-
-    document
-        .getElementById("formTitle")
-        .textContent =
-        "✏️ Modifier l'accès";
-
-
-    document.getElementById("name").value =
-        account.name || "";
-
-    document.getElementById("username").value =
-        account.username || "";
-
-    document.getElementById("password").value =
-        account.password || "";
-
-    document.getElementById("url1").value =
-        account.url1 || "";
-
-    document.getElementById("url2").value =
-        account.url2 || "";
-
-    document.getElementById("remark").value =
-        account.remark || "";
-
-
-    /*
-     ICI :
-     On récupère la durée existante.
-     Si elle n'existe pas, le champ reste
-     simplement vide.
-    */
-
-    document.getElementById("duration").value =
-        account.duration
-            ? Number(account.duration)
-            : "";
-
-
-    document
-        .getElementById("isApplication")
-        .checked =
-        !!account.isApplication;
-
-
-    document.getElementById("appUrl1").value =
-        account.appUrl1 || "";
-
-    document.getElementById("mac").value =
-        account.mac || "";
-
-    document.getElementById("appKey").value =
-        account.appKey || "";
-
-
-    toggleApplicationFields();
-
-
-    currentPhoto =
-        account.photo || "";
-
-
-    if(currentPhoto){
-
-        document
-            .getElementById("photoPreview")
-            .src =
-            currentPhoto;
-
-        document
-            .getElementById("photoContainer")
-            .classList.remove("hidden");
-
-    }else{
-
-        document
-            .getElementById("photoContainer")
-            .classList.add("hidden");
-
-        document
-            .getElementById("photoPreview")
-            .removeAttribute("src");
-
-    }
-
-
-    document
-        .getElementById("formCard")
-        .classList.remove("hidden");
-
-
-    /*
-     Met à jour immédiatement
-     les informations de date.
-    */
-
-    updateDatePreview();
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-}
-
-
-/* =========================
-   SUPPRIMER
-========================= */
-
-function deleteAccount(index){
-
-    const account =
-        accounts[index];
-
-    if(
-        !confirm(
-            "Supprimer l'accès de " +
-            (account.name || "cet utilisateur") +
-            " ?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    accounts.splice(index,1);
-
-    saveData();
-
-    updateUserCount();
-
-    renderAccounts();
-
-}
-
-
-/* =========================
-   COMPTE À REBOURS
-========================= */
-
-function getCountdown(account){
-
-    if(
-        !account.duration ||
-        !account.startDate
-    ){
-
-        return {
-
-            text:"⏳ Aucune durée définie",
-
-            className:"none",
-
-            days:null
-
-        };
-
-    }
-
-
-    const start =
-        new Date(account.startDate);
-
-
-    if(isNaN(start.getTime())){
-
-        return {
-
-            text:"⏳ Date de départ invalide",
-
-            className:"none",
-
-            days:null
-
-        };
-
-    }
-
-
-    start.setHours(0,0,0,0);
-
-
-    const expiry =
-        new Date(start);
-
-    expiry.setDate(
-        expiry.getDate() +
-        Number(account.duration)
-    );
-
-
-    const today =
-        new Date();
-
-    today.setHours(0,0,0,0);
-
-
-    const difference =
-        Math.ceil(
-            (expiry - today) /
-            (1000 * 60 * 60 * 24)
-        );
-
-
-    if(difference < 0){
-
-        const days =
-            Math.abs(difference);
-
-        return {
-
-            text:
-                "❌ Expiré depuis " +
-                days +
-                " jour" +
-                (days > 1 ? "s" : ""),
-
-            className:"expired",
-
-            days:difference
-
-        };
-
-    }
-
-
-    if(difference === 0){
-
-        return {
-
-            text:
-                "⚠️ Expire aujourd'hui",
-
-            className:"danger",
-
-            days:0
-
-        };
-
-    }
-
-
-    if(difference === 1){
-
-        return {
-
-            text:
-                "🔴 1 jour restant",
-
-            className:"danger",
-
-            days:1
-
-        };
-
-    }
-
-
-    if(difference === 2){
-
-        return {
-
-            text:
-                "🔴 2 jours restants",
-
-            className:"danger",
-
-            days:2
-
-        };
-
-    }
-
-
-    if(difference <= 7){
-
-        return {
-
-            text:
-                "🟠 " +
-                difference +
-                " jours restants",
-
-            className:"warning",
-
-            days:difference
-
-        };
-
-    }
-
-
-    return {
-
-        text:
-            "🟢 " +
-            difference +
-            " jours restants",
-
-        className:"ok",
-
-        days:difference
-
-    };
-
-}
-
-
-/* =========================
-   DATE EXPIRATION
-========================= */
-
-function getExpirationDate(account){
-
-    const expiry =
-        calculateExpiryDate(
-            account.startDate,
-            account.duration
-        );
-
-    if(!expiry){
-        return "";
-    }
-
-    return formatDate(expiry);
-
-}
-
-
-/* =========================
-   URL
-========================= */
-
-function normalizeUrl(url){
-
-    if(!url){
-        return "";
-    }
-
-    url =
-        url.trim();
-
-    if(
-        url.startsWith("http://") ||
-        url.startsWith("https://")
-    ){
-
-        return url;
-
-    }
-
-    return "https://" + url;
-
-}
-
-
-function createUrlLink(url){
-
-    if(!url){
-        return "";
-    }
-
-    const normalized =
-        normalizeUrl(url);
-
-    const a =
-        document.createElement("a");
-
-    a.className =
-        "urlLink";
-
-    a.href =
-        normalized;
-
-    a.target =
-        "_blank";
-
-    a.rel =
-        "noopener noreferrer";
-
-    a.textContent =
-        url;
-
-    return a.outerHTML;
-
-}
-
-
-/* =========================
-   RAPPEL EMAIL
-========================= */
-
-function sendReminderEmail(index){
-
-    const account =
-        accounts[index];
-
-    const countdown =
-        getCountdown(account);
-
-
-    if(countdown.days === null){
-
-        alert(
-            "Aucune durée n'est définie pour cet accès."
-        );
-
-        return;
-
-    }
-
-
-    if(countdown.days > 2){
-
-        alert(
-            "Le rappel sera disponible lorsqu'il restera 2 jours ou moins."
-        );
-
-        return;
-
-    }
-
-
-    let remainingText;
-
-
-    if(countdown.days < 0){
-
-        remainingText =
-            "Expiré depuis " +
-            Math.abs(countdown.days) +
-            " jour(s)";
-
-    }else if(countdown.days === 0){
-
-        remainingText =
-            "Expire aujourd'hui";
-
-    }else{
-
-        remainingText =
-            countdown.days +
-            " jour(s) restant(s)";
-
-    }
-
-
-    const subject =
-        "Rappel : accès bientôt expiré - " +
-        (account.name || "");
-
-
-    const body =
-        "Bonjour,\n\n" +
-        "L'accès de " +
-        (account.name || "") +
-        " arrive à expiration.\n\n" +
-        "Durée : " +
-        (account.duration || "") +
-        " jours\n" +
-        "Jours restants : " +
-        remainingText +
-        "\n" +
-        "Date d'expiration : " +
-        getExpirationDate(account) +
-        "\n\n" +
-        "Mes accès";
-
-
-    window.location.href =
-        "mailto:?subject=" +
-        encodeURIComponent(subject) +
-        "&body=" +
-        encodeURIComponent(body);
-
-}
-
-
-/* =========================
-   AFFICHAGE
-========================= */
-
-function renderAccounts(){
-
-    const list =
-        document.getElementById("accountsList");
-
-
-    const search =
-        document
-            .getElementById("searchInput")
-            .value
-            .toLowerCase()
-            .trim();
-
-
-    list.innerHTML = "";
-
-
-    const filtered =
-        accounts
-            .map(
-                (account,index)=>({
-                    account,
-                    index
-                })
-            )
-            .filter(item=>{
-
-                if(!search){
-                    return true;
-                }
-
-                const a =
-                    item.account;
-
-                const text = [
-
-                    a.name,
-                    a.username,
-                    a.url1,
-                    a.url2,
-                    a.remark,
-                    a.mac,
-                    a.appKey
-
-                ]
-                .join(" ")
-                .toLowerCase();
-
-
-                return text.includes(search);
-
-            });
-
-
-    if(filtered.length === 0){
-
-        list.innerHTML =
-            '<div class="card empty">' +
-            "Aucun accès trouvé." +
-            "</div>";
-
-        return;
-
-    }
-
-
-    filtered.forEach(item=>{
-
-        const account =
-            item.account;
-
-        const index =
-            item.index;
-
-        const countdown =
-            getCountdown(account);
-
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "account";
-
-
-        let html = "";
-
-
-        html +=
-            "<h2>👤 " +
-            escapeHtml(
-                account.name || ""
-            ) +
-            "</h2>";
-
-
-        html +=
-            '<div class="countdown ' +
-            countdown.className +
-            '">' +
-            escapeHtml(
-                countdown.text
-            ) +
-            "</div>";
-
-
-        if(account.duration){
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "⏳ Durée" +
-                "</div>" +
-
-                '<div class="accountValue">' +
-                escapeHtml(
-                    account.duration +
-                    " jours"
-                ) +
-                "</div>" +
-
-                "</div>";
-
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "📅 Expiration" +
-                "</div>" +
-
-                '<div class="accountValue">' +
-                escapeHtml(
-                    getExpirationDate(account)
-                ) +
-                "</div>" +
-
-                "</div>";
-
-        }
-
-
-        if(account.username){
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "Utilisateur" +
-                "</div>" +
-
-                '<div class="accountValue">' +
-
-                escapeHtml(
-                    account.username
-                ) +
-
-                ' <button class="copyBtn" onclick="copyText(' +
-
-                jsString(
-                    account.username
-                ) +
-
-                ')">Copier</button>' +
-
-                "</div>" +
-
-                "</div>";
-
-        }
-
-
-        if(account.password){
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "Mot de passe" +
-                "</div>" +
-
-                '<div class="accountValue">' +
-
-                '<span id="pass-' +
-                index +
-                '">••••••••</span>' +
-
-                ' <button class="copyBtn" onclick="toggleDisplayedPassword(' +
-                index +
-                ')">👁️</button>' +
-
-                ' <button class="copyBtn" onclick="copyText(' +
-
-                jsString(
-                    account.password
-                ) +
-
-                ')">Copier</button>' +
-
-                "</div>" +
-
-                "</div>";
-
-        }
-
-
-        if(account.url1){
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "URL 1" +
-                "</div>" +
-
-                createUrlLink(
-                    account.url1
-                ) +
-
-                '<button class="copyBtn" onclick="copyText(' +
-
-                jsString(
-                    account.url1
-                ) +
-
-                ')">Copier</button>' +
-
-                "</div>";
-
-        }
-
-
-        if(account.url2){
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "URL 2" +
-                "</div>" +
-
-                createUrlLink(
-                    account.url2
-                ) +
-
-                '<button class="copyBtn" onclick="copyText(' +
-
-                jsString(
-                    account.url2
-                ) +
-
-                ')">Copier</button>' +
-
-                "</div>";
-
-        }
-
-
-        if(account.remark){
-
-            html +=
-                '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                "📝 Remarque" +
-                "</div>" +
-
-                '<div class="accountValue">' +
-
-                escapeHtml(
-                    account.remark
-                ) +
-
-                "</div>" +
-
-                "</div>";
-
-        }
-
-
-        if(account.isApplication){
-
-            html +=
-                "<hr>" +
-
-                '<div class="accountLabel">' +
-                "📱 APPLICATION" +
-                "</div>";
-
-
-            if(account.appUrl1){
-
-                html +=
-                    '<div class="accountLine">' +
-
-                    '<div class="accountLabel">' +
-                    "URL" +
-                    "</div>" +
-
-                    createUrlLink(
-                        account.appUrl1
-                    ) +
-
-                    '<button class="copyBtn" onclick="copyText(' +
-
-                    jsString(
-                        account.appUrl1
-                    ) +
-
-                    ')">Copier</button>' +
-
-                    "</div>";
-
-            }
-
-
-            if(account.mac){
-
-                html +=
-                    '<div class="accountLine">' +
-
-                    '<div class="accountLabel">' +
-                    "MAC" +
-                    "</div>" +
-
-                    '<div class="accountValue">' +
-
-                    escapeHtml(
-                        account.mac
-                    ) +
-
-                    ' <button class="copyBtn" onclick="copyText(' +
-
-                    jsString(
-                        account.mac
-                    ) +
-
-                    ')">Copier</button>' +
-
-                    "</div>" +
-
-                    "</div>";
-
-            }
-
-
-            if(account.appKey){
-
-                html +=
-                    '<div class="accountLine">' +
-
-                    '<div class="accountLabel">' +
-                    "Clé" +
-                    "</div>" +
-
-                    '<div class="accountValue">' +
-
-                    escapeHtml(
-                        account.appKey
-                    ) +
-
-                    ' <button class="copyBtn" onclick="copyText(' +
-
-                    jsString(
-                        account.appKey
-                    ) +
-
-                    ')">Copier</button>' +
-
-                    "</div>" +
-
-                    "</div>";
-
-            }
-
-        }
-
-
-        if(account.photo){
-
-            html +=
-                "<hr>" +
-
-                '<img src="' +
-                escapeHtml(
-                    account.photo
-                ) +
-                '" class="photoPreview">';
-
-        }
-
-
-        html +=
-            '<div class="actions">' +
-
-            '<button class="secondary" onclick="editAccount(' +
-            index +
-            ')">' +
-            "✏️ Modifier" +
-            "</button>" +
-
-            '<button class="orange" onclick="sendReminderEmail(' +
-            index +
-            ')">' +
-            "📧 Rappel" +
-            "</button>" +
-
-            '<button class="danger" onclick="deleteAccount(' +
-            index +
-            ')">' +
-            "🗑️ Supprimer" +
-            "</button>" +
-
-            "</div>";
-
-
-        div.innerHTML =
-            html;
-
-        list.appendChild(div);
-
-    });
-
-}
-
-
-/* =========================
-   AFFICHER MOT DE PASSE
-========================= */
-
-function toggleDisplayedPassword(index){
-
-    const element =
-        document.getElementById(
-            "pass-" + index
-        );
-
-
-    if(!element){
-        return;
-    }
-
-
-    if(
-        element.textContent ===
-        "••••••••"
-    ){
-
-        element.textContent =
-            accounts[index].password || "";
-
-    }else{
-
-        element.textContent =
-            "••••••••";
-
-    }
-
-}
-
-
-/* =========================
-   SÉCURITÉ HTML
-========================= */
-
-function escapeHtml(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-function jsString(value){
-
-    return JSON
-        .stringify(
-            String(value || "")
-        )
-        .replace(
-            /</g,
-            "\\u003c"
-        );
-
-}
-
-
-/* =========================
-   SAUVEGARDE JSON
+   EXPORT
 ========================= */
 
 function exportData(){
 
-    const data =
-        JSON.stringify(
-            accounts,
-            null,
-            2
-        );
+const backup={
+version:1,
+date:new Date().toISOString(),
+data:data
+};
 
+const blob=new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
 
-    const blob =
-        new Blob(
-            [data],
-            {
-                type:"application/json"
-            }
-        );
+const url=URL.createObjectURL(blob);
 
+const a=document.createElement("a");
 
-    const url =
-        URL.createObjectURL(blob);
+a.href=url;
 
+a.download=
+"mes-paiements-backup.json";
 
-    const a =
-        document.createElement("a");
+document.body.appendChild(a);
 
-    a.href = url;
+a.click();
 
-    a.download =
-        "mes-acces-sauvegarde.json";
+a.remove();
 
-    document
-        .body
-        .appendChild(a);
-
-    a.click();
-
-    document
-        .body
-        .removeChild(a);
-
-    URL.revokeObjectURL(url);
+setTimeout(
+()=>{
+URL.revokeObjectURL(url);
+},
+1000
+);
 
 }
 
 
 /* =========================
-   RESTAURATION
+   IMPORT
 ========================= */
 
-function importData(event){
+document.getElementById(
+"importInput"
+).addEventListener(
+"change",
+function(){
 
-    const file =
-        event.target.files[0];
+const file=this.files[0];
 
+if(!file)return;
 
-    if(!file){
-        return;
-    }
+const reader=new FileReader();
 
+reader.onload=function(e){
 
-    const reader =
-        new FileReader();
+try{
 
+const backup=JSON.parse(
+e.target.result
+);
 
-    reader.onload =
-        function(e){
+if(
+backup.data&&
+Array.isArray(backup.data)
+){
 
-            try{
+data=backup.data;
 
-                const imported =
-                    JSON.parse(
-                        e.target.result
-                    );
+normalizeData();
 
+selectedIds.clear();
 
-                if(!Array.isArray(imported)){
+saveData();
 
-                    alert(
-                        "Fichier de sauvegarde invalide."
-                    );
+render();
 
-                    return;
+alert("Importation réussie.");
 
-                }
+}else{
 
-
-                if(
-                    !confirm(
-                        "Remplacer les accès actuels par cette sauvegarde ?"
-                    )
-                ){
-
-                    return;
-
-                }
-
-
-                accounts =
-                    imported;
-
-
-                saveData();
-
-                updateUserCount();
-
-                renderAccounts();
-
-
-                alert(
-                    "Sauvegarde restaurée."
-                );
-
-
-            }catch(error){
-
-                alert(
-                    "Impossible de lire cette sauvegarde."
-                );
-
-            }
-
-        };
-
-
-    reader.readAsText(file);
-
-    event.target.value = "";
+alert(
+"Fichier de sauvegarde invalide."
+);
 
 }
 
+}catch(err){
 
-/* =========================
-   ACTUALISATION
-========================= */
+console.error(err);
 
-setInterval(
-    function(){
+alert(
+"Impossible de lire la sauvegarde."
+);
 
-        const loginScreen =
-            document.getElementById(
-                "loginScreen"
-            );
+}
 
+};
 
-        if(
-            !loginScreen.classList.contains(
-                "hidden"
-            )
-        ){
+reader.readAsText(file);
 
-            return;
+this.value="";
 
-        }
-
-
-        renderAccounts();
-
-    },
-    60000
+}
 );
 
 
 /* =========================
-   RAPPELS
+   SECURITE
 ========================= */
 
-function checkReminders(){
+function escapeHtml(value){
 
-    accounts.forEach(
-        function(account){
+return String(value??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
-            const countdown =
-                getCountdown(account);
+}
 
 
-            if(
-                countdown.days !== null &&
-                countdown.days <= 2 &&
-                countdown.days >= 0
-            ){
+function escapeJs(value){
 
-                console.log(
-                    "⚠️ Rappel nécessaire pour :",
-                    account.name
-                );
-
-            }
-
-        }
-    );
+return String(value??"")
+.replaceAll("\\","\\\\")
+.replaceAll("'","\\'")
+.replaceAll("\n","\\n")
+.replaceAll("\r","\\r");
 
 }
 
 
 /* =========================
-   DÉMARRAGE
+   CALCULETTE
 ========================= */
 
-loadData();
-checkReminders();
+let calculatorValue="";
+
+
+function calcInput(value){
+
+calculatorValue+=value;
+
+document.getElementById(
+"calcDisplay"
+).value=calculatorValue;
+
+}
+
+
+function calcClear(){
+
+calculatorValue="";
+
+document.getElementById(
+"calcDisplay"
+).value="";
+
+}
+
+
+function calcResult(){
+
+try{
+
+if(!calculatorValue)return;
+
+const safe=calculatorValue.replace(
+/[^0-9+\-*/().]/g,
+""
+);
+
+if(!safe)
+throw new Error();
+
+const result=Function(
+'"use strict";return ('+
+safe+
+')'
+)();
+
+if(
+typeof result!=="number"||
+!isFinite(result)
+){
+
+throw new Error();
+
+}
+
+calculatorValue=String(
+Math.round(
+(result+Number.EPSILON)*100
+)/100
+);
+
+document.getElementById(
+"calcDisplay"
+).value=calculatorValue;
+
+}catch(e){
+
+document.getElementById(
+"calcDisplay"
+).value="Erreur";
+
+calculatorValue="";
+
+}
+
+}
+
+
+/* =========================
+   MODALES
+========================= */
+
+document.getElementById(
+"editModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeEdit();
+
+}
+);
+
+
+document.getElementById(
+"manualModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeManual();
+
+}
+);
+
+
+document.getElementById(
+"qrModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeQR();
+
+}
+);
+
+
+document.getElementById(
+"photoModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closePhoto();
+
+}
+);
+
+
+/* =========================
+   ENTREE PIN
+========================= */
+
+document.getElementById(
+"pinInput"
+).addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter")
+checkPin();
+
+}
+);
 
 </script>
 
