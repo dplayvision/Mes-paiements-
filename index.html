@@ -1,542 +1,609 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
-
-<title>Mes paiements</title>
+<title>Mes accès</title>
 
 <style>
-
 *{
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+    box-sizing:border-box;
 }
 
 body{
-margin:0;
-font-family:-apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-Roboto,
-Arial,
-sans-serif;
-background:#f2f2f7;
-color:#111;
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:#f2f2f7;
+    color:#111;
 }
 
 button,
 input{
-font-family:inherit;
-}
-
-.header{
-background:#007aff;
-color:white;
-padding:
-calc(env(safe-area-inset-top) + 15px)
-18px 16px;
-font-size:22px;
-font-weight:700;
-}
-
-.container{
-padding:15px;
-padding-bottom:40px;
-max-width:700px;
-margin:auto;
-}
-
-.card{
-background:white;
-border-radius:18px;
-padding:16px;
-margin-bottom:15px;
-box-shadow:
-0 2px 8px rgba(0,0,0,.06);
-}
-
-h2{
-font-size:19px;
-margin:0 0 14px;
-}
-
-label{
-display:block;
-font-size:14px;
-font-weight:600;
-margin:
-12px 0 6px;
-}
-
-input{
-width:100%;
-padding:13px;
-border:1px solid #d1d1d6;
-border-radius:11px;
-font-size:16px;
-background:#fff;
+    font-family:inherit;
 }
 
 button{
-border:0;
-border-radius:11px;
-padding:11px 14px;
-font-size:15px;
-font-weight:600;
-cursor:pointer;
-}
-
-.primary{
-background:#007aff;
-color:white;
-width:100%;
-}
-
-.secondary{
-background:#e9e9ee;
-color:#111;
-}
-
-.danger{
-background:#ff3b30;
-color:white;
-}
-
-.green{
-background:#34c759;
-color:white;
-}
-
-.summary{
-display:grid;
-grid-template-columns:
-repeat(3,1fr);
-gap:8px;
-margin-bottom:15px;
-}
-
-.summaryBox{
-background:white;
-border-radius:15px;
-padding:12px 8px;
-text-align:center;
-box-shadow:
-0 2px 7px rgba(0,0,0,.05);
-}
-
-.summaryTitle{
-font-size:12px;
-color:#666;
-}
-
-.summaryValue{
-font-size:18px;
-font-weight:700;
-margin-top:4px;
-}
-
-.tabs{
-display:flex;
-background:#dddde2;
-border-radius:11px;
-padding:3px;
-margin-bottom:15px;
-}
-
-.tab{
-flex:1;
-text-align:center;
-padding:9px;
-border-radius:9px;
-font-weight:600;
-font-size:14px;
-}
-
-.tab.active{
-background:white;
-box-shadow:
-0 1px 3px rgba(0,0,0,.15);
-}
-
-.selectionBar{
-display:none;
-background:#fff;
-border-radius:14px;
-padding:12px;
-margin-bottom:12px;
-align-items:center;
-justify-content:space-between;
-gap:8px;
-}
-
-.selectionBar.show{
-display:flex;
-}
-
-.selectionInfo{
-font-size:14px;
-font-weight:600;
-}
-
-.paymentGroup{
-background:#fff;
-border-radius:18px;
-padding:0;
-margin-bottom:15px;
-overflow:hidden;
-box-shadow:
-0 2px 8px rgba(0,0,0,.07);
-}
-
-.paymentGroupHeader{
-padding:15px;
-background:#f8f8fa;
-border-bottom:1px solid #e5e5ea;
-}
-
-.paymentGroupAlias{
-font-size:18px;
-font-weight:750;
-color:#007aff;
-}
-
-.paymentGroupBeneficiary{
-font-size:14px;
-font-weight:600;
-margin-top:4px;
-}
-
-.paymentGroupInfo{
-font-size:12px;
-color:#777;
-margin-top:5px;
-}
-
-.installment{
-margin:10px;
-padding:13px;
-border:1px solid #e1e1e6;
-border-radius:15px;
-background:#fff;
-}
-
-.installment.paid{
-background:#f3fff5;
-border-color:#b7e5c0;
-}
-
-.installmentTop{
-display:flex;
-gap:10px;
-align-items:flex-start;
-}
-
-.checkbox{
-width:21px;
-height:21px;
-margin-top:2px;
-flex-shrink:0;
-}
-
-.installmentInfo{
-flex:1;
-min-width:0;
-}
-
-.beneficiary{
-font-weight:700;
-font-size:15px;
-}
-
-.installmentDetails{
-font-size:13px;
-color:#666;
-margin-top:4px;
-line-height:1.5;
-}
-
-.amount{
-font-size:18px;
-font-weight:750;
-margin-top:6px;
-}
-
-.actions{
-display:flex;
-flex-wrap:wrap;
-gap:6px;
-margin-top:10px;
-}
-
-.actions button{
-padding:8px 10px;
-font-size:13px;
-}
-
-.small{
-font-size:12px;
-color:#777;
-}
-
-.badge{
-display:inline-block;
-font-size:11px;
-font-weight:700;
-padding:4px 7px;
-border-radius:7px;
-margin-left:5px;
-}
-
-.badgePaid{
-background:#d8f8df;
-color:#167c2e;
-}
-
-.badgeUnpaid{
-background:#ffe0dd;
-color:#c62820;
-}
-
-.photoButtons{
-display:flex;
-gap:8px;
-}
-
-.photoButtons button{
-flex:1;
-}
-
-.photoPreview{
-max-width:100%;
-max-height:180px;
-display:block;
-margin-top:10px;
-border-radius:10px;
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.45);
-display:none;
-align-items:center;
-justify-content:center;
-padding:18px;
-z-index:1000;
-}
-
-.modal.show{
-display:flex;
-}
-
-.modalBox{
-background:white;
-width:100%;
-max-width:500px;
-max-height:90vh;
-overflow:auto;
-border-radius:20px;
-padding:18px;
-}
-
-.modalTitle{
-font-size:20px;
-font-weight:750;
-margin-bottom:12px;
-}
-
-.modalActions{
-display:flex;
-gap:8px;
-margin-top:15px;
-}
-
-.modalActions button{
-flex:1;
-}
-
-.manualInfo{
-background:#f2f2f7;
-border-radius:12px;
-padding:12px;
-margin-bottom:10px;
-}
-
-.manualLine{
-margin-bottom:10px;
-}
-
-.manualLabel{
-font-size:12px;
-color:#777;
-}
-
-.manualValue{
-font-size:15px;
-font-weight:600;
-word-break:break-word;
-margin-top:2px;
-}
-
-.copyButton{
-margin-top:5px;
-background:#e9e9ee;
-font-size:12px;
-padding:7px 10px;
-}
-
-.copyButton.copied{
-background:#34c759;
-color:white;
-}
-
-.login{
-position:fixed;
-inset:0;
-background:#f2f2f7;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:25px;
-z-index:2000;
-}
-
-.loginBox{
-background:white;
-width:100%;
-max-width:360px;
-border-radius:22px;
-padding:25px;
-box-shadow:
-0 5px 25px rgba(0,0,0,.12);
-text-align:center;
-}
-
-.loginTitle{
-font-size:25px;
-font-weight:800;
-margin-bottom:8px;
-}
-
-.loginText{
-font-size:14px;
-color:#777;
-margin-bottom:18px;
-}
-
-#pinInput{
-text-align:center;
-font-size:25px;
-letter-spacing:8px;
+    cursor:pointer;
 }
 
 .hidden{
-display:none !important;
+    display:none !important;
 }
-
-input[type="file"]{
-display:none;
-}
-
-.photoModalImage{
-max-width:100%;
-max-height:75vh;
-display:block;
-margin:auto;
-border-radius:12px;
-}
-
-.photoModalButtons{
-display:flex;
-gap:8px;
-margin-top:12px;
-}
-
-.photoModalButtons button{
-flex:1;
-}
-
 
 /* =========================
-   CALCULETTE
+   CONNEXION
 ========================= */
 
-.calculatorDisplay{
-font-size:25px;
-font-weight:700;
-text-align:right;
-background:#f2f2f7;
-margin-bottom:10px;
+#loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:#f2f2f7;
 }
 
-.calculatorGrid{
-display:grid;
-grid-template-columns:
-repeat(4,1fr);
-gap:7px;
+.loginBox{
+    width:100%;
+    max-width:380px;
+    background:white;
+    border-radius:22px;
+    padding:30px 24px;
+    box-shadow:0 8px 30px rgba(0,0,0,.12);
+    text-align:center;
 }
 
-.calculatorGrid button{
-font-size:18px;
-padding:14px 5px;
+.loginBox h1{
+    margin:0 0 10px;
+    font-size:28px;
 }
 
-.calculatorEquals{
-margin-top:8px;
-width:100%;
-font-size:18px;
+.loginBox p{
+    color:#666;
+    margin-bottom:22px;
 }
 
+#pinInput{
+    width:100%;
+    padding:16px;
+    border:1px solid #ddd;
+    border-radius:14px;
+    font-size:22px;
+    text-align:center;
+    letter-spacing:8px;
+}
+
+.loginButton{
+    width:100%;
+    margin-top:15px;
+    padding:15px;
+    border:0;
+    border-radius:14px;
+    background:#007aff;
+    color:white;
+    font-size:17px;
+    font-weight:600;
+}
+
+.loginError{
+    color:#ff3b30;
+    margin-top:12px;
+    min-height:20px;
+}
+
+/* =========================
+   APPLICATION
+========================= */
+
+#app{
+    min-height:100vh;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:#007aff;
+    color:white;
+    padding:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.headerTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.header h1{
+    margin:0;
+    font-size:23px;
+}
+
+.userCount{
+    background:rgba(255,255,255,.2);
+    padding:7px 11px;
+    border-radius:20px;
+    font-size:14px;
+    white-space:nowrap;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    margin:auto;
+    padding:15px;
+}
+
+/* =========================
+   BARRE ACTIONS
+========================= */
+
+.topActions{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+}
+
+.topActions button{
+    flex:1;
+}
+
+.primaryButton{
+    background:#007aff;
+    color:white;
+    border:0;
+    border-radius:12px;
+    padding:13px 10px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.secondaryButton{
+    background:white;
+    color:#007aff;
+    border:1px solid #007aff;
+    border-radius:12px;
+    padding:13px 10px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.dangerButton{
+    background:#ff3b30;
+    color:white;
+    border:0;
+    border-radius:12px;
+    padding:13px 10px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.searchBox{
+    width:100%;
+    padding:14px 15px;
+    border:1px solid #ddd;
+    border-radius:13px;
+    background:white;
+    font-size:16px;
+    margin-bottom:15px;
+}
+
+/* =========================
+   FORMULAIRE
+========================= */
+
+.formCard{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.formCard h2{
+    margin:0 0 15px;
+    font-size:20px;
+}
+
+.formGroup{
+    margin-bottom:14px;
+}
+
+.formGroup label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:6px;
+    color:#444;
+}
+
+.inputCopy{
+    display:flex;
+    gap:7px;
+}
+
+.inputCopy input{
+    flex:1;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="url"],
+input[type="search"]{
+    width:100%;
+    padding:13px;
+    border:1px solid #d5d5d5;
+    border-radius:11px;
+    font-size:16px;
+    background:white;
+}
+
+.copyBtn{
+    flex:0 0 45px;
+    border:0;
+    border-radius:10px;
+    background:#e9f2ff;
+    color:#007aff;
+    font-size:19px;
+    min-width:45px;
+}
+
+.passwordArea{
+    display:flex;
+    gap:7px;
+}
+
+.passwordArea input{
+    flex:1;
+}
+
+.showPasswordBtn{
+    flex:0 0 45px;
+    border:0;
+    border-radius:10px;
+    background:#f0f0f0;
+    font-size:18px;
+}
+
+.checkboxRow{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:15px 0;
+}
+
+.checkboxRow input{
+    width:20px;
+    height:20px;
+}
+
+.applicationBox{
+    background:#f5f8ff;
+    border:1px solid #dce9ff;
+    border-radius:14px;
+    padding:15px;
+    margin-top:10px;
+}
+
+.applicationBox h3{
+    margin:0 0 14px;
+    color:#007aff;
+    font-size:17px;
+}
+
+.photoButtons{
+    display:flex;
+    gap:8px;
+}
+
+.photoButtons button{
+    flex:1;
+}
+
+.photoPreview{
+    width:100%;
+    max-height:250px;
+    object-fit:contain;
+    border-radius:12px;
+    margin-top:10px;
+    background:#eee;
+}
+
+.formButtons{
+    display:flex;
+    gap:8px;
+    margin-top:18px;
+}
+
+.formButtons button{
+    flex:1;
+}
+
+/* =========================
+   COMPTES
+========================= */
+
+.accountCard{
+    background:white;
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:14px;
+    box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+
+.accountHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.accountName{
+    font-size:19px;
+    font-weight:700;
+    word-break:break-word;
+}
+
+.accountActions{
+    display:flex;
+    gap:6px;
+    flex-shrink:0;
+}
+
+.iconButton{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:10px;
+    background:#f0f0f0;
+    font-size:18px;
+}
+
+.iconButton.edit{
+    color:#007aff;
+}
+
+.iconButton.delete{
+    color:#ff3b30;
+}
+
+.accountLine{
+    margin-bottom:11px;
+}
+
+.accountLabel{
+    font-size:12px;
+    font-weight:600;
+    color:#777;
+    margin-bottom:4px;
+    text-transform:uppercase;
+}
+
+.copyArea{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    min-width:0;
+}
+
+.valueText{
+    flex:1;
+    min-width:0;
+    word-break:break-word;
+    background:#f7f7f7;
+    border-radius:9px;
+    padding:10px;
+    font-size:15px;
+}
+
+.urlLink{
+    flex:1;
+    min-width:0;
+    color:#007aff;
+    text-decoration:underline;
+    word-break:break-all;
+    background:#f7f7f7;
+    border-radius:9px;
+    padding:10px;
+    display:block;
+}
+
+.passwordValue{
+    font-family:monospace;
+}
+
+.remarque{
+    white-space:pre-wrap;
+}
+
+.applicationSaved{
+    margin-top:15px;
+    background:#f5f8ff;
+    border-radius:13px;
+    padding:13px;
+}
+
+.applicationSaved h3{
+    color:#007aff;
+    font-size:16px;
+    margin:0 0 12px;
+}
+
+.photoSaved{
+    width:100%;
+    max-height:300px;
+    object-fit:contain;
+    border-radius:12px;
+    margin-top:10px;
+    background:#eee;
+}
+
+/* =========================
+   DUREE
+========================= */
+
+.durationBox{
+    margin-top:14px;
+    padding-top:13px;
+    border-top:1px solid #eee;
+}
+
+.durationText{
+    font-size:14px;
+    font-weight:600;
+}
+
+.expirationText{
+    font-size:14px;
+    margin-top:4px;
+}
+
+.expGreen{
+    color:#34c759;
+}
+
+.expOrange{
+    color:#ff9500;
+}
+
+.expRed{
+    color:#ff3b30;
+}
+
+.expGray{
+    color:#777;
+}
+
+/* =========================
+   BOUTON CALENDRIER
+========================= */
+
+.calendarButton{
+    width:100%;
+    margin-top:10px;
+    padding:11px;
+    border:0;
+    border-radius:10px;
+    background:#34c759;
+    color:white;
+    font-weight:600;
+    font-size:14px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    text-align:center;
+    padding:45px 15px;
+    color:#777;
+}
+
+.emptyIcon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+/* =========================
+   MODAL PHOTO
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modalBox{
+    background:white;
+    width:100%;
+    max-width:600px;
+    border-radius:18px;
+    padding:15px;
+    max-height:90vh;
+    overflow:auto;
+}
+
+.modalBox img{
+    width:100%;
+    max-height:70vh;
+    object-fit:contain;
+    border-radius:12px;
+}
+
+.modalClose{
+    width:100%;
+    margin-top:12px;
+    padding:13px;
+    border:0;
+    border-radius:11px;
+    background:#007aff;
+    color:white;
+    font-size:16px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:500px){
+    .topActions{
+        flex-wrap:wrap;
+    }
+
+    .topActions button{
+        min-width:calc(50% - 4px);
+    }
+
+    .accountHeader{
+        align-items:flex-start;
+    }
+}
 </style>
-
 </head>
 
 <body>
 
-
 <!-- =========================
-     CONNEXION
+     ECRAN PIN
 ========================= -->
 
-<div
-id="loginScreen"
-class="login">
+<div id="loginScreen">
 
-<div class="loginBox">
+    <div class="loginBox">
 
-<div class="loginTitle">
-Mes paiements
-</div>
+        <h1>🔐 Mes accès</h1>
 
-<div class="loginText">
-Entrez votre code PIN
-</div>
+        <p>Entrez votre code PIN pour accéder à vos informations.</p>
 
-<input
-id="pinInput"
-type="password"
-inputmode="numeric"
-maxlength="4"
-placeholder="••••">
+        <input
+            id="pinInput"
+            type="password"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="••••"
+            autocomplete="off"
+        >
 
-<br><br>
+        <button class="loginButton" onclick="login()">
+            Ouvrir
+        </button>
 
-<button
-class="primary"
-onclick="checkPin()">
+        <div id="loginError" class="loginError"></div>
 
-Ouvrir
-
-</button>
-
-</div>
+    </div>
 
 </div>
 
@@ -545,2703 +612,2399 @@ Ouvrir
      APPLICATION
 ========================= -->
 
-<div
-id="app"
-class="hidden">
+<div id="app" class="hidden">
 
-<div class="header">
+    <header class="header">
 
-Mes paiements
+        <div class="headerTop">
 
-</div>
+            <h1>🔐 Mes accès</h1>
 
+            <div class="userCount" id="userCount">
+                0 accès
+            </div>
 
-<div class="container">
+        </div>
 
+    </header>
 
-<!-- =========================
-     RESUME
-========================= -->
 
-<div class="summary">
+    <main class="container">
 
-<div class="summaryBox">
+        <div class="topActions">
 
-<div class="summaryTitle">
-Total
-</div>
+            <button
+                class="primaryButton"
+                onclick="showForm()"
+            >
+                ➕ Ajouter
+            </button>
 
-<div
-id="totalValue"
-class="summaryValue">
-0,00 €
-</div>
+            <button
+                class="secondaryButton"
+                onclick="exportData()"
+            >
+                💾 Sauvegarde
+            </button>
 
-</div>
+            <button
+                class="secondaryButton"
+                onclick="document.getElementById('importFile').click()"
+            >
+                📂 Restaurer
+            </button>
 
+            <input
+                id="importFile"
+                type="file"
+                accept=".json,application/json"
+                style="display:none"
+                onchange="importData(event)"
+            >
 
-<div class="summaryBox">
+        </div>
 
-<div class="summaryTitle">
-Payé
-</div>
 
-<div
-id="paidValue"
-class="summaryValue">
-0,00 €
-</div>
+        <input
+            id="searchInput"
+            class="searchBox"
+            type="search"
+            placeholder="🔎 Rechercher un accès..."
+            oninput="renderAccounts()"
+        >
 
-</div>
 
+        <!-- =========================
+             FORMULAIRE
+        ========================= -->
 
-<div class="summaryBox">
+        <div id="formCard" class="formCard hidden">
 
-<div class="summaryTitle">
-Reste
-</div>
+            <h2 id="formTitle">
+                Ajouter un accès
+            </h2>
 
-<div
-id="remainingValue"
-class="summaryValue">
-0,00 €
-</div>
 
-</div>
+            <div class="formGroup">
 
-</div>
+                <label>
+                    Nom / Prénom
+                </label>
 
+                <input
+                    id="nameInput"
+                    type="text"
+                    placeholder="Nom et prénom"
+                    autocomplete="off"
+                >
 
-<!-- =========================
-     ONGLETS
-========================= -->
+            </div>
 
-<div class="tabs">
 
-<div
-id="tabUnpaid"
-class="tab active"
-onclick="showTab('unpaid')">
+            <div class="formGroup">
 
-À payer
-(<span id="unpaidCount">0</span>)
+                <label>
+                    Utilisateur
+                </label>
 
-</div>
+                <div class="inputCopy">
 
-<div
-id="tabPaid"
-class="tab"
-onclick="showTab('paid')">
+                    <input
+                        id="usernameInput"
+                        type="text"
+                        placeholder="Nom d'utilisateur"
+                        autocomplete="off"
+                    >
 
-Payé
-(<span id="paidCount">0</span>)
+                    <button
+                        class="copyBtn"
+                        onclick="copyInputValue('usernameInput')"
+                    >
+                        📋
+                    </button>
 
-</div>
+                </div>
 
-</div>
+            </div>
 
 
-<!-- =========================
-     SELECTION
-========================= -->
+            <div class="formGroup">
 
-<div
-id="selectionBar"
-class="selectionBar">
+                <label>
+                    Mot de passe
+                </label>
 
-<div
-id="selectionInfo"
-class="selectionInfo">
+                <div class="passwordArea">
 
-0 sélectionné
+                    <input
+                        id="passwordInput"
+                        type="password"
+                        placeholder="Mot de passe"
+                        autocomplete="new-password"
+                    >
 
-</div>
+                    <button
+                        class="showPasswordBtn"
+                        onclick="togglePassword('passwordInput', this)"
+                    >
+                        👁️
+                    </button>
 
-<button
-class="danger"
-onclick="deleteSelected()">
+                    <button
+                        class="copyBtn"
+                        onclick="copyInputValue('passwordInput')"
+                    >
+                        📋
+                    </button>
 
-Supprimer
+                </div>
 
-</button>
+            </div>
 
-</div>
 
+            <div class="formGroup">
 
-<!-- =========================
-     LISTES
-========================= -->
+                <label>
+                    URL 1
+                </label>
 
-<div id="unpaidList"></div>
+                <div class="inputCopy">
 
-<div
-id="paidList"
-class="hidden"></div>
+                    <input
+                        id="url1Input"
+                        type="url"
+                        placeholder="https://..."
+                        autocomplete="off"
+                    >
 
+                    <button
+                        class="copyBtn"
+                        onclick="copyInputValue('url1Input')"
+                    >
+                        📋
+                    </button>
 
-<!-- =========================
-     AJOUT PAIEMENT
-========================= -->
+                </div>
 
-<div class="card">
+            </div>
 
-<h2>
-Ajouter un paiement
-</h2>
 
+            <div class="formGroup">
 
-<label>
-Alias / raccourci
-</label>
+                <label>
+                    URL 2
+                </label>
 
-<input
-id="alias"
-placeholder="Ex : Taxe maison">
+                <div class="inputCopy">
 
+                    <input
+                        id="url2Input"
+                        type="url"
+                        placeholder="https://..."
+                        autocomplete="off"
+                    >
 
-<label>
-Bénéficiaire
-</label>
+                    <button
+                        class="copyBtn"
+                        onclick="copyInputValue('url2Input')"
+                    >
+                        📋
+                    </button>
 
-<input
-id="beneficiary"
-placeholder="Nom du bénéficiaire">
+                </div>
 
+            </div>
 
-<label>
-IBAN
-</label>
 
-<input
-id="iban"
-placeholder="BE...">
+            <div class="formGroup">
 
+                <label>
+                    Remarque
+                </label>
 
-<label>
-Montant total
-</label>
+                <div class="inputCopy">
 
-<input
-id="totalAmount"
-type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="0,00">
+                    <input
+                        id="noteInput"
+                        type="text"
+                        placeholder="Remarque"
+                    >
 
+                    <button
+                        class="copyBtn"
+                        onclick="copyInputValue('noteInput')"
+                    >
+                        📋
+                    </button>
 
-<label>
-Nombre d'échéances
-</label>
+                </div>
 
-<input
-id="installments"
-type="number"
-min="1"
-value="1">
+            </div>
 
 
-<label>
-Première échéance
-</label>
+            <!-- APPLICATION -->
 
-<input
-id="firstDate"
-type="date">
+            <div class="checkboxRow">
 
+                <input
+                    id="applicationCheck"
+                    type="checkbox"
+                    onchange="toggleApplicationFields()"
+                >
 
-<label>
-Communication
-</label>
+                <label for="applicationCheck">
+                    Ajouter les informations de l'application
+                </label>
 
-<input
-id="communication"
-placeholder="Communication">
+            </div>
 
 
-<label>
-Document
-</label>
+            <div
+                id="applicationBox"
+                class="applicationBox hidden"
+            >
 
-<div class="photoButtons">
+                <h3>
+                    📱 Informations application
+                </h3>
 
-<button
-class="secondary"
-onclick="
-document.getElementById('cameraInput').click()
-">
 
-📷 Appareil photo
+                <div class="formGroup">
 
-</button>
+                    <label>
+                        URL application
+                    </label>
 
-<button
-class="secondary"
-onclick="
-document.getElementById('galleryInput').click()
-">
+                    <div class="inputCopy">
 
-🖼️ Mes photos
+                        <input
+                            id="appUrlInput"
+                            type="url"
+                            placeholder="https://..."
+                        >
 
-</button>
+                        <button
+                            class="copyBtn"
+                            onclick="copyInputValue('appUrlInput')"
+                        >
+                            📋
+                        </button>
 
-</div>
+                    </div>
 
+                </div>
 
-<input
-id="cameraInput"
-type="file"
-accept="image/*"
-capture="environment">
 
+                <div class="formGroup">
 
-<input
-id="galleryInput"
-type="file"
-accept="image/*">
+                    <label>
+                        MAC 1
+                    </label>
 
+                    <div class="inputCopy">
 
-<div id="addPhotoPreview"></div>
+                        <input
+                            id="mac1Input"
+                            type="text"
+                            placeholder="MAC 1"
+                        >
 
+                        <button
+                            class="copyBtn"
+                            onclick="copyInputValue('mac1Input')"
+                        >
+                            📋
+                        </button>
 
-<br>
+                    </div>
 
-<button
-class="primary"
-onclick="addPayment()">
+                </div>
 
-Ajouter le paiement
 
-</button>
+                <div class="formGroup">
 
-</div>
+                    <label>
+                        Clé 1
+                    </label>
 
+                    <div class="inputCopy">
 
-<!-- =========================
-     CALCULETTE
-========================= -->
+                        <input
+                            id="key1Input"
+                            type="text"
+                            placeholder="Clé 1"
+                        >
 
-<div class="card">
+                        <button
+                            class="copyBtn"
+                            onclick="copyInputValue('key1Input')"
+                        >
+                            📋
+                        </button>
 
-<h2>
-🧮 Calculette
-</h2>
+                    </div>
 
+                </div>
 
-<input
-id="calcDisplay"
-class="calculatorDisplay"
-type="text"
-readonly
-placeholder="0">
 
+                <div class="formGroup">
 
-<div class="calculatorGrid">
+                    <label>
+                        MAC 2
+                    </label>
 
-<button
-class="secondary"
-onclick="calcInput('7')">
-7
-</button>
+                    <div class="inputCopy">
 
-<button
-class="secondary"
-onclick="calcInput('8')">
-8
-</button>
+                        <input
+                            id="mac2Input"
+                            type="text"
+                            placeholder="MAC 2"
+                        >
 
-<button
-class="secondary"
-onclick="calcInput('9')">
-9
-</button>
+                        <button
+                            class="copyBtn"
+                            onclick="copyInputValue('mac2Input')"
+                        >
+                            📋
+                        </button>
 
-<button
-class="secondary"
-onclick="calcInput('/')">
-÷
-</button>
+                    </div>
 
+                </div>
 
-<button
-class="secondary"
-onclick="calcInput('4')">
-4
-</button>
 
-<button
-class="secondary"
-onclick="calcInput('5')">
-5
-</button>
+                <div class="formGroup">
 
-<button
-class="secondary"
-onclick="calcInput('6')">
-6
-</button>
+                    <label>
+                        Clé 2
+                    </label>
 
-<button
-class="secondary"
-onclick="calcInput('*')">
-×
-</button>
+                    <div class="inputCopy">
 
+                        <input
+                            id="key2Input"
+                            type="text"
+                            placeholder="Clé 2"
+                        >
 
-<button
-class="secondary"
-onclick="calcInput('1')">
-1
-</button>
+                        <button
+                            class="copyBtn"
+                            onclick="copyInputValue('key2Input')"
+                        >
+                            📋
+                        </button>
 
-<button
-class="secondary"
-onclick="calcInput('2')">
-2
-</button>
+                    </div>
 
-<button
-class="secondary"
-onclick="calcInput('3')">
-3
-</button>
+                </div>
 
-<button
-class="secondary"
-onclick="calcInput('-')">
-−
-</button>
+            </div>
 
 
-<button
-class="secondary"
-onclick="calcInput('0')">
-0
-</button>
+            <!-- PHOTO -->
 
-<button
-class="secondary"
-onclick="calcInput('.')">
-.
-</button>
+            <div class="formGroup">
 
-<button
-class="danger"
-onclick="calcClear()">
-C
-</button>
+                <label>
+                    📷 Photo du document
+                </label>
 
-<button
-class="secondary"
-onclick="calcInput('+')">
-+
-</button>
+                <div class="photoButtons">
 
-</div>
+                    <button
+                        type="button"
+                        class="secondaryButton"
+                        onclick="document.getElementById('photoGallery').click()"
+                    >
+                        🖼️ Mes photos
+                    </button>
 
+                    <button
+                        type="button"
+                        class="secondaryButton"
+                        onclick="document.getElementById('photoCamera').click()"
+                    >
+                        📷 Prendre une photo
+                    </button>
 
-<button
-class="primary calculatorEquals"
-onclick="calcResult()">
+                </div>
 
-= Calculer
 
-</button>
+                <input
+                    id="photoGallery"
+                    type="file"
+                    accept="image/*"
+                    style="display:none"
+                    onchange="handlePhoto(event)"
+                >
 
-</div>
+                <input
+                    id="photoCamera"
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    style="display:none"
+                    onchange="handlePhoto(event)"
+                >
 
 
-<!-- =========================
-     SAUVEGARDE
-========================= -->
+                <img
+                    id="photoPreview"
+                    class="photoPreview hidden"
+                    alt="Aperçu"
+                >
 
-<div class="card">
+                <button
+                    id="deletePhotoBtn"
+                    type="button"
+                    class="dangerButton hidden"
+                    style="margin-top:8px;width:100%;"
+                    onclick="deletePhoto()"
+                >
+                    🗑️ Supprimer la photo
+                </button>
 
-<h2>
-Sauvegarde
-</h2>
+            </div>
 
-<button
-class="secondary"
-onclick="exportData()">
 
-Exporter mes données
+            <!-- DUREE -->
 
-</button>
+            <div class="formGroup">
 
-<button
-class="secondary"
-onclick="
-document.getElementById('importInput').click()
-">
+                <label>
+                    Durée en jours
+                </label>
 
-Importer une sauvegarde
+                <input
+                    id="durationInput"
+                    type="number"
+                    min="1"
+                    placeholder="Exemple : 30"
+                >
 
-</button>
+            </div>
 
-<input
-id="importInput"
-type="file"
-accept=".json">
 
-</div>
+            <div class="formButtons">
 
+                <button
+                    class="primaryButton"
+                    onclick="saveAccount()"
+                >
+                    💾 Enregistrer
+                </button>
 
-</div>
+                <button
+                    class="secondaryButton"
+                    onclick="cancelForm()"
+                >
+                    Annuler
+                </button>
 
-</div>
+            </div>
 
+        </div>
 
-<!-- =========================
-     MODALE MODIFICATION
-========================= -->
 
-<div
-id="editModal"
-class="modal">
+        <!-- LISTE -->
 
-<div class="modalBox">
+        <div id="accountsList"></div>
 
-<div class="modalTitle">
-Modifier l'échéance
-</div>
-
-
-<label>
-Alias
-</label>
-
-<input id="editAlias">
-
-
-<label>
-Bénéficiaire
-</label>
-
-<input id="editBeneficiary">
-
-
-<label>
-IBAN
-</label>
-
-<input id="editIban">
-
-
-<label>
-Date
-</label>
-
-<input
-id="editDate"
-type="date">
-
-
-<label>
-Montant
-</label>
-
-<input
-id="editAmount"
-type="number"
-step="0.01">
-
-
-<label>
-Communication
-</label>
-
-<input id="editCommunication">
-
-
-<div class="modalActions">
-
-<button
-class="secondary"
-onclick="closeEdit()">
-
-Annuler
-
-</button>
-
-<button
-class="primary"
-onclick="saveEdit()">
-
-Enregistrer
-
-</button>
-
-</div>
-
-</div>
+    </main>
 
 </div>
 
 
 <!-- =========================
-     MODALE PAIEMENT MANUEL
+     MODAL PHOTO
 ========================= -->
 
 <div
-id="manualModal"
-class="modal">
+    id="photoModal"
+    class="modal hidden"
+    onclick="closePhotoModal(event)"
+>
 
-<div class="modalBox">
+    <div class="modalBox">
 
-<div class="modalTitle">
-Paiement manuel
-</div>
+        <img
+            id="modalPhoto"
+            src=""
+            alt="Photo"
+        >
 
-<div
-id="manualContent"></div>
+        <button
+            class="modalClose"
+            onclick="closePhotoModal()"
+        >
+            Fermer
+        </button>
 
-<div class="modalActions">
-
-<button
-class="secondary"
-onclick="closeManual()">
-
-Fermer
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     MODALE PHOTO
-========================= -->
-
-<div
-id="photoModal"
-class="modal">
-
-<div class="modalBox">
-
-<div class="modalTitle">
-Document
-</div>
-
-<img
-id="photoModalImage"
-class="photoModalImage">
-
-<div class="photoModalButtons">
-
-<button
-class="danger"
-onclick="deletePhoto()">
-
-Supprimer
-
-</button>
-
-<button
-class="secondary"
-onclick="closePhoto()">
-
-Fermer
-
-</button>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
 
 <script>
 
-/* =========================
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+const PIN = "1157";
+
+const STORAGE_KEY = "mesAcces";
+
+let accounts = [];
+
+let editingId = null;
+
+let currentPhoto = "";
+
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    loadData();
+
+    document
+        .getElementById("pinInput")
+        .addEventListener("keydown", function(event){
+
+            if(event.key === "Enter"){
+                login();
+            }
+
+        });
+
+});
+
+
+/* =========================================================
+   CONNEXION
+========================================================= */
+
+function login(){
+
+    const pin =
+        document.getElementById("pinInput").value;
+
+    const error =
+        document.getElementById("loginError");
+
+    if(pin === PIN){
+
+        document
+            .getElementById("loginScreen")
+            .classList.add("hidden");
+
+        document
+            .getElementById("app")
+            .classList.remove("hidden");
+
+        renderAccounts();
+
+    }else{
+
+        error.textContent =
+            "Code PIN incorrect.";
+
+        document
+            .getElementById("pinInput")
+            .value = "";
+
+    }
+
+}
+
+
+/* =========================================================
    DONNEES
-========================= */
-
-const PIN="1157";
-
-let data=[];
-
-let currentTab="unpaid";
-
-let selectedIds=new Set();
-
-let editId=null;
-
-let manualId=null;
-
-let photoId=null;
-
-let addPhotoData="";
-
-
-/* =========================
-   OUTILS
-========================= */
-
-function euro(value){
-
-return Number(value || 0)
-.toLocaleString(
-"fr-BE",
-{
-style:"currency",
-currency:"EUR"
-}
-);
-
-}
-
-
-function generateId(){
-
-return Date.now().toString()
-+
-Math.random()
-.toString(36)
-.substring(2,9);
-
-}
-
-
-function formatDate(date){
-
-if(!date)
-return "";
-
-const d=
-new Date(
-date+"T00:00:00"
-);
-
-return d.toLocaleDateString(
-"fr-BE"
-);
-
-}
-
-
-function addMonths(
-date,
-months
-){
-
-const d=
-new Date(
-date+"T00:00:00"
-);
-
-d.setMonth(
-d.getMonth()+months
-);
-
-return d.toISOString()
-.substring(0,10);
-
-}
-
-
-/* =========================
-   NORMALISATION
-========================= */
-
-function normalizeData(){
-
-data.forEach(p=>{
-
-if(!p.id)
-p.id=generateId();
-
-if(!p.alias)
-p.alias="";
-
-if(!p.beneficiary)
-p.beneficiary="";
-
-if(!p.iban)
-p.iban="";
-
-if(!p.communication)
-p.communication="";
-
-if(!p.installments)
-p.installments=[];
-
-p.installments.forEach(i=>{
-
-if(!i.id)
-i.id=generateId();
-
-if(typeof i.paid!=="boolean")
-i.paid=false;
-
-if(!i.amount)
-i.amount=0;
-
-});
-
-});
-
-}
-
-
-/* =========================
-   CHARGEMENT
-========================= */
+========================================================= */
 
 function loadData(){
 
-try{
+    try{
 
-const saved=
-localStorage.getItem(
-"mesPaiements"
-);
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
 
-if(saved){
+        if(saved){
 
-data=
-JSON.parse(saved);
+            const parsed =
+                JSON.parse(saved);
 
-normalizeData();
+            if(Array.isArray(parsed)){
+
+                accounts = parsed;
+
+            }else{
+
+                accounts = [];
+
+            }
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        accounts = [];
+
+    }
+
+    updateUserCount();
 
 }
 
-}catch(e){
-
-console.error(e);
-
-data=[];
-
-}
-
-render();
-
-}
-
-
-/* =========================
-   SAUVEGARDE
-========================= */
 
 function saveData(){
 
-localStorage.setItem(
-"mesPaiements",
-JSON.stringify(data)
-);
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(accounts)
+    );
+
+    updateUserCount();
 
 }
 
 
-/* =========================
-   PIN
-========================= */
+/* =========================================================
+   COMPTEUR
+========================================================= */
 
-function checkPin(){
+function updateUserCount(){
 
-const value=
-document.getElementById(
-"pinInput"
-).value;
+    const element =
+        document.getElementById("userCount");
 
-if(value===PIN){
+    if(!element){
+        return;
+    }
 
-document.getElementById(
-"loginScreen"
-).classList.add(
-"hidden"
-);
+    const count = accounts.length;
 
-document.getElementById(
-"app"
-).classList.remove(
-"hidden"
-);
-
-loadData();
-
-}else{
-
-alert(
-"Code PIN incorrect"
-);
-
-document.getElementById(
-"pinInput"
-).value="";
-
-}
+    element.textContent =
+        count +
+        (count > 1 ? " accès" : " accès");
 
 }
 
 
-/* =========================
+/* =========================================================
+   FORMULAIRE
+========================================================= */
+
+function showForm(){
+
+    editingId = null;
+
+    resetForm();
+
+    document
+        .getElementById("formTitle")
+        .textContent = "Ajouter un accès";
+
+    document
+        .getElementById("formCard")
+        .classList.remove("hidden");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function cancelForm(){
+
+    document
+        .getElementById("formCard")
+        .classList.add("hidden");
+
+    editingId = null;
+
+    resetForm();
+
+}
+
+
+function resetForm(){
+
+    document.getElementById("nameInput").value = "";
+
+    document.getElementById("usernameInput").value = "";
+
+    document.getElementById("passwordInput").value = "";
+
+    document.getElementById("url1Input").value = "";
+
+    document.getElementById("url2Input").value = "";
+
+    document.getElementById("noteInput").value = "";
+
+    document.getElementById("applicationCheck").checked = false;
+
+    document.getElementById("appUrlInput").value = "";
+
+    document.getElementById("mac1Input").value = "";
+
+    document.getElementById("key1Input").value = "";
+
+    document.getElementById("mac2Input").value = "";
+
+    document.getElementById("key2Input").value = "";
+
+    document.getElementById("durationInput").value = "";
+
+    currentPhoto = "";
+
+    document
+        .getElementById("applicationBox")
+        .classList.add("hidden");
+
+    document
+        .getElementById("photoPreview")
+        .classList.add("hidden");
+
+    document
+        .getElementById("deletePhotoBtn")
+        .classList.add("hidden");
+
+    document.getElementById("photoPreview").src = "";
+
+}
+
+
+/* =========================================================
+   APPLICATION
+========================================================= */
+
+function toggleApplicationFields(){
+
+    const checked =
+        document.getElementById("applicationCheck").checked;
+
+    const box =
+        document.getElementById("applicationBox");
+
+    if(checked){
+
+        box.classList.remove("hidden");
+
+    }else{
+
+        box.classList.add("hidden");
+
+    }
+
+}
+
+
+/* =========================================================
    PHOTO
-========================= */
+========================================================= */
 
-function handlePhoto(file){
+function handlePhoto(event){
 
-if(!file)
-return;
+    const file =
+        event.target.files &&
+        event.target.files[0];
 
-const reader=
-new FileReader();
+    if(!file){
+        return;
+    }
 
-reader.onload=function(e){
+    const reader = new FileReader();
 
-const img=
-new Image();
+    reader.onload = function(e){
 
-img.onload=function(){
+        currentPhoto = e.target.result;
 
-const canvas=
-document.createElement(
-"canvas"
-);
+        const preview =
+            document.getElementById("photoPreview");
 
-const maxWidth=1400;
+        preview.src = currentPhoto;
 
-let width=img.width;
+        preview.classList.remove("hidden");
 
-let height=img.height;
+        document
+            .getElementById("deletePhotoBtn")
+            .classList.remove("hidden");
 
-if(width>maxWidth){
+    };
 
-height=
-height*
-(maxWidth/width);
-
-width=maxWidth;
-
-}
-
-canvas.width=width;
-
-canvas.height=height;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.drawImage(
-img,
-0,
-0,
-width,
-height
-);
-
-addPhotoData=
-canvas.toDataURL(
-"image/jpeg",
-0.75
-);
-
-document.getElementById(
-"addPhotoPreview"
-).innerHTML=
-`
-<img
-src="${addPhotoData}"
-class="photoPreview">
-`;
-
-};
-
-img.src=e.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-
-document.getElementById(
-"cameraInput"
-).addEventListener(
-"change",
-function(){
-
-handlePhoto(this.files[0]);
-
-}
-);
-
-
-document.getElementById(
-"galleryInput"
-).addEventListener(
-"change",
-function(){
-
-handlePhoto(this.files[0]);
-
-}
-);
-
-
-/* =========================
-   AJOUT PAIEMENT
-========================= */
-
-function addPayment(){
-
-const alias=
-document.getElementById(
-"alias"
-).value.trim();
-
-const beneficiary=
-document.getElementById(
-"beneficiary"
-).value.trim();
-
-const iban=
-document.getElementById(
-"iban"
-).value.trim();
-
-const total=
-parseFloat(
-document.getElementById(
-"totalAmount"
-).value
-);
-
-const count=
-parseInt(
-document.getElementById(
-"installments"
-).value
-);
-
-const firstDate=
-document.getElementById(
-"firstDate"
-).value;
-
-const communication=
-document.getElementById(
-"communication"
-).value.trim();
-
-
-if(
-!beneficiary ||
-!total ||
-!count ||
-!firstDate
-){
-
-alert(
-"Veuillez remplir les champs obligatoires."
-);
-
-return;
-
-}
-
-
-const base=
-Math.floor(
-(total/count)*100
-)/100;
-
-const last=
-Math.round(
-(
-total-
-base*(count-1)
-)*100
-)/100;
-
-
-const installments=[];
-
-
-for(
-let i=0;
-i<count;
-i++
-){
-
-installments.push({
-
-id:generateId(),
-
-date:addMonths(
-firstDate,
-i
-),
-
-amount:
-i===count-1
-?last
-:base,
-
-paid:false
-
-});
-
-}
-
-
-data.push({
-
-id:generateId(),
-
-alias:alias,
-
-beneficiary:beneficiary,
-
-iban:iban,
-
-communication:communication,
-
-photo:addPhotoData,
-
-installments:installments
-
-});
-
-
-saveData();
-
-resetAddForm();
-
-render();
-
-alert(
-"Paiement ajouté."
-);
-
-}
-
-
-/* =========================
-   RESET AJOUT
-========================= */
-
-function resetAddForm(){
-
-document.getElementById(
-"alias"
-).value="";
-
-document.getElementById(
-"beneficiary"
-).value="";
-
-document.getElementById(
-"iban"
-).value="";
-
-document.getElementById(
-"totalAmount"
-).value="";
-
-document.getElementById(
-"installments"
-).value="1";
-
-document.getElementById(
-"firstDate"
-).value="";
-
-document.getElementById(
-"communication"
-).value="";
-
-document.getElementById(
-"addPhotoPreview"
-).innerHTML="";
-
-document.getElementById(
-"cameraInput"
-).value="";
-
-document.getElementById(
-"galleryInput"
-).value="";
-
-addPhotoData="";
-
-}
-
-
-/* =========================
-   ONGLETS
-========================= */
-
-function showTab(tab){
-
-currentTab=tab;
-
-document.getElementById(
-"tabUnpaid"
-).classList.toggle(
-"active",
-tab==="unpaid"
-);
-
-document.getElementById(
-"tabPaid"
-).classList.toggle(
-"active",
-tab==="paid"
-);
-
-document.getElementById(
-"unpaidList"
-).classList.toggle(
-"hidden",
-tab!=="unpaid"
-);
-
-document.getElementById(
-"paidList"
-).classList.toggle(
-"hidden",
-tab!=="paid"
-);
-
-render();
-
-}
-
-
-/* =========================
-   AFFICHAGE
-========================= */
-
-function render(){
-
-const unpaidList=
-document.getElementById(
-"unpaidList"
-);
-
-const paidList=
-document.getElementById(
-"paidList"
-);
-
-unpaidList.innerHTML="";
-
-paidList.innerHTML="";
-
-
-let total=0;
-
-let paid=0;
-
-let unpaidCount=0;
-
-let paidCount=0;
-
-
-data.forEach(
-payment=>{
-
-payment.installments.forEach(
-inst=>{
-
-total+=
-Number(inst.amount||0);
-
-if(inst.paid){
-
-paid+=
-Number(inst.amount||0);
-
-paidCount++;
-
-}else{
-
-unpaidCount++;
-
-}
-
-});
-
-});
-
-
-document.getElementById(
-"totalValue"
-).textContent=
-euro(total);
-
-document.getElementById(
-"paidValue"
-).textContent=
-euro(paid);
-
-document.getElementById(
-"remainingValue"
-).textContent=
-euro(total-paid);
-
-document.getElementById(
-"unpaidCount"
-).textContent=
-unpaidCount;
-
-document.getElementById(
-"paidCount"
-).textContent=
-paidCount;
-
-
-data.forEach(
-payment=>{
-
-const visible=
-payment.installments.filter(
-i=>
-currentTab==="unpaid"
-? !i.paid
-: i.paid
-);
-
-if(!visible.length)
-return;
-
-const group=
-createPaymentGroup(
-payment,
-visible
-);
-
-if(currentTab==="unpaid")
-unpaidList.appendChild(group);
-else
-paidList.appendChild(group);
-
-});
-
-
-updateSelectionBar();
-
-}
-
-
-/* =========================
-   GROUPE PAIEMENT
-========================= */
-
-function createPaymentGroup(
-payment,
-installments
-){
-
-const group=
-document.createElement("div");
-
-group.className=
-"paymentGroup";
-
-
-const header=
-document.createElement("div");
-
-header.className=
-"paymentGroupHeader";
-
-
-const alias=
-payment.alias ||
-"Sans alias";
-
-
-const totalInstallments=
-payment.installments.length;
-
-const paidInstallments=
-payment.installments.filter(
-i=>i.paid
-).length;
-
-const remainingInstallments=
-payment.installments.filter(
-i=>!i.paid
-).length;
-
-
-header.innerHTML=
-`
-<div class="paymentGroupAlias">
-
-${escapeHtml(alias)}
-
-</div>
-
-<div class="paymentGroupBeneficiary">
-
-${escapeHtml(
-payment.beneficiary
-)}
-
-</div>
-
-<div class="paymentGroupInfo">
-
-${totalInstallments}
-échéance(s)
-•
-${paidInstallments}
-payée(s)
-•
-${remainingInstallments}
-restante(s)
-
-</div>
-`;
-
-
-group.appendChild(header);
-
-
-installments.forEach(
-inst=>{
-
-group.appendChild(
-createInstallmentCard(
-payment,
-inst
-)
-);
-
-});
-
-
-return group;
-
-}
-
-
-/* =========================
-   CARTE ECHEANCE
-========================= */
-
-function createInstallmentCard(
-payment,
-inst
-){
-
-const card=
-document.createElement("div");
-
-card.className=
-"installment";
-
-
-if(inst.paid)
-card.classList.add("paid");
-
-
-const top=
-document.createElement("div");
-
-top.className=
-"installmentTop";
-
-
-const checkbox=
-document.createElement("input");
-
-checkbox.type="checkbox";
-
-checkbox.className=
-"checkbox";
-
-checkbox.checked=
-selectedIds.has(inst.id);
-
-
-checkbox.addEventListener(
-"change",
-function(){
-
-if(this.checked)
-selectedIds.add(inst.id);
-else
-selectedIds.delete(inst.id);
-
-updateSelectionBar();
-
-}
-);
-
-
-const info=
-document.createElement("div");
-
-info.className=
-"installmentInfo";
-
-
-const status=
-inst.paid
-?
-`<span class="badge badgePaid">
-PAYÉ
-</span>`
-:
-`<span class="badge badgeUnpaid">
-À PAYER
-</span>`;
-
-
-info.innerHTML=
-`
-<div class="beneficiary">
-
-${escapeHtml(
-payment.beneficiary
-)}
-
-${status}
-
-</div>
-
-<div class="installmentDetails">
-
-Échéance :
-${formatDate(inst.date)}
-
-<br>
-
-Communication :
-${escapeHtml(
-payment.communication || "-"
-)}
-
-</div>
-
-<div class="amount">
-
-${euro(inst.amount)}
-
-</div>
-`;
-
-
-top.appendChild(
-checkbox
-);
-
-top.appendChild(
-info
-);
-
-card.appendChild(top);
-
-
-const actions=
-document.createElement("div");
-
-actions.className="actions";
-
-
-const editBtn=
-document.createElement("button");
-
-editBtn.className=
-"secondary";
-
-editBtn.textContent=
-"✏️ Modifier";
-
-
-editBtn.onclick=function(){
-
-openEdit(
-payment.id,
-inst.id
-);
-
-};
-
-
-const paidBtn=
-document.createElement("button");
-
-paidBtn.className=
-inst.paid
-?"secondary"
-:"green";
-
-paidBtn.textContent=
-inst.paid
-?"↩️ À payer"
-:"✓ Payé";
-
-
-paidBtn.onclick=function(){
-
-togglePaid(
-payment.id,
-inst.id
-);
-
-};
-
-
-const manualBtn=
-document.createElement("button");
-
-manualBtn.className=
-"secondary";
-
-manualBtn.textContent=
-"💳 Payer";
-
-
-manualBtn.onclick=function(){
-
-openManual(
-payment.id,
-inst.id
-);
-
-};
-
-
-const calendarBtn=
-document.createElement("button");
-
-calendarBtn.className=
-"secondary";
-
-calendarBtn.textContent=
-"📅 Calendrier";
-
-
-calendarBtn.onclick=function(){
-
-addCalendar(
-payment,
-inst
-);
-
-};
-
-
-actions.appendChild(
-editBtn
-);
-
-actions.appendChild(
-paidBtn
-);
-
-actions.appendChild(
-manualBtn
-);
-
-actions.appendChild(
-calendarBtn
-);
-
-
-if(payment.photo){
-
-const photoBtn=
-document.createElement("button");
-
-photoBtn.className=
-"secondary";
-
-photoBtn.textContent=
-"📄 Document";
-
-
-photoBtn.onclick=function(){
-
-openPhoto(
-payment.id
-);
-
-};
-
-actions.appendChild(
-photoBtn
-);
-
-}
-
-
-card.appendChild(actions);
-
-
-return card;
-
-}
-
-
-/* =========================
-   SELECTION
-========================= */
-
-function updateSelectionBar(){
-
-const bar=
-document.getElementById(
-"selectionBar"
-);
-
-const info=
-document.getElementById(
-"selectionInfo"
-);
-
-const count=
-selectedIds.size;
-
-
-if(count>0){
-
-bar.classList.add("show");
-
-info.textContent=
-count+
-(
-count>1
-?
-" sélectionnés"
-:
-" sélectionné"
-);
-
-}else{
-
-bar.classList.remove("show");
-
-}
-
-}
-
-
-/* =========================
-   SUPPRESSION
-========================= */
-
-function deleteSelected(){
-
-if(!selectedIds.size)
-return;
-
-if(
-!confirm(
-"Supprimer les échéances sélectionnées ?"
-)
-)
-return;
-
-
-data.forEach(
-payment=>{
-
-payment.installments=
-payment.installments.filter(
-inst=>
-!selectedIds.has(inst.id)
-);
-
-});
-
-
-data=
-data.filter(
-p=>
-p.installments.length>0
-);
-
-
-selectedIds.clear();
-
-saveData();
-
-render();
-
-}
-
-
-/* =========================
-   PAYE / NON PAYE
-========================= */
-
-function togglePaid(
-paymentId,
-installmentId
-){
-
-const payment=
-data.find(
-p=>p.id===paymentId
-);
-
-if(!payment)
-return;
-
-
-const inst=
-payment.installments.find(
-i=>i.id===installmentId
-);
-
-if(!inst)
-return;
-
-
-inst.paid=!inst.paid;
-
-saveData();
-
-render();
-
-}
-
-
-/* =========================
-   MODIFICATION
-========================= */
-
-function openEdit(
-paymentId,
-installmentId
-){
-
-editId={
-paymentId,
-installmentId
-};
-
-
-const payment=
-data.find(
-p=>p.id===paymentId
-);
-
-const inst=
-payment.installments.find(
-i=>i.id===installmentId
-);
-
-
-document.getElementById(
-"editAlias"
-).value=
-payment.alias || "";
-
-
-document.getElementById(
-"editBeneficiary"
-).value=
-payment.beneficiary || "";
-
-
-document.getElementById(
-"editIban"
-).value=
-payment.iban || "";
-
-
-document.getElementById(
-"editDate"
-).value=
-inst.date || "";
-
-
-document.getElementById(
-"editAmount"
-).value=
-inst.amount || "";
-
-
-document.getElementById(
-"editCommunication"
-).value=
-payment.communication || "";
-
-
-document.getElementById(
-"editModal"
-).classList.add(
-"show"
-);
-
-}
-
-
-function closeEdit(){
-
-document.getElementById(
-"editModal"
-).classList.remove(
-"show"
-);
-
-editId=null;
-
-}
-
-
-function saveEdit(){
-
-if(!editId)
-return;
-
-
-const payment=
-data.find(
-p=>p.id===editId.paymentId
-);
-
-if(!payment)
-return;
-
-
-const inst=
-payment.installments.find(
-i=>i.id===editId.installmentId
-);
-
-if(!inst)
-return;
-
-
-payment.alias=
-document.getElementById(
-"editAlias"
-).value.trim();
-
-
-payment.beneficiary=
-document.getElementById(
-"editBeneficiary"
-).value.trim();
-
-
-payment.iban=
-document.getElementById(
-"editIban"
-).value.trim();
-
-
-payment.communication=
-document.getElementById(
-"editCommunication"
-).value.trim();
-
-
-inst.date=
-document.getElementById(
-"editDate"
-).value;
-
-
-const amount=
-parseFloat(
-document.getElementById(
-"editAmount"
-).value
-);
-
-
-inst.amount=
-isNaN(amount)
-?0
-:amount;
-
-
-saveData();
-
-closeEdit();
-
-render();
-
-}
-
-
-/* =========================
-   PAIEMENT MANUEL
-========================= */
-
-function openManual(
-paymentId,
-installmentId
-){
-
-manualId={
-paymentId,
-installmentId
-};
-
-
-const payment=
-data.find(
-p=>p.id===paymentId
-);
-
-const inst=
-payment.installments.find(
-i=>i.id===installmentId
-);
-
-
-const content=
-document.getElementById(
-"manualContent"
-);
-
-
-content.innerHTML=
-`
-<div class="manualInfo">
-
-
-<div class="manualLine">
-
-<div class="manualLabel">
-Bénéficiaire
-</div>
-
-<div class="manualValue">
-${escapeHtml(
-payment.beneficiary
-)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-payment.beneficiary
-)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-<div class="manualLine">
-
-<div class="manualLabel">
-IBAN
-</div>
-
-<div class="manualValue">
-${escapeHtml(
-payment.iban || "-"
-)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-payment.iban || ""
-)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-<div class="manualLine">
-
-<div class="manualLabel">
-Montant
-</div>
-
-<div class="manualValue">
-${euro(inst.amount)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-Number(inst.amount)
-.toFixed(2)
-)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-<div class="manualLine">
-
-<div class="manualLabel">
-Communication
-</div>
-
-<div class="manualValue">
-${escapeHtml(
-payment.communication || "-"
-)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-payment.communication || ""
-)}',
-this
-)">
-
-Copier
-
-</button>
-
-</div>
-
-
-</div>
-`;
-
-
-document.getElementById(
-"manualModal"
-).classList.add(
-"show"
-);
-
-}
-
-
-function closeManual(){
-
-document.getElementById(
-"manualModal"
-).classList.remove(
-"show"
-);
-
-manualId=null;
-
-resetCopyButtons();
-
-}
-
-
-/* =========================
-   COPIER
-========================= */
-
-function copyText(
-text,
-button
-){
-
-if(
-navigator.clipboard &&
-navigator.clipboard.writeText
-){
-
-navigator.clipboard.writeText(
-text
-).then(()=>{
-
-button.textContent=
-"✓ Copié";
-
-button.classList.add(
-"copied"
-);
-
-});
-
-}else{
-
-const textarea=
-document.createElement(
-"textarea"
-);
-
-textarea.value=text;
-
-document.body.appendChild(
-textarea
-);
-
-textarea.select();
-
-document.execCommand(
-"copy"
-);
-
-textarea.remove();
-
-button.textContent=
-"✓ Copié";
-
-button.classList.add(
-"copied"
-);
-
-}
-
-}
-
-
-function resetCopyButtons(){
-
-document
-.querySelectorAll(
-".copyButton"
-)
-.forEach(
-b=>{
-
-b.textContent=
-"Copier";
-
-b.classList.remove(
-"copied"
-);
-
-}
-);
-
-}
-
-
-/* =========================
-   GOOGLE CALENDAR
-========================= */
-
-function addCalendar(
-payment,
-inst
-){
-
-const date=
-inst.date.replaceAll(
-"-",
-""
-);
-
-
-const d2=
-new Date(
-inst.date+
-"T00:00:00"
-);
-
-d2.setDate(
-d2.getDate()+1
-);
-
-
-const end=
-d2.toISOString()
-.substring(0,10)
-.replaceAll(
-"-",
-""
-);
-
-
-const title=
-(
-payment.alias
-?
-payment.alias+
-" - "
-:
-""
-)+
-payment.beneficiary;
-
-
-const details=
-"Montant : "+
-Number(inst.amount)
-.toFixed(2)+
-" €\n"+
-"IBAN : "+
-(payment.iban||"")+
-"\n"+
-"Communication : "+
-(payment.communication||"");
-
-
-const url=
-"https://calendar.google.com/calendar/render?action=TEMPLATE"+
-"&text="+
-encodeURIComponent(title)+
-"&dates="+
-date+
-"/"+
-end+
-"&details="+
-encodeURIComponent(details);
-
-
-window.open(
-url,
-"_blank"
-);
-
-}
-
-
-/* =========================
-   PHOTO
-========================= */
-
-function openPhoto(
-paymentId
-){
-
-const payment=
-data.find(
-p=>p.id===paymentId
-);
-
-if(
-!payment ||
-!payment.photo
-)
-return;
-
-
-photoId=paymentId;
-
-
-document.getElementById(
-"photoModalImage"
-).src=
-payment.photo;
-
-
-document.getElementById(
-"photoModal"
-).classList.add(
-"show"
-);
-
-}
-
-
-function closePhoto(){
-
-document.getElementById(
-"photoModal"
-).classList.remove(
-"show"
-);
-
-photoId=null;
+    reader.readAsDataURL(file);
 
 }
 
 
 function deletePhoto(){
 
-if(!photoId)
-return;
+    currentPhoto = "";
 
+    document.getElementById("photoPreview").src = "";
 
-const payment=
-data.find(
-p=>p.id===photoId
-);
+    document
+        .getElementById("photoPreview")
+        .classList.add("hidden");
 
-if(payment){
+    document
+        .getElementById("deletePhotoBtn")
+        .classList.add("hidden");
 
-payment.photo="";
+    document.getElementById("photoGallery").value = "";
 
-saveData();
-
-}
-
-
-closePhoto();
-
-render();
+    document.getElementById("photoCamera").value = "";
 
 }
 
 
-/* =========================
-   EXPORT
-========================= */
+/* =========================================================
+   ENREGISTRER
+========================================================= */
+
+function saveAccount(){
+
+    const name =
+        document.getElementById("nameInput").value.trim();
+
+    const username =
+        document.getElementById("usernameInput").value.trim();
+
+    const password =
+        document.getElementById("passwordInput").value;
+
+    const url1 =
+        document.getElementById("url1Input").value.trim();
+
+    const url2 =
+        document.getElementById("url2Input").value.trim();
+
+    const note =
+        document.getElementById("noteInput").value.trim();
+
+    const application =
+        document.getElementById("applicationCheck").checked;
+
+    const durationValue =
+        document.getElementById("durationInput").value;
+
+    const duration =
+        Number(durationValue);
+
+
+    if(!name){
+
+        alert("Veuillez entrer un nom / prénom.");
+
+        return;
+
+    }
+
+
+    if(!duration || duration < 1){
+
+        alert("Veuillez entrer une durée en jours.");
+
+        return;
+
+    }
+
+
+    const data = {
+
+        id:
+            editingId ||
+            Date.now().toString(),
+
+        name:name,
+
+        username:username,
+
+        password:password,
+
+        url1:url1,
+
+        url2:url2,
+
+        note:note,
+
+        application:application,
+
+        appUrl:
+            application
+            ? document.getElementById("appUrlInput").value.trim()
+            : "",
+
+        mac1:
+            application
+            ? document.getElementById("mac1Input").value.trim()
+            : "",
+
+        key1:
+            application
+            ? document.getElementById("key1Input").value.trim()
+            : "",
+
+        mac2:
+            application
+            ? document.getElementById("mac2Input").value.trim()
+            : "",
+
+        key2:
+            application
+            ? document.getElementById("key2Input").value.trim()
+            : "",
+
+        photo:currentPhoto,
+
+        duration:duration,
+
+        startDate:
+            editingId
+            ? getExistingStartDate(editingId)
+            : new Date().toISOString()
+
+    };
+
+
+    if(editingId){
+
+        const index =
+            accounts.findIndex(
+                account => account.id === editingId
+            );
+
+        if(index !== -1){
+
+            accounts[index] = data;
+
+        }
+
+    }else{
+
+        accounts.push(data);
+
+    }
+
+
+    saveData();
+
+    cancelForm();
+
+    renderAccounts();
+
+}
+
+
+function getExistingStartDate(id){
+
+    const existing =
+        accounts.find(
+            account => account.id === id
+        );
+
+    if(existing && existing.startDate){
+
+        return existing.startDate;
+
+    }
+
+    return new Date().toISOString();
+
+}
+
+
+/* =========================================================
+   MODIFIER
+========================================================= */
+
+function editAccount(id){
+
+    const account =
+        accounts.find(
+            item => item.id === id
+        );
+
+    if(!account){
+        return;
+    }
+
+    editingId = id;
+
+    document
+        .getElementById("formTitle")
+        .textContent = "Modifier l'accès";
+
+
+    document.getElementById("nameInput").value =
+        account.name || "";
+
+    document.getElementById("usernameInput").value =
+        account.username || "";
+
+    document.getElementById("passwordInput").value =
+        account.password || "";
+
+    document.getElementById("url1Input").value =
+        account.url1 || "";
+
+    document.getElementById("url2Input").value =
+        account.url2 || "";
+
+    document.getElementById("noteInput").value =
+        account.note || "";
+
+    document.getElementById("durationInput").value =
+        account.duration || "";
+
+
+    document
+        .getElementById("applicationCheck")
+        .checked = !!account.application;
+
+
+    document.getElementById("appUrlInput").value =
+        account.appUrl || "";
+
+    document.getElementById("mac1Input").value =
+        account.mac1 || "";
+
+    document.getElementById("key1Input").value =
+        account.key1 || "";
+
+    document.getElementById("mac2Input").value =
+        account.mac2 || "";
+
+    document.getElementById("key2Input").value =
+        account.key2 || "";
+
+
+    toggleApplicationFields();
+
+
+    currentPhoto =
+        account.photo || "";
+
+
+    if(currentPhoto){
+
+        document.getElementById("photoPreview").src =
+            currentPhoto;
+
+        document
+            .getElementById("photoPreview")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("deletePhotoBtn")
+            .classList.remove("hidden");
+
+    }else{
+
+        document
+            .getElementById("photoPreview")
+            .classList.add("hidden");
+
+        document
+            .getElementById("deletePhotoBtn")
+            .classList.add("hidden");
+
+    }
+
+
+    document
+        .getElementById("formCard")
+        .classList.remove("hidden");
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   SUPPRIMER
+========================================================= */
+
+function deleteAccount(id){
+
+    const account =
+        accounts.find(
+            item => item.id === id
+        );
+
+    if(!account){
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "Supprimer l'accès de " +
+            account.name +
+            " ?"
+        );
+
+
+    if(!confirmed){
+        return;
+    }
+
+
+    accounts =
+        accounts.filter(
+            item => item.id !== id
+        );
+
+
+    saveData();
+
+    renderAccounts();
+
+}
+
+
+/* =========================================================
+   URL
+========================================================= */
+
+function normalizeUrl(url){
+
+    if(!url){
+        return "";
+    }
+
+    let value =
+        String(url).trim();
+
+    if(!value){
+        return "";
+    }
+
+
+    if(
+        !value.startsWith("http://") &&
+        !value.startsWith("https://")
+    ){
+
+        value =
+            "https://" + value;
+
+    }
+
+    return value;
+
+}
+
+
+/*
+    IMPORTANT :
+    Cette fonction est appelée directement par le clic
+    sur l'URL.
+
+    Elle demande à l'iPhone d'ouvrir l'adresse dans
+    une nouvelle page/onglet.
+
+    L'application Mes accès reste donc ouverte.
+*/
+
+function openUrlInNewPage(event, url){
+
+    if(event){
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+
+    const finalUrl =
+        normalizeUrl(url);
+
+
+    if(!finalUrl){
+        return false;
+    }
+
+
+    /*
+       window.open est déclenché directement par
+       l'action de l'utilisateur.
+    */
+
+    window.open(
+        finalUrl,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   AFFICHAGE
+========================================================= */
+
+function renderAccounts(){
+
+    const container =
+        document.getElementById("accountsList");
+
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    let filtered =
+        accounts.filter(account => {
+
+            const text = [
+
+                account.name,
+                account.username,
+                account.url1,
+                account.url2,
+                account.note,
+                account.appUrl,
+                account.mac1,
+                account.key1,
+                account.mac2,
+                account.key2
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+            return text.includes(search);
+
+        });
+
+
+    /*
+       Tri alphabétique Nom / Prénom
+    */
+
+    filtered.sort(function(a,b){
+
+        return String(a.name || "")
+            .localeCompare(
+                String(b.name || ""),
+                "fr",
+                {
+                    sensitivity:"base"
+                }
+            );
+
+    });
+
+
+    if(filtered.length === 0){
+
+        container.innerHTML =
+
+            '<div class="empty">' +
+                '<div class="emptyIcon">🔐</div>' +
+                '<div>Aucun accès trouvé.</div>' +
+            '</div>';
+
+        updateUserCount();
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    filtered.forEach(function(account){
+
+        html += renderAccount(account);
+
+    });
+
+
+    container.innerHTML = html;
+
+    updateUserCount();
+
+}
+
+
+/* =========================================================
+   CARTE COMPTE
+========================================================= */
+
+function renderAccount(account){
+
+    let html = "";
+
+
+    html +=
+        '<div class="accountCard">';
+
+
+    /* HEADER */
+
+    html +=
+        '<div class="accountHeader">' +
+
+            '<div class="accountName">' +
+                escapeHtml(account.name || "") +
+            '</div>' +
+
+            '<div class="accountActions">' +
+
+                '<button ' +
+                    'class="iconButton edit" ' +
+                    'onclick="editAccount(\'' +
+                    escapeJs(account.id) +
+                    '\')">' +
+                    '✏️' +
+                '</button>' +
+
+                '<button ' +
+                    'class="iconButton delete" ' +
+                    'onclick="deleteAccount(\'' +
+                    escapeJs(account.id) +
+                    '\')">' +
+                    '🗑️' +
+                '</button>' +
+
+            '</div>' +
+
+        '</div>';
+
+
+    /* UTILISATEUR */
+
+    if(account.username){
+
+        html += accountLineCopy(
+            "Utilisateur",
+            account.username
+        );
+
+    }
+
+
+    /* MOT DE PASSE */
+
+    if(account.password){
+
+        html +=
+            '<div class="accountLine">' +
+
+                '<div class="accountLabel">' +
+                    'MOT DE PASSE' +
+                '</div>' +
+
+                '<div class="copyArea">' +
+
+                    '<div ' +
+                        'class="valueText passwordValue" ' +
+                        'data-password="' +
+                        escapeHtml(account.password) +
+                        '">' +
+                        '••••••••' +
+                    '</div>' +
+
+                    '<button ' +
+                        'class="iconButton" ' +
+                        'onclick="toggleSavedPassword(this)">' +
+                        '👁️' +
+                    '</button>' +
+
+                    '<button ' +
+                        'class="copyBtn" ' +
+                        'onclick="copySavedValue(this)"' +
+                        'data-copy="' +
+                        escapeHtml(account.password) +
+                        '">' +
+                        '📋' +
+                    '</button>' +
+
+                '</div>' +
+
+            '</div>';
+
+    }
+
+
+    /* URL 1 */
+
+    if(account.url1){
+
+        html += accountUrlLine(
+            "URL 1",
+            account.url1
+        );
+
+    }
+
+
+    /* URL 2 */
+
+    if(account.url2){
+
+        html += accountUrlLine(
+            "URL 2",
+            account.url2
+        );
+
+    }
+
+
+    /* REMARQUE */
+
+    if(account.note){
+
+        html +=
+            '<div class="accountLine">' +
+
+                '<div class="accountLabel">' +
+                    'REMARQUE' +
+                '</div>' +
+
+                '<div class="copyArea">' +
+
+                    '<div class="valueText remarque">' +
+                        escapeHtml(account.note) +
+                    '</div>' +
+
+                    '<button ' +
+                        'class="copyBtn" ' +
+                        'onclick="copySavedValue(this)" ' +
+                        'data-copy="' +
+                        escapeHtml(account.note) +
+                        '">' +
+                        '📋' +
+                    '</button>' +
+
+                '</div>' +
+
+            '</div>';
+
+    }
+
+
+    /* APPLICATION */
+
+    if(account.application){
+
+        html +=
+            '<div class="applicationSaved">' +
+
+                '<h3>📱 Application</h3>';
+
+
+        if(account.appUrl){
+
+            html += accountUrlLine(
+                "URL application",
+                account.appUrl
+            );
+
+        }
+
+
+        if(account.mac1){
+
+            html += accountLineCopy(
+                "MAC 1",
+                account.mac1
+            );
+
+        }
+
+
+        if(account.key1){
+
+            html += accountLineCopy(
+                "Clé 1",
+                account.key1
+            );
+
+        }
+
+
+        if(account.mac2){
+
+            html += accountLineCopy(
+                "MAC 2",
+                account.mac2
+            );
+
+        }
+
+
+        if(account.key2){
+
+            html += accountLineCopy(
+                "Clé 2",
+                account.key2
+            );
+
+        }
+
+
+        html +=
+            '</div>';
+
+    }
+
+
+    /* PHOTO */
+
+    if(account.photo){
+
+        html +=
+            '<div class="accountLine">' +
+
+                '<div class="accountLabel">' +
+                    'PHOTO' +
+                '</div>' +
+
+                '<img ' +
+                    'class="photoSaved" ' +
+                    'src="' +
+                    account.photo +
+                    '" ' +
+                    'alt="Document" ' +
+                    'onclick="openPhotoModal(\'' +
+                    escapeJs(account.photo) +
+                    '\')" ' +
+                    'style="cursor:pointer;"' +
+                '>' +
+
+            '</div>';
+
+    }
+
+
+    /* DUREE */
+
+    html += renderDuration(account);
+
+
+    html +=
+        '</div>';
+
+
+    return html;
+
+}
+
+
+/* =========================================================
+   LIGNE TEXTE + COPIE
+========================================================= */
+
+function accountLineCopy(label, value){
+
+    return (
+
+        '<div class="accountLine">' +
+
+            '<div class="accountLabel">' +
+                escapeHtml(label) +
+            '</div>' +
+
+            '<div class="copyArea">' +
+
+                '<div class="valueText">' +
+                    escapeHtml(value) +
+                '</div>' +
+
+                '<button ' +
+                    'class="copyBtn" ' +
+                    'onclick="copySavedValue(this)" ' +
+                    'data-copy="' +
+                    escapeHtml(value) +
+                    '">' +
+                    '📋' +
+                '</button>' +
+
+            '</div>' +
+
+        '</div>'
+
+    );
+
+}
+
+
+/* =========================================================
+   LIGNE URL
+========================================================= */
+
+function accountUrlLine(label, value){
+
+    const normalized =
+        normalizeUrl(value);
+
+
+    /*
+       L'URL elle-même est cliquable.
+
+       Le clic utilise openUrlInNewPage()
+       pour demander une nouvelle page/onglet.
+    */
+
+    return (
+
+        '<div class="accountLine">' +
+
+            '<div class="accountLabel">' +
+                escapeHtml(label) +
+            '</div>' +
+
+            '<div class="copyArea">' +
+
+                '<a ' +
+                    'class="urlLink" ' +
+                    'href="' +
+                    escapeAttribute(normalized) +
+                    '" ' +
+                    'target="_blank" ' +
+                    'rel="noopener noreferrer" ' +
+                    'onclick="return openUrlInNewPage(event, this.href);">' +
+
+                    escapeHtml(value) +
+
+                '</a>' +
+
+                '<button ' +
+                    'class="copyBtn" ' +
+                    'onclick="copySavedValue(this)" ' +
+                    'data-copy="' +
+                    escapeHtml(value) +
+                    '">' +
+                    '📋' +
+                '</button>' +
+
+            '</div>' +
+
+        '</div>'
+
+    );
+
+}
+
+
+/* =========================================================
+   DUREE / EXPIRATION
+========================================================= */
+
+function renderDuration(account){
+
+    if(!account.duration || !account.startDate){
+
+        return "";
+
+    }
+
+
+    const start =
+        new Date(account.startDate);
+
+    const expiration =
+        new Date(start.getTime() +
+        Number(account.duration) *
+        24 *
+        60 *
+        60 *
+        1000);
+
+
+    const now =
+        new Date();
+
+
+    const difference =
+        expiration.getTime() -
+        now.getTime();
+
+
+    const daysRemaining =
+        Math.ceil(
+            difference /
+            (24 * 60 * 60 * 1000)
+        );
+
+
+    let className =
+        "expGreen";
+
+
+    if(daysRemaining < 0){
+
+        className = "expGray";
+
+    }else if(daysRemaining <= 2){
+
+        className = "expRed";
+
+    }else if(daysRemaining <= 7){
+
+        className = "expOrange";
+
+    }
+
+
+    let remainingText;
+
+
+    if(daysRemaining < 0){
+
+        remainingText =
+            "Expiré";
+
+    }else if(daysRemaining === 0){
+
+        remainingText =
+            "Expire aujourd'hui";
+
+    }else if(daysRemaining === 1){
+
+        remainingText =
+            "Il reste 1 jour";
+
+    }else{
+
+        remainingText =
+            "Il reste " +
+            daysRemaining +
+            " jours";
+
+    }
+
+
+    const expirationDate =
+        expiration.toLocaleDateString(
+            "fr-BE",
+            {
+                day:"2-digit",
+                month:"2-digit",
+                year:"numeric"
+            }
+        );
+
+
+    return (
+
+        '<div class="durationBox">' +
+
+            '<div class="durationText ' +
+                className +
+            '">' +
+
+                '⏳ ' +
+                escapeHtml(remainingText) +
+
+            '</div>' +
+
+            '<div class="expirationText">' +
+
+                'Durée : ' +
+                escapeHtml(String(account.duration)) +
+                ' jour(s) • Expiration : ' +
+                escapeHtml(expirationDate) +
+
+            '</div>' +
+
+            '<button ' +
+                'class="calendarButton" ' +
+                'onclick="addCalendarReminder(\'' +
+                escapeJs(account.id) +
+                '\')">' +
+
+                '📅 Rappel Google Calendar' +
+
+            '</button>' +
+
+        '</div>'
+
+    );
+
+}
+
+
+/* =========================================================
+   MOT DE PASSE SAUVEGARDE
+========================================================= */
+
+function toggleSavedPassword(button){
+
+    const area =
+        button.parentElement;
+
+    const passwordElement =
+        area.querySelector(".passwordValue");
+
+    if(!passwordElement){
+        return;
+    }
+
+
+    const password =
+        passwordElement.getAttribute(
+            "data-password"
+        );
+
+
+    const visible =
+        passwordElement.dataset.visible === "true";
+
+
+    if(visible){
+
+        passwordElement.textContent =
+            "••••••••";
+
+        passwordElement.dataset.visible =
+            "false";
+
+        button.textContent = "👁️";
+
+    }else{
+
+        passwordElement.textContent =
+            password;
+
+        passwordElement.dataset.visible =
+            "true";
+
+        button.textContent = "🙈";
+
+    }
+
+}
+
+
+/* =========================================================
+   COPIER
+========================================================= */
+
+function copyInputValue(id){
+
+    const input =
+        document.getElementById(id);
+
+    if(!input){
+        return;
+    }
+
+    copyText(
+        input.value,
+        null
+    );
+
+}
+
+
+function copySavedValue(button){
+
+    if(!button){
+        return;
+    }
+
+    const value =
+        button.getAttribute("data-copy") || "";
+
+    copyText(
+        value,
+        button
+    );
+
+}
+
+
+function copyText(text, button){
+
+    if(!text){
+
+        return;
+
+    }
+
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+            .writeText(text)
+            .then(function(){
+
+                copySuccess(button);
+
+            })
+            .catch(function(){
+
+                fallbackCopy(text, button);
+
+            });
+
+    }else{
+
+        fallbackCopy(text, button);
+
+    }
+
+}
+
+
+function fallbackCopy(text, button){
+
+    const textarea =
+        document.createElement("textarea");
+
+    textarea.value = text;
+
+    textarea.style.position = "fixed";
+
+    textarea.style.left = "-9999px";
+
+    document.body.appendChild(textarea);
+
+    textarea.focus();
+
+    textarea.select();
+
+
+    try{
+
+        document.execCommand("copy");
+
+        copySuccess(button);
+
+    }catch(error){
+
+        alert(
+            "Impossible de copier automatiquement. " +
+            "Vous pouvez sélectionner le texte manuellement."
+        );
+
+    }
+
+
+    document.body.removeChild(textarea);
+
+}
+
+
+function copySuccess(button){
+
+    if(!button){
+        return;
+    }
+
+    const old =
+        button.textContent;
+
+    button.textContent =
+        "✅";
+
+
+    setTimeout(function(){
+
+        button.textContent =
+            old;
+
+    },1000);
+
+}
+
+
+/* =========================================================
+   MOT DE PASSE FORMULAIRE
+========================================================= */
+
+function togglePassword(id, button){
+
+    const input =
+        document.getElementById(id);
+
+    if(!input){
+        return;
+    }
+
+
+    if(input.type === "password"){
+
+        input.type = "text";
+
+        button.textContent = "🙈";
+
+    }else{
+
+        input.type = "password";
+
+        button.textContent = "👁️";
+
+    }
+
+}
+
+
+/* =========================================================
+   PHOTO MODAL
+========================================================= */
+
+function openPhotoModal(src){
+
+    document
+        .getElementById("modalPhoto")
+        .src = src;
+
+    document
+        .getElementById("photoModal")
+        .classList.remove("hidden");
+
+}
+
+
+function closePhotoModal(event){
+
+    if(
+        event &&
+        event.target &&
+        event.target.id !== "photoModal"
+    ){
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("photoModal")
+        .classList.add("hidden");
+
+}
+
+
+/* =========================================================
+   GOOGLE CALENDAR
+========================================================= */
+
+function addCalendarReminder(id){
+
+    const account =
+        accounts.find(
+            item => item.id === id
+        );
+
+
+    if(!account){
+
+        return;
+
+    }
+
+
+    if(!account.duration || !account.startDate){
+
+        alert(
+            "Aucune durée disponible pour cet accès."
+        );
+
+        return;
+
+    }
+
+
+    const start =
+        new Date(account.startDate);
+
+
+    const expiration =
+        new Date(
+            start.getTime() +
+            Number(account.duration) *
+            24 *
+            60 *
+            60 *
+            1000
+        );
+
+
+    /*
+       Rappel exactement 2 jours avant expiration.
+    */
+
+    const reminder =
+        new Date(
+            expiration.getTime() -
+            2 *
+            24 *
+            60 *
+            60 *
+            1000
+        );
+
+
+    const formatCalendarDate =
+        function(date){
+
+            return date
+                .toISOString()
+                .replace(/[-:]/g,"")
+                .replace(/\.\d{3}/,"");
+
+        };
+
+
+    const dateStart =
+        formatCalendarDate(reminder);
+
+
+    const dateEnd =
+        formatCalendarDate(
+            new Date(
+                reminder.getTime() +
+                60 * 60 * 1000
+            )
+        );
+
+
+    const title =
+        encodeURIComponent(
+            "Expiration accès - " +
+            account.name
+        );
+
+
+    const details =
+        encodeURIComponent(
+            "L'accès de " +
+            account.name +
+            " expire le " +
+            expiration.toLocaleDateString("fr-BE")
+        );
+
+
+    const url =
+        "https://calendar.google.com/calendar/render" +
+        "?action=TEMPLATE" +
+        "&text=" + title +
+        "&dates=" + dateStart +
+        "/" + dateEnd +
+        "&details=" + details;
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/* =========================================================
+   SAUVEGARDE JSON
+========================================================= */
 
 function exportData(){
 
-const backup={
-
-version:1,
-
-date:
-new Date().toISOString(),
-
-data:data
-
-};
+    const data =
+        JSON.stringify(
+            accounts,
+            null,
+            2
+        );
 
 
-const blob=
-new Blob(
-[
-JSON.stringify(
-backup,
-null,
-2
-)
-],
-{
-type:"application/json"
-}
-);
+    const blob =
+        new Blob(
+            [data],
+            {
+                type:"application/json"
+            }
+        );
 
 
-const url=
-URL.createObjectURL(
-blob
-);
+    const url =
+        URL.createObjectURL(blob);
 
 
-const a=
-document.createElement("a");
+    const link =
+        document.createElement("a");
 
-a.href=url;
+    link.href = url;
 
-a.download=
-"mes-paiements-backup.json";
+    link.download =
+        "mes-acces-sauvegarde.json";
 
-a.click();
 
-URL.revokeObjectURL(
-url
-);
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
 
 }
 
 
-/* =========================
-   IMPORT
-========================= */
+/* =========================================================
+   RESTAURATION JSON
+========================================================= */
 
-document.getElementById(
-"importInput"
-).addEventListener(
-"change",
-function(){
+function importData(event){
 
-const file=
-this.files[0];
-
-if(!file)
-return;
+    const file =
+        event.target.files &&
+        event.target.files[0];
 
 
-const reader=
-new FileReader();
+    if(!file){
+        return;
+    }
 
 
-reader.onload=
-function(e){
-
-try{
-
-const backup=
-JSON.parse(
-e.target.result
-);
+    const reader =
+        new FileReader();
 
 
-if(
-backup.data &&
-Array.isArray(
-backup.data
-)
-){
+    reader.onload =
+        function(e){
 
-data=
-backup.data;
+            try{
 
-normalizeData();
-
-saveData();
-
-render();
-
-alert(
-"Importation réussie."
-);
-
-}else{
-
-alert(
-"Fichier de sauvegarde invalide."
-);
-
-}
-
-}catch(err){
-
-alert(
-"Impossible de lire la sauvegarde."
-);
-
-}
-
-};
+                const imported =
+                    JSON.parse(e.target.result);
 
 
-reader.readAsText(file);
+                if(!Array.isArray(imported)){
 
-}
-);
+                    throw new Error(
+                        "Format invalide"
+                    );
+
+                }
 
 
-/* =========================
-   SECURITE HTML
-========================= */
+                const confirmed =
+                    confirm(
+                        "La restauration va remplacer les accès actuellement enregistrés. Continuer ?"
+                    );
 
-function escapeHtml(
-value
-){
 
-return String(
-value ?? ""
-)
+                if(!confirmed){
+                    return;
+                }
 
-.replaceAll(
-"&",
-"&amp;"
-)
 
-.replaceAll(
-"<",
-"&lt;"
-)
+                accounts =
+                    imported;
 
-.replaceAll(
-">",
-"&gt;"
-)
 
-.replaceAll(
-'"',
-"&quot;"
-)
+                saveData();
 
-.replaceAll(
-"'",
-"&#039;"
-);
+                renderAccounts();
+
+
+                alert(
+                    "Sauvegarde restaurée avec succès."
+                );
+
+
+            }catch(error){
+
+                alert(
+                    "Impossible de restaurer cette sauvegarde."
+                );
+
+            }
+
+        };
+
+
+    reader.readAsText(file);
+
+
+    event.target.value = "";
 
 }
 
 
-function escapeJs(
-value
-){
+/* =========================================================
+   SECURITE AFFICHAGE
+========================================================= */
 
-return String(
-value ?? ""
-)
+function escapeHtml(value){
 
-.replaceAll(
-"\\",
-"\\\\"
-)
-
-.replaceAll(
-"'",
-"\\'"
-)
-
-.replaceAll(
-"\n",
-"\\n"
-)
-
-.replaceAll(
-"\r",
-"\\r"
-);
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 
-/* =========================
-   CALCULETTE
-========================= */
+function escapeAttribute(value){
 
-let calculatorValue="";
-
-
-function calcInput(
-value
-){
-
-calculatorValue+=value;
-
-document.getElementById(
-"calcDisplay"
-).value=
-calculatorValue;
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
 
 }
 
 
-function calcClear(){
+function escapeJs(value){
 
-calculatorValue="";
-
-document.getElementById(
-"calcDisplay"
-).value="";
-
-}
-
-
-function calcResult(){
-
-try{
-
-if(!calculatorValue)
-return;
-
-
-const safe=
-calculatorValue.replace(
-/[^0-9+\-*/().]/g,
-""
-);
-
-
-const result=
-Function(
-'"use strict";return ('+
-safe+
-')'
-)();
-
-
-if(
-typeof result!=="number" ||
-!isFinite(result)
-){
-
-throw new Error();
+    return String(value ?? "")
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/"/g,'\\"')
+        .replace(/\n/g,"\\n")
+        .replace(/\r/g,"\\r");
 
 }
 
 
-calculatorValue=
-String(
-Math.round(
-(result+
-Number.EPSILON)
-*100
-)/100
-);
+/* =========================================================
+   ACTUALISATION DU COMPTE A REBOURS
+========================================================= */
 
+setInterval(function(){
 
-document.getElementById(
-"calcDisplay"
-).value=
-calculatorValue;
+    if(
+        !document
+            .getElementById("app")
+            .classList.contains("hidden")
+    ){
 
+        renderAccounts();
 
-}catch(e){
+    }
 
-document.getElementById(
-"calcDisplay"
-).value=
-"Erreur";
-
-calculatorValue="";
-
-}
-
-}
-
-
-/* =========================
-   MODALES
-========================= */
-
-document.getElementById(
-"editModal"
-).addEventListener(
-"click",
-function(e){
-
-if(e.target===this)
-closeEdit();
-
-}
-);
-
-
-document.getElementById(
-"manualModal"
-).addEventListener(
-"click",
-function(e){
-
-if(e.target===this)
-closeManual();
-
-}
-);
-
-
-document.getElementById(
-"photoModal"
-).addEventListener(
-"click",
-function(e){
-
-if(e.target===this)
-closePhoto();
-
-}
-);
-
-
-/* =========================
-   ENTREE PIN
-========================= */
-
-document.getElementById(
-"pinInput"
-).addEventListener(
-"keydown",
-function(e){
-
-if(e.key==="Enter")
-checkPin();
-
-}
-);
+},60000);
 
 </script>
 
