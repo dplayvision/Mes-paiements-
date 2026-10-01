@@ -7,302 +7,251 @@
 <title>Mes accès</title>
 
 <style>
+
 *{
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 body{
     margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
     background:#f2f2f7;
     color:#111;
 }
 
-button,
-input{
-    font-family:inherit;
+header{
+    background:#007aff;
+    color:white;
+    padding:18px 15px 16px;
+    text-align:center;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+header h1{
+    margin:0 0 10px;
+    font-size:25px;
+}
+
+.userCount{
+    font-size:32px;
+    font-weight:900;
+    line-height:1.15;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    padding:15px;
+}
+
+.card,
+.account{
+    background:white;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+input,
+textarea{
+    width:100%;
+    border:1px solid #d1d1d6;
+    border-radius:10px;
+    padding:12px;
+    font-size:16px;
+    background:#fff;
+    margin-top:6px;
+}
+
+textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+label{
+    display:block;
+    font-weight:600;
+    margin-top:12px;
 }
 
 button{
+    border:0;
+    border-radius:10px;
+    padding:11px 14px;
+    font-size:15px;
+    font-weight:600;
     cursor:pointer;
+}
+
+.primary{
+    background:#007aff;
+    color:white;
+    width:100%;
+    margin-top:15px;
+}
+
+.secondary{
+    background:#e5e5ea;
+    color:#111;
+}
+
+.danger{
+    background:#ff3b30;
+    color:white;
+}
+
+.copyBtn{
+    background:#e5e5ea;
+    color:#111;
+    padding:8px 10px;
+    font-size:13px;
+    margin-left:6px;
+    white-space:nowrap;
+    min-width:44px;
+}
+
+.fieldRow{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.fieldRow input,
+.fieldRow textarea{
+    flex:1;
+}
+
+.copyArea{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:6px;
+}
+
+.copyArea input,
+.copyArea textarea{
+    flex:1;
+    margin-top:0;
+    min-width:0;
+}
+
+.copyValue{
+    user-select:text;
+    -webkit-user-select:text;
+    cursor:text;
+}
+
+.urlLink{
+    display:block;
+    flex:1;
+    min-width:0;
+    color:#007aff;
+    text-decoration:underline;
+    word-break:break-all;
+    padding:12px 4px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.urlLink:active{
+    opacity:.6;
 }
 
 .hidden{
     display:none !important;
 }
 
-/* =========================
-   CONNEXION
-========================= */
-
-#loginScreen{
-    min-height:100vh;
+.checkRow{
     display:flex;
     align-items:center;
-    justify-content:center;
-    padding:20px;
+    gap:10px;
+    margin-top:15px;
+}
+
+.checkRow input{
+    width:auto;
+    margin:0;
+}
+
+.countdown{
+    margin:12px 0;
+    padding:14px;
+    border-radius:12px;
+    font-weight:800;
+    text-align:center;
+    font-size:17px;
+}
+
+.countdown.ok{
+    background:#e8f8ed;
+    color:#16803c;
+}
+
+.countdown.warning{
+    background:#fff3cd;
+    color:#9a6700;
+}
+
+.countdown.danger{
+    background:#ffe5e5;
+    color:#c62828;
+}
+
+.countdown.expired{
+    background:#e5e5ea;
+    color:#555;
+}
+
+.countdown.none{
     background:#f2f2f7;
+    color:#777;
+}
+
+.login{
+    position:fixed;
+    inset:0;
+    background:#f2f2f7;
+    z-index:100;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
 }
 
 .loginBox{
-    width:100%;
-    max-width:380px;
     background:white;
-    border-radius:22px;
-    padding:30px 24px;
-    box-shadow:0 8px 30px rgba(0,0,0,.12);
+    width:100%;
+    max-width:360px;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 5px 25px rgba(0,0,0,.15);
     text-align:center;
 }
 
 .loginBox h1{
-    margin:0 0 10px;
-    font-size:28px;
-}
-
-.loginBox p{
-    color:#666;
-    margin-bottom:22px;
-}
-
-#pinInput{
-    width:100%;
-    padding:16px;
-    border:1px solid #ddd;
-    border-radius:14px;
-    font-size:22px;
-    text-align:center;
-    letter-spacing:8px;
-}
-
-.loginButton{
-    width:100%;
-    margin-top:15px;
-    padding:15px;
-    border:0;
-    border-radius:14px;
-    background:#007aff;
-    color:white;
-    font-size:17px;
-    font-weight:600;
+    margin-top:0;
 }
 
 .loginError{
     color:#ff3b30;
-    margin-top:12px;
-    min-height:20px;
-}
-
-/* =========================
-   APPLICATION
-========================= */
-
-#app{
-    min-height:100vh;
-}
-
-.header{
-    position:sticky;
-    top:0;
-    z-index:50;
-    background:#007aff;
-    color:white;
-    padding:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-
-.headerTop{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-}
-
-.header h1{
-    margin:0;
-    font-size:23px;
-}
-
-.userCount{
-    background:rgba(255,255,255,.2);
-    padding:7px 11px;
-    border-radius:20px;
-    font-size:14px;
-    white-space:nowrap;
-}
-
-.container{
-    width:100%;
-    max-width:850px;
-    margin:auto;
-    padding:15px;
-}
-
-/* =========================
-   BARRE ACTIONS
-========================= */
-
-.topActions{
-    display:flex;
-    gap:8px;
-    margin-bottom:12px;
-}
-
-.topActions button{
-    flex:1;
-}
-
-.primaryButton{
-    background:#007aff;
-    color:white;
-    border:0;
-    border-radius:12px;
-    padding:13px 10px;
-    font-size:15px;
     font-weight:600;
-}
-
-.secondaryButton{
-    background:white;
-    color:#007aff;
-    border:1px solid #007aff;
-    border-radius:12px;
-    padding:13px 10px;
-    font-size:15px;
-    font-weight:600;
-}
-
-.dangerButton{
-    background:#ff3b30;
-    color:white;
-    border:0;
-    border-radius:12px;
-    padding:13px 10px;
-    font-size:15px;
-    font-weight:600;
-}
-
-.searchBox{
-    width:100%;
-    padding:14px 15px;
-    border:1px solid #ddd;
-    border-radius:13px;
-    background:white;
-    font-size:16px;
-    margin-bottom:15px;
-}
-
-/* =========================
-   FORMULAIRE
-========================= */
-
-.formCard{
-    background:white;
-    border-radius:18px;
-    padding:18px;
-    margin-bottom:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-.formCard h2{
-    margin:0 0 15px;
-    font-size:20px;
-}
-
-.formGroup{
-    margin-bottom:14px;
-}
-
-.formGroup label{
-    display:block;
-    font-size:14px;
-    font-weight:600;
-    margin-bottom:6px;
-    color:#444;
-}
-
-.inputCopy{
-    display:flex;
-    gap:7px;
-}
-
-.inputCopy input{
-    flex:1;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="number"],
-input[type="date"],
-input[type="url"],
-input[type="search"]{
-    width:100%;
-    padding:13px;
-    border:1px solid #d5d5d5;
-    border-radius:11px;
-    font-size:16px;
-    background:white;
-}
-
-.copyBtn{
-    flex:0 0 45px;
-    border:0;
-    border-radius:10px;
-    background:#e9f2ff;
-    color:#007aff;
-    font-size:19px;
-    min-width:45px;
-}
-
-.passwordArea{
-    display:flex;
-    gap:7px;
-}
-
-.passwordArea input{
-    flex:1;
-}
-
-.showPasswordBtn{
-    flex:0 0 45px;
-    border:0;
-    border-radius:10px;
-    background:#f0f0f0;
-    font-size:18px;
-}
-
-.checkboxRow{
-    display:flex;
-    align-items:center;
-    gap:9px;
-    margin:15px 0;
-}
-
-.checkboxRow input{
-    width:20px;
-    height:20px;
-}
-
-.applicationBox{
-    background:#f5f8ff;
-    border:1px solid #dce9ff;
-    border-radius:14px;
-    padding:15px;
     margin-top:10px;
 }
 
-.applicationBox h3{
-    margin:0 0 14px;
-    color:#007aff;
-    font-size:17px;
-}
-
-.photoButtons{
+.topButtons{
     display:flex;
     gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
 }
 
-.photoButtons button{
+.topButtons button{
     flex:1;
+    min-width:130px;
 }
 
 .photoPreview{
@@ -311,834 +260,690 @@ input[type="search"]{
     object-fit:contain;
     border-radius:12px;
     margin-top:10px;
-    background:#eee;
+    background:#f2f2f7;
 }
-
-.formButtons{
-    display:flex;
-    gap:8px;
-    margin-top:18px;
-}
-
-.formButtons button{
-    flex:1;
-}
-
-/* =========================
-   COMPTES
-========================= */
-
-.accountCard{
-    background:white;
-    border-radius:18px;
-    padding:17px;
-    margin-bottom:14px;
-    box-shadow:0 2px 8px rgba(0,0,0,.07);
-}
-
-.accountHeader{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:14px;
-}
-
-.accountName{
-    font-size:19px;
-    font-weight:700;
-    word-break:break-word;
-}
-
-.accountActions{
-    display:flex;
-    gap:6px;
-    flex-shrink:0;
-}
-
-.iconButton{
-    width:40px;
-    height:40px;
-    border:0;
-    border-radius:10px;
-    background:#f0f0f0;
-    font-size:18px;
-}
-
-.iconButton.edit{
-    color:#007aff;
-}
-
-.iconButton.delete{
-    color:#ff3b30;
-}
-
-.accountLine{
-    margin-bottom:11px;
-}
-
-.accountLabel{
-    font-size:12px;
-    font-weight:600;
-    color:#777;
-    margin-bottom:4px;
-    text-transform:uppercase;
-}
-
-.copyArea{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    min-width:0;
-}
-
-.valueText{
-    flex:1;
-    min-width:0;
-    word-break:break-word;
-    background:#f7f7f7;
-    border-radius:9px;
-    padding:10px;
-    font-size:15px;
-}
-
-.urlLink{
-    flex:1;
-    min-width:0;
-    color:#007aff;
-    text-decoration:underline;
-    word-break:break-all;
-    background:#f7f7f7;
-    border-radius:9px;
-    padding:10px;
-    display:block;
-}
-
-.passwordValue{
-    font-family:monospace;
-}
-
-.remarque{
-    white-space:pre-wrap;
-}
-
-.applicationSaved{
-    margin-top:15px;
-    background:#f5f8ff;
-    border-radius:13px;
-    padding:13px;
-}
-
-.applicationSaved h3{
-    color:#007aff;
-    font-size:16px;
-    margin:0 0 12px;
-}
-
-.photoSaved{
-    width:100%;
-    max-height:300px;
-    object-fit:contain;
-    border-radius:12px;
-    margin-top:10px;
-    background:#eee;
-}
-
-/* =========================
-   DUREE
-========================= */
-
-.durationBox{
-    margin-top:14px;
-    padding-top:13px;
-    border-top:1px solid #eee;
-}
-
-.durationText{
-    font-size:14px;
-    font-weight:600;
-}
-
-.expirationText{
-    font-size:14px;
-    margin-top:4px;
-}
-
-.expGreen{
-    color:#34c759;
-}
-
-.expOrange{
-    color:#ff9500;
-}
-
-.expRed{
-    color:#ff3b30;
-}
-
-.expGray{
-    color:#777;
-}
-
-/* =========================
-   BOUTON CALENDRIER
-========================= */
-
-.calendarButton{
-    width:100%;
-    margin-top:10px;
-    padding:11px;
-    border:0;
-    border-radius:10px;
-    background:#34c759;
-    color:white;
-    font-weight:600;
-    font-size:14px;
-}
-
-/* =========================
-   EMPTY
-========================= */
 
 .empty{
     text-align:center;
-    padding:45px 15px;
     color:#777;
+    padding:30px 10px;
 }
 
-.emptyIcon{
-    font-size:45px;
-    margin-bottom:10px;
+hr{
+    border:0;
+    border-top:1px solid #e5e5ea;
+    margin:18px 0;
 }
 
-/* =========================
-   MODAL PHOTO
-========================= */
+.account h2{
+    margin:0 0 12px;
+    font-size:20px;
+}
 
-.modal{
+.accountLine{
+    margin:12px 0;
+    word-break:break-word;
+}
+
+.accountLabel{
+    font-size:13px;
+    color:#666;
+    font-weight:600;
+}
+
+.accountValue{
+    margin-top:4px;
+}
+
+.durationBox{
+    background:#f2f2f7;
+    border-radius:14px;
+    padding:14px;
+    margin-top:12px;
+}
+
+.durationBoxTitle{
+    font-weight:800;
+    font-size:16px;
+    margin-bottom:8px;
+}
+
+.durationRow{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.durationRow input{
+    margin:0;
+    flex:1;
+}
+
+.durationUnit{
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.dateInfo{
+    margin-top:8px;
+    font-size:14px;
+    color:#555;
+}
+
+.calendarBox{
+    margin-top:10px;
+    padding:12px;
+    border-radius:12px;
+    background:#eef6ff;
+    color:#075ca8;
+}
+
+.calendarButton{
+    background:#007aff;
+    color:white;
+    width:100%;
+    margin-top:8px;
+}
+
+.photoButtons{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+}
+
+.photoButtons button{
+    flex:1;
+}
+
+.photoButtonText{
+    display:block;
+    margin-top:8px;
+    color:#666;
+    font-size:14px;
+}
+
+.copyModal{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.65);
-    z-index:100;
+    background:rgba(0,0,0,.55);
+    z-index:200;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:20px;
 }
 
-.modalBox{
+.copyModalBox{
+    width:100%;
+    max-width:500px;
     background:white;
-    width:100%;
-    max-width:600px;
     border-radius:18px;
-    padding:15px;
-    max-height:90vh;
-    overflow:auto;
+    padding:20px;
+    box-shadow:0 5px 30px rgba(0,0,0,.25);
 }
 
-.modalBox img{
-    width:100%;
-    max-height:70vh;
-    object-fit:contain;
-    border-radius:12px;
+.copyModalBox h2{
+    margin-top:0;
 }
 
-.modalClose{
+.copyInstruction{
+    color:#555;
+    line-height:1.4;
+    margin-bottom:12px;
+}
+
+.copyFallback{
     width:100%;
+    font-size:18px;
+    padding:14px;
+    margin:0;
+    border:2px solid #007aff;
+    border-radius:10px;
+    user-select:text;
+    -webkit-user-select:text;
+}
+
+.modalButtons{
+    display:flex;
+    gap:8px;
     margin-top:12px;
-    padding:13px;
-    border:0;
-    border-radius:11px;
-    background:#007aff;
-    color:white;
-    font-size:16px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:500px){
-    .topActions{
-        flex-wrap:wrap;
-    }
-
-    .topActions button{
-        min-width:calc(50% - 4px);
-    }
-
-    .accountHeader{
-        align-items:flex-start;
-    }
+.modalButtons button{
+    flex:1;
 }
+
+.actions{
+    display:flex;
+    gap:8px;
+    margin-top:15px;
+}
+
+.actions button{
+    flex:1;
+}
+
+.applicationFieldTitle{
+    margin-top:14px;
+    font-weight:700;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     ECRAN PIN
-========================= -->
-
-<div id="loginScreen">
+<div class="login" id="loginScreen">
 
     <div class="loginBox">
 
         <h1>🔐 Mes accès</h1>
 
-        <p>Entrez votre code PIN pour accéder à vos informations.</p>
+        <p>Entrez votre code PIN</p>
 
         <input
-            id="pinInput"
             type="password"
+            id="pinInput"
             inputmode="numeric"
             maxlength="4"
-            placeholder="••••"
+            placeholder="PIN"
             autocomplete="off"
         >
 
-        <button class="loginButton" onclick="login()">
-            Ouvrir
+        <button
+            class="primary"
+            onclick="login()"
+        >
+            Se connecter
         </button>
 
-        <div id="loginError" class="loginError"></div>
+        <div
+            id="loginError"
+            class="loginError hidden"
+        >
+            Code incorrect
+        </div>
 
     </div>
 
 </div>
 
 
-<!-- =========================
-     APPLICATION
-========================= -->
+<header>
 
-<div id="app" class="hidden">
+    <h1>🔐 Mes accès</h1>
 
-    <header class="header">
+    <div
+        class="userCount"
+        id="userCount"
+    >
+        👥 0 utilisateurs
+    </div>
 
-        <div class="headerTop">
+</header>
 
-            <h1>🔐 Mes accès</h1>
 
-            <div class="userCount" id="userCount">
-                0 accès
+<div class="container">
+
+    <div class="topButtons">
+
+        <button
+            class="secondary"
+            onclick="showAddForm()"
+        >
+            ➕ Ajouter
+        </button>
+
+        <button
+            class="secondary"
+            onclick="exportData()"
+        >
+            💾 Sauvegarder
+        </button>
+
+        <button
+            class="secondary"
+            onclick="document.getElementById('importFile').click()"
+        >
+            📂 Restaurer
+        </button>
+
+        <input
+            type="file"
+            id="importFile"
+            accept=".json,application/json"
+            class="hidden"
+            onchange="importData(event)"
+        >
+
+    </div>
+
+
+    <input
+        id="searchInput"
+        placeholder="🔎 Rechercher un utilisateur..."
+        oninput="renderAccounts()"
+    >
+
+
+    <div
+        class="card hidden"
+        id="formCard"
+    >
+
+        <h2 id="formTitle">
+            ➕ Nouvel accès
+        </h2>
+
+
+        <label>Nom / Prénom</label>
+
+        <input
+            id="name"
+            placeholder="Exemple : Jean Dupont"
+        >
+
+
+        <label>Utilisateur</label>
+
+        <div class="fieldRow">
+
+            <input
+                id="username"
+                placeholder="Utilisateur"
+            >
+
+            <button
+                class="copyBtn"
+                onclick="copyField('username',this)"
+            >
+                📋 Copier
+            </button>
+
+        </div>
+
+
+        <label>Mot de passe</label>
+
+        <div class="fieldRow">
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Mot de passe"
+            >
+
+            <button
+                class="copyBtn"
+                onclick="togglePassword()"
+            >
+                👁️
+            </button>
+
+            <button
+                class="copyBtn"
+                onclick="copyField('password',this)"
+            >
+                📋 Copier
+            </button>
+
+        </div>
+
+
+        <label>URL 1</label>
+
+        <div class="fieldRow">
+
+            <input
+                id="url1"
+                placeholder="https://..."
+            >
+
+            <button
+                class="copyBtn"
+                onclick="copyField('url1',this)"
+            >
+                📋 Copier
+            </button>
+
+        </div>
+
+
+        <label>URL 2</label>
+
+        <div class="fieldRow">
+
+            <input
+                id="url2"
+                placeholder="https://..."
+            >
+
+            <button
+                class="copyBtn"
+                onclick="copyField('url2',this)"
+            >
+                📋 Copier
+            </button>
+
+        </div>
+
+
+        <label>Remarque</label>
+
+        <textarea
+            id="remark"
+            placeholder="Remarque..."
+        ></textarea>
+
+
+        <hr>
+
+
+        <div class="durationBox">
+
+            <div class="durationBoxTitle">
+                ⏳ Durée de l'accès
+            </div>
+
+            <div class="durationRow">
+
+                <input
+                    id="duration"
+                    type="number"
+                    min="1"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="Exemple : 365"
+                >
+
+                <span class="durationUnit">
+                    jours
+                </span>
+
+            </div>
+
+            <div
+                class="dateInfo"
+                id="startDateInfo"
+            >
+                📅 La date de début sera enregistrée à l'ajout.
+            </div>
+
+            <div
+                class="dateInfo"
+                id="expiryPreview"
+            >
+                📅 La date d'expiration sera calculée automatiquement.
             </div>
 
         </div>
 
-    </header>
 
-
-    <main class="container">
-
-        <div class="topActions">
-
-            <button
-                class="primaryButton"
-                onclick="showForm()"
-            >
-                ➕ Ajouter
-            </button>
-
-            <button
-                class="secondaryButton"
-                onclick="exportData()"
-            >
-                💾 Sauvegarde
-            </button>
-
-            <button
-                class="secondaryButton"
-                onclick="document.getElementById('importFile').click()"
-            >
-                📂 Restaurer
-            </button>
+        <div class="checkRow">
 
             <input
-                id="importFile"
-                type="file"
-                accept=".json,application/json"
-                style="display:none"
-                onchange="importData(event)"
+                type="checkbox"
+                id="isApplication"
+                onchange="toggleApplicationFields()"
             >
+
+            <label
+                for="isApplication"
+                style="margin:0;"
+            >
+                📱 Application
+            </label>
+
+        </div>
+
+
+        <div
+            id="applicationFields"
+            class="hidden"
+        >
+
+            <label>URL de l'application</label>
+
+            <div class="fieldRow">
+
+                <input
+                    id="appUrl1"
+                    placeholder="https://..."
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('appUrl1',this)"
+                >
+                    📋 Copier
+                </button>
+
+            </div>
+
+
+            <div class="applicationFieldTitle">
+                MAC 1
+            </div>
+
+            <div class="fieldRow">
+
+                <input
+                    id="mac"
+                    placeholder="MAC 1"
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('mac',this)"
+                >
+                    📋 Copier
+                </button>
+
+            </div>
+
+
+            <div class="applicationFieldTitle">
+                MAC 2
+            </div>
+
+            <div class="fieldRow">
+
+                <input
+                    id="mac2"
+                    placeholder="MAC 2"
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('mac2',this)"
+                >
+                    📋 Copier
+                </button>
+
+            </div>
+
+
+            <div class="applicationFieldTitle">
+                Clé 1
+            </div>
+
+            <div class="fieldRow">
+
+                <input
+                    id="appKey"
+                    placeholder="Clé 1"
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('appKey',this)"
+                >
+                    📋 Copier
+                </button>
+
+            </div>
+
+
+            <div class="applicationFieldTitle">
+                Clé 2
+            </div>
+
+            <div class="fieldRow">
+
+                <input
+                    id="appKey2"
+                    placeholder="Clé 2"
+                >
+
+                <button
+                    class="copyBtn"
+                    onclick="copyField('appKey2',this)"
+                >
+                    📋 Copier
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+        <label>📷 Photo</label>
+
+
+        <div class="photoButtons">
+
+            <button
+                type="button"
+                class="secondary"
+                onclick="choosePhoto()"
+            >
+                🖼️ Choisir dans les Photos
+            </button>
+
+            <button
+                type="button"
+                class="secondary"
+                onclick="takePhoto()"
+            >
+                📷 Prendre une photo
+            </button>
 
         </div>
 
 
         <input
-            id="searchInput"
-            class="searchBox"
-            type="search"
-            placeholder="🔎 Rechercher un accès..."
-            oninput="renderAccounts()"
+            type="file"
+            id="photoLibraryInput"
+            accept="image/*"
+            class="hidden"
+            onchange="handlePhoto(event)"
         >
 
+        <input
+            type="file"
+            id="cameraInput"
+            accept="image/*"
+            capture="environment"
+            class="hidden"
+            onchange="handlePhoto(event)"
+        >
 
-        <!-- =========================
-             FORMULAIRE
-        ========================= -->
-
-        <div id="formCard" class="formCard hidden">
-
-            <h2 id="formTitle">
-                Ajouter un accès
-            </h2>
-
-
-            <div class="formGroup">
-
-                <label>
-                    Nom / Prénom
-                </label>
-
-                <input
-                    id="nameInput"
-                    type="text"
-                    placeholder="Nom et prénom"
-                    autocomplete="off"
-                >
-
-            </div>
+        <span class="photoButtonText">
+            Choisis une photo existante ou prends-en une nouvelle.
+        </span>
 
 
-            <div class="formGroup">
+        <div
+            id="photoContainer"
+            class="hidden"
+        >
 
-                <label>
-                    Utilisateur
-                </label>
-
-                <div class="inputCopy">
-
-                    <input
-                        id="usernameInput"
-                        type="text"
-                        placeholder="Nom d'utilisateur"
-                        autocomplete="off"
-                    >
-
-                    <button
-                        class="copyBtn"
-                        onclick="copyInputValue('usernameInput')"
-                    >
-                        📋
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="formGroup">
-
-                <label>
-                    Mot de passe
-                </label>
-
-                <div class="passwordArea">
-
-                    <input
-                        id="passwordInput"
-                        type="password"
-                        placeholder="Mot de passe"
-                        autocomplete="new-password"
-                    >
-
-                    <button
-                        class="showPasswordBtn"
-                        onclick="togglePassword('passwordInput', this)"
-                    >
-                        👁️
-                    </button>
-
-                    <button
-                        class="copyBtn"
-                        onclick="copyInputValue('passwordInput')"
-                    >
-                        📋
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="formGroup">
-
-                <label>
-                    URL 1
-                </label>
-
-                <div class="inputCopy">
-
-                    <input
-                        id="url1Input"
-                        type="url"
-                        placeholder="https://..."
-                        autocomplete="off"
-                    >
-
-                    <button
-                        class="copyBtn"
-                        onclick="copyInputValue('url1Input')"
-                    >
-                        📋
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="formGroup">
-
-                <label>
-                    URL 2
-                </label>
-
-                <div class="inputCopy">
-
-                    <input
-                        id="url2Input"
-                        type="url"
-                        placeholder="https://..."
-                        autocomplete="off"
-                    >
-
-                    <button
-                        class="copyBtn"
-                        onclick="copyInputValue('url2Input')"
-                    >
-                        📋
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="formGroup">
-
-                <label>
-                    Remarque
-                </label>
-
-                <div class="inputCopy">
-
-                    <input
-                        id="noteInput"
-                        type="text"
-                        placeholder="Remarque"
-                    >
-
-                    <button
-                        class="copyBtn"
-                        onclick="copyInputValue('noteInput')"
-                    >
-                        📋
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- APPLICATION -->
-
-            <div class="checkboxRow">
-
-                <input
-                    id="applicationCheck"
-                    type="checkbox"
-                    onchange="toggleApplicationFields()"
-                >
-
-                <label for="applicationCheck">
-                    Ajouter les informations de l'application
-                </label>
-
-            </div>
-
-
-            <div
-                id="applicationBox"
-                class="applicationBox hidden"
+            <img
+                id="photoPreview"
+                class="photoPreview"
             >
 
-                <h3>
-                    📱 Informations application
-                </h3>
-
-
-                <div class="formGroup">
-
-                    <label>
-                        URL application
-                    </label>
-
-                    <div class="inputCopy">
-
-                        <input
-                            id="appUrlInput"
-                            type="url"
-                            placeholder="https://..."
-                        >
-
-                        <button
-                            class="copyBtn"
-                            onclick="copyInputValue('appUrlInput')"
-                        >
-                            📋
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="formGroup">
-
-                    <label>
-                        MAC 1
-                    </label>
-
-                    <div class="inputCopy">
-
-                        <input
-                            id="mac1Input"
-                            type="text"
-                            placeholder="MAC 1"
-                        >
-
-                        <button
-                            class="copyBtn"
-                            onclick="copyInputValue('mac1Input')"
-                        >
-                            📋
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="formGroup">
-
-                    <label>
-                        Clé 1
-                    </label>
-
-                    <div class="inputCopy">
-
-                        <input
-                            id="key1Input"
-                            type="text"
-                            placeholder="Clé 1"
-                        >
-
-                        <button
-                            class="copyBtn"
-                            onclick="copyInputValue('key1Input')"
-                        >
-                            📋
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="formGroup">
-
-                    <label>
-                        MAC 2
-                    </label>
-
-                    <div class="inputCopy">
-
-                        <input
-                            id="mac2Input"
-                            type="text"
-                            placeholder="MAC 2"
-                        >
-
-                        <button
-                            class="copyBtn"
-                            onclick="copyInputValue('mac2Input')"
-                        >
-                            📋
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="formGroup">
-
-                    <label>
-                        Clé 2
-                    </label>
-
-                    <div class="inputCopy">
-
-                        <input
-                            id="key2Input"
-                            type="text"
-                            placeholder="Clé 2"
-                        >
-
-                        <button
-                            class="copyBtn"
-                            onclick="copyInputValue('key2Input')"
-                        >
-                            📋
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- PHOTO -->
-
-            <div class="formGroup">
-
-                <label>
-                    📷 Photo du document
-                </label>
-
-                <div class="photoButtons">
-
-                    <button
-                        type="button"
-                        class="secondaryButton"
-                        onclick="document.getElementById('photoGallery').click()"
-                    >
-                        🖼️ Mes photos
-                    </button>
-
-                    <button
-                        type="button"
-                        class="secondaryButton"
-                        onclick="document.getElementById('photoCamera').click()"
-                    >
-                        📷 Prendre une photo
-                    </button>
-
-                </div>
-
-
-                <input
-                    id="photoGallery"
-                    type="file"
-                    accept="image/*"
-                    style="display:none"
-                    onchange="handlePhoto(event)"
-                >
-
-                <input
-                    id="photoCamera"
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    style="display:none"
-                    onchange="handlePhoto(event)"
-                >
-
-
-                <img
-                    id="photoPreview"
-                    class="photoPreview hidden"
-                    alt="Aperçu"
-                >
-
-                <button
-                    id="deletePhotoBtn"
-                    type="button"
-                    class="dangerButton hidden"
-                    style="margin-top:8px;width:100%;"
-                    onclick="deletePhoto()"
-                >
-                    🗑️ Supprimer la photo
-                </button>
-
-            </div>
-
-
-            <!-- DUREE -->
-
-            <div class="formGroup">
-
-                <label>
-                    Durée en jours
-                </label>
-
-                <input
-                    id="durationInput"
-                    type="number"
-                    min="1"
-                    placeholder="Exemple : 30"
-                >
-
-            </div>
-
-
-            <div class="formButtons">
-
-                <button
-                    class="primaryButton"
-                    onclick="saveAccount()"
-                >
-                    💾 Enregistrer
-                </button>
-
-                <button
-                    class="secondaryButton"
-                    onclick="cancelForm()"
-                >
-                    Annuler
-                </button>
-
-            </div>
+            <button
+                class="danger"
+                style="width:100%;margin-top:8px;"
+                onclick="removePhoto()"
+            >
+                🗑️ Supprimer la photo
+            </button>
 
         </div>
 
 
-        <!-- LISTE -->
+        <button
+            class="primary"
+            onclick="saveAccount()"
+        >
+            💾 Enregistrer
+        </button>
 
-        <div id="accountsList"></div>
 
-    </main>
+        <button
+            class="secondary"
+            style="width:100%;margin-top:8px;"
+            onclick="cancelForm()"
+        >
+            Annuler
+        </button>
+
+    </div>
+
+
+    <div id="accountsList"></div>
 
 </div>
 
 
-<!-- =========================
-     MODAL PHOTO
-========================= -->
-
 <div
-    id="photoModal"
-    class="modal hidden"
-    onclick="closePhotoModal(event)"
+    id="copyModal"
+    class="copyModal hidden"
 >
 
-    <div class="modalBox">
+    <div class="copyModalBox">
 
-        <img
-            id="modalPhoto"
-            src=""
-            alt="Photo"
+        <h2>📋 Copier</h2>
+
+        <div class="copyInstruction">
+            La copie automatique n'a pas été autorisée par l'iPhone.
+            <br><br>
+            Le texte est sélectionné ci-dessous.
+            <br>
+            Fais un appui long dessus puis choisis
+            <b>Copier</b>.
+        </div>
+
+        <input
+            id="copyFallback"
+            class="copyFallback"
+            readonly
+            onclick="selectFallback()"
         >
 
-        <button
-            class="modalClose"
-            onclick="closePhotoModal()"
-        >
-            Fermer
-        </button>
+        <div class="modalButtons">
+
+            <button
+                class="primary"
+                style="margin:0;"
+                onclick="selectFallback()"
+            >
+                📋 Sélectionner le texte
+            </button>
+
+            <button
+                class="secondary"
+                onclick="closeCopyModal()"
+            >
+                Fermer
+            </button>
+
+        </div>
 
     </div>
 
@@ -1147,83 +952,17 @@ input[type="search"]{
 
 <script>
 
-/* =========================================================
-   CONFIGURATION
-========================================================= */
-
 const PIN = "1157";
-
 const STORAGE_KEY = "mesAcces";
 
 let accounts = [];
-
-let editingId = null;
-
+let editIndex = -1;
 let currentPhoto = "";
 
 
-/* =========================================================
-   INITIALISATION
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    loadData();
-
-    document
-        .getElementById("pinInput")
-        .addEventListener("keydown", function(event){
-
-            if(event.key === "Enter"){
-                login();
-            }
-
-        });
-
-});
-
-
-/* =========================================================
-   CONNEXION
-========================================================= */
-
-function login(){
-
-    const pin =
-        document.getElementById("pinInput").value;
-
-    const error =
-        document.getElementById("loginError");
-
-    if(pin === PIN){
-
-        document
-            .getElementById("loginScreen")
-            .classList.add("hidden");
-
-        document
-            .getElementById("app")
-            .classList.remove("hidden");
-
-        renderAccounts();
-
-    }else{
-
-        error.textContent =
-            "Code PIN incorrect.";
-
-        document
-            .getElementById("pinInput")
-            .value = "";
-
-    }
-
-}
-
-
-/* =========================================================
-   DONNEES
-========================================================= */
+/* =========================
+   CHARGEMENT
+========================= */
 
 function loadData(){
 
@@ -1234,90 +973,223 @@ function loadData(){
 
         if(saved){
 
-            const parsed =
+            const data =
                 JSON.parse(saved);
 
-            if(Array.isArray(parsed)){
+            accounts =
+                Array.isArray(data)
+                    ? data
+                    : [];
 
-                accounts = parsed;
+        }else{
 
-            }else{
-
-                accounts = [];
-
-            }
+            accounts = [];
 
         }
 
     }catch(error){
 
         console.error(error);
-
         accounts = [];
 
     }
 
     updateUserCount();
+    renderAccounts();
 
 }
 
+
+/* =========================
+   SAUVEGARDE
+========================= */
 
 function saveData(){
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(accounts)
-    );
+    try{
 
-    updateUserCount();
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(accounts)
+        );
+
+    }catch(error){
+
+        alert(
+            "Impossible de sauvegarder les données."
+        );
+
+    }
 
 }
 
 
-/* =========================================================
+/* =========================
+   LOGIN
+========================= */
+
+function login(){
+
+    const pin =
+        document.getElementById(
+            "pinInput"
+        ).value;
+
+    if(pin === PIN){
+
+        document
+            .getElementById("loginScreen")
+            .classList
+            .add("hidden");
+
+        document
+            .getElementById("loginError")
+            .classList
+            .add("hidden");
+
+        loadData();
+
+    }else{
+
+        document
+            .getElementById("loginError")
+            .classList
+            .remove("hidden");
+
+        document
+            .getElementById("pinInput")
+            .value = "";
+
+        document
+            .getElementById("pinInput")
+            .focus();
+
+    }
+
+}
+
+
+document
+    .getElementById("pinInput")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === "Enter"){
+                login();
+            }
+
+        }
+    );
+
+
+/* =========================
    COMPTEUR
-========================================================= */
+========================= */
 
 function updateUserCount(){
 
-    const element =
-        document.getElementById("userCount");
+    const count =
+        accounts.length;
 
-    if(!element){
-        return;
-    }
-
-    const count = accounts.length;
-
-    element.textContent =
-        count +
-        (count > 1 ? " accès" : " accès");
+    document
+        .getElementById("userCount")
+        .textContent =
+            "👥 " +
+            count +
+            " utilisateur" +
+            (
+                count > 1
+                    ? "s"
+                    : ""
+            );
 
 }
 
 
-/* =========================================================
+/* =========================
    FORMULAIRE
-========================================================= */
+========================= */
 
-function showForm(){
+function showAddForm(){
 
-    editingId = null;
+    editIndex = -1;
 
-    resetForm();
+    clearForm();
 
     document
         .getElementById("formTitle")
-        .textContent = "Ajouter un accès";
+        .textContent =
+            "➕ Nouvel accès";
 
     document
         .getElementById("formCard")
-        .classList.remove("hidden");
+        .classList
+        .remove("hidden");
+
+    updateDatePreview();
 
     window.scrollTo({
         top:0,
         behavior:"smooth"
     });
+
+}
+
+
+function clearForm(){
+
+    document.getElementById("name").value = "";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("url1").value = "";
+    document.getElementById("url2").value = "";
+    document.getElementById("remark").value = "";
+    document.getElementById("duration").value = "";
+
+    document
+        .getElementById("isApplication")
+        .checked = false;
+
+    document.getElementById("appUrl1").value = "";
+    document.getElementById("mac").value = "";
+    document.getElementById("mac2").value = "";
+    document.getElementById("appKey").value = "";
+    document.getElementById("appKey2").value = "";
+
+    document
+        .getElementById("applicationFields")
+        .classList
+        .add("hidden");
+
+    currentPhoto = "";
+
+    document
+        .getElementById("photoContainer")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("photoPreview")
+        .removeAttribute("src");
+
+    document
+        .getElementById("photoLibraryInput")
+        .value = "";
+
+    document
+        .getElementById("cameraInput")
+        .value = "";
+
+    document
+        .getElementById("startDateInfo")
+        .textContent =
+            "📅 La date de début sera enregistrée à l'ajout.";
+
+    document
+        .getElementById("expiryPreview")
+        .textContent =
+            "📅 La date d'expiration sera calculée automatiquement.";
 
 }
 
@@ -1326,1198 +1198,224 @@ function cancelForm(){
 
     document
         .getElementById("formCard")
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
 
-    editingId = null;
+    editIndex = -1;
 
-    resetForm();
-
-}
-
-
-function resetForm(){
-
-    document.getElementById("nameInput").value = "";
-
-    document.getElementById("usernameInput").value = "";
-
-    document.getElementById("passwordInput").value = "";
-
-    document.getElementById("url1Input").value = "";
-
-    document.getElementById("url2Input").value = "";
-
-    document.getElementById("noteInput").value = "";
-
-    document.getElementById("applicationCheck").checked = false;
-
-    document.getElementById("appUrlInput").value = "";
-
-    document.getElementById("mac1Input").value = "";
-
-    document.getElementById("key1Input").value = "";
-
-    document.getElementById("mac2Input").value = "";
-
-    document.getElementById("key2Input").value = "";
-
-    document.getElementById("durationInput").value = "";
-
-    currentPhoto = "";
-
-    document
-        .getElementById("applicationBox")
-        .classList.add("hidden");
-
-    document
-        .getElementById("photoPreview")
-        .classList.add("hidden");
-
-    document
-        .getElementById("deletePhotoBtn")
-        .classList.add("hidden");
-
-    document.getElementById("photoPreview").src = "";
+    clearForm();
 
 }
 
-
-/* =========================================================
-   APPLICATION
-========================================================= */
 
 function toggleApplicationFields(){
 
     const checked =
-        document.getElementById("applicationCheck").checked;
-
-    const box =
-        document.getElementById("applicationBox");
-
-    if(checked){
-
-        box.classList.remove("hidden");
-
-    }else{
-
-        box.classList.add("hidden");
-
-    }
-
-}
-
-
-/* =========================================================
-   PHOTO
-========================================================= */
-
-function handlePhoto(event){
-
-    const file =
-        event.target.files &&
-        event.target.files[0];
-
-    if(!file){
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-
-        currentPhoto = e.target.result;
-
-        const preview =
-            document.getElementById("photoPreview");
-
-        preview.src = currentPhoto;
-
-        preview.classList.remove("hidden");
-
         document
-            .getElementById("deletePhotoBtn")
-            .classList.remove("hidden");
-
-    };
-
-    reader.readAsDataURL(file);
-
-}
-
-
-function deletePhoto(){
-
-    currentPhoto = "";
-
-    document.getElementById("photoPreview").src = "";
+            .getElementById("isApplication")
+            .checked;
 
     document
-        .getElementById("photoPreview")
-        .classList.add("hidden");
-
-    document
-        .getElementById("deletePhotoBtn")
-        .classList.add("hidden");
-
-    document.getElementById("photoGallery").value = "";
-
-    document.getElementById("photoCamera").value = "";
-
-}
-
-
-/* =========================================================
-   ENREGISTRER
-========================================================= */
-
-function saveAccount(){
-
-    const name =
-        document.getElementById("nameInput").value.trim();
-
-    const username =
-        document.getElementById("usernameInput").value.trim();
-
-    const password =
-        document.getElementById("passwordInput").value;
-
-    const url1 =
-        document.getElementById("url1Input").value.trim();
-
-    const url2 =
-        document.getElementById("url2Input").value.trim();
-
-    const note =
-        document.getElementById("noteInput").value.trim();
-
-    const application =
-        document.getElementById("applicationCheck").checked;
-
-    const durationValue =
-        document.getElementById("durationInput").value;
-
-    const duration =
-        Number(durationValue);
-
-
-    if(!name){
-
-        alert("Veuillez entrer un nom / prénom.");
-
-        return;
-
-    }
-
-
-    if(!duration || duration < 1){
-
-        alert("Veuillez entrer une durée en jours.");
-
-        return;
-
-    }
-
-
-    const data = {
-
-        id:
-            editingId ||
-            Date.now().toString(),
-
-        name:name,
-
-        username:username,
-
-        password:password,
-
-        url1:url1,
-
-        url2:url2,
-
-        note:note,
-
-        application:application,
-
-        appUrl:
-            application
-            ? document.getElementById("appUrlInput").value.trim()
-            : "",
-
-        mac1:
-            application
-            ? document.getElementById("mac1Input").value.trim()
-            : "",
-
-        key1:
-            application
-            ? document.getElementById("key1Input").value.trim()
-            : "",
-
-        mac2:
-            application
-            ? document.getElementById("mac2Input").value.trim()
-            : "",
-
-        key2:
-            application
-            ? document.getElementById("key2Input").value.trim()
-            : "",
-
-        photo:currentPhoto,
-
-        duration:duration,
-
-        startDate:
-            editingId
-            ? getExistingStartDate(editingId)
-            : new Date().toISOString()
-
-    };
-
-
-    if(editingId){
-
-        const index =
-            accounts.findIndex(
-                account => account.id === editingId
-            );
-
-        if(index !== -1){
-
-            accounts[index] = data;
-
-        }
-
-    }else{
-
-        accounts.push(data);
-
-    }
-
-
-    saveData();
-
-    cancelForm();
-
-    renderAccounts();
-
-}
-
-
-function getExistingStartDate(id){
-
-    const existing =
-        accounts.find(
-            account => account.id === id
+        .getElementById("applicationFields")
+        .classList
+        .toggle(
+            "hidden",
+            !checked
         );
 
-    if(existing && existing.startDate){
-
-        return existing.startDate;
-
-    }
-
-    return new Date().toISOString();
-
 }
 
 
-/* =========================================================
-   MODIFIER
-========================================================= */
+/* =========================
+   MOT DE PASSE
+========================= */
 
-function editAccount(id){
+function togglePassword(){
 
-    const account =
-        accounts.find(
-            item => item.id === id
+    const field =
+        document.getElementById(
+            "password"
         );
 
-    if(!account){
-        return;
-    }
-
-    editingId = id;
-
-    document
-        .getElementById("formTitle")
-        .textContent = "Modifier l'accès";
-
-
-    document.getElementById("nameInput").value =
-        account.name || "";
-
-    document.getElementById("usernameInput").value =
-        account.username || "";
-
-    document.getElementById("passwordInput").value =
-        account.password || "";
-
-    document.getElementById("url1Input").value =
-        account.url1 || "";
-
-    document.getElementById("url2Input").value =
-        account.url2 || "";
-
-    document.getElementById("noteInput").value =
-        account.note || "";
-
-    document.getElementById("durationInput").value =
-        account.duration || "";
-
-
-    document
-        .getElementById("applicationCheck")
-        .checked = !!account.application;
-
-
-    document.getElementById("appUrlInput").value =
-        account.appUrl || "";
-
-    document.getElementById("mac1Input").value =
-        account.mac1 || "";
-
-    document.getElementById("key1Input").value =
-        account.key1 || "";
-
-    document.getElementById("mac2Input").value =
-        account.mac2 || "";
-
-    document.getElementById("key2Input").value =
-        account.key2 || "";
-
-
-    toggleApplicationFields();
-
-
-    currentPhoto =
-        account.photo || "";
-
-
-    if(currentPhoto){
-
-        document.getElementById("photoPreview").src =
-            currentPhoto;
-
-        document
-            .getElementById("photoPreview")
-            .classList.remove("hidden");
-
-        document
-            .getElementById("deletePhotoBtn")
-            .classList.remove("hidden");
-
-    }else{
-
-        document
-            .getElementById("photoPreview")
-            .classList.add("hidden");
-
-        document
-            .getElementById("deletePhotoBtn")
-            .classList.add("hidden");
-
-    }
-
-
-    document
-        .getElementById("formCard")
-        .classList.remove("hidden");
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    field.type =
+        field.type === "password"
+            ? "text"
+            : "password";
 
 }
 
 
-/* =========================================================
-   SUPPRIMER
-========================================================= */
+/* =========================
+   COPIE - FORMULAIRE
+========================= */
 
-function deleteAccount(id){
+function copyField(id,button){
 
-    const account =
-        accounts.find(
-            item => item.id === id
-        );
-
-    if(!account){
-        return;
-    }
-
-
-    const confirmed =
-        confirm(
-            "Supprimer l'accès de " +
-            account.name +
-            " ?"
-        );
-
-
-    if(!confirmed){
-        return;
-    }
-
-
-    accounts =
-        accounts.filter(
-            item => item.id !== id
-        );
-
-
-    saveData();
-
-    renderAccounts();
-
-}
-
-
-/* =========================================================
-   URL
-========================================================= */
-
-function normalizeUrl(url){
-
-    if(!url){
-        return "";
-    }
-
-    let value =
-        String(url).trim();
-
-    if(!value){
-        return "";
-    }
-
-
-    if(
-        !value.startsWith("http://") &&
-        !value.startsWith("https://")
-    ){
-
-        value =
-            "https://" + value;
-
-    }
-
-    return value;
-
-}
-
-
-/*
-    IMPORTANT :
-    Cette fonction est appelée directement par le clic
-    sur l'URL.
-
-    Elle demande à l'iPhone d'ouvrir l'adresse dans
-    une nouvelle page/onglet.
-
-    L'application Mes accès reste donc ouverte.
-*/
-
-function openUrlInNewPage(event, url){
-
-    if(event){
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-
-    const finalUrl =
-        normalizeUrl(url);
-
-
-    if(!finalUrl){
-        return false;
-    }
-
-
-    /*
-       window.open est déclenché directement par
-       l'action de l'utilisateur.
-    */
-
-    window.open(
-        finalUrl,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-
-    return false;
-
-}
-
-
-/* =========================================================
-   AFFICHAGE
-========================================================= */
-
-function renderAccounts(){
-
-    const container =
-        document.getElementById("accountsList");
-
-    const search =
-        document
-            .getElementById("searchInput")
-            .value
-            .trim()
-            .toLowerCase();
-
-
-    let filtered =
-        accounts.filter(account => {
-
-            const text = [
-
-                account.name,
-                account.username,
-                account.url1,
-                account.url2,
-                account.note,
-                account.appUrl,
-                account.mac1,
-                account.key1,
-                account.mac2,
-                account.key2
-
-            ]
-            .join(" ")
-            .toLowerCase();
-
-
-            return text.includes(search);
-
-        });
-
-
-    /*
-       Tri alphabétique Nom / Prénom
-    */
-
-    filtered.sort(function(a,b){
-
-        return String(a.name || "")
-            .localeCompare(
-                String(b.name || ""),
-                "fr",
-                {
-                    sensitivity:"base"
-                }
-            );
-
-    });
-
-
-    if(filtered.length === 0){
-
-        container.innerHTML =
-
-            '<div class="empty">' +
-                '<div class="emptyIcon">🔐</div>' +
-                '<div>Aucun accès trouvé.</div>' +
-            '</div>';
-
-        updateUserCount();
-
-        return;
-
-    }
-
-
-    let html = "";
-
-
-    filtered.forEach(function(account){
-
-        html += renderAccount(account);
-
-    });
-
-
-    container.innerHTML = html;
-
-    updateUserCount();
-
-}
-
-
-/* =========================================================
-   CARTE COMPTE
-========================================================= */
-
-function renderAccount(account){
-
-    let html = "";
-
-
-    html +=
-        '<div class="accountCard">';
-
-
-    /* HEADER */
-
-    html +=
-        '<div class="accountHeader">' +
-
-            '<div class="accountName">' +
-                escapeHtml(account.name || "") +
-            '</div>' +
-
-            '<div class="accountActions">' +
-
-                '<button ' +
-                    'class="iconButton edit" ' +
-                    'onclick="editAccount(\'' +
-                    escapeJs(account.id) +
-                    '\')">' +
-                    '✏️' +
-                '</button>' +
-
-                '<button ' +
-                    'class="iconButton delete" ' +
-                    'onclick="deleteAccount(\'' +
-                    escapeJs(account.id) +
-                    '\')">' +
-                    '🗑️' +
-                '</button>' +
-
-            '</div>' +
-
-        '</div>';
-
-
-    /* UTILISATEUR */
-
-    if(account.username){
-
-        html += accountLineCopy(
-            "Utilisateur",
-            account.username
-        );
-
-    }
-
-
-    /* MOT DE PASSE */
-
-    if(account.password){
-
-        html +=
-            '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                    'MOT DE PASSE' +
-                '</div>' +
-
-                '<div class="copyArea">' +
-
-                    '<div ' +
-                        'class="valueText passwordValue" ' +
-                        'data-password="' +
-                        escapeHtml(account.password) +
-                        '">' +
-                        '••••••••' +
-                    '</div>' +
-
-                    '<button ' +
-                        'class="iconButton" ' +
-                        'onclick="toggleSavedPassword(this)">' +
-                        '👁️' +
-                    '</button>' +
-
-                    '<button ' +
-                        'class="copyBtn" ' +
-                        'onclick="copySavedValue(this)"' +
-                        'data-copy="' +
-                        escapeHtml(account.password) +
-                        '">' +
-                        '📋' +
-                    '</button>' +
-
-                '</div>' +
-
-            '</div>';
-
-    }
-
-
-    /* URL 1 */
-
-    if(account.url1){
-
-        html += accountUrlLine(
-            "URL 1",
-            account.url1
-        );
-
-    }
-
-
-    /* URL 2 */
-
-    if(account.url2){
-
-        html += accountUrlLine(
-            "URL 2",
-            account.url2
-        );
-
-    }
-
-
-    /* REMARQUE */
-
-    if(account.note){
-
-        html +=
-            '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                    'REMARQUE' +
-                '</div>' +
-
-                '<div class="copyArea">' +
-
-                    '<div class="valueText remarque">' +
-                        escapeHtml(account.note) +
-                    '</div>' +
-
-                    '<button ' +
-                        'class="copyBtn" ' +
-                        'onclick="copySavedValue(this)" ' +
-                        'data-copy="' +
-                        escapeHtml(account.note) +
-                        '">' +
-                        '📋' +
-                    '</button>' +
-
-                '</div>' +
-
-            '</div>';
-
-    }
-
-
-    /* APPLICATION */
-
-    if(account.application){
-
-        html +=
-            '<div class="applicationSaved">' +
-
-                '<h3>📱 Application</h3>';
-
-
-        if(account.appUrl){
-
-            html += accountUrlLine(
-                "URL application",
-                account.appUrl
-            );
-
-        }
-
-
-        if(account.mac1){
-
-            html += accountLineCopy(
-                "MAC 1",
-                account.mac1
-            );
-
-        }
-
-
-        if(account.key1){
-
-            html += accountLineCopy(
-                "Clé 1",
-                account.key1
-            );
-
-        }
-
-
-        if(account.mac2){
-
-            html += accountLineCopy(
-                "MAC 2",
-                account.mac2
-            );
-
-        }
-
-
-        if(account.key2){
-
-            html += accountLineCopy(
-                "Clé 2",
-                account.key2
-            );
-
-        }
-
-
-        html +=
-            '</div>';
-
-    }
-
-
-    /* PHOTO */
-
-    if(account.photo){
-
-        html +=
-            '<div class="accountLine">' +
-
-                '<div class="accountLabel">' +
-                    'PHOTO' +
-                '</div>' +
-
-                '<img ' +
-                    'class="photoSaved" ' +
-                    'src="' +
-                    account.photo +
-                    '" ' +
-                    'alt="Document" ' +
-                    'onclick="openPhotoModal(\'' +
-                    escapeJs(account.photo) +
-                    '\')" ' +
-                    'style="cursor:pointer;"' +
-                '>' +
-
-            '</div>';
-
-    }
-
-
-    /* DUREE */
-
-    html += renderDuration(account);
-
-
-    html +=
-        '</div>';
-
-
-    return html;
-
-}
-
-
-/* =========================================================
-   LIGNE TEXTE + COPIE
-========================================================= */
-
-function accountLineCopy(label, value){
-
-    return (
-
-        '<div class="accountLine">' +
-
-            '<div class="accountLabel">' +
-                escapeHtml(label) +
-            '</div>' +
-
-            '<div class="copyArea">' +
-
-                '<div class="valueText">' +
-                    escapeHtml(value) +
-                '</div>' +
-
-                '<button ' +
-                    'class="copyBtn" ' +
-                    'onclick="copySavedValue(this)" ' +
-                    'data-copy="' +
-                    escapeHtml(value) +
-                    '">' +
-                    '📋' +
-                '</button>' +
-
-            '</div>' +
-
-        '</div>'
-
-    );
-
-}
-
-
-/* =========================================================
-   LIGNE URL
-========================================================= */
-
-function accountUrlLine(label, value){
-
-    const normalized =
-        normalizeUrl(value);
-
-
-    /*
-       L'URL elle-même est cliquable.
-
-       Le clic utilise openUrlInNewPage()
-       pour demander une nouvelle page/onglet.
-    */
-
-    return (
-
-        '<div class="accountLine">' +
-
-            '<div class="accountLabel">' +
-                escapeHtml(label) +
-            '</div>' +
-
-            '<div class="copyArea">' +
-
-                '<a ' +
-                    'class="urlLink" ' +
-                    'href="' +
-                    escapeAttribute(normalized) +
-                    '" ' +
-                    'target="_blank" ' +
-                    'rel="noopener noreferrer" ' +
-                    'onclick="return openUrlInNewPage(event, this.href);">' +
-
-                    escapeHtml(value) +
-
-                '</a>' +
-
-                '<button ' +
-                    'class="copyBtn" ' +
-                    'onclick="copySavedValue(this)" ' +
-                    'data-copy="' +
-                    escapeHtml(value) +
-                    '">' +
-                    '📋' +
-                '</button>' +
-
-            '</div>' +
-
-        '</div>'
-
-    );
-
-}
-
-
-/* =========================================================
-   DUREE / EXPIRATION
-========================================================= */
-
-function renderDuration(account){
-
-    if(!account.duration || !account.startDate){
-
-        return "";
-
-    }
-
-
-    const start =
-        new Date(account.startDate);
-
-    const expiration =
-        new Date(start.getTime() +
-        Number(account.duration) *
-        24 *
-        60 *
-        60 *
-        1000);
-
-
-    const now =
-        new Date();
-
-
-    const difference =
-        expiration.getTime() -
-        now.getTime();
-
-
-    const daysRemaining =
-        Math.ceil(
-            difference /
-            (24 * 60 * 60 * 1000)
-        );
-
-
-    let className =
-        "expGreen";
-
-
-    if(daysRemaining < 0){
-
-        className = "expGray";
-
-    }else if(daysRemaining <= 2){
-
-        className = "expRed";
-
-    }else if(daysRemaining <= 7){
-
-        className = "expOrange";
-
-    }
-
-
-    let remainingText;
-
-
-    if(daysRemaining < 0){
-
-        remainingText =
-            "Expiré";
-
-    }else if(daysRemaining === 0){
-
-        remainingText =
-            "Expire aujourd'hui";
-
-    }else if(daysRemaining === 1){
-
-        remainingText =
-            "Il reste 1 jour";
-
-    }else{
-
-        remainingText =
-            "Il reste " +
-            daysRemaining +
-            " jours";
-
-    }
-
-
-    const expirationDate =
-        expiration.toLocaleDateString(
-            "fr-BE",
-            {
-                day:"2-digit",
-                month:"2-digit",
-                year:"numeric"
-            }
-        );
-
-
-    return (
-
-        '<div class="durationBox">' +
-
-            '<div class="durationText ' +
-                className +
-            '">' +
-
-                '⏳ ' +
-                escapeHtml(remainingText) +
-
-            '</div>' +
-
-            '<div class="expirationText">' +
-
-                'Durée : ' +
-                escapeHtml(String(account.duration)) +
-                ' jour(s) • Expiration : ' +
-                escapeHtml(expirationDate) +
-
-            '</div>' +
-
-            '<button ' +
-                'class="calendarButton" ' +
-                'onclick="addCalendarReminder(\'' +
-                escapeJs(account.id) +
-                '\')">' +
-
-                '📅 Rappel Google Calendar' +
-
-            '</button>' +
-
-        '</div>'
-
-    );
-
-}
-
-
-/* =========================================================
-   MOT DE PASSE SAUVEGARDE
-========================================================= */
-
-function toggleSavedPassword(button){
-
-    const area =
-        button.parentElement;
-
-    const passwordElement =
-        area.querySelector(".passwordValue");
-
-    if(!passwordElement){
-        return;
-    }
-
-
-    const password =
-        passwordElement.getAttribute(
-            "data-password"
-        );
-
-
-    const visible =
-        passwordElement.dataset.visible === "true";
-
-
-    if(visible){
-
-        passwordElement.textContent =
-            "••••••••";
-
-        passwordElement.dataset.visible =
-            "false";
-
-        button.textContent = "👁️";
-
-    }else{
-
-        passwordElement.textContent =
-            password;
-
-        passwordElement.dataset.visible =
-            "true";
-
-        button.textContent = "🙈";
-
-    }
-
-}
-
-
-/* =========================================================
-   COPIER
-========================================================= */
-
-function copyInputValue(id){
-
-    const input =
+    const field =
         document.getElementById(id);
 
-    if(!input){
+    if(!field){
         return;
     }
 
     copyText(
-        input.value,
-        null
+        field.value,
+        button
     );
 
 }
 
+
+/* =========================
+   COPIE - SYSTÈME COMMUN
+========================= */
+
+function copyText(text,button){
+
+    const value =
+        String(
+            text === null ||
+            text === undefined
+                ? ""
+                : text
+        );
+
+    if(!value){
+
+        alert("Rien à copier.");
+
+        return;
+
+    }
+
+
+    /*
+       PREMIÈRE MÉTHODE :
+       on utilise un vrai textarea
+       temporaire et visible pour iPhone.
+    */
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+    textarea.value = value;
+
+    textarea.setAttribute(
+        "readonly",
+        ""
+    );
+
+    textarea.style.position = "fixed";
+    textarea.style.top = "0";
+    textarea.style.left = "0";
+    textarea.style.width = "1px";
+    textarea.style.height = "1px";
+    textarea.style.padding = "0";
+    textarea.style.border = "0";
+    textarea.style.outline = "0";
+    textarea.style.fontSize = "16px";
+    textarea.style.opacity = "0.01";
+    textarea.style.zIndex = "-1";
+
+    document.body.appendChild(
+        textarea
+    );
+
+    textarea.focus();
+    textarea.select();
+
+    try{
+
+        textarea.setSelectionRange(
+            0,
+            value.length
+        );
+
+    }catch(error){}
+
+
+    let copied = false;
+
+    try{
+
+        copied =
+            document.execCommand(
+                "copy"
+            );
+
+    }catch(error){
+
+        copied = false;
+
+    }
+
+
+    document.body.removeChild(
+        textarea
+    );
+
+
+    if(copied){
+
+        showCopied(button);
+
+        return;
+
+    }
+
+
+    /*
+       DEUXIÈME MÉTHODE :
+       Clipboard API.
+    */
+
+    if(
+        navigator.clipboard &&
+        window.isSecureContext
+    ){
+
+        navigator.clipboard
+            .writeText(value)
+            .then(
+                function(){
+
+                    showCopied(button);
+
+                }
+            )
+            .catch(
+                function(){
+
+                    showCopyFallback(
+                        value
+                    );
+
+                }
+            );
+
+        return;
+
+    }
+
+
+    /*
+       DERNIER RECOURS :
+       fenêtre permettant de copier
+       manuellement sur iPhone.
+    */
+
+    showCopyFallback(
+        value
+    );
+
+}
+
+
+/* =========================
+   COPIE DES FICHES ENREGISTRÉES
+========================= */
 
 function copySavedValue(button){
 
@@ -2526,7 +1424,17 @@ function copySavedValue(button){
     }
 
     const value =
-        button.getAttribute("data-copy") || "";
+        button.getAttribute(
+            "data-copy"
+        ) || "";
+
+    if(!value){
+
+        alert("Rien à copier.");
+
+        return;
+
+    }
 
     copyText(
         value,
@@ -2536,293 +1444,1820 @@ function copySavedValue(button){
 }
 
 
-function copyText(text, button){
-
-    if(!text){
-
-        return;
-
-    }
-
-
-    if(
-        navigator.clipboard &&
-        navigator.clipboard.writeText
-    ){
-
-        navigator.clipboard
-            .writeText(text)
-            .then(function(){
-
-                copySuccess(button);
-
-            })
-            .catch(function(){
-
-                fallbackCopy(text, button);
-
-            });
-
-    }else{
-
-        fallbackCopy(text, button);
-
-    }
-
-}
-
-
-function fallbackCopy(text, button){
-
-    const textarea =
-        document.createElement("textarea");
-
-    textarea.value = text;
-
-    textarea.style.position = "fixed";
-
-    textarea.style.left = "-9999px";
-
-    document.body.appendChild(textarea);
-
-    textarea.focus();
-
-    textarea.select();
-
-
-    try{
-
-        document.execCommand("copy");
-
-        copySuccess(button);
-
-    }catch(error){
-
-        alert(
-            "Impossible de copier automatiquement. " +
-            "Vous pouvez sélectionner le texte manuellement."
-        );
-
-    }
-
-
-    document.body.removeChild(textarea);
-
-}
-
-
-function copySuccess(button){
+function showCopied(button){
 
     if(!button){
         return;
     }
 
-    const old =
+    const oldText =
         button.textContent;
 
     button.textContent =
-        "✅";
+        "✅ Copié";
 
+    button.style.background =
+        "#d1f7dc";
 
-    setTimeout(function(){
+    button.style.color =
+        "#16803c";
 
-        button.textContent =
-            old;
+    setTimeout(
+        function(){
 
-    },1000);
+            button.textContent =
+                oldText;
 
-}
+            button.style.background =
+                "";
 
+            button.style.color =
+                "";
 
-/* =========================================================
-   MOT DE PASSE FORMULAIRE
-========================================================= */
-
-function togglePassword(id, button){
-
-    const input =
-        document.getElementById(id);
-
-    if(!input){
-        return;
-    }
-
-
-    if(input.type === "password"){
-
-        input.type = "text";
-
-        button.textContent = "🙈";
-
-    }else{
-
-        input.type = "password";
-
-        button.textContent = "👁️";
-
-    }
-
-}
-
-
-/* =========================================================
-   PHOTO MODAL
-========================================================= */
-
-function openPhotoModal(src){
-
-    document
-        .getElementById("modalPhoto")
-        .src = src;
-
-    document
-        .getElementById("photoModal")
-        .classList.remove("hidden");
-
-}
-
-
-function closePhotoModal(event){
-
-    if(
-        event &&
-        event.target &&
-        event.target.id !== "photoModal"
-    ){
-
-        return;
-
-    }
-
-
-    document
-        .getElementById("photoModal")
-        .classList.add("hidden");
-
-}
-
-
-/* =========================================================
-   GOOGLE CALENDAR
-========================================================= */
-
-function addCalendarReminder(id){
-
-    const account =
-        accounts.find(
-            item => item.id === id
-        );
-
-
-    if(!account){
-
-        return;
-
-    }
-
-
-    if(!account.duration || !account.startDate){
-
-        alert(
-            "Aucune durée disponible pour cet accès."
-        );
-
-        return;
-
-    }
-
-
-    const start =
-        new Date(account.startDate);
-
-
-    const expiration =
-        new Date(
-            start.getTime() +
-            Number(account.duration) *
-            24 *
-            60 *
-            60 *
-            1000
-        );
-
-
-    /*
-       Rappel exactement 2 jours avant expiration.
-    */
-
-    const reminder =
-        new Date(
-            expiration.getTime() -
-            2 *
-            24 *
-            60 *
-            60 *
-            1000
-        );
-
-
-    const formatCalendarDate =
-        function(date){
-
-            return date
-                .toISOString()
-                .replace(/[-:]/g,"")
-                .replace(/\.\d{3}/,"");
-
-        };
-
-
-    const dateStart =
-        formatCalendarDate(reminder);
-
-
-    const dateEnd =
-        formatCalendarDate(
-            new Date(
-                reminder.getTime() +
-                60 * 60 * 1000
-            )
-        );
-
-
-    const title =
-        encodeURIComponent(
-            "Expiration accès - " +
-            account.name
-        );
-
-
-    const details =
-        encodeURIComponent(
-            "L'accès de " +
-            account.name +
-            " expire le " +
-            expiration.toLocaleDateString("fr-BE")
-        );
-
-
-    const url =
-        "https://calendar.google.com/calendar/render" +
-        "?action=TEMPLATE" +
-        "&text=" + title +
-        "&dates=" + dateStart +
-        "/" + dateEnd +
-        "&details=" + details;
-
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
+        },
+        1200
     );
 
 }
 
 
-/* =========================================================
-   SAUVEGARDE JSON
-========================================================= */
+function showCopyFallback(text){
+
+    const modal =
+        document.getElementById(
+            "copyModal"
+        );
+
+    const input =
+        document.getElementById(
+            "copyFallback"
+        );
+
+    input.value = text;
+
+    modal
+        .classList
+        .remove("hidden");
+
+    setTimeout(
+        function(){
+
+            selectFallback();
+
+        },
+        100
+    );
+
+}
+
+
+function selectFallback(){
+
+    const input =
+        document.getElementById(
+            "copyFallback"
+        );
+
+    input.focus();
+    input.select();
+
+    try{
+
+        input.setSelectionRange(
+            0,
+            input.value.length
+        );
+
+    }catch(error){}
+
+}
+
+
+function closeCopyModal(){
+
+    document
+        .getElementById("copyModal")
+        .classList
+        .add("hidden");
+
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+function choosePhoto(){
+
+    document
+        .getElementById(
+            "photoLibraryInput"
+        )
+        .click();
+
+}
+
+
+function takePhoto(){
+
+    document
+        .getElementById(
+            "cameraInput"
+        )
+        .click();
+
+}
+
+
+function handlePhoto(event){
+
+    const file =
+        event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(
+        !file.type.startsWith(
+            "image/"
+        )
+    ){
+
+        alert(
+            "Veuillez sélectionner une image."
+        );
+
+        return;
+
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload =
+        function(e){
+
+            currentPhoto =
+                e.target.result;
+
+            document
+                .getElementById(
+                    "photoPreview"
+                )
+                .src =
+                    currentPhoto;
+
+            document
+                .getElementById(
+                    "photoContainer"
+                )
+                .classList
+                .remove("hidden");
+
+        };
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function removePhoto(){
+
+    currentPhoto = "";
+
+    document
+        .getElementById(
+            "photoPreview"
+        )
+        .removeAttribute(
+            "src"
+        );
+
+    document
+        .getElementById(
+            "photoContainer"
+        )
+        .classList
+        .add("hidden");
+
+}
+
+
+/* =========================
+   DATES
+========================= */
+
+function calculateExpiryDate(
+    startDate,
+    duration
+){
+
+    if(
+        !startDate ||
+        !duration
+    ){
+        return null;
+    }
+
+    const date =
+        new Date(startDate);
+
+    if(
+        isNaN(
+            date.getTime()
+        )
+    ){
+        return null;
+    }
+
+    date.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    date.setDate(
+        date.getDate() +
+        Number(duration)
+    );
+
+    return date;
+
+}
+
+
+function formatDate(date){
+
+    if(!date){
+        return "";
+    }
+
+    return date.toLocaleDateString(
+        "fr-BE"
+    );
+
+}
+
+
+function updateDatePreview(){
+
+    const duration =
+        parseInt(
+            document
+                .getElementById(
+                    "duration"
+                )
+                .value,
+            10
+        );
+
+    if(
+        !Number.isInteger(duration) ||
+        duration < 1
+    ){
+        return;
+    }
+
+    let startDate;
+
+    if(editIndex === -1){
+
+        startDate =
+            new Date();
+
+        document
+            .getElementById(
+                "startDateInfo"
+            )
+            .textContent =
+                "📅 Début : aujourd'hui";
+
+    }else{
+
+        startDate =
+            new Date(
+                accounts[editIndex]
+                    .startDate
+            );
+
+        document
+            .getElementById(
+                "startDateInfo"
+            )
+            .textContent =
+                "📅 Début : " +
+                formatDate(
+                    startDate
+                );
+
+    }
+
+    const expiry =
+        calculateExpiryDate(
+            startDate,
+            duration
+        );
+
+    document
+        .getElementById(
+            "expiryPreview"
+        )
+        .textContent =
+            "📅 Expiration : " +
+            formatDate(
+                expiry
+            );
+
+}
+
+
+document
+    .getElementById(
+        "duration"
+    )
+    .addEventListener(
+        "input",
+        updateDatePreview
+    );
+
+
+/* =========================
+   ENREGISTRER
+========================= */
+
+function saveAccount(){
+
+    const name =
+        document
+            .getElementById("name")
+            .value
+            .trim();
+
+    if(!name){
+
+        alert(
+            "Veuillez mettre un Nom / Prénom."
+        );
+
+        return;
+
+    }
+
+    const username =
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("password")
+            .value;
+
+    const url1 =
+        document
+            .getElementById("url1")
+            .value
+            .trim();
+
+    const url2 =
+        document
+            .getElementById("url2")
+            .value
+            .trim();
+
+    const remark =
+        document
+            .getElementById("remark")
+            .value
+            .trim();
+
+    const duration =
+        parseInt(
+            document
+                .getElementById("duration")
+                .value,
+            10
+        ) || 0;
+
+    const isApplication =
+        document
+            .getElementById(
+                "isApplication"
+            )
+            .checked;
+
+    const appUrl1 =
+        document
+            .getElementById(
+                "appUrl1"
+            )
+            .value
+            .trim();
+
+    const mac =
+        document
+            .getElementById(
+                "mac"
+            )
+            .value
+            .trim();
+
+    const mac2 =
+        document
+            .getElementById(
+                "mac2"
+            )
+            .value
+            .trim();
+
+    const appKey =
+        document
+            .getElementById(
+                "appKey"
+            )
+            .value
+            .trim();
+
+    const appKey2 =
+        document
+            .getElementById(
+                "appKey2"
+            )
+            .value
+            .trim();
+
+
+    if(editIndex === -1){
+
+        accounts.push({
+
+            name:name,
+            username:username,
+            password:password,
+            url1:url1,
+            url2:url2,
+            remark:remark,
+            duration:duration,
+            startDate:
+                new Date().toISOString(),
+
+            isApplication:
+                isApplication,
+
+            appUrl1:
+                appUrl1,
+
+            mac:
+                mac,
+
+            mac2:
+                mac2,
+
+            appKey:
+                appKey,
+
+            appKey2:
+                appKey2,
+
+            photo:
+                currentPhoto
+
+        });
+
+    }else{
+
+        const account =
+            accounts[editIndex];
+
+        account.name =
+            name;
+
+        account.username =
+            username;
+
+        account.password =
+            password;
+
+        account.url1 =
+            url1;
+
+        account.url2 =
+            url2;
+
+        account.remark =
+            remark;
+
+        account.duration =
+            duration;
+
+        account.isApplication =
+            isApplication;
+
+        account.appUrl1 =
+            appUrl1;
+
+        account.mac =
+            mac;
+
+        account.mac2 =
+            mac2;
+
+        account.appKey =
+            appKey;
+
+        account.appKey2 =
+            appKey2;
+
+        account.photo =
+            currentPhoto;
+
+        if(!account.startDate){
+
+            account.startDate =
+                new Date().toISOString();
+
+        }
+
+    }
+
+    saveData();
+    updateUserCount();
+    renderAccounts();
+    cancelForm();
+
+}
+
+
+/* =========================
+   MODIFIER
+========================= */
+
+function editAccount(index){
+
+    const account =
+        accounts[index];
+
+    if(!account){
+        return;
+    }
+
+    editIndex = index;
+
+    document
+        .getElementById(
+            "formTitle"
+        )
+        .textContent =
+            "✏️ Modifier l'accès";
+
+    document
+        .getElementById("name")
+        .value =
+            account.name || "";
+
+    document
+        .getElementById("username")
+        .value =
+            account.username || "";
+
+    document
+        .getElementById("password")
+        .value =
+            account.password || "";
+
+    document
+        .getElementById("url1")
+        .value =
+            account.url1 || "";
+
+    document
+        .getElementById("url2")
+        .value =
+            account.url2 || "";
+
+    document
+        .getElementById("remark")
+        .value =
+            account.remark || "";
+
+    document
+        .getElementById("duration")
+        .value =
+            account.duration || "";
+
+    document
+        .getElementById(
+            "isApplication"
+        )
+        .checked =
+            !!account.isApplication;
+
+    document
+        .getElementById("appUrl1")
+        .value =
+            account.appUrl1 || "";
+
+    document
+        .getElementById("mac")
+        .value =
+            account.mac || "";
+
+    document
+        .getElementById("mac2")
+        .value =
+            account.mac2 || "";
+
+    document
+        .getElementById("appKey")
+        .value =
+            account.appKey || "";
+
+    document
+        .getElementById("appKey2")
+        .value =
+            account.appKey2 || "";
+
+    toggleApplicationFields();
+
+    currentPhoto =
+        account.photo || "";
+
+    if(currentPhoto){
+
+        document
+            .getElementById(
+                "photoPreview"
+            )
+            .src =
+                currentPhoto;
+
+        document
+            .getElementById(
+                "photoContainer"
+            )
+            .classList
+            .remove("hidden");
+
+    }else{
+
+        document
+            .getElementById(
+                "photoContainer"
+            )
+            .classList
+            .add("hidden");
+
+    }
+
+    document
+        .getElementById(
+            "formCard"
+        )
+        .classList
+        .remove("hidden");
+
+    updateDatePreview();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================
+   SUPPRIMER
+========================= */
+
+function deleteAccount(index){
+
+    const account =
+        accounts[index];
+
+    if(!account){
+        return;
+    }
+
+    if(
+        !confirm(
+            "Supprimer l'accès de " +
+            (
+                account.name ||
+                "cet utilisateur"
+            ) +
+            " ?"
+        )
+    ){
+        return;
+    }
+
+    accounts.splice(
+        index,
+        1
+    );
+
+    saveData();
+    updateUserCount();
+    renderAccounts();
+
+}
+
+
+/* =========================
+   COMPTE À REBOURS
+========================= */
+
+function getCountdown(account){
+
+    if(
+        !account.duration ||
+        !account.startDate
+    ){
+
+        return {
+            text:
+                "⏳ Aucune durée définie",
+            className:"none"
+        };
+
+    }
+
+    const start =
+        new Date(
+            account.startDate
+        );
+
+    if(
+        isNaN(
+            start.getTime()
+        )
+    ){
+
+        return {
+            text:"⏳ Date invalide",
+            className:"none"
+        };
+
+    }
+
+    start.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    const expiry =
+        new Date(start);
+
+    expiry.setDate(
+        expiry.getDate() +
+        Number(account.duration)
+    );
+
+    const today =
+        new Date();
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+    const days =
+        Math.ceil(
+            (
+                expiry -
+                today
+            ) /
+            (
+                1000 *
+                60 *
+                60 *
+                24
+            )
+        );
+
+    if(days < 0){
+
+        return {
+            text:
+                "❌ Expiré depuis " +
+                Math.abs(days) +
+                " jour(s)",
+            className:"expired"
+        };
+
+    }
+
+    if(days <= 2){
+
+        return {
+            text:
+                "🔴 " +
+                days +
+                " jour(s) restant(s)",
+            className:"danger"
+        };
+
+    }
+
+    if(days <= 7){
+
+        return {
+            text:
+                "🟠 " +
+                days +
+                " jours restants",
+            className:"warning"
+        };
+
+    }
+
+    return {
+        text:
+            "🟢 " +
+            days +
+            " jours restants",
+        className:"ok"
+    };
+
+}
+
+
+/* =========================
+   GOOGLE CALENDAR
+========================= */
+
+function googleDate(date){
+
+    return (
+        date.getFullYear() +
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0") +
+        String(
+            date.getDate()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+function addToGoogleCalendar(index){
+
+    const account =
+        accounts[index];
+
+    if(!account){
+        return;
+    }
+
+    const expiry =
+        calculateExpiryDate(
+            account.startDate,
+            account.duration
+        );
+
+    if(!expiry){
+
+        alert(
+            "Il faut définir une durée."
+        );
+
+        return;
+
+    }
+
+    const reminder =
+        new Date(expiry);
+
+    reminder.setDate(
+        reminder.getDate() - 2
+    );
+
+    const start =
+        googleDate(reminder);
+
+    const endDate =
+        new Date(reminder);
+
+    endDate.setDate(
+        endDate.getDate() + 1
+    );
+
+    const end =
+        googleDate(endDate);
+
+    const title =
+        "🔔 Rappel accès - " +
+        (
+            account.name ||
+            "Utilisateur"
+        );
+
+    const details =
+        "Rappel 2 jours avant l'expiration." +
+        "\nExpiration : " +
+        formatDate(expiry);
+
+    const url =
+        "https://calendar.google.com/calendar/render" +
+        "?action=TEMPLATE" +
+        "&text=" +
+        encodeURIComponent(title) +
+        "&dates=" +
+        start +
+        "/" +
+        end +
+        "&details=" +
+        encodeURIComponent(details);
+
+    window.location.href =
+        url;
+
+}
+
+
+/* =========================
+   URL
+========================= */
+
+function normalizeUrl(url){
+
+    if(!url){
+        return "";
+    }
+
+    const value =
+        url.trim();
+
+    if(
+        value.startsWith(
+            "http://"
+        ) ||
+        value.startsWith(
+            "https://"
+        )
+    ){
+
+        return value;
+
+    }
+
+    return "https://" + value;
+
+}
+
+
+/* =========================
+   AFFICHAGE
+========================= */
+
+function renderAccounts(){
+
+    const list =
+        document.getElementById(
+            "accountsList"
+        );
+
+    const search =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const sortedAccounts =
+        accounts
+            .map(
+                function(account,index){
+
+                    return {
+                        account:account,
+                        index:index
+                    };
+
+                }
+            )
+            .sort(
+                function(a,b){
+
+                    const nameA =
+                        String(
+                            a.account.name || ""
+                        ).trim();
+
+                    const nameB =
+                        String(
+                            b.account.name || ""
+                        ).trim();
+
+                    return nameA.localeCompare(
+                        nameB,
+                        "fr",
+                        {
+                            sensitivity:"base",
+                            numeric:true
+                        }
+                    );
+
+                }
+            );
+
+
+    list.innerHTML = "";
+
+
+    const filtered =
+        sortedAccounts.filter(
+            function(item){
+
+                if(!search){
+                    return true;
+                }
+
+                const a =
+                    item.account;
+
+                const text = [
+
+                    a.name,
+                    a.username,
+                    a.password,
+                    a.url1,
+                    a.url2,
+                    a.remark,
+                    a.appUrl1,
+                    a.mac,
+                    a.mac2,
+                    a.appKey,
+                    a.appKey2
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
+
+    if(filtered.length === 0){
+
+        list.innerHTML =
+            '<div class="card empty">' +
+            "Aucun accès trouvé." +
+            "</div>";
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        function(item){
+
+            const account =
+                item.account;
+
+            const index =
+                item.index;
+
+            const countdown =
+                getCountdown(account);
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "account";
+
+            let html = "";
+
+
+            html +=
+                "<h2>👤 " +
+                escapeHtml(
+                    account.name ||
+                    "Sans nom"
+                ) +
+                "</h2>";
+
+
+            html +=
+                '<div class="countdown ' +
+                countdown.className +
+                '">' +
+                escapeHtml(
+                    countdown.text
+                ) +
+                "</div>";
+
+
+            if(account.duration){
+
+                html +=
+                    '<div class="accountLine">' +
+                    '<div class="accountLabel">⏳ Durée</div>' +
+                    '<div class="accountValue">' +
+                    escapeHtml(
+                        account.duration +
+                        " jours"
+                    ) +
+                    "</div>" +
+                    "</div>";
+
+            }
+
+
+            if(
+                account.duration &&
+                account.startDate
+            ){
+
+                const expiry =
+                    calculateExpiryDate(
+                        account.startDate,
+                        account.duration
+                    );
+
+                html +=
+                    '<div class="accountLine">' +
+                    '<div class="accountLabel">📅 Expiration</div>' +
+                    '<div class="accountValue">' +
+                    escapeHtml(
+                        formatDate(expiry)
+                    ) +
+                    "</div>" +
+                    "</div>";
+
+                html +=
+                    '<div class="calendarBox">' +
+                    "<strong>📆 Rappel calendrier</strong>" +
+
+                    '<button ' +
+                    'class="calendarButton" ' +
+                    'onclick="addToGoogleCalendar(' +
+                    index +
+                    ')">' +
+
+                    "📅 Ajouter au calendrier Google" +
+
+                    "</button>" +
+
+                    "</div>";
+
+            }
+
+
+            /* UTILISATEUR */
+
+            if(account.username){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    "Utilisateur" +
+                    "</div>" +
+
+                    '<div class="copyArea">' +
+
+                    '<input ' +
+                    'class="copyValue" ' +
+                    'readonly ' +
+                    'value="' +
+                    escapeHtml(
+                        account.username
+                    ) +
+                    '" ' +
+                    'onclick="this.select()">' +
+
+                    '<button ' +
+                    'type="button" ' +
+                    'class="copyBtn" ' +
+                    'data-copy="' +
+                    escapeHtml(
+                        account.username
+                    ) +
+                    '" ' +
+                    'onclick="copySavedValue(this)">' +
+
+                    "📋 Copier" +
+
+                    "</button>" +
+
+                    "</div>" +
+
+                    "</div>";
+
+            }
+
+
+            /* MOT DE PASSE */
+
+            if(account.password){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    "Mot de passe" +
+                    "</div>" +
+
+                    '<div class="copyArea">' +
+
+                    '<input ' +
+                    'id="password-' +
+                    index +
+                    '" ' +
+                    'class="copyValue" ' +
+                    'type="password" ' +
+                    'readonly ' +
+                    'value="' +
+                    escapeHtml(
+                        account.password
+                    ) +
+                    '">' +
+
+                    '<button ' +
+                    'type="button" ' +
+                    'class="copyBtn" ' +
+                    'onclick="showAccountPassword(' +
+                    index +
+                    ',this)">' +
+
+                    "👁️" +
+
+                    "</button>" +
+
+                    '<button ' +
+                    'type="button" ' +
+                    'class="copyBtn" ' +
+                    'data-copy="' +
+                    escapeHtml(
+                        account.password
+                    ) +
+                    '" ' +
+                    'onclick="copySavedValue(this)">' +
+
+                    "📋 Copier" +
+
+                    "</button>" +
+
+                    "</div>" +
+
+                    "</div>";
+
+            }
+
+
+            /* URL 1 */
+
+            if(account.url1){
+
+                const url1 =
+                    normalizeUrl(
+                        account.url1
+                    );
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    "URL 1" +
+                    "</div>" +
+
+                    '<div class="copyArea">' +
+
+                    '<a ' +
+                    'class="urlLink" ' +
+                    'href="' +
+                    escapeHtml(url1) +
+                    '" ' +
+                    'target="_blank" ' +
+                    'rel="noopener noreferrer">' +
+
+                    escapeHtml(
+                        account.url1
+                    ) +
+
+                    "</a>" +
+
+                    '<button ' +
+                    'type="button" ' +
+                    'class="copyBtn" ' +
+                    'data-copy="' +
+                    escapeHtml(
+                        account.url1
+                    ) +
+                    '" ' +
+                    'onclick="copySavedValue(this)">' +
+
+                    "📋 Copier" +
+
+                    "</button>" +
+
+                    "</div>" +
+
+                    "</div>";
+
+            }
+
+
+            /* URL 2 */
+
+            if(account.url2){
+
+                const url2 =
+                    normalizeUrl(
+                        account.url2
+                    );
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    "URL 2" +
+                    "</div>" +
+
+                    '<div class="copyArea">' +
+
+                    '<a ' +
+                    'class="urlLink" ' +
+                    'href="' +
+                    escapeHtml(url2) +
+                    '" ' +
+                    'target="_blank" ' +
+                    'rel="noopener noreferrer">' +
+
+                    escapeHtml(
+                        account.url2
+                    ) +
+
+                    "</a>" +
+
+                    '<button ' +
+                    'type="button" ' +
+                    'class="copyBtn" ' +
+                    'data-copy="' +
+                    escapeHtml(
+                        account.url2
+                    ) +
+                    '" ' +
+                    'onclick="copySavedValue(this)">' +
+
+                    "📋 Copier" +
+
+                    "</button>" +
+
+                    "</div>" +
+
+                    "</div>";
+
+            }
+
+
+            /* REMARQUE */
+
+            if(account.remark){
+
+                html +=
+                    '<div class="accountLine">' +
+
+                    '<div class="accountLabel">' +
+                    "📝 Remarque" +
+                    "</div>" +
+
+                    '<div class="copyArea">' +
+
+                    '<textarea ' +
+                    'class="copyValue" ' +
+                    'readonly ' +
+                    'onclick="this.select()">' +
+
+                    escapeHtml(
+                        account.remark
+                    ) +
+
+                    '</textarea>' +
+
+                    '<button ' +
+                    'type="button" ' +
+                    'class="copyBtn" ' +
+                    'data-copy="' +
+                    escapeHtml(
+                        account.remark
+                    ) +
+                    '" ' +
+                    'onclick="copySavedValue(this)">' +
+
+                    "📋 Copier" +
+
+                    "</button>" +
+
+                    "</div>" +
+
+                    "</div>";
+
+            }
+
+
+            /* APPLICATION */
+
+            if(account.isApplication){
+
+                html +=
+                    "<hr>" +
+
+                    '<div class="accountLabel">' +
+                    "📱 APPLICATION" +
+                    "</div>";
+
+
+                /* URL APPLICATION */
+
+                if(account.appUrl1){
+
+                    const appUrl =
+                        normalizeUrl(
+                            account.appUrl1
+                        );
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        "URL application" +
+                        "</div>" +
+
+                        '<div class="copyArea">' +
+
+                        '<a ' +
+                        'class="urlLink" ' +
+                        'href="' +
+                        escapeHtml(appUrl) +
+                        '" ' +
+                        'target="_blank" ' +
+                        'rel="noopener noreferrer">' +
+
+                        escapeHtml(
+                            account.appUrl1
+                        ) +
+
+                        "</a>" +
+
+                        '<button ' +
+                        'type="button" ' +
+                        'class="copyBtn" ' +
+                        'data-copy="' +
+                        escapeHtml(
+                            account.appUrl1
+                        ) +
+                        '" ' +
+                        'onclick="copySavedValue(this)">' +
+
+                        "📋 Copier" +
+
+                        "</button>" +
+
+                        "</div>" +
+
+                        "</div>";
+
+                }
+
+
+                /* MAC 1 */
+
+                if(account.mac){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        "MAC 1" +
+                        "</div>" +
+
+                        '<div class="copyArea">' +
+
+                        '<input ' +
+                        'class="copyValue" ' +
+                        'readonly ' +
+                        'value="' +
+                        escapeHtml(
+                            account.mac
+                        ) +
+                        '" ' +
+                        'onclick="this.select()">' +
+
+                        '<button ' +
+                        'type="button" ' +
+                        'class="copyBtn" ' +
+                        'data-copy="' +
+                        escapeHtml(
+                            account.mac
+                        ) +
+                        '" ' +
+                        'onclick="copySavedValue(this)">' +
+
+                        "📋 Copier" +
+
+                        "</button>" +
+
+                        "</div>" +
+
+                        "</div>";
+
+                }
+
+
+                /* MAC 2 */
+
+                if(account.mac2){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        "MAC 2" +
+                        "</div>" +
+
+                        '<div class="copyArea">' +
+
+                        '<input ' +
+                        'class="copyValue" ' +
+                        'readonly ' +
+                        'value="' +
+                        escapeHtml(
+                            account.mac2
+                        ) +
+                        '" ' +
+                        'onclick="this.select()">' +
+
+                        '<button ' +
+                        'type="button" ' +
+                        'class="copyBtn" ' +
+                        'data-copy="' +
+                        escapeHtml(
+                            account.mac2
+                        ) +
+                        '" ' +
+                        'onclick="copySavedValue(this)">' +
+
+                        "📋 Copier" +
+
+                        "</button>" +
+
+                        "</div>" +
+
+                        "</div>";
+
+                }
+
+
+                /* CLÉ 1 */
+
+                if(account.appKey){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        "Clé 1" +
+                        "</div>" +
+
+                        '<div class="copyArea">' +
+
+                        '<input ' +
+                        'class="copyValue" ' +
+                        'readonly ' +
+                        'value="' +
+                        escapeHtml(
+                            account.appKey
+                        ) +
+                        '" ' +
+                        'onclick="this.select()">' +
+
+                        '<button ' +
+                        'type="button" ' +
+                        'class="copyBtn" ' +
+                        'data-copy="' +
+                        escapeHtml(
+                            account.appKey
+                        ) +
+                        '" ' +
+                        'onclick="copySavedValue(this)">' +
+
+                        "📋 Copier" +
+
+                        "</button>" +
+
+                        "</div>" +
+
+                        "</div>";
+
+                }
+
+
+                /* CLÉ 2 */
+
+                if(account.appKey2){
+
+                    html +=
+                        '<div class="accountLine">' +
+
+                        '<div class="accountLabel">' +
+                        "Clé 2" +
+                        "</div>" +
+
+                        '<div class="copyArea">' +
+
+                        '<input ' +
+                        'class="copyValue" ' +
+                        'readonly ' +
+                        'value="' +
+                        escapeHtml(
+                            account.appKey2
+                        ) +
+                        '" ' +
+                        'onclick="this.select()">' +
+
+                        '<button ' +
+                        'type="button" ' +
+                        'class="copyBtn" ' +
+                        'data-copy="' +
+                        escapeHtml(
+                            account.appKey2
+                        ) +
+                        '" ' +
+                        'onclick="copySavedValue(this)">' +
+
+                        "📋 Copier" +
+
+                        "</button>" +
+
+                        "</div>" +
+
+                        "</div>";
+
+                }
+
+            }
+
+
+            /* PHOTO */
+
+            if(account.photo){
+
+                html +=
+                    "<hr>" +
+
+                    '<img ' +
+                    'src="' +
+                    escapeHtml(
+                        account.photo
+                    ) +
+                    '" ' +
+                    'class="photoPreview">';
+
+            }
+
+
+            /* BOUTONS */
+
+            html +=
+                '<div class="actions">' +
+
+                '<button ' +
+                'class="secondary" ' +
+                'onclick="editAccount(' +
+                index +
+                ')">' +
+
+                "✏️ Modifier" +
+
+                "</button>" +
+
+                '<button ' +
+                'class="danger" ' +
+                'onclick="deleteAccount(' +
+                index +
+                ')">' +
+
+                "🗑️ Supprimer" +
+
+                "</button>" +
+
+                "</div>";
+
+
+            div.innerHTML =
+                html;
+
+            list.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   AFFICHER MOT DE PASSE
+========================= */
+
+function showAccountPassword(
+    index,
+    button
+){
+
+    const input =
+        document.getElementById(
+            "password-" +
+            index
+        );
+
+    if(!input){
+        return;
+    }
+
+    if(
+        input.type ===
+        "password"
+    ){
+
+        input.type =
+            "text";
+
+        button.textContent =
+            "🙈";
+
+    }else{
+
+        input.type =
+            "password";
+
+        button.textContent =
+            "👁️";
+
+    }
+
+}
+
+
+/* =========================
+   SÉCURITÉ
+========================= */
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================
+   EXPORT
+========================= */
 
 function exportData(){
 
@@ -2833,59 +3268,56 @@ function exportData(){
             2
         );
 
-
     const blob =
         new Blob(
             [data],
             {
-                type:"application/json"
+                type:
+                    "application/json"
             }
         );
 
-
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
+    const a =
+        document.createElement(
+            "a"
+        );
 
-    const link =
-        document.createElement("a");
+    a.href = url;
 
-    link.href = url;
-
-    link.download =
+    a.download =
         "mes-acces-sauvegarde.json";
 
+    document.body.appendChild(a);
 
-    document.body.appendChild(link);
+    a.click();
 
-    link.click();
-
-    document.body.removeChild(link);
+    document.body.removeChild(a);
 
     URL.revokeObjectURL(url);
 
 }
 
 
-/* =========================================================
-   RESTAURATION JSON
-========================================================= */
+/* =========================
+   IMPORT
+========================= */
 
 function importData(event){
 
     const file =
-        event.target.files &&
         event.target.files[0];
-
 
     if(!file){
         return;
     }
 
-
     const reader =
         new FileReader();
-
 
     reader.onload =
         function(e){
@@ -2893,118 +3325,94 @@ function importData(event){
             try{
 
                 const imported =
-                    JSON.parse(e.target.result);
-
-
-                if(!Array.isArray(imported)){
-
-                    throw new Error(
-                        "Format invalide"
+                    JSON.parse(
+                        e.target.result
                     );
 
-                }
+                if(
+                    !Array.isArray(
+                        imported
+                    )
+                ){
 
-
-                const confirmed =
-                    confirm(
-                        "La restauration va remplacer les accès actuellement enregistrés. Continuer ?"
+                    alert(
+                        "Fichier invalide."
                     );
 
-
-                if(!confirmed){
                     return;
+
                 }
 
+                if(
+                    !confirm(
+                        "Remplacer les accès actuels par cette sauvegarde ?"
+                    )
+                ){
+
+                    return;
+
+                }
 
                 accounts =
                     imported;
 
-
                 saveData();
-
+                updateUserCount();
                 renderAccounts();
 
-
                 alert(
-                    "Sauvegarde restaurée avec succès."
+                    "✅ Sauvegarde restaurée."
                 );
-
 
             }catch(error){
 
                 alert(
-                    "Impossible de restaurer cette sauvegarde."
+                    "Impossible de lire cette sauvegarde."
                 );
 
             }
 
         };
 
-
     reader.readAsText(file);
-
 
     event.target.value = "";
 
 }
 
 
-/* =========================================================
-   SECURITE AFFICHAGE
-========================================================= */
+/* =========================
+   ACTUALISATION
+========================= */
 
-function escapeHtml(value){
+setInterval(
+    function(){
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+        const loginScreen =
+            document.getElementById(
+                "loginScreen"
+            );
 
-}
+        if(
+            loginScreen.classList.contains(
+                "hidden"
+            )
+        ){
 
+            renderAccounts();
 
-function escapeAttribute(value){
+        }
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/"/g,"&quot;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;");
-
-}
-
-
-function escapeJs(value){
-
-    return String(value ?? "")
-        .replace(/\\/g,"\\\\")
-        .replace(/'/g,"\\'")
-        .replace(/"/g,'\\"')
-        .replace(/\n/g,"\\n")
-        .replace(/\r/g,"\\r");
-
-}
+    },
+    60000
+);
 
 
-/* =========================================================
-   ACTUALISATION DU COMPTE A REBOURS
-========================================================= */
+/* =========================
+   DÉMARRAGE
+========================= */
 
-setInterval(function(){
-
-    if(
-        !document
-            .getElementById("app")
-            .classList.contains("hidden")
-    ){
-
-        renderAccounts();
-
-    }
-
-},60000);
+loadData();
 
 </script>
 
