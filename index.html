@@ -76,6 +76,11 @@ font-size:16px;
 background:#fff;
 }
 
+input[readonly]{
+background:#f2f2f7;
+color:#555;
+}
+
 button{
 border:0;
 border-radius:11px;
@@ -669,10 +674,25 @@ font-size:20px;
 color:#007aff;
 }
 
+.domiciliationInfoBox{
+background:#f2f2f7;
+border-radius:12px;
+padding:11px;
+margin-top:10px;
+font-size:12px;
+color:#666;
+line-height:1.5;
+}
+
 </style>
 </head>
 
 <body>
+
+
+<!-- =========================
+     CONNEXION
+========================= -->
 
 <div id="loginScreen" class="login">
 
@@ -708,6 +728,10 @@ Ouvrir
 </div>
 
 
+<!-- =========================
+     APPLICATION
+========================= -->
+
 <div id="app" class="hidden">
 
 <div class="header">
@@ -716,25 +740,69 @@ Mes paiements
 
 <div class="container">
 
+
+<!-- =========================
+     RESUME PAIEMENTS
+========================= -->
+
 <div class="summary">
 
 <div class="summaryBox">
-<div class="summaryTitle">Total</div>
-<div id="totalValue" class="summaryValue">0,00 €</div>
+
+<div class="summaryTitle">
+Total
 </div>
+
+<div
+id="totalValue"
+class="summaryValue">
+
+0,00 €
+
+</div>
+
+</div>
+
 
 <div class="summaryBox">
-<div class="summaryTitle">Payé</div>
-<div id="paidValue" class="summaryValue">0,00 €</div>
+
+<div class="summaryTitle">
+Payé
 </div>
+
+<div
+id="paidValue"
+class="summaryValue">
+
+0,00 €
+
+</div>
+
+</div>
+
 
 <div class="summaryBox">
-<div class="summaryTitle">Reste</div>
-<div id="remainingValue" class="summaryValue">0,00 €</div>
+
+<div class="summaryTitle">
+Reste
+</div>
+
+<div
+id="remainingValue"
+class="summaryValue">
+
+0,00 €
+
+</div>
+
 </div>
 
 </div>
 
+
+<!-- =========================
+     ONGLETS
+========================= -->
 
 <div class="tabs">
 
@@ -761,10 +829,16 @@ Payé
 </div>
 
 
-<div id="selectionBar" class="selectionBar">
+<div
+id="selectionBar"
+class="selectionBar">
 
-<div id="selectionInfo" class="selectionInfo">
+<div
+id="selectionInfo"
+class="selectionInfo">
+
 0 sélectionné
+
 </div>
 
 <button
@@ -780,32 +854,53 @@ Supprimer
 
 <div id="unpaidList"></div>
 
-<div id="paidList" class="hidden"></div>
+<div
+id="paidList"
+class="hidden">
 
+</div>
+
+
+<!-- =========================
+     AJOUT PAIEMENT
+========================= -->
 
 <div class="card">
 
-<h2>Ajouter un paiement</h2>
+<h2>
+Ajouter un paiement
+</h2>
 
-<label>Alias / raccourci</label>
+<label>
+Alias / raccourci
+</label>
 
 <input
 id="alias"
 placeholder="Ex : Taxe maison">
 
-<label>Bénéficiaire</label>
+
+<label>
+Bénéficiaire
+</label>
 
 <input
 id="beneficiary"
 placeholder="Nom du bénéficiaire">
 
-<label>IBAN</label>
+
+<label>
+IBAN
+</label>
 
 <input
 id="iban"
 placeholder="BE...">
 
-<label>Montant total</label>
+
+<label>
+Montant total
+</label>
 
 <input
 id="totalAmount"
@@ -814,7 +909,10 @@ step="0.01"
 inputmode="decimal"
 placeholder="0,00">
 
-<label>Nombre d'échéances</label>
+
+<label>
+Nombre d'échéances
+</label>
 
 <input
 id="installments"
@@ -822,19 +920,28 @@ type="number"
 min="1"
 value="1">
 
-<label>Première échéance</label>
+
+<label>
+Première échéance
+</label>
 
 <input
 id="firstDate"
 type="date">
 
-<label>Communication</label>
+
+<label>
+Communication
+</label>
 
 <input
 id="communication"
 placeholder="Communication">
 
-<label>Document</label>
+
+<label>
+Document
+</label>
 
 <div class="photoButtons">
 
@@ -856,16 +963,19 @@ onclick="document.getElementById('galleryInput').click()">
 
 </div>
 
+
 <input
 id="cameraInput"
 type="file"
 accept="image/*"
 capture="environment">
 
+
 <input
 id="galleryInput"
 type="file"
 accept="image/*">
+
 
 <div id="addPhotoPreview"></div>
 
@@ -882,9 +992,9 @@ Ajouter le paiement
 </div>
 
 
-<!-- =========================
+<!-- ==================================================
      DOMICILIATIONS
-========================= -->
+================================================== -->
 
 <div class="domiciliationCard">
 
@@ -905,32 +1015,44 @@ onclick="toggleDomiciliationForm()">
 </div>
 
 
-<div id="domiciliationForm" class="domiciliationForm hidden">
+<div id="domiciliationForm"
+class="domiciliationForm hidden">
 
-<h2>Ajouter une domiciliation</h2>
+<h2>
+Ajouter une domiciliation
+</h2>
 
-<label>Alias / raccourci</label>
+
+<label>
+Alias / raccourci
+</label>
 
 <input
 id="domAlias"
 placeholder="Ex : Crédit maison">
 
 
-<label>Bénéficiaire</label>
+<label>
+Bénéficiaire
+</label>
 
 <input
 id="domBeneficiary"
 placeholder="Nom du bénéficiaire">
 
 
-<label>IBAN</label>
+<label>
+IBAN
+</label>
 
 <input
 id="domIban"
 placeholder="BE...">
 
 
-<label>Montant total</label>
+<label>
+Montant total
+</label>
 
 <input
 id="domTotalAmount"
@@ -941,7 +1063,9 @@ placeholder="0,00"
 oninput="calculateDomiciliation()">
 
 
-<label>Nombre de mois</label>
+<label>
+Nombre de mois
+</label>
 
 <input
 id="domMonths"
@@ -951,12 +1075,56 @@ value="1"
 oninput="calculateDomiciliation()">
 
 
+<label>
+TAEG (%)
+</label>
+
+<input
+id="domTaeg"
+type="number"
+step="0.01"
+min="0"
+inputmode="decimal"
+placeholder="Ex : 3"
+oninput="calculateDomiciliation()">
+
+
+<label>
+Date de début
+</label>
+
+<input
+id="domStartDate"
+type="date"
+onchange="calculateDomiciliation()">
+
+
+<label>
+Date de fin
+</label>
+
+<input
+id="domEndDate"
+type="date"
+readonly>
+
+
 <div
 id="domMonthlyResult"
 class="domiciliationMonthly">
 
-Mensualité automatique :
+Mensualité estimée :
 <strong>0,00 €</strong>
+
+</div>
+
+
+<div class="domiciliationInfoBox">
+
+La mensualité est calculée automatiquement à partir
+du montant, de la durée et du TAEG saisi.
+Le calcul est indicatif et peut différer de celui
+de la banque.
 
 </div>
 
@@ -978,9 +1146,15 @@ Ajouter la domiciliation
 </div>
 
 
+<!-- =========================
+     CALCULETTE
+========================= -->
+
 <div class="card">
 
-<h2>🧮 Calculette</h2>
+<h2>
+🧮 Calculette
+</h2>
 
 <input
 id="calcDisplay"
@@ -989,29 +1163,110 @@ type="text"
 readonly
 placeholder="0">
 
+
 <div class="calculatorGrid">
 
-<button class="secondary" onclick="calcInput('7')">7</button>
-<button class="secondary" onclick="calcInput('8')">8</button>
-<button class="secondary" onclick="calcInput('9')">9</button>
-<button class="secondary" onclick="calcInput('/')">÷</button>
+<button
+class="secondary"
+onclick="calcInput('7')">
+7
+</button>
 
-<button class="secondary" onclick="calcInput('4')">4</button>
-<button class="secondary" onclick="calcInput('5')">5</button>
-<button class="secondary" onclick="calcInput('6')">6</button>
-<button class="secondary" onclick="calcInput('*')">×</button>
+<button
+class="secondary"
+onclick="calcInput('8')">
+8
+</button>
 
-<button class="secondary" onclick="calcInput('1')">1</button>
-<button class="secondary" onclick="calcInput('2')">2</button>
-<button class="secondary" onclick="calcInput('3')">3</button>
-<button class="secondary" onclick="calcInput('-')">−</button>
+<button
+class="secondary"
+onclick="calcInput('9')">
+9
+</button>
 
-<button class="secondary" onclick="calcInput('0')">0</button>
-<button class="secondary" onclick="calcInput('.')">.</button>
-<button class="danger" onclick="calcClear()">C</button>
-<button class="secondary" onclick="calcInput('+')">+</button>
+<button
+class="secondary"
+onclick="calcInput('/')">
+÷
+</button>
+
+
+<button
+class="secondary"
+onclick="calcInput('4')">
+4
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('5')">
+5
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('6')">
+6
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('*')">
+×
+</button>
+
+
+<button
+class="secondary"
+onclick="calcInput('1')">
+1
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('2')">
+2
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('3')">
+3
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('-')">
+−
+</button>
+
+
+<button
+class="secondary"
+onclick="calcInput('0')">
+0
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('.')">
+.
+</button>
+
+<button
+class="danger"
+onclick="calcClear()">
+C
+</button>
+
+<button
+class="secondary"
+onclick="calcInput('+')">
++
+</button>
 
 </div>
+
 
 <button
 class="primary calculatorEquals"
@@ -1024,9 +1279,15 @@ onclick="calcResult()">
 </div>
 
 
+<!-- =========================
+     SAUVEGARDE
+========================= -->
+
 <div class="card">
 
-<h2>Sauvegarde</h2>
+<h2>
+Sauvegarde
+</h2>
 
 <button
 class="secondary"
@@ -1052,10 +1313,17 @@ accept=".json">
 </div>
 
 </div>
+
 </div>
 
 
-<div id="editModal" class="modal">
+<!-- ==================================================
+     MODIFICATION PAIEMENT
+================================================== -->
+
+<div
+id="editModal"
+class="modal">
 
 <div class="modalBox">
 
@@ -1063,41 +1331,220 @@ accept=".json">
 Modifier l'échéance
 </div>
 
-<label>Alias</label>
+<label>
+Alias
+</label>
+
 <input id="editAlias">
 
-<label>Bénéficiaire</label>
+
+<label>
+Bénéficiaire
+</label>
+
 <input id="editBeneficiary">
 
-<label>IBAN</label>
+
+<label>
+IBAN
+</label>
+
 <input id="editIban">
 
-<label>Date</label>
-<input id="editDate" type="date">
 
-<label>Montant</label>
-<input id="editAmount" type="number" step="0.01">
+<label>
+Date
+</label>
 
-<label>Communication</label>
+<input
+id="editDate"
+type="date">
+
+
+<label>
+Montant
+</label>
+
+<input
+id="editAmount"
+type="number"
+step="0.01">
+
+
+<label>
+Communication
+</label>
+
 <input id="editCommunication">
+
 
 <div class="modalActions">
 
-<button class="secondary" onclick="closeEdit()">
+<button
+class="secondary"
+onclick="closeEdit()">
+
 Annuler
+
 </button>
 
-<button class="primary" onclick="saveEdit()">
+<button
+class="primary"
+onclick="saveEdit()">
+
 Enregistrer
+
 </button>
 
 </div>
 
 </div>
+
 </div>
 
 
-<div id="manualModal" class="modal">
+<!-- ==================================================
+     MODIFICATION DOMICILIATION
+================================================== -->
+
+<div
+id="domEditModal"
+class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+Modifier la domiciliation
+</div>
+
+
+<label>
+Alias / raccourci
+</label>
+
+<input id="domEditAlias">
+
+
+<label>
+Bénéficiaire
+</label>
+
+<input id="domEditBeneficiary">
+
+
+<label>
+IBAN
+</label>
+
+<input id="domEditIban">
+
+
+<label>
+Montant total
+</label>
+
+<input
+id="domEditTotal"
+type="number"
+step="0.01"
+inputmode="decimal"
+oninput="calculateEditDomiciliation()">
+
+
+<label>
+Nombre de mois
+</label>
+
+<input
+id="domEditMonths"
+type="number"
+min="1"
+oninput="calculateEditDomiciliation()">
+
+
+<label>
+TAEG (%)
+</label>
+
+<input
+id="domEditTaeg"
+type="number"
+step="0.01"
+min="0"
+inputmode="decimal"
+oninput="calculateEditDomiciliation()">
+
+
+<label>
+Date de début
+</label>
+
+<input
+id="domEditStartDate"
+type="date"
+onchange="calculateEditDomiciliation()">
+
+
+<label>
+Date de fin
+</label>
+
+<input
+id="domEditEndDate"
+type="date"
+readonly>
+
+
+<div
+id="domEditMonthlyResult"
+class="domiciliationMonthly">
+
+Mensualité estimée :
+<strong>0,00 €</strong>
+
+</div>
+
+
+<div class="domiciliationInfoBox">
+
+La mensualité est recalculée automatiquement
+si tu modifies le montant, la durée ou le TAEG.
+
+</div>
+
+
+<div class="modalActions">
+
+<button
+class="secondary"
+onclick="closeDomiciliationEdit()">
+
+Annuler
+
+</button>
+
+<button
+class="primary"
+onclick="saveDomiciliationEdit()">
+
+Enregistrer
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     PAIEMENT MANUEL
+================================================== -->
+
+<div
+id="manualModal"
+class="modal">
 
 <div class="modalBox">
 
@@ -1120,10 +1567,17 @@ Fermer
 </div>
 
 </div>
+
 </div>
 
 
-<div id="qrModal" class="modal">
+<!-- ==================================================
+     QR
+================================================== -->
+
+<div
+id="qrModal"
+class="modal">
 
 <div class="modalBox">
 
@@ -1135,11 +1589,16 @@ Fermer
 
 <div id="qrCode"></div>
 
-<div id="qrInfo" class="qrInfo"></div>
+<div
+id="qrInfo"
+class="qrInfo">
+</div>
 
 <div class="qrWarning">
+
 Scanne ce QR avec une application bancaire compatible.
 Vérifie toujours les informations avant de valider le paiement.
+
 </div>
 
 </div>
@@ -1157,10 +1616,17 @@ Fermer
 </div>
 
 </div>
+
 </div>
 
 
-<div id="photoModal" class="modal">
+<!-- ==================================================
+     PHOTO
+================================================== -->
+
+<div
+id="photoModal"
+class="modal">
 
 <div class="modalBox">
 
@@ -1193,6 +1659,7 @@ Fermer
 </div>
 
 </div>
+
 </div>
 
 
@@ -1202,14 +1669,24 @@ const PIN="1157";
 
 let data=[];
 let domiciliations=[];
+
 let currentTab="unpaid";
+
 let selectedIds=new Set();
+
 let editId=null;
 let manualId=null;
 let photoId=null;
 let qrId=null;
+
+let domEditId=null;
+
 let addPhotoData="";
 
+
+/* =========================
+   OUTILS
+========================= */
 
 function euro(value){
 
@@ -1243,6 +1720,9 @@ return d.toLocaleDateString("fr-BE");
 }
 
 
+/* Fonction originale conservée
+   pour les paiements */
+
 function addMonths(date,months){
 
 const d=new Date(date+"T00:00:00");
@@ -1254,12 +1734,71 @@ return d.toISOString().substring(0,10);
 }
 
 
+/* Fonction sécurisée pour les
+   dates de domiciliations */
+
+function addMonthsSafe(date,months){
+
+if(!date)return "";
+
+const parts=date.split("-");
+
+if(parts.length!==3)return "";
+
+const year=parseInt(parts[0]);
+const month=parseInt(parts[1]);
+const day=parseInt(parts[2]);
+
+if(
+isNaN(year)||
+isNaN(month)||
+isNaN(day)
+){
+
+return "";
+
+}
+
+
+const totalMonths=
+(month-1)+Number(months||0);
+
+const targetYear=
+year+
+Math.floor(totalMonths/12);
+
+const targetMonth=
+((totalMonths%12)+12)%12;
+
+const lastDay=
+new Date(
+targetYear,
+targetMonth+1,
+0
+).getDate();
+
+const targetDay=
+Math.min(day,lastDay);
+
+return String(targetYear)+
+"-"+
+String(targetMonth+1).padStart(2,"0")+
+"-"+
+String(targetDay).padStart(2,"0");
+
+}
+
+
 function selectionKey(paymentId,installmentId){
 
 return String(paymentId)+"::"+String(installmentId);
 
 }
 
+
+/* =========================
+   NORMALISATION PAIEMENTS
+========================= */
 
 function normalizeData(){
 
@@ -1268,53 +1807,80 @@ data=[];
 
 data.forEach(p=>{
 
-if(!p.id)p.id=generateId();
-if(!p.alias)p.alias="";
-if(!p.beneficiary)p.beneficiary="";
-if(!p.iban)p.iban="";
-if(!p.communication)p.communication="";
-if(!p.photo)p.photo="";
+if(!p.id)
+p.id=generateId();
+
+if(!p.alias)
+p.alias="";
+
+if(!p.beneficiary)
+p.beneficiary="";
+
+if(!p.iban)
+p.iban="";
+
+if(!p.communication)
+p.communication="";
+
+if(!p.photo)
+p.photo="";
+
 if(!Array.isArray(p.installments))
 p.installments=[];
 
 p.installments.forEach(i=>{
 
-if(!i.id)i.id=generateId();
+if(!i.id)
+i.id=generateId();
 
 if(typeof i.paid!=="boolean")
 i.paid=false;
 
-if(i.amount===undefined||
+if(
+i.amount===undefined||
 i.amount===null||
-i.amount==="")
+i.amount===""
+)
 i.amount=0;
 
 });
 
 });
 
+
 }
 
+
+/* =========================
+   CHARGEMENT
+========================= */
 
 function loadData(){
 
 try{
 
-const saved=localStorage.getItem("mesPaiements");
+const saved=
+localStorage.getItem("mesPaiements");
 
 if(saved){
 
 data=JSON.parse(saved);
+
 normalizeData();
 
 }
 
 }catch(e){
 
-console.error("Erreur chargement :",e);
+console.error(
+"Erreur chargement :",
+e
+);
+
 data=[];
 
 }
+
 
 loadDomiciliations();
 
@@ -1334,7 +1900,10 @@ JSON.stringify(data)
 
 }catch(e){
 
-console.error("Erreur sauvegarde :",e);
+console.error(
+"Erreur sauvegarde :",
+e
+);
 
 alert(
 "Impossible de sauvegarder les données."
@@ -1345,10 +1914,16 @@ alert(
 }
 
 
+/* =========================
+   PIN
+========================= */
+
 function checkPin(){
 
 const value=
-document.getElementById("pinInput").value;
+document.getElementById(
+"pinInput"
+).value;
 
 if(value===PIN){
 
@@ -1366,12 +1941,18 @@ loadData();
 
 alert("Code PIN incorrect");
 
-document.getElementById("pinInput").value="";
+document.getElementById(
+"pinInput"
+).value="";
 
 }
 
 }
 
+
+/* =========================
+   PHOTOS
+========================= */
 
 function handlePhoto(file){
 
@@ -1385,7 +1966,8 @@ const img=new Image();
 
 img.onload=function(){
 
-const canvas=document.createElement("canvas");
+const canvas=
+document.createElement("canvas");
 
 const maxWidth=1400;
 
@@ -1394,7 +1976,9 @@ let height=img.height;
 
 if(width>maxWidth){
 
-height=height*(maxWidth/width);
+height=
+height*(maxWidth/width);
+
 width=maxWidth;
 
 }
@@ -1402,7 +1986,8 @@ width=maxWidth;
 canvas.width=width;
 canvas.height=height;
 
-const ctx=canvas.getContext("2d");
+const ctx=
+canvas.getContext("2d");
 
 ctx.drawImage(
 img,
@@ -1412,7 +1997,8 @@ width,
 height
 );
 
-addPhotoData=canvas.toDataURL(
+addPhotoData=
+canvas.toDataURL(
 "image/jpeg",
 0.75
 );
@@ -1437,8 +2023,9 @@ reader.readAsDataURL(file);
 }
 
 
-document.getElementById("cameraInput")
-.addEventListener(
+document.getElementById(
+"cameraInput"
+).addEventListener(
 "change",
 function(){
 
@@ -1448,8 +2035,9 @@ handlePhoto(this.files[0]);
 );
 
 
-document.getElementById("galleryInput")
-.addEventListener(
+document.getElementById(
+"galleryInput"
+).addEventListener(
 "change",
 function(){
 
@@ -1458,33 +2046,51 @@ handlePhoto(this.files[0]);
 }
 );
 
+
+/* =========================
+   AJOUT PAIEMENT
+========================= */
 
 function addPayment(){
 
 const alias=
-document.getElementById("alias").value.trim();
+document.getElementById(
+"alias"
+).value.trim();
 
 const beneficiary=
-document.getElementById("beneficiary").value.trim();
+document.getElementById(
+"beneficiary"
+).value.trim();
 
 const iban=
-document.getElementById("iban").value.trim()
+document.getElementById(
+"iban"
+).value.trim()
 .toUpperCase()
 .replace(/\s/g,"");
 
 const total=parseFloat(
-document.getElementById("totalAmount").value
+document.getElementById(
+"totalAmount"
+).value
 );
 
 const count=parseInt(
-document.getElementById("installments").value
+document.getElementById(
+"installments"
+).value
 );
 
 const firstDate=
-document.getElementById("firstDate").value;
+document.getElementById(
+"firstDate"
+).value;
 
 const communication=
-document.getElementById("communication").value.trim();
+document.getElementById(
+"communication"
+).value.trim();
 
 
 if(
@@ -1505,11 +2111,13 @@ return;
 }
 
 
-const base=Math.floor(
+const base=
+Math.floor(
 (total/count)*100
 )/100;
 
-const last=Math.round(
+const last=
+Math.round(
 (total-base*(count-1))*100
 )/100;
 
@@ -1527,7 +2135,8 @@ firstDate,
 i
 ),
 
-amount:i===count-1
+amount:
+i===count-1
 ?last
 :base,
 
@@ -1572,21 +2181,54 @@ alert("Paiement ajouté.");
 
 function resetAddForm(){
 
-document.getElementById("alias").value="";
-document.getElementById("beneficiary").value="";
-document.getElementById("iban").value="";
-document.getElementById("totalAmount").value="";
-document.getElementById("installments").value="1";
-document.getElementById("firstDate").value="";
-document.getElementById("communication").value="";
-document.getElementById("addPhotoPreview").innerHTML="";
-document.getElementById("cameraInput").value="";
-document.getElementById("galleryInput").value="";
+document.getElementById(
+"alias"
+).value="";
+
+document.getElementById(
+"beneficiary"
+).value="";
+
+document.getElementById(
+"iban"
+).value="";
+
+document.getElementById(
+"totalAmount"
+).value="";
+
+document.getElementById(
+"installments"
+).value="1";
+
+document.getElementById(
+"firstDate"
+).value="";
+
+document.getElementById(
+"communication"
+).value="";
+
+document.getElementById(
+"addPhotoPreview"
+).innerHTML="";
+
+document.getElementById(
+"cameraInput"
+).value="";
+
+document.getElementById(
+"galleryInput"
+).value="";
 
 addPhotoData="";
 
 }
 
+
+/* =========================
+   ONGLETS
+========================= */
 
 function showTab(tab){
 
@@ -1625,15 +2267,23 @@ render();
 }
 
 
+/* =========================
+   AFFICHAGE PAIEMENTS
+========================= */
+
 function render(){
 
 normalizeData();
 
 const unpaidList=
-document.getElementById("unpaidList");
+document.getElementById(
+"unpaidList"
+);
 
 const paidList=
-document.getElementById("paidList");
+document.getElementById(
+"paidList"
+);
 
 unpaidList.innerHTML="";
 paidList.innerHTML="";
@@ -1653,6 +2303,7 @@ total+=Number(inst.amount||0);
 if(inst.paid){
 
 paid+=Number(inst.amount||0);
+
 paidCount++;
 
 }else{
@@ -1666,24 +2317,44 @@ unpaidCount++;
 });
 
 
-document.getElementById("totalValue").textContent=euro(total);
-document.getElementById("paidValue").textContent=euro(paid);
-document.getElementById("remainingValue").textContent=euro(total-paid);
-document.getElementById("unpaidCount").textContent=unpaidCount;
-document.getElementById("paidCount").textContent=paidCount;
+document.getElementById(
+"totalValue"
+).textContent=euro(total);
+
+document.getElementById(
+"paidValue"
+).textContent=euro(paid);
+
+document.getElementById(
+"remainingValue"
+).textContent=
+euro(total-paid);
+
+document.getElementById(
+"unpaidCount"
+).textContent=
+unpaidCount;
+
+document.getElementById(
+"paidCount"
+).textContent=
+paidCount;
 
 
 data.forEach(payment=>{
 
-const visible=payment.installments.filter(
-i=>currentTab==="unpaid"
+const visible=
+payment.installments.filter(
+i=>
+currentTab==="unpaid"
 ?!i.paid
 :i.paid
 );
 
 if(!visible.length)return;
 
-const group=createPaymentGroup(
+const group=
+createPaymentGroup(
 payment,
 visible
 );
@@ -1701,26 +2372,42 @@ updateSelectionBar();
 }
 
 
-function createPaymentGroup(payment,installments){
+/* =========================
+   GROUPE PAIEMENT
+========================= */
 
-const group=document.createElement("div");
+function createPaymentGroup(
+payment,
+installments
+){
+
+const group=
+document.createElement("div");
 
 group.className="paymentGroup";
 
-const header=document.createElement("div");
+const header=
+document.createElement("div");
 
-header.className="paymentGroupHeader";
+header.className=
+"paymentGroupHeader";
 
-const alias=payment.alias||"Sans alias";
+const alias=
+payment.alias||
+"Sans alias";
 
 const totalInstallments=
 payment.installments.length;
 
 const paidInstallments=
-payment.installments.filter(i=>i.paid).length;
+payment.installments.filter(
+i=>i.paid
+).length;
 
 const remainingInstallments=
-payment.installments.filter(i=>!i.paid).length;
+payment.installments.filter(
+i=>!i.paid
+).length;
 
 
 header.innerHTML=
@@ -1747,10 +2434,14 @@ restante(s)
 
 group.appendChild(header);
 
+
 installments.forEach(inst=>{
 
 group.appendChild(
-createInstallmentCard(payment,inst)
+createInstallmentCard(
+payment,
+inst
+)
 );
 
 });
@@ -1760,9 +2451,17 @@ return group;
 }
 
 
-function createInstallmentCard(payment,inst){
+/* =========================
+   CARTE ECHEANCE
+========================= */
 
-const card=document.createElement("div");
+function createInstallmentCard(
+payment,
+inst
+){
+
+const card=
+document.createElement("div");
 
 card.className="installment";
 
@@ -1770,22 +2469,27 @@ if(inst.paid)
 card.classList.add("paid");
 
 
-const top=document.createElement("div");
+const top=
+document.createElement("div");
 
 top.className="installmentTop";
 
 
-const checkbox=document.createElement("input");
+const checkbox=
+document.createElement("input");
 
 checkbox.type="checkbox";
+
 checkbox.className="checkbox";
 
-const key=selectionKey(
+const key=
+selectionKey(
 payment.id,
 inst.id
 );
 
-checkbox.checked=selectedIds.has(key);
+checkbox.checked=
+selectedIds.has(key);
 
 checkbox.addEventListener(
 "change",
@@ -1802,12 +2506,15 @@ updateSelectionBar();
 );
 
 
-const info=document.createElement("div");
+const info=
+document.createElement("div");
 
-info.className="installmentInfo";
+info.className=
+"installmentInfo";
 
 
-const status=inst.paid
+const status=
+inst.paid
 ?
 `<span class="badge badgePaid">PAYÉ</span>`
 :
@@ -1818,7 +2525,9 @@ info.innerHTML=
 `
 <div class="beneficiary">
 
-${escapeHtml(payment.beneficiary)}
+${escapeHtml(
+payment.beneficiary
+)}
 
 ${status}
 
@@ -1832,7 +2541,9 @@ ${formatDate(inst.date)}
 <br>
 
 Communication :
-${escapeHtml(payment.communication||"-")}
+${escapeHtml(
+payment.communication||"-"
+)}
 
 </div>
 
@@ -1845,20 +2556,25 @@ ${euro(inst.amount)}
 
 
 top.appendChild(checkbox);
+
 top.appendChild(info);
 
 card.appendChild(top);
 
 
-const actions=document.createElement("div");
+const actions=
+document.createElement("div");
 
 actions.className="actions";
 
 
-const editBtn=document.createElement("button");
+const editBtn=
+document.createElement("button");
 
 editBtn.className="secondary";
-editBtn.textContent="✏️ Modifier";
+
+editBtn.textContent=
+"✏️ Modifier";
 
 editBtn.onclick=function(){
 
@@ -1870,7 +2586,8 @@ inst.id
 };
 
 
-const paidBtn=document.createElement("button");
+const paidBtn=
+document.createElement("button");
 
 paidBtn.className=
 inst.paid
@@ -1892,10 +2609,13 @@ inst.id
 };
 
 
-const manualBtn=document.createElement("button");
+const manualBtn=
+document.createElement("button");
 
 manualBtn.className="secondary";
-manualBtn.textContent="💳 Payer";
+
+manualBtn.textContent=
+"💳 Payer";
 
 manualBtn.onclick=function(){
 
@@ -1907,9 +2627,11 @@ inst.id
 };
 
 
-const qrBtn=document.createElement("button");
+const qrBtn=
+document.createElement("button");
 
 qrBtn.className="qrButton";
+
 qrBtn.textContent="▣ QR";
 
 qrBtn.onclick=function(){
@@ -1922,10 +2644,14 @@ inst
 };
 
 
-const calendarBtn=document.createElement("button");
+const calendarBtn=
+document.createElement("button");
 
-calendarBtn.className="secondary";
-calendarBtn.textContent="📅 Calendrier";
+calendarBtn.className=
+"secondary";
+
+calendarBtn.textContent=
+"📅 Calendrier";
 
 calendarBtn.onclick=function(){
 
@@ -1937,10 +2663,13 @@ inst
 };
 
 
-const deleteBtn=document.createElement("button");
+const deleteBtn=
+document.createElement("button");
 
 deleteBtn.className="danger";
-deleteBtn.textContent="🗑️ Supprimer";
+
+deleteBtn.textContent=
+"🗑️ Supprimer";
 
 deleteBtn.onclick=function(){
 
@@ -1962,10 +2691,14 @@ actions.appendChild(deleteBtn);
 
 if(payment.photo){
 
-const photoBtn=document.createElement("button");
+const photoBtn=
+document.createElement("button");
 
-photoBtn.className="secondary";
-photoBtn.textContent="📄 Document";
+photoBtn.className=
+"secondary";
+
+photoBtn.textContent=
+"📄 Document";
 
 photoBtn.onclick=function(){
 
@@ -1985,20 +2718,32 @@ return card;
 }
 
 
-function deleteInstallment(paymentId,installmentId){
+/* =========================
+   SUPPRIMER ECHEANCE
+========================= */
 
-const payment=data.find(
+function deleteInstallment(
+paymentId,
+installmentId
+){
+
+const payment=
+data.find(
 p=>String(p.id)===String(paymentId)
 );
 
 if(!payment)return;
 
-if(!confirm("Supprimer cette échéance ?"))
+if(!confirm(
+"Supprimer cette échéance ?"
+))
 return;
 
 payment.installments=
 payment.installments.filter(
-i=>String(i.id)!==String(installmentId)
+i=>
+String(i.id)!==
+String(installmentId)
 );
 
 selectedIds.delete(
@@ -2008,10 +2753,12 @@ installmentId
 )
 );
 
+
 if(payment.installments.length===0){
 
 data=data.filter(
-p=>String(p.id)!==String(paymentId)
+p=>String(p.id)!==
+String(paymentId)
 );
 
 }
@@ -2027,25 +2774,37 @@ render();
    QR
 ========================= */
 
-function createEPCQR(payment,inst){
+function createEPCQR(
+payment,
+inst
+){
 
 const name=
-String(payment.beneficiary||"")
+String(
+payment.beneficiary||""
+)
 .trim()
 .substring(0,70);
 
 const iban=
-String(payment.iban||"")
+String(
+payment.iban||""
+)
 .replace(/\s/g,"")
 .toUpperCase();
 
 const amount=
-Number(inst.amount||0).toFixed(2);
+Number(
+inst.amount||0
+).toFixed(2);
 
 const communication=
-String(payment.communication||"")
+String(
+payment.communication||""
+)
 .trim()
 .substring(0,140);
+
 
 return[
 "BCD",
@@ -2064,10 +2823,15 @@ communication,
 }
 
 
-function openQR(payment,inst){
+function openQR(
+payment,
+inst
+){
 
 const iban=
-String(payment.iban||"")
+String(
+payment.iban||""
+)
 .replace(/\s/g,"")
 .toUpperCase();
 
@@ -2097,14 +2861,21 @@ paymentId:payment.id,
 installmentId:inst.id
 };
 
-const qrBox=document.getElementById("qrCode");
+
+const qrBox=
+document.getElementById(
+"qrCode"
+);
 
 qrBox.innerHTML="";
 
-const payload=createEPCQR(
+
+const payload=
+createEPCQR(
 payment,
 inst
 );
+
 
 new QRCode(
 qrBox,
@@ -2112,7 +2883,8 @@ qrBox,
 text:payload,
 width:240,
 height:240,
-correctLevel:QRCode.CorrectLevel.M
+correctLevel:
+QRCode.CorrectLevel.M
 }
 );
 
@@ -2122,7 +2894,9 @@ document.getElementById(
 ).innerHTML=
 `
 <strong>
-${escapeHtml(payment.beneficiary)}
+${escapeHtml(
+payment.beneficiary
+)}
 </strong>
 
 <br>
@@ -2138,7 +2912,9 @@ ${euro(inst.amount)}
 <br>
 
 Communication :
-${escapeHtml(payment.communication||"-")}
+${escapeHtml(
+payment.communication||"-"
+)}
 `;
 
 
@@ -2170,15 +2946,19 @@ qrId=null;
 
 function updateSelectionBar(){
 
-const bar=document.getElementById(
+const bar=
+document.getElementById(
 "selectionBar"
 );
 
-const info=document.getElementById(
+const info=
+document.getElementById(
 "selectionInfo"
 );
 
-const count=selectedIds.size;
+const count=
+selectedIds.size;
+
 
 if(count>0){
 
@@ -2186,9 +2966,11 @@ bar.classList.add("show");
 
 info.textContent=
 count+
-(count>1
+(
+count>1
 ?" sélectionnés"
-:" sélectionné");
+:" sélectionné"
+);
 
 }else{
 
@@ -2209,12 +2991,15 @@ if(!confirm(
 ))
 return;
 
+
 data.forEach(payment=>{
 
 payment.installments=
-payment.installments.filter(inst=>{
+payment.installments.filter(
+inst=>{
 
-const key=selectionKey(
+const key=
+selectionKey(
 payment.id,
 inst.id
 );
@@ -2226,7 +3011,8 @@ return !selectedIds.has(key);
 });
 
 
-data=data.filter(
+data=
+data.filter(
 p=>p.installments.length>0
 );
 
@@ -2239,19 +3025,30 @@ render();
 }
 
 
-function togglePaid(paymentId,installmentId){
+/* =========================
+   PAYE / A PAYER
+========================= */
 
-const payment=data.find(
+function togglePaid(
+paymentId,
+installmentId
+){
+
+const payment=
+data.find(
 p=>String(p.id)===String(paymentId)
 );
 
 if(!payment)return;
 
-const inst=payment.installments.find(
+
+const inst=
+payment.installments.find(
 i=>String(i.id)===String(installmentId)
 );
 
 if(!inst)return;
+
 
 inst.paid=!inst.paid;
 
@@ -2263,30 +3060,40 @@ render();
 
 
 /* =========================
-   MODIFICATION
+   MODIFICATION PAIEMENT
 ========================= */
 
-function openEdit(paymentId,installmentId){
+function openEdit(
+paymentId,
+installmentId
+){
 
-const payment=data.find(
+const payment=
+data.find(
 p=>String(p.id)===String(paymentId)
 );
 
 if(!payment){
 
-alert("Paiement introuvable.");
+alert(
+"Paiement introuvable."
+);
 
 return;
 
 }
 
-const inst=payment.installments.find(
+
+const inst=
+payment.installments.find(
 i=>String(i.id)===String(installmentId)
 );
 
 if(!inst){
 
-alert("Échéance introuvable.");
+alert(
+"Échéance introuvable."
+);
 
 return;
 
@@ -2301,23 +3108,28 @@ installmentId:installmentId
 
 document.getElementById(
 "editAlias"
-).value=payment.alias||"";
+).value=
+payment.alias||"";
 
 document.getElementById(
 "editBeneficiary"
-).value=payment.beneficiary||"";
+).value=
+payment.beneficiary||"";
 
 document.getElementById(
 "editIban"
-).value=payment.iban||"";
+).value=
+payment.iban||"";
 
 document.getElementById(
 "editDate"
-).value=inst.date||"";
+).value=
+inst.date||"";
 
 document.getElementById(
 "editAmount"
-).value=inst.amount??"";
+).value=
+inst.amount??"";
 
 document.getElementById(
 "editCommunication"
@@ -2347,25 +3159,35 @@ function saveEdit(){
 
 if(!editId)return;
 
-const payment=data.find(
-p=>String(p.id)===String(editId.paymentId)
+
+const payment=
+data.find(
+p=>String(p.id)===
+String(editId.paymentId)
 );
 
 if(!payment){
 
-alert("Paiement introuvable.");
+alert(
+"Paiement introuvable."
+);
 
 return;
 
 }
 
-const inst=payment.installments.find(
-i=>String(i.id)===String(editId.installmentId)
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===
+String(editId.installmentId)
 );
 
 if(!inst){
 
-alert("Échéance introuvable.");
+alert(
+"Échéance introuvable."
+);
 
 return;
 
@@ -2399,15 +3221,22 @@ document.getElementById(
 "editDate"
 ).value;
 
-const amount=parseFloat(
+
+const amount=
+parseFloat(
 document.getElementById(
 "editAmount"
 ).value
 );
 
-if(isNaN(amount)||amount<0){
+if(
+isNaN(amount)||
+amount<0
+){
 
-alert("Montant incorrect.");
+alert(
+"Montant incorrect."
+);
 
 return;
 
@@ -2421,7 +3250,9 @@ closeEdit();
 
 render();
 
-alert("Modification enregistrée.");
+alert(
+"Modification enregistrée."
+);
 
 }
 
@@ -2430,19 +3261,28 @@ alert("Modification enregistrée.");
    PAIEMENT MANUEL
 ========================= */
 
-function openManual(paymentId,installmentId){
+function openManual(
+paymentId,
+installmentId
+){
 
-const payment=data.find(
-p=>String(p.id)===String(paymentId)
+const payment=
+data.find(
+p=>String(p.id)===
+String(paymentId)
 );
 
 if(!payment)return;
 
-const inst=payment.installments.find(
-i=>String(i.id)===String(installmentId)
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===
+String(installmentId)
 );
 
 if(!inst)return;
+
 
 manualId={
 paymentId,
@@ -2450,7 +3290,8 @@ installmentId
 };
 
 
-const content=document.getElementById(
+const content=
+document.getElementById(
 "manualContent"
 );
 
@@ -2459,6 +3300,7 @@ content.innerHTML=
 `
 <div class="manualInfo">
 
+
 <div class="manualLine">
 
 <div class="manualLabel">
@@ -2466,13 +3308,17 @@ Bénéficiaire
 </div>
 
 <div class="manualValue">
-${escapeHtml(payment.beneficiary)}
+${escapeHtml(
+payment.beneficiary
+)}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.beneficiary)}',
+'${escapeJs(
+payment.beneficiary
+)}',
 this
 )">
 
@@ -2490,13 +3336,17 @@ IBAN
 </div>
 
 <div class="manualValue">
-${escapeHtml(payment.iban||"-")}
+${escapeHtml(
+payment.iban||"-"
+)}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.iban||"")}',
+'${escapeJs(
+payment.iban||""
+)}',
 this
 )">
 
@@ -2520,7 +3370,9 @@ ${euro(inst.amount)}
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(Number(inst.amount).toFixed(2))}',
+'${escapeJs(
+Number(inst.amount).toFixed(2)
+)}',
 this
 )">
 
@@ -2538,13 +3390,17 @@ Communication
 </div>
 
 <div class="manualValue">
-${escapeHtml(payment.communication||"-")}
+${escapeHtml(
+payment.communication||"-"
+)}
 </div>
 
 <button
 class="copyButton"
 onclick="copyText(
-'${escapeJs(payment.communication||"")}',
+'${escapeJs(
+payment.communication||""
+)}',
 this
 )">
 
@@ -2553,6 +3409,7 @@ Copier
 </button>
 
 </div>
+
 
 </div>
 `;
@@ -2578,7 +3435,10 @@ resetCopyButtons();
 }
 
 
-function copyText(text,button){
+function copyText(
+text,
+button
+){
 
 if(
 navigator.clipboard&&
@@ -2588,32 +3448,50 @@ navigator.clipboard.writeText
 navigator.clipboard.writeText(text)
 .then(()=>{
 
-button.textContent="✓ Copié";
-button.classList.add("copied");
+button.textContent=
+"✓ Copié";
+
+button.classList.add(
+"copied"
+);
 
 })
 .catch(()=>{
 
-fallbackCopy(text,button);
+fallbackCopy(
+text,
+button
+);
 
 });
 
 }else{
 
-fallbackCopy(text,button);
+fallbackCopy(
+text,
+button
+);
 
 }
 
 }
 
 
-function fallbackCopy(text,button){
+function fallbackCopy(
+text,
+button
+){
 
-const textarea=document.createElement("textarea");
+const textarea=
+document.createElement(
+"textarea"
+);
 
 textarea.value=text;
 
-document.body.appendChild(textarea);
+document.body.appendChild(
+textarea
+);
 
 textarea.select();
 
@@ -2621,12 +3499,18 @@ try{
 
 document.execCommand("copy");
 
-button.textContent="✓ Copié";
-button.classList.add("copied");
+button.textContent=
+"✓ Copié";
+
+button.classList.add(
+"copied"
+);
 
 }catch(e){
 
-alert("Impossible de copier.");
+alert(
+"Impossible de copier."
+);
 
 }
 
@@ -2639,11 +3523,14 @@ function resetCopyButtons(){
 
 document.querySelectorAll(
 ".copyButton"
-).forEach(b=>{
+).forEach(
+b=>{
 
 b.textContent="Copier";
 
-b.classList.remove("copied");
+b.classList.remove(
+"copied"
+);
 
 });
 
@@ -2654,27 +3541,37 @@ b.classList.remove("copied");
    CALENDRIER
 ========================= */
 
-function addCalendar(payment,inst){
+function addCalendar(
+payment,
+inst
+){
 
 if(!inst.date)return;
 
-const date=inst.date.replaceAll("-","");
+const date=
+inst.date.replaceAll("-","");
 
-const d2=new Date(
+const d2=
+new Date(
 inst.date+"T00:00:00"
 );
 
-d2.setDate(d2.getDate()+1);
+d2.setDate(
+d2.getDate()+1
+);
 
-const end=d2.toISOString()
+const end=
+d2.toISOString()
 .substring(0,10)
 .replaceAll("-","");
 
 
 const title=
-(payment.alias
+(
+payment.alias
 ?payment.alias+" - "
-:"")+
+:""
+)+
 payment.beneficiary;
 
 
@@ -2691,12 +3588,18 @@ Number(inst.amount).toFixed(2)+
 
 const url=
 "https://calendar.google.com/calendar/render?action=TEMPLATE"+
-"&text="+encodeURIComponent(title)+
-"&dates="+date+"/"+end+
-"&details="+encodeURIComponent(details);
+"&text="+
+encodeURIComponent(title)+
+"&dates="+
+date+"/"+end+
+"&details="+
+encodeURIComponent(details);
 
 
-window.open(url,"_blank");
+window.open(
+url,
+"_blank"
+);
 
 }
 
@@ -2707,18 +3610,24 @@ window.open(url,"_blank");
 
 function openPhoto(paymentId){
 
-const payment=data.find(
-p=>String(p.id)===String(paymentId)
+const payment=
+data.find(
+p=>String(p.id)===
+String(paymentId)
 );
 
 if(!payment||!payment.photo)
 return;
 
+
 photoId=paymentId;
+
 
 document.getElementById(
 "photoModalImage"
-).src=payment.photo;
+).src=
+payment.photo;
+
 
 document.getElementById(
 "photoModal"
@@ -2742,13 +3651,18 @@ function deletePhoto(){
 
 if(!photoId)return;
 
-const payment=data.find(
-p=>String(p.id)===String(photoId)
+
+const payment=
+data.find(
+p=>String(p.id)===
+String(photoId)
 );
 
 if(payment){
 
-if(!confirm("Supprimer ce document ?"))
+if(!confirm(
+"Supprimer ce document ?"
+))
 return;
 
 payment.photo="";
@@ -2764,284 +3678,34 @@ render();
 }
 
 
-/* =========================
-   EXPORT
-========================= */
-
-function exportData(){
-
-const backup={
-version:2,
-date:new Date().toISOString(),
-data:data,
-domiciliations:domiciliations
-};
-
-const blob=new Blob(
-[
-JSON.stringify(
-backup,
-null,
-2
-)
-],
-{
-type:"application/json"
-}
-);
-
-const url=URL.createObjectURL(blob);
-
-const a=document.createElement("a");
-
-a.href=url;
-
-a.download=
-"mes-paiements-backup.json";
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-setTimeout(
-()=>{
-URL.revokeObjectURL(url);
-},
-1000
-);
-
-}
-
-
-/* =========================
-   IMPORT
-========================= */
-
-document.getElementById(
-"importInput"
-).addEventListener(
-"change",
-function(){
-
-const file=this.files[0];
-
-if(!file)return;
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-
-try{
-
-const backup=JSON.parse(
-e.target.result
-);
-
-if(
-backup.data&&
-Array.isArray(backup.data)
-){
-
-data=backup.data;
-
-normalizeData();
-
-if(
-backup.domiciliations&&
-Array.isArray(backup.domiciliations)
-){
-
-domiciliations=
-backup.domiciliations;
-
-normalizeDomiciliations();
-
-}else{
-
-/*
-Anciennes sauvegardes :
-on conserve les paiements
-sans supprimer les domiciliations
-déjà présentes.
-*/
-
-}
-
-selectedIds.clear();
-
-saveData();
-
-saveDomiciliations();
-
-render();
-
-renderDomiciliations();
-
-alert("Importation réussie.");
-
-}else{
-
-alert(
-"Fichier de sauvegarde invalide."
-);
-
-}
-
-}catch(err){
-
-console.error(err);
-
-alert(
-"Impossible de lire la sauvegarde."
-);
-
-}
-
-};
-
-reader.readAsText(file);
-
-this.value="";
-
-}
-);
-
-
-/* =========================
-   SECURITE
-========================= */
-
-function escapeHtml(value){
-
-return String(value??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-function escapeJs(value){
-
-return String(value??"")
-.replaceAll("\\","\\\\")
-.replaceAll("'","\\'")
-.replaceAll("\n","\\n")
-.replaceAll("\r","\\r");
-
-}
-
-
-/* =========================
-   CALCULETTE
-========================= */
-
-let calculatorValue="";
-
-
-function calcInput(value){
-
-calculatorValue+=value;
-
-document.getElementById(
-"calcDisplay"
-).value=calculatorValue;
-
-}
-
-
-function calcClear(){
-
-calculatorValue="";
-
-document.getElementById(
-"calcDisplay"
-).value="";
-
-}
-
-
-function calcResult(){
-
-try{
-
-if(!calculatorValue)return;
-
-const safe=calculatorValue.replace(
-/[^0-9+\-*/().]/g,
-""
-);
-
-if(!safe)
-throw new Error();
-
-const result=Function(
-'"use strict";return ('+
-safe+
-')'
-)();
-
-if(
-typeof result!=="number"||
-!isFinite(result)
-){
-
-throw new Error();
-
-}
-
-calculatorValue=String(
-Math.round(
-(result+Number.EPSILON)*100
-)/100
-);
-
-document.getElementById(
-"calcDisplay"
-).value=calculatorValue;
-
-}catch(e){
-
-document.getElementById(
-"calcDisplay"
-).value="Erreur";
-
-calculatorValue="";
-
-}
-
-}
-
-
-/* =========================
+/* ==================================================
    DOMICILIATIONS
-========================= */
+================================================== */
+
+
+/* ---------- Chargement ---------- */
 
 function loadDomiciliations(){
 
 try{
 
 const saved=
-localStorage.getItem("mesDomiciliations");
+localStorage.getItem(
+"mesDomiciliations"
+);
 
 if(saved){
 
-domiciliations=JSON.parse(saved);
-
-if(!Array.isArray(domiciliations))
-domiciliations=[];
-
-normalizeDomiciliations();
+domiciliations=
+JSON.parse(saved);
 
 }else{
 
 domiciliations=[];
 
 }
+
+normalizeDomiciliations();
 
 }catch(e){
 
@@ -3059,13 +3723,17 @@ renderDomiciliations();
 }
 
 
+/* ---------- Sauvegarde ---------- */
+
 function saveDomiciliations(){
 
 try{
 
 localStorage.setItem(
 "mesDomiciliations",
-JSON.stringify(domiciliations)
+JSON.stringify(
+domiciliations
+)
 );
 
 }catch(e){
@@ -3084,23 +3752,26 @@ alert(
 }
 
 
+/* ---------- Normalisation ---------- */
+
 function normalizeDomiciliations(){
 
 if(!Array.isArray(domiciliations))
 domiciliations=[];
+
 
 domiciliations.forEach(dom=>{
 
 if(!dom.id)
 dom.id=generateId();
 
-if(!dom.alias)
+if(dom.alias===undefined)
 dom.alias="";
 
-if(!dom.beneficiary)
+if(dom.beneficiary===undefined)
 dom.beneficiary="";
 
-if(!dom.iban)
+if(dom.iban===undefined)
 dom.iban="";
 
 if(dom.total===undefined)
@@ -3109,60 +3780,200 @@ dom.total=0;
 if(dom.months===undefined)
 dom.months=1;
 
+if(dom.taeg===undefined)
+dom.taeg=0;
+
+if(dom.startDate===undefined)
+dom.startDate="";
+
 if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
+
+/*
+Anciennes domiciliations :
+elles n'avaient pas de TAEG/date.
+On conserve leurs données.
+*/
+
 });
+
 
 }
 
+
+/* ---------- Ouvrir formulaire ---------- */
 
 function toggleDomiciliationForm(){
 
 document.getElementById(
 "domiciliationForm"
-).classList.toggle("hidden");
+).classList.toggle(
+"hidden"
+);
 
 }
 
 
+/* ---------- Calcul mensualité ---------- */
+
+function calculateLoanMonthly(
+total,
+months,
+taeg
+){
+
+total=Number(total)||0;
+
+months=parseInt(months)||0;
+
+taeg=Number(taeg)||0;
+
+
+if(
+total<=0||
+months<=0
+){
+
+return 0;
+
+}
+
+
+/*
+TAEG = taux annuel.
+Conversion en taux mensuel.
+*/
+
+if(taeg<=0){
+
+return total/months;
+
+}
+
+
+const monthlyRate=
+(taeg/100)/12;
+
+
+const monthly=
+total*
+monthlyRate/
+(
+1-
+Math.pow(
+1+monthlyRate,
+-months
+)
+);
+
+
+if(
+!isFinite(monthly)
+){
+
+return 0;
+
+}
+
+
+return monthly;
+
+}
+
+
+/* ---------- Calcul date fin ---------- */
+
+function calculateDomiciliationEndDate(
+startDate,
+months
+){
+
+if(
+!startDate||
+!months||
+Number(months)<=0
+){
+
+return "";
+
+}
+
+
+return addMonthsSafe(
+startDate,
+Number(months)
+);
+
+}
+
+
+/* ---------- Calcul formulaire ---------- */
+
 function calculateDomiciliation(){
 
-const total=parseFloat(
+const total=
+parseFloat(
 document.getElementById(
 "domTotalAmount"
 ).value
 );
 
-const months=parseInt(
+const months=
+parseInt(
 document.getElementById(
 "domMonths"
 ).value
 );
 
-let monthly=0;
+const taeg=
+parseFloat(
+document.getElementById(
+"domTaeg"
+).value
+);
 
-if(
-!isNaN(total)&&
-total>0&&
-!isNaN(months)&&
-months>0
-){
+const startDate=
+document.getElementById(
+"domStartDate"
+).value;
 
-monthly=total/months;
 
-}
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
+
+
+const endDate=
+calculateDomiciliationEndDate(
+startDate,
+months
+);
+
+
+document.getElementById(
+"domEndDate"
+).value=
+endDate;
+
 
 document.getElementById(
 "domMonthlyResult"
 ).innerHTML=
 `
-Mensualité automatique :
-<strong>${euro(monthly)}</strong>
+Mensualité estimée :
+<strong>
+${euro(monthly)}
+</strong>
 `;
 
 }
 
+
+/* ---------- Ajouter ---------- */
 
 function addDomiciliation(){
 
@@ -3183,26 +3994,42 @@ document.getElementById(
 .toUpperCase()
 .replace(/\s/g,"");
 
-const total=parseFloat(
+const total=
+parseFloat(
 document.getElementById(
 "domTotalAmount"
 ).value
 );
 
-const months=parseInt(
+const months=
+parseInt(
 document.getElementById(
 "domMonths"
 ).value
 );
 
+const taeg=
+parseFloat(
+document.getElementById(
+"domTaeg"
+).value
+);
+
+const startDate=
+document.getElementById(
+"domStartDate"
+).value;
+
 
 if(
-!alias||
 !beneficiary||
 isNaN(total)||
 total<=0||
 isNaN(months)||
-months<1
+months<1||
+isNaN(taeg)||
+taeg<0||
+!startDate
 ){
 
 alert(
@@ -3228,6 +4055,10 @@ total:total,
 
 months:months,
 
+taeg:taeg,
+
+startDate:startDate,
+
 monthsPaid:[]
 
 });
@@ -3245,6 +4076,8 @@ alert(
 
 }
 
+
+/* ---------- Réinitialiser ---------- */
 
 function resetDomiciliationForm(){
 
@@ -3269,28 +4102,44 @@ document.getElementById(
 ).value="1";
 
 document.getElementById(
+"domTaeg"
+).value="";
+
+document.getElementById(
+"domStartDate"
+).value="";
+
+document.getElementById(
+"domEndDate"
+).value="";
+
+document.getElementById(
 "domMonthlyResult"
 ).innerHTML=
 `
-Mensualité automatique :
+Mensualité estimée :
 <strong>0,00 €</strong>
 `;
 
 document.getElementById(
 "domiciliationForm"
-).classList.add("hidden");
+).classList.add(
+"hidden"
+);
 
 }
 
 
+/* ---------- Affichage ---------- */
+
 function renderDomiciliations(){
 
-const list=document.getElementById(
+const list=
+document.getElementById(
 "domiciliationList"
 );
 
-if(!list)
-return;
+if(!list)return;
 
 list.innerHTML="";
 
@@ -3311,36 +4160,174 @@ return;
 }
 
 
+/*
+Résumé
+*/
+
+let totalMensuel=0;
+let totalRestant=0;
+
+
 domiciliations.forEach(dom=>{
 
-const total=Number(dom.total||0);
+const total=
+Number(dom.total||0);
 
-const months=Math.max(
+const months=
+Math.max(
 1,
 Number(dom.months||1)
 );
 
-const monthly=total/months;
+const taeg=
+Number(dom.taeg||0);
+
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
 
 const paidCount=
 Array.isArray(dom.monthsPaid)
 ?dom.monthsPaid.length
 :0;
 
-const remainingMonths=Math.max(
+const remainingMonths=
+Math.max(
 0,
 months-paidCount
 );
 
-const paidAmount=Math.min(
+const remainingAmount=
+Math.max(
+0,
+monthly*remainingMonths
+);
+
+totalMensuel+=
+remainingMonths>0
+?monthly
+:0;
+
+totalRestant+=
+remainingAmount;
+
+});
+
+
+/*
+Résumé visuel
+*/
+
+const summary=
+document.createElement("div");
+
+summary.className=
+"domiciliationSummary";
+
+summary.innerHTML=
+`
+<div class="domiciliationSummaryBox">
+
+<div class="domiciliationSummaryTitle">
+Domiciliations
+</div>
+
+<div class="domiciliationSummaryValue">
+${domiciliations.length}
+</div>
+
+</div>
+
+<div class="domiciliationSummaryBox">
+
+<div class="domiciliationSummaryTitle">
+Mensuel
+</div>
+
+<div class="domiciliationSummaryValue">
+${euro(totalMensuel)}
+</div>
+
+</div>
+
+<div class="domiciliationSummaryBox">
+
+<div class="domiciliationSummaryTitle">
+Reste estimé
+</div>
+
+<div class="domiciliationSummaryValue">
+${euro(totalRestant)}
+</div>
+
+</div>
+`;
+
+list.appendChild(summary);
+
+
+/*
+Cartes
+*/
+
+domiciliations.forEach(dom=>{
+
+const total=
+Number(dom.total||0);
+
+const months=
+Math.max(
+1,
+Number(dom.months||1)
+);
+
+const taeg=
+Number(dom.taeg||0);
+
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
+
+const startDate=
+dom.startDate||"";
+
+const endDate=
+calculateDomiciliationEndDate(
+startDate,
+months
+);
+
+
+const paidCount=
+Array.isArray(dom.monthsPaid)
+?dom.monthsPaid.length
+:0;
+
+const remainingMonths=
+Math.max(
+0,
+months-paidCount
+);
+
+
+const paidAmount=
+Math.min(
 total,
 monthly*paidCount
 );
 
-const remainingAmount=Math.max(
+const remainingAmount=
+Math.max(
 0,
 total-paidAmount
 );
+
 
 const progress=
 Math.min(
@@ -3349,10 +4336,12 @@ Math.min(
 );
 
 
-const item=document.createElement("div");
+const item=
+document.createElement("div");
 
 item.className=
 "domiciliationItem";
+
 
 if(
 remainingMonths===0
@@ -3372,6 +4361,7 @@ dom.alias||"Sans alias"
 )}
 
 </div>
+
 
 <div class="domiciliationBeneficiary">
 
@@ -3398,6 +4388,19 @@ ${euro(total)}
 
 <br>
 
+TAEG :
+<strong>
+${Number(taeg).toLocaleString(
+"fr-BE",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)} %
+</strong>
+
+<br>
+
 Durée :
 <strong>
 ${months} mois
@@ -3405,7 +4408,21 @@ ${months} mois
 
 <br>
 
-Mensualité :
+Date de début :
+<strong>
+${formatDate(startDate)||"-"}
+</strong>
+
+<br>
+
+Date de fin :
+<strong>
+${formatDate(endDate)||"-"}
+</strong>
+
+<br>
+
+Mensualité estimée :
 <strong>
 ${euro(monthly)}
 </strong>
@@ -3439,7 +4456,6 @@ ${euro(remainingAmount)}
 <div
 class="domiciliationProgressBar"
 style="width:${progress}%">
-
 </div>
 
 </div>
@@ -3449,23 +4465,42 @@ style="width:${progress}%">
 
 <button
 class="green"
-onclick="payNextDomiciliationMonth('${escapeJs(dom.id)}')">
+onclick="payNextDomiciliationMonth(
+'${escapeJs(dom.id)}'
+)">
 
 ✓ Marquer le mois payé
 
 </button>
 
+
 <button
 class="secondary"
-onclick="undoDomiciliationMonth('${escapeJs(dom.id)}')">
+onclick="undoDomiciliationMonth(
+'${escapeJs(dom.id)}'
+)">
 
 ↩️ Annuler dernier
 
 </button>
 
+
+<button
+class="secondary"
+onclick="openDomiciliationEdit(
+'${escapeJs(dom.id)}'
+)">
+
+✏️ Modifier
+
+</button>
+
+
 <button
 class="danger"
-onclick="deleteDomiciliation('${escapeJs(dom.id)}')">
+onclick="deleteDomiciliation(
+'${escapeJs(dom.id)}'
+)">
 
 🗑️ Supprimer
 
@@ -3474,6 +4509,7 @@ onclick="deleteDomiciliation('${escapeJs(dom.id)}')">
 </div>
 `;
 
+
 list.appendChild(item);
 
 });
@@ -3481,25 +4517,33 @@ list.appendChild(item);
 }
 
 
+/* ---------- Mois payé ---------- */
+
 function payNextDomiciliationMonth(id){
 
-const dom=domiciliations.find(
-d=>String(d.id)===String(id)
+const dom=
+domiciliations.find(
+d=>String(d.id)===
+String(id)
 );
 
-if(!dom)
-return;
+if(!dom)return;
+
 
 if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
-const months=Math.max(
+
+const months=
+Math.max(
 1,
 Number(dom.months||1)
 );
 
 
-if(dom.monthsPaid.length>=months){
+if(
+dom.monthsPaid.length>=months
+){
 
 alert(
 "Cette domiciliation est entièrement payée."
@@ -3513,7 +4557,9 @@ return;
 const nextMonth=
 dom.monthsPaid.length+1;
 
-dom.monthsPaid.push(nextMonth);
+dom.monthsPaid.push(
+nextMonth
+);
 
 saveDomiciliations();
 
@@ -3522,14 +4568,18 @@ renderDomiciliations();
 }
 
 
+/* ---------- Annuler dernier ---------- */
+
 function undoDomiciliationMonth(id){
 
-const dom=domiciliations.find(
-d=>String(d.id)===String(id)
+const dom=
+domiciliations.find(
+d=>String(d.id)===
+String(id)
 );
 
-if(!dom)
-return;
+if(!dom)return;
+
 
 if(
 !Array.isArray(dom.monthsPaid)||
@@ -3551,6 +4601,7 @@ return;
 
 }
 
+
 dom.monthsPaid.pop();
 
 saveDomiciliations();
@@ -3560,14 +4611,307 @@ renderDomiciliations();
 }
 
 
-function deleteDomiciliation(id){
+/* ---------- Modifier ---------- */
 
-const dom=domiciliations.find(
-d=>String(d.id)===String(id)
+function openDomiciliationEdit(id){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===
+String(id)
 );
 
-if(!dom)
+if(!dom){
+
+alert(
+"Domiciliation introuvable."
+);
+
 return;
+
+}
+
+
+domEditId=id;
+
+
+document.getElementById(
+"domEditAlias"
+).value=
+dom.alias||"";
+
+document.getElementById(
+"domEditBeneficiary"
+).value=
+dom.beneficiary||"";
+
+document.getElementById(
+"domEditIban"
+).value=
+dom.iban||"";
+
+document.getElementById(
+"domEditTotal"
+).value=
+dom.total??"";
+
+document.getElementById(
+"domEditMonths"
+).value=
+dom.months??1;
+
+document.getElementById(
+"domEditTaeg"
+).value=
+dom.taeg??0;
+
+document.getElementById(
+"domEditStartDate"
+).value=
+dom.startDate||"";
+
+
+calculateEditDomiciliation();
+
+
+document.getElementById(
+"domEditModal"
+).classList.add(
+"show"
+);
+
+}
+
+
+/* ---------- Calcul modification ---------- */
+
+function calculateEditDomiciliation(){
+
+const total=
+parseFloat(
+document.getElementById(
+"domEditTotal"
+).value
+);
+
+const months=
+parseInt(
+document.getElementById(
+"domEditMonths"
+).value
+);
+
+const taeg=
+parseFloat(
+document.getElementById(
+"domEditTaeg"
+).value
+);
+
+const startDate=
+document.getElementById(
+"domEditStartDate"
+).value;
+
+
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
+
+
+const endDate=
+calculateDomiciliationEndDate(
+startDate,
+months
+);
+
+
+document.getElementById(
+"domEditEndDate"
+).value=
+endDate;
+
+
+document.getElementById(
+"domEditMonthlyResult"
+).innerHTML=
+`
+Mensualité estimée :
+<strong>
+${euro(monthly)}
+</strong>
+`;
+
+}
+
+
+/* ---------- Sauvegarder modification ---------- */
+
+function saveDomiciliationEdit(){
+
+if(!domEditId)return;
+
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===
+String(domEditId)
+);
+
+if(!dom){
+
+alert(
+"Domiciliation introuvable."
+);
+
+return;
+
+}
+
+
+const alias=
+document.getElementById(
+"domEditAlias"
+).value.trim();
+
+const beneficiary=
+document.getElementById(
+"domEditBeneficiary"
+).value.trim();
+
+const iban=
+document.getElementById(
+"domEditIban"
+).value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+const total=
+parseFloat(
+document.getElementById(
+"domEditTotal"
+).value
+);
+
+const months=
+parseInt(
+document.getElementById(
+"domEditMonths"
+).value
+);
+
+const taeg=
+parseFloat(
+document.getElementById(
+"domEditTaeg"
+).value
+);
+
+const startDate=
+document.getElementById(
+"domEditStartDate"
+).value;
+
+
+if(
+!beneficiary||
+isNaN(total)||
+total<=0||
+isNaN(months)||
+months<1||
+isNaN(taeg)||
+taeg<0||
+!startDate
+){
+
+alert(
+"Veuillez remplir correctement les champs obligatoires."
+);
+
+return;
+
+}
+
+
+/*
+Si on raccourcit la durée,
+on évite d'avoir plus de mois payés
+que la nouvelle durée.
+*/
+
+if(
+!Array.isArray(dom.monthsPaid)
+){
+
+dom.monthsPaid=[];
+
+}
+
+dom.monthsPaid=
+dom.monthsPaid.slice(
+0,
+months
+);
+
+
+dom.alias=alias;
+
+dom.beneficiary=beneficiary;
+
+dom.iban=iban;
+
+dom.total=total;
+
+dom.months=months;
+
+dom.taeg=taeg;
+
+dom.startDate=startDate;
+
+
+saveDomiciliations();
+
+closeDomiciliationEdit();
+
+renderDomiciliations();
+
+alert(
+"Modification enregistrée."
+);
+
+}
+
+
+/* ---------- Fermer modification ---------- */
+
+function closeDomiciliationEdit(){
+
+document.getElementById(
+"domEditModal"
+).classList.remove(
+"show"
+);
+
+domEditId=null;
+
+}
+
+
+/* ---------- Supprimer ---------- */
+
+function deleteDomiciliation(id){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===
+String(id)
+);
+
+if(!dom)return;
+
 
 if(
 !confirm(
@@ -3579,14 +4923,330 @@ return;
 
 }
 
+
 domiciliations=
 domiciliations.filter(
-d=>String(d.id)!==String(id)
+d=>String(d.id)!==
+String(id)
 );
 
 saveDomiciliations();
 
 renderDomiciliations();
+
+}
+
+
+/* =========================
+   EXPORT
+========================= */
+
+function exportData(){
+
+const backup={
+
+version:3,
+
+date:
+new Date().toISOString(),
+
+data:data,
+
+domiciliations:
+domiciliations
+
+};
+
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+
+const url=
+URL.createObjectURL(blob);
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"mes-paiements-backup.json";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+
+setTimeout(
+()=>{
+URL.revokeObjectURL(url);
+},
+1000
+);
+
+}
+
+
+/* =========================
+   IMPORT
+========================= */
+
+document.getElementById(
+"importInput"
+).addEventListener(
+"change",
+function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+
+const reader=
+new FileReader();
+
+
+reader.onload=function(e){
+
+try{
+
+const backup=
+JSON.parse(
+e.target.result
+);
+
+
+if(
+backup.data&&
+Array.isArray(backup.data)
+){
+
+data=backup.data;
+
+normalizeData();
+
+
+/*
+On importe les domiciliations
+uniquement si elles existent
+dans la sauvegarde.
+*/
+
+if(
+Array.isArray(
+backup.domiciliations
+)
+){
+
+domiciliations=
+backup.domiciliations;
+
+normalizeDomiciliations();
+
+}
+
+
+selectedIds.clear();
+
+saveData();
+
+saveDomiciliations();
+
+render();
+
+renderDomiciliations();
+
+alert(
+"Importation réussie."
+);
+
+}else{
+
+alert(
+"Fichier de sauvegarde invalide."
+);
+
+}
+
+}catch(err){
+
+console.error(err);
+
+alert(
+"Impossible de lire la sauvegarde."
+);
+
+}
+
+};
+
+
+reader.readAsText(file);
+
+this.value="";
+
+}
+);
+
+
+/* =========================
+   SECURITE HTML
+========================= */
+
+function escapeHtml(value){
+
+return String(value??"")
+.replaceAll(
+"&",
+"&amp;"
+)
+.replaceAll(
+"<",
+"&lt;"
+)
+.replaceAll(
+">",
+"&gt;"
+)
+.replaceAll(
+'"',
+"&quot;"
+)
+.replaceAll(
+"'",
+"&#039;"
+);
+
+}
+
+
+function escapeJs(value){
+
+return String(value??"")
+.replaceAll(
+"\\",
+"\\\\"
+)
+.replaceAll(
+"'",
+"\\'"
+)
+.replaceAll(
+"\n",
+"\\n"
+)
+.replaceAll(
+"\r",
+"\\r"
+);
+
+}
+
+
+/* =========================
+   CALCULETTE
+========================= */
+
+let calculatorValue="";
+
+
+function calcInput(value){
+
+calculatorValue+=value;
+
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
+
+}
+
+
+function calcClear(){
+
+calculatorValue="";
+
+document.getElementById(
+"calcDisplay"
+).value="";
+
+}
+
+
+function calcResult(){
+
+try{
+
+if(!calculatorValue)return;
+
+
+const safe=
+calculatorValue.replace(
+/[^0-9+\-*/().]/g,
+""
+);
+
+
+if(!safe)
+throw new Error();
+
+
+const result=
+Function(
+'"use strict";return ('+
+safe+
+')'
+)();
+
+
+if(
+typeof result!=="number"||
+!isFinite(result)
+){
+
+throw new Error();
+
+}
+
+
+calculatorValue=
+String(
+Math.round(
+(result+Number.EPSILON)*100
+)/100
+);
+
+
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
+
+
+}catch(e){
+
+document.getElementById(
+"calcDisplay"
+).value=
+"Erreur";
+
+calculatorValue="";
+
+}
 
 }
 
@@ -3603,6 +5263,19 @@ function(e){
 
 if(e.target===this)
 closeEdit();
+
+}
+);
+
+
+document.getElementById(
+"domEditModal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this)
+closeDomiciliationEdit();
 
 }
 );
