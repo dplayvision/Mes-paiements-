@@ -28,382 +28,570 @@ background:#f2f2f7;
 color:#111;
 }
 
-button,
-input,
-select,
-textarea{
+button,input{
 font-family:inherit;
 }
-
-button{
-cursor:pointer;
-}
-
-.hidden{
-display:none!important;
-}
-
-/* =========================
-   PIN
-========================= */
-
-#pinScreen{
-position:fixed;
-inset:0;
-background:#f2f2f7;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-
-.pinBox{
-width:90%;
-max-width:360px;
-background:white;
-border-radius:24px;
-padding:30px 22px;
-text-align:center;
-box-shadow:0 10px 35px rgba(0,0,0,.12);
-}
-
-.pinBox h1{
-margin:0 0 8px;
-font-size:26px;
-}
-
-.pinBox p{
-color:#777;
-margin:0 0 20px;
-}
-
-#pinInput{
-width:100%;
-height:52px;
-border:1px solid #ddd;
-border-radius:14px;
-text-align:center;
-font-size:25px;
-letter-spacing:8px;
-outline:none;
-}
-
-.pinButton{
-margin-top:15px;
-width:100%;
-height:50px;
-border:0;
-border-radius:14px;
-background:#007aff;
-color:white;
-font-size:17px;
-font-weight:600;
-}
-
-/* =========================
-   HEADER
-========================= */
 
 .header{
 background:#007aff;
 color:white;
-padding:18px 15px 16px;
-position:sticky;
-top:0;
-z-index:100;
-box-shadow:0 2px 8px rgba(0,0,0,.12);
-}
-
-.headerTitle{
-font-size:25px;
+padding:calc(env(safe-area-inset-top) + 15px) 18px 16px;
+font-size:22px;
 font-weight:700;
-text-align:center;
 }
-
-/* =========================
-   CONTENT
-========================= */
 
 .container{
+padding:15px;
+padding-bottom:40px;
 max-width:700px;
 margin:auto;
-padding:15px;
-padding-bottom:80px;
 }
 
-/* =========================
-   SUMMARY
-========================= */
+.card{
+background:white;
+border-radius:18px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
 
-.summaryGrid{
+h2{
+font-size:19px;
+margin:0 0 14px;
+}
+
+label{
+display:block;
+font-size:14px;
+font-weight:600;
+margin:12px 0 6px;
+}
+
+input{
+width:100%;
+padding:13px;
+border:1px solid #d1d1d6;
+border-radius:11px;
+font-size:16px;
+background:#fff;
+}
+
+input[readonly]{
+background:#f2f2f7;
+color:#555;
+}
+
+button{
+border:0;
+border-radius:11px;
+padding:11px 14px;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+}
+
+.primary{
+background:#007aff;
+color:white;
+width:100%;
+}
+
+.secondary{
+background:#e9e9ee;
+color:#111;
+}
+
+.danger{
+background:#ff3b30;
+color:white;
+}
+
+.green{
+background:#34c759;
+color:white;
+}
+
+.qrButton{
+background:#5856d6;
+color:white;
+}
+
+.summary{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:8px;
 margin-bottom:15px;
 }
 
-.summaryCard{
+.summaryBox{
 background:white;
-border-radius:17px;
-padding:13px 7px;
+border-radius:15px;
+padding:12px 8px;
 text-align:center;
-box-shadow:0 1px 4px rgba(0,0,0,.07);
+box-shadow:0 2px 7px rgba(0,0,0,.05);
 }
 
 .summaryTitle{
 font-size:12px;
-color:#777;
-margin-bottom:5px;
+color:#666;
 }
 
 .summaryValue{
-font-size:17px;
+font-size:18px;
 font-weight:700;
+margin-top:4px;
 }
-
-/* =========================
-   TABS
-========================= */
 
 .tabs{
 display:flex;
-background:#e5e5ea;
-border-radius:12px;
+background:#dddde2;
+border-radius:11px;
 padding:3px;
 margin-bottom:15px;
 }
 
 .tab{
 flex:1;
-border:0;
-background:transparent;
-padding:10px 5px;
+text-align:center;
+padding:9px;
 border-radius:9px;
-font-size:14px;
 font-weight:600;
-color:#555;
+font-size:14px;
 }
 
 .tab.active{
 background:white;
-color:#007aff;
-box-shadow:0 1px 4px rgba(0,0,0,.12);
+box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 
-/* =========================
-   SECTIONS
-========================= */
-
-.section{
-background:white;
-border-radius:18px;
-padding:15px;
-margin-bottom:15px;
-box-shadow:0 1px 5px rgba(0,0,0,.07);
-}
-
-.sectionTitle{
-font-size:19px;
-font-weight:700;
-margin-bottom:13px;
-}
-
-.formGroup{
-margin-bottom:11px;
-}
-
-.formGroup label{
-display:block;
-font-size:13px;
-font-weight:600;
-color:#555;
-margin-bottom:5px;
-}
-
-.formGroup input,
-.formGroup textarea,
-.formGroup select{
-width:100%;
-border:1px solid #d5d5da;
-border-radius:11px;
-padding:11px 12px;
-font-size:16px;
-background:white;
-outline:none;
-}
-
-.formGroup textarea{
-min-height:75px;
-resize:vertical;
-}
-
-.primaryButton{
-width:100%;
-border:0;
-border-radius:12px;
-background:#007aff;
-color:white;
+.selectionBar{
+display:none;
+background:#fff;
+border-radius:14px;
 padding:12px;
-font-size:16px;
-font-weight:600;
-}
-
-.secondaryButton{
-width:100%;
-border:0;
-border-radius:12px;
-background:#e5e5ea;
-color:#111;
-padding:11px;
-font-size:15px;
-font-weight:600;
-}
-
-.dangerButton{
-width:100%;
-border:0;
-border-radius:12px;
-background:#ff3b30;
-color:white;
-padding:11px;
-font-size:15px;
-font-weight:600;
-}
-
-/* =========================
-   PAYMENTS
-========================= */
-
-.paymentCard{
-background:white;
-border-radius:18px;
-padding:15px;
 margin-bottom:12px;
-box-shadow:0 1px 5px rgba(0,0,0,.07);
+align-items:center;
+justify-content:space-between;
+gap:8px;
 }
 
-.paymentHeader{
+.selectionBar.show{
 display:flex;
-justify-content:space-between;
+}
+
+.selectionInfo{
+font-size:14px;
+font-weight:600;
+}
+
+.paymentGroup{
+background:#fff;
+border-radius:18px;
+padding:0;
+margin-bottom:15px;
+overflow:hidden;
+box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+
+.paymentGroupHeader{
+padding:15px;
+background:#f8f8fa;
+border-bottom:1px solid #e5e5ea;
+}
+
+.paymentGroupAlias{
+font-size:18px;
+font-weight:750;
+color:#007aff;
+}
+
+.paymentGroupBeneficiary{
+font-size:14px;
+font-weight:600;
+margin-top:4px;
+}
+
+.paymentGroupInfo{
+font-size:12px;
+color:#777;
+margin-top:5px;
+line-height:1.5;
+}
+
+.installment{
+margin:10px;
+padding:13px;
+border:1px solid #e1e1e6;
+border-radius:15px;
+background:#fff;
+}
+
+.installment.paid{
+background:#f3fff5;
+border-color:#b7e5c0;
+}
+
+.installmentTop{
+display:flex;
 gap:10px;
 align-items:flex-start;
 }
 
-.paymentName{
-font-size:17px;
-font-weight:700;
-}
-
-.paymentDate{
-font-size:12px;
-color:#777;
-margin-top:3px;
-}
-
-.paymentTotal{
-font-size:18px;
-font-weight:700;
-white-space:nowrap;
-}
-
-.paymentInfo{
-margin-top:12px;
-font-size:14px;
-color:#555;
-line-height:1.6;
-}
-
-.amountLine{
-display:flex;
-justify-content:space-between;
-padding:3px 0;
-}
-
-.remaining{
-color:#ff3b30;
-font-weight:700;
-}
-
-.paidAmount{
-color:#34c759;
-font-weight:700;
-}
-
-/* =========================
-   ECHEANCES PAIEMENT
-========================= */
-
-.installments{
-margin-top:12px;
-border-top:1px solid #eee;
-padding-top:8px;
-}
-
-.installmentRow{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-padding:9px 0;
-border-bottom:1px solid #f0f0f0;
-}
-
-.installmentRow:last-child{
-border-bottom:0;
-}
-
-.installmentLeft{
-display:flex;
-align-items:center;
-gap:9px;
-font-size:14px;
-}
-
-.installmentLeft input{
+.checkbox{
 width:21px;
 height:21px;
-accent-color:#007aff;
+margin-top:2px;
+flex-shrink:0;
 }
 
-.installmentPaid{
-color:#34c759;
-font-weight:600;
+.installmentInfo{
+flex:1;
+min-width:0;
 }
 
-.installmentUnpaid{
-color:#555;
+.beneficiary{
+font-weight:700;
+font-size:15px;
 }
 
-.paymentButtons{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:7px;
-margin-top:12px;
-}
-
-.smallButton{
-border:0;
-border-radius:10px;
-padding:9px 5px;
+.installmentDetails{
 font-size:13px;
+color:#666;
+margin-top:4px;
+line-height:1.5;
+}
+
+.amount{
+font-size:18px;
+font-weight:750;
+margin-top:6px;
+}
+
+.actions{
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+margin-top:10px;
+}
+
+.actions button{
+padding:8px 10px;
+font-size:13px;
+}
+
+.small{
+font-size:12px;
+color:#777;
+}
+
+.badge{
+display:inline-block;
+font-size:11px;
+font-weight:700;
+padding:4px 7px;
+border-radius:7px;
+margin-left:5px;
+}
+
+.badgePaid{
+background:#d8f8df;
+color:#167c2e;
+}
+
+.badgeUnpaid{
+background:#ffe0dd;
+color:#c62820;
+}
+
+.badgeBalloon{
+background:#e5e2ff;
+color:#5856d6;
+}
+
+.balloonOption{
+display:flex;
+align-items:center;
+gap:10px;
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-top:15px;
+}
+
+.balloonOption input{
+width:21px;
+height:21px;
+margin:0;
+flex-shrink:0;
+}
+
+.balloonOption label{
+margin:0;
+font-size:14px;
+font-weight:700;
+}
+
+.balloonBox{
+background:#eaf4ff;
+border-radius:14px;
+padding:13px;
+margin-top:10px;
+}
+
+.balloonTitle{
+font-size:14px;
+font-weight:750;
+color:#007aff;
+margin-bottom:8px;
+}
+
+.balloonInfo{
+font-size:12px;
+color:#666;
+line-height:1.5;
+margin-top:10px;
+}
+
+.balloonTotal{
+background:white;
+border-radius:10px;
+padding:10px;
+margin-top:10px;
+font-size:14px;
+}
+
+.balloonTotal strong{
+color:#007aff;
+font-size:17px;
+}
+
+.photoButtons{
+display:flex;
+gap:8px;
+}
+
+.photoButtons button{
+flex:1;
+}
+
+.photoPreview{
+max-width:100%;
+max-height:180px;
+display:block;
+margin-top:10px;
+border-radius:10px;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+z-index:1000;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modalBox{
+background:white;
+width:100%;
+max-width:500px;
+max-height:90vh;
+overflow:auto;
+border-radius:20px;
+padding:18px;
+}
+
+.modalTitle{
+font-size:20px;
+font-weight:750;
+margin-bottom:12px;
+}
+
+.modalActions{
+display:flex;
+gap:8px;
+margin-top:15px;
+}
+
+.modalActions button{
+flex:1;
+}
+
+.manualInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-bottom:10px;
+}
+
+.manualLine{
+margin-bottom:12px;
+}
+
+.manualLabel{
+font-size:12px;
+color:#777;
+}
+
+.manualValue{
+font-size:15px;
 font-weight:600;
-background:#e5e5ea;
+word-break:break-word;
+margin-top:2px;
 }
 
-.smallButton.blue{
-background:#007aff;
-color:white;
+.copyButton{
+margin-top:5px;
+background:#e9e9ee;
+font-size:12px;
+padding:7px 10px;
 }
 
-.smallButton.red{
-background:#ff3b30;
-color:white;
-}
-
-.smallButton.green{
+.copyButton.copied{
 background:#34c759;
 color:white;
 }
+
+.login{
+position:fixed;
+inset:0;
+background:#f2f2f7;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:25px;
+z-index:2000;
+}
+
+.loginBox{
+background:white;
+width:100%;
+max-width:360px;
+border-radius:22px;
+padding:25px;
+box-shadow:0 5px 25px rgba(0,0,0,.12);
+text-align:center;
+}
+
+.loginTitle{
+font-size:25px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+.loginText{
+font-size:14px;
+color:#777;
+margin-bottom:18px;
+}
+
+#pinInput{
+text-align:center;
+font-size:25px;
+letter-spacing:8px;
+}
+
+.hidden{
+display:none !important;
+}
+
+input[type="file"]{
+display:none;
+}
+
+.photoModalImage{
+max-width:100%;
+max-height:75vh;
+display:block;
+margin:auto;
+border-radius:12px;
+}
+
+.photoModalButtons{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.photoModalButtons button{
+flex:1;
+}
+
+.qrContainer{
+text-align:center;
+padding:10px 0;
+}
+
+#qrCode{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:10px;
+background:white;
+}
+
+#qrCode img,
+#qrCode canvas{
+margin:auto;
+}
+
+.qrInfo{
+background:#f2f2f7;
+border-radius:12px;
+padding:12px;
+margin-top:12px;
+font-size:13px;
+line-height:1.5;
+text-align:left;
+}
+
+.qrWarning{
+font-size:12px;
+color:#777;
+margin-top:10px;
+text-align:center;
+}
+
+.calculatorDisplay{
+font-size:25px;
+font-weight:700;
+text-align:right;
+background:#f2f2f7;
+margin-bottom:10px;
+}
+
+.calculatorGrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px;
+}
+
+.calculatorGrid button{
+font-size:18px;
+padding:14px 5px;
+}
+
+.calculatorEquals{
+margin-top:8px;
+width:100%;
+font-size:18px;
+}
+
+.empty{
+background:white;
+border-radius:15px;
+padding:20px;
+text-align:center;
+color:#777;
+margin-bottom:15px;
+}
+
 
 /* =========================
    DOMICILIATIONS
@@ -412,273 +600,343 @@ color:white;
 .domiciliationCard{
 background:white;
 border-radius:18px;
-padding:15px;
-margin-bottom:12px;
-box-shadow:0 1px 5px rgba(0,0,0,.07);
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.domHeader{
+.domiciliationHeader{
 display:flex;
 justify-content:space-between;
+align-items:center;
 gap:10px;
+margin-bottom:14px;
 }
 
-.domTitle{
-font-size:18px;
+.domiciliationTitle{
+font-size:19px;
+font-weight:750;
+}
+
+.domiciliationSummary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:7px;
+margin-bottom:14px;
+}
+
+.domiciliationSummaryBox{
+background:#f2f2f7;
+border-radius:12px;
+padding:9px 5px;
+text-align:center;
+}
+
+.domiciliationSummaryTitle{
+font-size:11px;
+color:#777;
+}
+
+.domiciliationSummaryValue{
+font-size:15px;
 font-weight:700;
+margin-top:3px;
 }
 
-.domMonthly{
-font-size:18px;
-font-weight:700;
-color:#007aff;
-white-space:nowrap;
-}
-
-.domInfo{
+.domiciliationItem{
+border:1px solid #e1e1e6;
+border-radius:15px;
+padding:14px;
 margin-top:10px;
-font-size:14px;
-line-height:1.65;
-color:#555;
+background:#fff;
 }
 
-.domProgress{
-margin-top:12px;
-height:9px;
+.domiciliationItem.paid{
+background:#f3fff5;
+border-color:#b7e5c0;
+}
+
+.domiciliationAlias{
+font-size:17px;
+font-weight:750;
+color:#007aff;
+}
+
+.domiciliationBeneficiary{
+font-size:14px;
+font-weight:600;
+margin-top:3px;
+}
+
+.domiciliationDetails{
+font-size:13px;
+color:#666;
+margin-top:8px;
+line-height:1.6;
+}
+
+.domiciliationAmount{
+font-size:19px;
+font-weight:750;
+margin-top:8px;
+}
+
+.domiciliationActions{
+display:flex;
+flex-wrap:wrap;
+gap:7px;
+margin-top:10px;
+}
+
+.domiciliationActions button{
+padding:8px 10px;
+font-size:13px;
+}
+
+.domiciliationProgress{
+height:8px;
 background:#e5e5ea;
 border-radius:10px;
 overflow:hidden;
+margin-top:10px;
 }
 
-.domProgressBar{
+.domiciliationProgressBar{
 height:100%;
 background:#34c759;
 border-radius:10px;
 }
 
-.domButtons{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:7px;
-margin-top:12px;
-}
-
-.domButton{
-border:0;
-border-radius:10px;
-padding:10px 5px;
-font-size:13px;
-font-weight:600;
-background:#e5e5ea;
-}
-
-.domButton.blue{
-background:#007aff;
-color:white;
-}
-
-.domButton.red{
-background:#ff3b30;
-color:white;
-}
-
-.domButton.green{
-background:#34c759;
-color:white;
-}
-
-/* =========================
-   DERNIERE ECHEANCE
-========================= */
-
-.checkboxLine{
-display:flex;
-align-items:center;
-gap:9px;
+.domiciliationEmpty{
 background:#f2f2f7;
 border-radius:12px;
-padding:11px;
-margin:10px 0;
+padding:15px;
+text-align:center;
+color:#777;
+font-size:14px;
+margin-top:10px;
 }
 
-.checkboxLine input{
-width:21px;
-height:21px;
-accent-color:#007aff;
+.domiciliationForm{
+margin-top:15px;
+padding-top:15px;
+border-top:1px solid #e5e5ea;
 }
 
-.checkboxLine span{
+.domiciliationMonthly{
+background:#eaf4ff;
+border-radius:12px;
+padding:12px;
+margin-top:12px;
 font-size:14px;
 font-weight:600;
 }
 
-.lastInstallmentBox{
-display:none;
+.domiciliationMonthly strong{
+font-size:20px;
+color:#007aff;
 }
 
-.lastInstallmentBox.visible{
-display:block;
+.domiciliationInfoBox{
+background:#f2f2f7;
+border-radius:12px;
+padding:11px;
+margin-top:10px;
+font-size:12px;
+color:#666;
+line-height:1.5;
 }
+
 
 /* =========================
-   MODAL
+   ECHEANCES DOMICILIATION
 ========================= */
 
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.45);
-display:none;
-align-items:flex-end;
-justify-content:center;
-z-index:500;
-}
-
-.modal.show{
-display:flex;
-}
-
-.modalBox{
-width:100%;
-max-width:700px;
-background:white;
-border-radius:22px 22px 0 0;
-padding:20px;
-max-height:90vh;
-overflow:auto;
-}
-
-.modalTitle{
-font-size:20px;
-font-weight:700;
-margin-bottom:15px;
-}
-
-.modalButtons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
+.domiciliationNext{
+background:#eaf4ff;
+border-radius:14px;
+padding:12px;
 margin-top:12px;
 }
 
-/* =========================
-   PHOTO
-========================= */
-
-.photoPreview{
-margin-top:10px;
-max-width:100%;
-max-height:250px;
-border-radius:12px;
-display:block;
-}
-
-.photoButtons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-}
-
-/* =========================
-   QR
-========================= */
-
-.qrBox{
+.domiciliationNextTop{
 display:flex;
-justify-content:center;
-padding:15px;
+align-items:center;
+gap:10px;
 }
 
-#qrcode{
-display:inline-block;
+.domiciliationCheckbox{
+width:22px !important;
+height:22px !important;
+margin:0 !important;
+padding:0 !important;
+flex-shrink:0;
 }
+
+.domiciliationNextInfo{
+flex:1;
+min-width:0;
+}
+
+.domiciliationNextTitle{
+font-size:12px;
+color:#777;
+}
+
+.domiciliationNextDate{
+font-size:15px;
+font-weight:700;
+margin-top:2px;
+}
+
+.domiciliationNextAmount{
+font-size:18px;
+font-weight:750;
+color:#007aff;
+margin-top:3px;
+}
+
+.domiciliationScheduleButton{
+width:100%;
+margin-top:10px;
+}
+
+.domiciliationSchedule{
+margin-top:10px;
+}
+
+.domiciliationSchedule.hidden{
+display:none !important;
+}
+
+.domiciliationMonth{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+border:1px solid #e1e1e6;
+border-radius:12px;
+margin-top:7px;
+background:#fff;
+}
+
+.domiciliationMonth.paid{
+background:#f3fff5;
+border-color:#b7e5c0;
+}
+
+.domiciliationMonth input{
+width:21px !important;
+height:21px !important;
+margin:0 !important;
+padding:0 !important;
+flex-shrink:0;
+}
+
+.domiciliationMonthInfo{
+flex:1;
+min-width:0;
+}
+
+.domiciliationMonthLabel{
+font-size:12px;
+color:#777;
+}
+
+.domiciliationMonthDate{
+font-size:14px;
+font-weight:700;
+margin-top:2px;
+}
+
+.domiciliationMonthAmount{
+font-size:15px;
+font-weight:700;
+margin-top:2px;
+}
+
+.domiciliationLast{
+font-size:10px;
+font-weight:700;
+background:#e5e2ff;
+color:#5856d6;
+border-radius:6px;
+padding:3px 6px;
+margin-left:5px;
+}
+
 
 /* =========================
-   CALCULATRICE
+   PHOTOS DOMICILIATION
 ========================= */
 
-.calculator{
-background:#1c1c1e;
-border-radius:20px;
-padding:12px;
+.domiciliationPhotos{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:12px;
 }
 
-.calcDisplay{
-background:#000;
-color:white;
-font-size:35px;
-text-align:right;
-padding:15px 10px;
-border-radius:12px;
-margin-bottom:10px;
-min-height:65px;
+.domiciliationPhotoBox{
+background:#f2f2f7;
+border-radius:14px;
+padding:8px;
+text-align:center;
 overflow:hidden;
 }
 
-.calcGrid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:7px;
+.domiciliationPhoto{
+width:100%;
+height:140px;
+object-fit:cover;
+border-radius:10px;
+display:block;
+cursor:pointer;
 }
 
-.calcBtn{
-border:0;
-border-radius:12px;
-height:55px;
-font-size:21px;
-background:#3a3a3c;
-color:white;
+.domiciliationPhotoEmpty{
+height:140px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#777;
+font-size:13px;
+line-height:1.5;
 }
 
-.calcBtn.operator{
-background:#ff9500;
+.domiciliationPhotoActions{
+display:flex;
+gap:5px;
+margin-top:7px;
 }
 
-.calcBtn.equal{
-background:#34c759;
+.domiciliationPhotoActions button{
+flex:1;
+padding:7px 5px;
+font-size:12px;
 }
 
-.calcBtn.clear{
-background:#ff3b30;
-}
-
-/* =========================
-   BACKUP
-========================= */
-
-.backupGrid{
-display:grid;
-grid-template-columns:1fr 1fr;
+.domiciliationPhotoButtons{
+display:flex;
 gap:8px;
+margin-top:8px;
 }
+
+.domiciliationPhotoButtons button{
+flex:1;
+}
+
+.domiciliationPhotoInput{
+display:none !important;
+}
+
 
 /* =========================
-   EMPTY
+   MODIFICATION PHOTOS
 ========================= */
 
-.empty{
-text-align:center;
-color:#888;
-padding:25px 10px;
-}
-
-hr{
-border:0;
-border-top:1px solid #eee;
-margin:15px 0;
-}
-
-@media(max-width:400px){
-
-.summaryValue{
-font-size:15px;
-}
-
-.paymentButtons,
-.domButtons{
-grid-template-columns:1fr 1fr;
-}
-
+.domEditPhotos{
+margin-top:10px;
 }
 
 </style>
@@ -686,35 +944,39 @@ grid-template-columns:1fr 1fr;
 
 <body>
 
+
 <!-- =========================
-     PIN
+     CONNEXION
 ========================= -->
 
-<div id="pinScreen">
+<div id="loginScreen" class="login">
 
-<div class="pinBox">
+<div class="loginBox">
 
-<h1>Mes paiements</h1>
+<div class="loginTitle">
+Mes paiements
+</div>
 
-<p>Entrez votre code PIN</p>
+<div class="loginText">
+Entrez votre code PIN
+</div>
 
 <input
 id="pinInput"
 type="password"
 inputmode="numeric"
 maxlength="4"
-autocomplete="off">
+placeholder="••••">
+
+<br><br>
 
 <button
-class="pinButton"
+class="primary"
 onclick="checkPin()">
-Déverrouiller
-</button>
 
-<p id="pinError"
-style="color:#ff3b30;margin-top:12px;display:none;">
-Code incorrect
-</p>
+Ouvrir
+
+</button>
 
 </div>
 
@@ -722,42 +984,72 @@ Code incorrect
 
 
 <!-- =========================
-     APP
+     APPLICATION
 ========================= -->
 
 <div id="app" class="hidden">
 
 <div class="header">
-
-<div class="headerTitle">
 Mes paiements
 </div>
-
-</div>
-
 
 <div class="container">
 
 
 <!-- =========================
-     RESUME
+     RESUME PAIEMENTS
 ========================= -->
 
-<div class="summaryGrid">
+<div class="summary">
 
-<div class="summaryCard">
-<div class="summaryTitle">Total</div>
-<div id="summaryTotal" class="summaryValue">0,00 €</div>
+<div class="summaryBox">
+
+<div class="summaryTitle">
+Total
 </div>
 
-<div class="summaryCard">
-<div class="summaryTitle">Payé</div>
-<div id="summaryPaid" class="summaryValue">0,00 €</div>
+<div
+id="totalValue"
+class="summaryValue">
+
+0,00 €
+
 </div>
 
-<div class="summaryCard">
-<div class="summaryTitle">Reste</div>
-<div id="summaryRemaining" class="summaryValue">0,00 €</div>
+</div>
+
+
+<div class="summaryBox">
+
+<div class="summaryTitle">
+Payé
+</div>
+
+<div
+id="paidValue"
+class="summaryValue">
+
+0,00 €
+
+</div>
+
+</div>
+
+
+<div class="summaryBox">
+
+<div class="summaryTitle">
+Reste
+</div>
+
+<div
+id="remainingValue"
+class="summaryValue">
+
+0,00 €
+
+</div>
+
 </div>
 
 </div>
@@ -769,334 +1061,565 @@ Mes paiements
 
 <div class="tabs">
 
-<button
+<div
 id="tabUnpaid"
 class="tab active"
-onclick="switchTab('unpaid')">
-Impayés <span id="unpaidCount">0</span>
-</button>
+onclick="showTab('unpaid')">
 
-<button
+À payer
+(<span id="unpaidCount">0</span>)
+
+</div>
+
+<div
 id="tabPaid"
 class="tab"
-onclick="switchTab('paid')">
-Payés <span id="paidCount">0</span>
+onclick="showTab('paid')">
+
+Payé
+(<span id="paidCount">0</span>)
+
+</div>
+
+</div>
+
+
+<div
+id="selectionBar"
+class="selectionBar">
+
+<div
+id="selectionInfo"
+class="selectionInfo">
+
+0 sélectionné
+
+</div>
+
+<button
+class="danger"
+onclick="deleteSelected()">
+
+Supprimer
+
 </button>
 
 </div>
 
 
-<div id="paymentsList"></div>
+<div id="unpaidList"></div>
+
+<div
+id="paidList"
+class="hidden">
+
+</div>
 
 
 <!-- =========================
-     AJOUTER UN PAIEMENT
+     AJOUT PAIEMENT
 ========================= -->
 
-<div class="section">
+<div class="card">
 
-<div class="sectionTitle">
+<h2>
 Ajouter un paiement
-</div>
+</h2>
 
-<div class="formGroup">
-<label>Bénéficiaire</label>
-<input id="payBeneficiary" type="text">
-</div>
+<label>
+Alias / raccourci
+</label>
 
-<div class="formGroup">
-<label>IBAN</label>
-<input id="payIBAN" type="text">
-</div>
-
-<div class="formGroup">
-<label>Montant total (€)</label>
 <input
-id="payTotal"
+id="alias"
+placeholder="Ex : Taxe maison">
+
+
+<label>
+Bénéficiaire
+</label>
+
+<input
+id="beneficiary"
+placeholder="Nom du bénéficiaire">
+
+
+<label>
+IBAN
+</label>
+
+<input
+id="iban"
+placeholder="BE...">
+
+
+<label id="totalAmountLabel">
+Montant total
+</label>
+
+<input
+id="totalAmount"
 type="number"
 step="0.01"
-inputmode="decimal">
-</div>
+inputmode="decimal"
+placeholder="0,00">
 
-<div class="formGroup">
-<label>Nombre d'échéances</label>
+
+<label>
+Nombre d'échéances
+</label>
+
 <input
-id="payInstallments"
+id="installments"
 type="number"
 min="1"
 value="1"
-inputmode="numeric">
+oninput="updateBalloonTotal()">
+
+
+<div class="balloonOption">
+
+<input
+id="balloonEnabled"
+type="checkbox"
+onchange="toggleBalloonFields()">
+
+<label for="balloonEnabled">
+Dernière échéance différente
+</label>
+
 </div>
 
-<div class="formGroup">
-<label>Date</label>
-<input id="payDate" type="date">
+
+<div
+id="balloonBox"
+class="balloonBox hidden">
+
+<div class="balloonTitle">
+💰 Échéance finale / ballon
 </div>
 
-<div class="formGroup">
-<label>Communication</label>
-<input id="payCommunication" type="text">
+
+<label>
+Montant financé / emprunté
+</label>
+
+<input
+id="financedAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 21600,00">
+
+
+<label>
+Montant de chaque échéance normale
+</label>
+
+<input
+id="regularAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 313,14"
+oninput="updateBalloonTotal()">
+
+
+<label>
+Montant de la dernière échéance
+</label>
+
+<input
+id="balloonAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 7873,14"
+oninput="updateBalloonTotal()">
+
+
+<div
+id="balloonTotalInfo"
+class="balloonTotal">
+
+Total des échéances :
+<strong>0,00 €</strong>
+
 </div>
 
-<div class="formGroup">
 
-<label>Photo de la facture</label>
+<div class="balloonInfo">
+
+Les échéances normales seront générées avec le
+montant indiqué ci-dessus. La dernière échéance
+aura son propre montant et sera automatiquement
+identifiée comme <strong>BALLON</strong>.
+
+</div>
+
+</div>
+
+
+<label>
+Première échéance
+</label>
+
+<input
+id="firstDate"
+type="date">
+
+
+<label>
+Communication
+</label>
+
+<input
+id="communication"
+placeholder="Communication">
+
+
+<label>
+Document
+</label>
 
 <div class="photoButtons">
 
 <button
-type="button"
-class="secondaryButton"
-onclick="document.getElementById('payPhotoCamera').click()">
+class="secondary"
+onclick="document.getElementById('cameraInput').click()">
+
 📷 Appareil photo
+
 </button>
 
 <button
-type="button"
-class="secondaryButton"
-onclick="document.getElementById('payPhotoGallery').click()">
-🖼️ Galerie
+class="secondary"
+onclick="document.getElementById('galleryInput').click()">
+
+🖼️ Mes photos
+
 </button>
 
 </div>
 
-<input
-id="payPhotoCamera"
-type="file"
-accept="image/*"
-capture="environment"
-style="display:none"
-onchange="handlePaymentPhoto(this)">
 
 <input
-id="payPhotoGallery"
+id="cameraInput"
 type="file"
 accept="image/*"
-style="display:none"
-onchange="handlePaymentPhoto(this)">
+capture="environment">
 
-<img
-id="payPhotoPreview"
-class="photoPreview"
-style="display:none">
 
-</div>
+<input
+id="galleryInput"
+type="file"
+accept="image/*">
+
+
+<div id="addPhotoPreview"></div>
+
+<br>
 
 <button
-class="primaryButton"
+class="primary"
 onclick="addPayment()">
+
 Ajouter le paiement
+
 </button>
 
 </div>
 
 
-<!-- =========================
+<!-- ==================================================
      DOMICILIATIONS
-========================= -->
+================================================== -->
 
-<div class="section">
+<div class="domiciliationCard">
 
-<div
-class="sectionTitle"
-style="display:flex;justify-content:space-between;align-items:center;">
+<div class="domiciliationHeader">
 
-<span>Domiciliations</span>
+<div class="domiciliationTitle">
+🏦 Domiciliations
+</div>
 
 <button
-class="smallButton blue"
+class="secondary"
 onclick="toggleDomiciliationForm()">
+
 ＋ Ajouter
+
 </button>
 
 </div>
 
 
-<div id="domiciliationForm" class="hidden">
+<div id="domiciliationForm"
+class="domiciliationForm hidden">
 
-<div class="formGroup">
-<label>Nom / Référence</label>
-<input id="domAlias" type="text">
-</div>
+<h2>
+Ajouter une domiciliation
+</h2>
 
-<div class="formGroup">
-<label>Bénéficiaire</label>
-<input id="domBeneficiary" type="text">
-</div>
 
-<div class="formGroup">
-<label>IBAN</label>
-<input id="domIBAN" type="text">
-</div>
+<label>
+Alias / raccourci
+</label>
 
-<div class="formGroup">
-<label>Montant du prêt / total (€)</label>
 <input
-id="domTotal"
+id="domAlias"
+placeholder="Ex : Crédit maison">
+
+
+<label>
+Bénéficiaire
+</label>
+
+<input
+id="domBeneficiary"
+placeholder="Nom du bénéficiaire">
+
+
+<label>
+IBAN
+</label>
+
+<input
+id="domIban"
+placeholder="BE...">
+
+
+<label>
+Montant total
+</label>
+
+<input
+id="domTotalAmount"
 type="number"
 step="0.01"
 inputmode="decimal"
+placeholder="0,00"
 oninput="calculateDomiciliation()">
-</div>
 
-<div class="formGroup">
-<label>Nombre de mois</label>
+
+<label>
+Nombre de mois
+</label>
+
 <input
 id="domMonths"
 type="number"
 min="1"
-inputmode="numeric"
+value="1"
 oninput="calculateDomiciliation()">
-</div>
 
-<div class="formGroup">
-<label>TAEG (%)</label>
-<input
-id="domTAEG"
-type="number"
-step="0.01"
-inputmode="decimal"
-oninput="calculateDomiciliation()">
-</div>
-
-<div class="formGroup">
-<label>Date de début</label>
-<input
-id="domStartDate"
-type="date"
-oninput="calculateDomiciliation()">
-</div>
-
-
-<!-- =================================
-     NOUVELLE OPTION UNIQUEMENT ICI
-================================= -->
-
-<div class="checkboxLine">
-
-<input
-id="domLastDifferent"
-type="checkbox"
-onchange="toggleLastInstallment()">
-
-<span>
-Dernière échéance différente
-</span>
-
-</div>
-
-<div
-id="domLastInstallmentBox"
-class="lastInstallmentBox">
-
-<div class="formGroup">
 
 <label>
-Montant de la dernière échéance (€)
+TAEG (%)
 </label>
 
 <input
-id="domLastInstallment"
+id="domTaeg"
 type="number"
 step="0.01"
+min="0"
 inputmode="decimal"
+placeholder="Ex : 3"
 oninput="calculateDomiciliation()">
+
+
+<label>
+Date de début
+</label>
+
+<input
+id="domStartDate"
+type="date"
+onchange="calculateDomiciliation()">
+
+
+<label>
+Date de fin
+</label>
+
+<input
+id="domEndDate"
+type="date"
+readonly>
+
+
+<!-- =========================
+     PHOTOS DOMICILIATION
+========================= -->
+
+<label>
+Photos de la domiciliation
+</label>
+
+<div class="domiciliationPhotoButtons">
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto1Camera').click()">
+
+📷 Photo 1
+
+</button>
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto2Camera').click()">
+
+📷 Photo 2
+
+</button>
 
 </div>
 
+<input
+id="domPhoto1Camera"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*"
+capture="environment">
+
+<input
+id="domPhoto2Camera"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*"
+capture="environment">
+
+
+<div class="domiciliationPhotoButtons">
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto1Gallery').click()">
+
+🖼️ Photo 1
+
+</button>
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto2Gallery').click()">
+
+🖼️ Photo 2
+
+</button>
+
+</div>
+
+<input
+id="domPhoto1Gallery"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*">
+
+<input
+id="domPhoto2Gallery"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*">
+
+
+<div
+id="domAddPhotosPreview"
+class="domiciliationPhotos">
 </div>
 
 
 <div
-id="domCalculation"
-style="
-background:#f2f2f7;
-padding:12px;
-border-radius:12px;
-margin-bottom:12px;
-font-size:14px;
-line-height:1.7;">
+id="domMonthlyResult"
+class="domiciliationMonthly">
+
+Mensualité estimée :
+<strong>0,00 €</strong>
+
 </div>
 
 
+<div class="domiciliationInfoBox">
+
+La mensualité est calculée automatiquement à partir
+du montant, de la durée et du TAEG saisi.
+Le calcul est indicatif et peut différer de celui
+de la banque.
+
+</div>
+
+<br>
+
 <button
-class="primaryButton"
+class="primary"
 onclick="addDomiciliation()">
+
 Ajouter la domiciliation
-</button>
 
-<br><br>
-
-<button
-class="secondaryButton"
-onclick="resetDomiciliationForm();toggleDomiciliationForm()">
-Annuler
 </button>
 
 </div>
 
 
-<div id="domiciliationsList"></div>
+<div id="domiciliationList"></div>
 
 </div>
 
 
 <!-- =========================
-     CALCULATRICE
+     CALCULETTE
 ========================= -->
 
-<div class="section">
+<div class="card">
 
-<div class="sectionTitle">
-Calculatrice
+<h2>
+🧮 Calculette
+</h2>
+
+<input
+id="calcDisplay"
+class="calculatorDisplay"
+type="text"
+readonly
+placeholder="0">
+
+
+<div class="calculatorGrid">
+
+<button class="secondary" onclick="calcInput('7')">7</button>
+<button class="secondary" onclick="calcInput('8')">8</button>
+<button class="secondary" onclick="calcInput('9')">9</button>
+<button class="secondary" onclick="calcInput('/')">÷</button>
+
+<button class="secondary" onclick="calcInput('4')">4</button>
+<button class="secondary" onclick="calcInput('5')">5</button>
+<button class="secondary" onclick="calcInput('6')">6</button>
+<button class="secondary" onclick="calcInput('*')">×</button>
+
+<button class="secondary" onclick="calcInput('1')">1</button>
+<button class="secondary" onclick="calcInput('2')">2</button>
+<button class="secondary" onclick="calcInput('3')">3</button>
+<button class="secondary" onclick="calcInput('-')">−</button>
+
+<button class="secondary" onclick="calcInput('0')">0</button>
+<button class="secondary" onclick="calcInput('.')">.</button>
+<button class="danger" onclick="calcClear()">C</button>
+<button class="secondary" onclick="calcInput('+')">+</button>
+
 </div>
-
-<div class="calculator">
-
-<div id="calcDisplay" class="calcDisplay">
-0
-</div>
-
-<div class="calcGrid">
-
-<button class="calcBtn clear" onclick="calcClear()">C</button>
-<button class="calcBtn" onclick="calcInput('(')">(</button>
-<button class="calcBtn" onclick="calcInput(')')">)</button>
-<button class="calcBtn operator" onclick="calcInput('/')">÷</button>
-
-<button class="calcBtn" onclick="calcInput('7')">7</button>
-<button class="calcBtn" onclick="calcInput('8')">8</button>
-<button class="calcBtn" onclick="calcInput('9')">9</button>
-<button class="calcBtn operator" onclick="calcInput('*')">×</button>
-
-<button class="calcBtn" onclick="calcInput('4')">4</button>
-<button class="calcBtn" onclick="calcInput('5')">5</button>
-<button class="calcBtn" onclick="calcInput('6')">6</button>
-<button class="calcBtn operator" onclick="calcInput('-')">−</button>
-
-<button class="calcBtn" onclick="calcInput('1')">1</button>
-<button class="calcBtn" onclick="calcInput('2')">2</button>
-<button class="calcBtn" onclick="calcInput('3')">3</button>
-<button class="calcBtn operator" onclick="calcInput('+')">+</button>
 
 <button
-class="calcBtn"
-style="grid-column:span 2"
-onclick="calcInput('0')">
-0
+class="primary calculatorEquals"
+onclick="calcResult()">
+
+= Calculer
+
 </button>
-
-<button class="calcBtn" onclick="calcInput('.')">
-,
-</button>
-
-<button class="calcBtn equal" onclick="calcResult()">
-=
-</button>
-
-</div>
-
-</div>
 
 </div>
 
@@ -1105,105 +1628,111 @@ onclick="calcInput('0')">
      SAUVEGARDE
 ========================= -->
 
-<div class="section">
+<div class="card">
 
-<div class="sectionTitle">
+<h2>
 Sauvegarde
-</div>
-
-<div class="backupGrid">
+</h2>
 
 <button
-class="secondaryButton"
+class="secondary"
 onclick="exportData()">
-Exporter
+
+Exporter mes données
+
 </button>
 
 <button
-class="secondaryButton"
-onclick="document.getElementById('importFile').click()">
-Importer
-</button>
+class="secondary"
+onclick="document.getElementById('importInput').click()">
 
-</div>
+Importer une sauvegarde
+
+</button>
 
 <input
-id="importFile"
+id="importInput"
 type="file"
-accept=".json,application/json"
-style="display:none"
-onchange="importData(this)">
-
-</div>
-
+accept=".json">
 
 </div>
 
 </div>
 
+</div>
 
-<!-- =========================
-     MODAL PAIEMENT
-========================= -->
 
-<div id="paymentModal" class="modal">
+<!-- ==================================================
+     MODIFICATION PAIEMENT
+================================================== -->
+
+<div
+id="editModal"
+class="modal">
 
 <div class="modalBox">
 
 <div class="modalTitle">
-Modifier le paiement
+Modifier l'échéance
 </div>
 
-<input type="hidden" id="editPaymentId">
+<label>
+Alias
+</label>
 
-<div class="formGroup">
-<label>Bénéficiaire</label>
+<input id="editAlias">
+
+<label>
+Bénéficiaire
+</label>
+
 <input id="editBeneficiary">
-</div>
 
-<div class="formGroup">
-<label>IBAN</label>
-<input id="editIBAN">
-</div>
+<label>
+IBAN
+</label>
 
-<div class="formGroup">
-<label>Montant total (€)</label>
+<input id="editIban">
+
+<label>
+Date
+</label>
+
 <input
-id="editTotal"
+id="editDate"
+type="date">
+
+<label>
+Montant
+</label>
+
+<input
+id="editAmount"
 type="number"
 step="0.01">
-</div>
 
-<div class="formGroup">
-<label>Nombre d'échéances</label>
-<input
-id="editInstallments"
-type="number"
-min="1">
-</div>
+<label>
+Communication
+</label>
 
-<div class="formGroup">
-<label>Date</label>
-<input id="editDate" type="date">
-</div>
-
-<div class="formGroup">
-<label>Communication</label>
 <input id="editCommunication">
-</div>
 
-<div class="modalButtons">
+<div class="modalActions">
 
 <button
-class="secondaryButton"
-onclick="closePaymentModal()">
+class="secondary"
+onclick="closeEdit()">
+
 Annuler
+
 </button>
 
 <button
-class="primaryButton"
-onclick="savePaymentEdit()">
+class="primary"
+onclick="saveEdit()">
+
 Enregistrer
+
 </button>
 
 </div>
@@ -1213,11 +1742,13 @@ Enregistrer
 </div>
 
 
-<!-- =========================
-     MODAL DOMICILIATION
-========================= -->
+<!-- ==================================================
+     MODIFICATION DOMICILIATION
+================================================== -->
 
-<div id="domModal" class="modal">
+<div
+id="domEditModal"
+class="modal">
 
 <div class="modalBox">
 
@@ -1225,117 +1756,120 @@ Enregistrer
 Modifier la domiciliation
 </div>
 
-<input type="hidden" id="editDomId">
+<label>
+Alias / raccourci
+</label>
 
-<div class="formGroup">
-<label>Nom / Référence</label>
-<input id="editDomAlias">
-</div>
-
-<div class="formGroup">
-<label>Bénéficiaire</label>
-<input id="editDomBeneficiary">
-</div>
-
-<div class="formGroup">
-<label>IBAN</label>
-<input id="editDomIBAN">
-</div>
-
-<div class="formGroup">
-<label>Montant total (€)</label>
-<input
-id="editDomTotal"
-type="number"
-step="0.01"
-oninput="calculateEditDomiciliation()">
-</div>
-
-<div class="formGroup">
-<label>Nombre de mois</label>
-<input
-id="editDomMonths"
-type="number"
-min="1"
-oninput="calculateEditDomiciliation()">
-</div>
-
-<div class="formGroup">
-<label>TAEG (%)</label>
-<input
-id="editDomTAEG"
-type="number"
-step="0.01"
-oninput="calculateEditDomiciliation()">
-</div>
-
-<div class="formGroup">
-<label>Date de début</label>
-<input
-id="editDomStartDate"
-type="date"
-oninput="calculateEditDomiciliation()">
-</div>
-
-
-<div class="checkboxLine">
-
-<input
-id="editDomLastDifferent"
-type="checkbox"
-onchange="toggleEditLastInstallment()">
-
-<span>
-Dernière échéance différente
-</span>
-
-</div>
-
-<div
-id="editDomLastInstallmentBox"
-class="lastInstallmentBox">
-
-<div class="formGroup">
+<input id="domEditAlias">
 
 <label>
-Montant de la dernière échéance (€)
+Bénéficiaire
+</label>
+
+<input id="domEditBeneficiary">
+
+<label>
+IBAN
+</label>
+
+<input id="domEditIban">
+
+<label>
+Montant total
 </label>
 
 <input
-id="editDomLastInstallment"
+id="domEditTotal"
 type="number"
 step="0.01"
+inputmode="decimal"
 oninput="calculateEditDomiciliation()">
 
-</div>
+<label>
+Nombre de mois
+</label>
 
+<input
+id="domEditMonths"
+type="number"
+min="1"
+oninput="calculateEditDomiciliation()">
+
+<label>
+TAEG (%)
+</label>
+
+<input
+id="domEditTaeg"
+type="number"
+step="0.01"
+min="0"
+inputmode="decimal"
+oninput="calculateEditDomiciliation()">
+
+<label>
+Date de début
+</label>
+
+<input
+id="domEditStartDate"
+type="date"
+onchange="calculateEditDomiciliation()">
+
+<label>
+Date de fin
+</label>
+
+<input
+id="domEditEndDate"
+type="date"
+readonly>
+
+
+<!-- PHOTOS MODIFICATION -->
+
+<label>
+Photos de la domiciliation
+</label>
+
+<div
+id="domEditPhotos"
+class="domiciliationPhotos">
 </div>
 
 
 <div
-id="editDomCalculation"
-style="
-background:#f2f2f7;
-padding:12px;
-border-radius:12px;
-margin-bottom:12px;
-font-size:14px;
-line-height:1.7;">
+id="domEditMonthlyResult"
+class="domiciliationMonthly">
+
+Mensualité estimée :
+<strong>0,00 €</strong>
+
 </div>
 
+<div class="domiciliationInfoBox">
 
-<div class="modalButtons">
+La mensualité est recalculée automatiquement
+si tu modifies le montant, la durée ou le TAEG.
+
+</div>
+
+<div class="modalActions">
 
 <button
-class="secondaryButton"
+class="secondary"
 onclick="closeDomiciliationEdit()">
+
 Annuler
+
 </button>
 
 <button
-class="primaryButton"
+class="primary"
 onclick="saveDomiciliationEdit()">
+
 Enregistrer
+
 </button>
 
 </div>
@@ -1345,29 +1879,125 @@ Enregistrer
 </div>
 
 
-<!-- =========================
-     MODAL QR
-========================= -->
+<!-- ==================================================
+     PAIEMENT MANUEL
+================================================== -->
 
-<div id="qrModal" class="modal">
+<div
+id="manualModal"
+class="modal">
 
 <div class="modalBox">
 
 <div class="modalTitle">
-QR Code de paiement
+Paiement manuel
 </div>
 
-<div class="qrBox">
+<div id="manualContent"></div>
 
-<div id="qrcode"></div>
-
-</div>
+<div class="modalActions">
 
 <button
-class="secondaryButton"
-onclick="closeQR()">
+class="secondary"
+onclick="closeManual()">
+
 Fermer
+
 </button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     QR
+================================================== -->
+
+<div
+id="qrModal"
+class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+▣ QR paiement
+</div>
+
+<div class="qrContainer">
+
+<div id="qrCode"></div>
+
+<div
+id="qrInfo"
+class="qrInfo">
+</div>
+
+<div class="qrWarning">
+
+Scanne ce QR avec une application bancaire compatible.
+Vérifie toujours les informations avant de valider le paiement.
+
+</div>
+
+</div>
+
+<div class="modalActions">
+
+<button
+class="secondary"
+onclick="closeQR()">
+
+Fermer
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ==================================================
+     PHOTO PAIEMENT
+================================================== -->
+
+<div
+id="photoModal"
+class="modal">
+
+<div class="modalBox">
+
+<div class="modalTitle">
+Document
+</div>
+
+<img
+id="photoModalImage"
+class="photoModalImage">
+
+<div class="photoModalButtons">
+
+<button
+class="danger"
+onclick="deletePhoto()">
+
+Supprimer
+
+</button>
+
+<button
+class="secondary"
+onclick="closePhoto()">
+
+Fermer
+
+</button>
+
+</div>
 
 </div>
 
@@ -1376,977 +2006,327 @@ Fermer
 
 <script>
 
-/* ==========================================================
-   CONFIGURATION
-========================================================== */
+const PIN="1157";
 
-const PIN = "1157";
+let data=[];
+let domiciliations=[];
 
-let payments = [];
-let domiciliations = [];
+let currentTab="unpaid";
 
-let currentTab = "unpaid";
+let selectedIds=new Set();
 
-let paymentPhoto = null;
+let editId=null;
+let manualId=null;
+let photoId=null;
+let qrId=null;
+
+let domEditId=null;
+
+let addPhotoData="";
+
+let domPhoto1="";
+let domPhoto2="";
+
+let openedDomiciliationSchedules=new Set();
 
 
-/* ==========================================================
-   UTILITAIRES
-========================================================== */
+/* =========================
+   OUTILS
+========================= */
 
-function money(value){
+function euro(value){
 
-return Number(value || 0).toLocaleString(
+return Number(value||0).toLocaleString(
 "fr-BE",
 {
-minimumFractionDigits:2,
-maximumFractionDigits:2
+style:"currency",
+currency:"EUR"
 }
-) + " €";
-
-}
-
-
-function escapeHTML(value){
-
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+);
 
 }
 
 
-function uid(){
+function roundMoney(value){
 
-return Date.now().toString(36)
-+
-Math.random().toString(36).substring(2,8);
+return Math.round(
+(Number(value)||0)*100
+)/100;
+
+}
+
+
+function generateId(){
+
+return Date.now().toString()+
+Math.random().toString(36).substring(2,9);
 
 }
 
 
 function formatDate(date){
 
-if(!date) return "";
+if(!date)return "";
 
-const d = new Date(date + "T00:00:00");
-
-if(isNaN(d)) return date;
+const d=new Date(date+"T00:00:00");
 
 return d.toLocaleDateString("fr-BE");
 
 }
 
 
-function round2(value){
+function addMonths(date,months){
 
-return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+const d=new Date(date+"T00:00:00");
+
+d.setMonth(d.getMonth()+months);
+
+return d.toISOString().substring(0,10);
 
 }
 
 
-function addMonthsSafe(dateString, months){
+function addMonthsSafe(date,months){
 
-if(!dateString) return "";
+if(!date)return "";
 
-const d = new Date(dateString + "T00:00:00");
+const parts=date.split("-");
 
-const day = d.getDate();
+if(parts.length!==3)return "";
 
-d.setDate(1);
+const year=parseInt(parts[0]);
+const month=parseInt(parts[1]);
+const day=parseInt(parts[2]);
 
-d.setMonth(d.getMonth() + Number(months));
+if(
+isNaN(year)||
+isNaN(month)||
+isNaN(day)
+){
 
-const lastDay = new Date(
-d.getFullYear(),
-d.getMonth()+1,
+return "";
+
+}
+
+const totalMonths=
+(month-1)+Number(months||0);
+
+const targetYear=
+year+
+Math.floor(totalMonths/12);
+
+const targetMonth=
+((totalMonths%12)+12)%12;
+
+const lastDay=
+new Date(
+targetYear,
+targetMonth+1,
 0
 ).getDate();
 
-d.setDate(Math.min(day,lastDay));
+const targetDay=
+Math.min(day,lastDay);
 
-return d.toISOString().slice(0,10);
-
-}
-
-
-/* ==========================================================
-   PIN
-========================================================== */
-
-function checkPin(){
-
-const value =
-document.getElementById("pinInput").value;
-
-if(value === PIN){
-
-document.getElementById("pinScreen")
-.classList.add("hidden");
-
-document.getElementById("app")
-.classList.remove("hidden");
-
-renderAll();
-
-}else{
-
-document.getElementById("pinError")
-.style.display="block";
-
-document.getElementById("pinInput").value="";
-
-}
+return String(targetYear)+
+"-"+
+String(targetMonth+1).padStart(2,"0")+
+"-"+
+String(targetDay).padStart(2,"0");
 
 }
 
 
-document.getElementById("pinInput")
-.addEventListener("keydown",function(e){
+function selectionKey(paymentId,installmentId){
 
-if(e.key === "Enter"){
-checkPin();
+return String(paymentId)+"::"+String(installmentId);
+
 }
+
+
+/* =========================
+   NORMALISATION PAIEMENTS
+========================= */
+
+function normalizeData(){
+
+if(!Array.isArray(data))
+data=[];
+
+data.forEach(p=>{
+
+if(!p.id)
+p.id=generateId();
+
+if(!p.alias)
+p.alias="";
+
+if(!p.beneficiary)
+p.beneficiary="";
+
+if(!p.iban)
+p.iban="";
+
+if(!p.communication)
+p.communication="";
+
+if(!p.photo)
+p.photo="";
+
+if(typeof p.balloonEnabled!=="boolean")
+p.balloonEnabled=false;
+
+if(
+p.financedAmount===undefined||
+p.financedAmount===null
+)
+p.financedAmount=0;
+
+if(
+p.regularAmount===undefined||
+p.regularAmount===null
+)
+p.regularAmount=0;
+
+if(
+p.balloonAmount===undefined||
+p.balloonAmount===null
+)
+p.balloonAmount=0;
+
+if(!Array.isArray(p.installments))
+p.installments=[];
+
+p.installments.forEach(i=>{
+
+if(!i.id)
+i.id=generateId();
+
+if(typeof i.paid!=="boolean")
+i.paid=false;
+
+if(
+i.amount===undefined||
+i.amount===null||
+i.amount===""
+)
+i.amount=0;
+
+if(typeof i.balloon!=="boolean")
+i.balloon=false;
 
 });
 
+});
 
-/* ==========================================================
-   LOCAL STORAGE
-========================================================== */
+}
+
+
+/* =========================
+   CHARGEMENT
+========================= */
 
 function loadData(){
 
 try{
 
-payments =
-JSON.parse(
-localStorage.getItem("mesPaiements") || "[]"
-);
+const saved=
+localStorage.getItem("mesPaiements");
+
+if(saved){
+
+data=JSON.parse(saved);
+
+normalizeData();
+
+}
 
 }catch(e){
 
-payments=[];
+console.error(
+"Erreur chargement :",
+e
+);
+
+data=[];
 
 }
+
+loadDomiciliations();
+
+render();
+
+}
+
+
+function saveData(){
 
 try{
 
-domiciliations =
-JSON.parse(
-localStorage.getItem("mesDomiciliations") || "[]"
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(data)
 );
 
 }catch(e){
 
-domiciliations=[];
+console.error(
+"Erreur sauvegarde :",
+e
+);
 
-}
-
-normalizePayments();
-
-normalizeDomiciliations();
-
-}
-
-
-function savePayments(){
-
-localStorage.setItem(
-"mesPaiements",
-JSON.stringify(payments)
+alert(
+"Impossible de sauvegarder les données."
 );
 
 }
 
-
-function saveDomiciliations(){
-
-localStorage.setItem(
-"mesDomiciliations",
-JSON.stringify(domiciliations)
-);
-
 }
 
 
-/* ==========================================================
-   NORMALISATION PAIEMENTS
-========================================================== */
+/* =========================
+   PIN
+========================= */
 
-function normalizePayments(){
+function checkPin(){
 
-payments = payments.map(p => {
+const value=
+document.getElementById(
+"pinInput"
+).value;
 
-let installments =
-Number(
-p.installments ??
-p.echeances ??
-1
-);
+if(value===PIN){
 
-if(!Number.isFinite(installments) || installments < 1){
-installments=1;
-}
+document.getElementById(
+"loginScreen"
+).classList.add("hidden");
 
-installments=Math.floor(installments);
+document.getElementById(
+"app"
+).classList.remove("hidden");
 
-let paidInstallments =
-Array.isArray(p.paidInstallments)
-? p.paidInstallments.slice(0,installments)
-: null;
-
-if(!paidInstallments){
-
-paidInstallments =
-Array(installments).fill(!!p.paid);
-
-}
-
-while(paidInstallments.length < installments){
-
-paidInstallments.push(false);
-
-}
-
-return {
-
-...p,
-
-id:p.id || uid(),
-
-installments:installments,
-
-paidInstallments:paidInstallments
-
-};
-
-});
-
-savePayments();
-
-}
-
-
-function normalizeDomiciliations(){
-
-domiciliations =
-domiciliations.map(d => {
-
-let monthsPaid =
-Array.isArray(d.monthsPaid)
-? d.monthsPaid
-: [];
-
-return {
-
-...d,
-
-id:d.id || uid(),
-
-monthsPaid:monthsPaid,
-
-months:Number(d.months || 1),
-
-total:Number(d.total || 0),
-
-taeg:Number(d.taeg || 0),
-
-lastDifferent:!!d.lastDifferent,
-
-lastInstallment:
-d.lastInstallment !== undefined
-? Number(d.lastInstallment)
-: null
-
-};
-
-});
-
-saveDomiciliations();
-
-}
-
-
-/* ==========================================================
-   PAIEMENTS
-========================================================== */
-
-function getInstallmentAmounts(payment){
-
-const total = round2(payment.total);
-
-const count =
-Math.max(1,Number(payment.installments || 1));
-
-const base =
-round2(total / count);
-
-const amounts=[];
-
-let accumulated=0;
-
-for(let i=0;i<count;i++){
-
-if(i === count-1){
-
-amounts.push(
-round2(total - accumulated)
-);
+loadData();
 
 }else{
 
-amounts.push(base);
-
-accumulated =
-round2(accumulated + base);
-
-}
-
-}
-
-return amounts;
-
-}
-
-
-function getPaidAmount(payment){
-
-const amounts =
-getInstallmentAmounts(payment);
-
-const states =
-payment.paidInstallments || [];
-
-let total=0;
-
-amounts.forEach((amount,index)=>{
-
-if(states[index]){
-total += amount;
-}
-
-});
-
-return round2(total);
-
-}
-
-
-function isFullyPaid(payment){
-
-const count =
-Number(payment.installments || 1);
-
-const states =
-payment.paidInstallments || [];
-
-return states.length >= count &&
-states.slice(0,count).every(Boolean);
-
-}
-
-
-function getRemaining(payment){
-
-return round2(
-Number(payment.total || 0)
--
-getPaidAmount(payment)
-);
-
-}
-
-
-function addPayment(){
-
-const beneficiary =
-document.getElementById("payBeneficiary").value.trim();
-
-const iban =
-document.getElementById("payIBAN").value.trim();
-
-const total =
-round2(
-parseFloat(
-document.getElementById("payTotal").value
-) || 0
-);
-
-const installments =
-Math.max(
-1,
-parseInt(
-document.getElementById("payInstallments").value
-) || 1
-);
-
-const date =
-document.getElementById("payDate").value;
-
-const communication =
-document.getElementById("payCommunication").value.trim();
-
-if(!beneficiary){
-
-alert("Veuillez encoder le bénéficiaire.");
-
-return;
-
-}
-
-if(total <= 0){
-
-alert("Veuillez encoder un montant.");
-
-return;
-
-}
-
-payments.unshift({
-
-id:uid(),
-
-beneficiary:beneficiary,
-
-iban:iban,
-
-total:total,
-
-installments:installments,
-
-date:date,
-
-communication:communication,
-
-paidInstallments:
-Array(installments).fill(false),
-
-photo:paymentPhoto
-
-});
-
-savePayments();
-
-resetPaymentForm();
-
-renderAll();
-
-alert("Paiement ajouté.");
-
-}
-
-
-function resetPaymentForm(){
-
-document.getElementById("payBeneficiary").value="";
-
-document.getElementById("payIBAN").value="";
-
-document.getElementById("payTotal").value="";
-
-document.getElementById("payInstallments").value="1";
-
-document.getElementById("payDate").value="";
-
-document.getElementById("payCommunication").value="";
-
-paymentPhoto=null;
-
-document.getElementById("payPhotoPreview")
-.style.display="none";
-
-document.getElementById("payPhotoPreview")
-.src="";
-
-}
-
-
-/* ==========================================================
-   CHECKBOX ECHEANCE PAIEMENT
-========================================================== */
-
-function togglePaymentInstallment(id,index){
-
-const payment =
-payments.find(p => p.id === id);
-
-if(!payment) return;
-
-if(!Array.isArray(payment.paidInstallments)){
-
-payment.paidInstallments =
-Array(payment.installments || 1)
-.fill(false);
-
-}
-
-payment.paidInstallments[index] =
-!payment.paidInstallments[index];
-
-payment.paid =
-isFullyPaid(payment);
-
-savePayments();
-
-renderAll();
-
-}
-
-
-/* ==========================================================
-   RENDER PAIEMENTS
-========================================================== */
-
-function renderPayments(){
-
-const list =
-document.getElementById("paymentsList");
-
-const filtered =
-payments.filter(payment => {
-
-const paid =
-isFullyPaid(payment);
-
-return currentTab === "paid"
-? paid
-: !paid;
-
-});
-
-
-if(filtered.length === 0){
-
-list.innerHTML =
-`<div class="section empty">
-Aucun paiement dans cette catégorie.
-</div>`;
-
-updateSummary();
-
-return;
-
-}
-
-
-list.innerHTML =
-filtered.map(renderPaymentCard).join("");
-
-updateSummary();
-
-}
-
-
-function renderPaymentCard(payment){
-
-const amounts =
-getInstallmentAmounts(payment);
-
-const paidAmount =
-getPaidAmount(payment);
-
-const remaining =
-getRemaining(payment);
-
-let installmentsHTML="";
-
-amounts.forEach((amount,index)=>{
-
-const checked =
-!!(
-payment.paidInstallments &&
-payment.paidInstallments[index]
-);
-
-installmentsHTML += `
-
-<label class="installmentRow">
-
-<div class="installmentLeft">
-
-<input
-type="checkbox"
-${checked ? "checked" : ""}
-onchange="togglePaymentInstallment('${payment.id}',${index})">
-
-<span class="${checked ? "installmentPaid" : "installmentUnpaid"}">
-
-Échéance ${index+1}/${amounts.length}
-
-</span>
-
-</div>
-
-<strong>
-${money(amount)}
-</strong>
-
-</label>
-
-`;
-
-});
-
-
-return `
-
-<div class="paymentCard">
-
-<div class="paymentHeader">
-
-<div>
-
-<div class="paymentName">
-${escapeHTML(payment.beneficiary)}
-</div>
-
-<div class="paymentDate">
-${formatDate(payment.date)}
-</div>
-
-</div>
-
-<div class="paymentTotal">
-${money(payment.total)}
-</div>
-
-</div>
-
-
-<div class="paymentInfo">
-
-${payment.iban
-? `<div>IBAN : ${escapeHTML(payment.iban)}</div>`
-: ""}
-
-${payment.communication
-? `<div>Communication : ${escapeHTML(payment.communication)}</div>`
-: ""}
-
-<div class="amountLine">
-<span>Payé</span>
-<strong class="paidAmount">
-${money(paidAmount)}
-</strong>
-</div>
-
-<div class="amountLine">
-<span>Reste</span>
-<strong class="remaining">
-${money(remaining)}
-</strong>
-</div>
-
-</div>
-
-
-<div class="installments">
-
-${installmentsHTML}
-
-</div>
-
-
-${payment.photo
-? `
-<button
-class="smallButton"
-style="width:100%;margin-top:8px;"
-onclick="showPaymentPhoto('${payment.id}')">
-🖼️ Voir la facture
-</button>
-`
-: ""}
-
-
-<div class="paymentButtons">
-
-<button
-class="smallButton blue"
-onclick="openPaymentEdit('${payment.id}')">
-✏️ Modifier
-</button>
-
-<button
-class="smallButton green"
-onclick="manualPayment('${payment.id}')">
-💶 Payer
-</button>
-
-<button
-class="smallButton"
-onclick="generateQR('${payment.id}')">
-▣ QR
-</button>
-
-<button
-class="smallButton red"
-onclick="deletePayment('${payment.id}')">
-🗑️ Supprimer
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* ==========================================================
-   SUMMARY
-========================================================== */
-
-function updateSummary(){
-
-let total=0;
-let paid=0;
-
-payments.forEach(payment=>{
-
-total += Number(payment.total || 0);
-
-paid += getPaidAmount(payment);
-
-});
-
-const remaining =
-Math.max(0,round2(total-paid));
-
-document.getElementById("summaryTotal")
-.textContent=money(total);
-
-document.getElementById("summaryPaid")
-.textContent=money(paid);
-
-document.getElementById("summaryRemaining")
-.textContent=money(remaining);
-
-document.getElementById("unpaidCount")
-.textContent =
-payments.filter(p=>!isFullyPaid(p)).length;
-
-document.getElementById("paidCount")
-.textContent =
-payments.filter(p=>isFullyPaid(p)).length;
-
-}
-
-
-/* ==========================================================
-   TABS
-========================================================== */
-
-function switchTab(tab){
-
-currentTab=tab;
-
-document.getElementById("tabUnpaid")
-.classList.toggle(
-"active",
-tab==="unpaid"
-);
-
-document.getElementById("tabPaid")
-.classList.toggle(
-"active",
-tab==="paid"
-);
-
-renderPayments();
-
-}
-
-
-/* ==========================================================
-   MODIFIER PAIEMENT
-========================================================== */
-
-function openPaymentEdit(id){
-
-const p =
-payments.find(x=>x.id===id);
-
-if(!p) return;
-
-document.getElementById("editPaymentId").value=id;
-
-document.getElementById("editBeneficiary").value =
-p.beneficiary || "";
-
-document.getElementById("editIBAN").value =
-p.iban || "";
-
-document.getElementById("editTotal").value =
-p.total || "";
-
-document.getElementById("editInstallments").value =
-p.installments || 1;
-
-document.getElementById("editDate").value =
-p.date || "";
-
-document.getElementById("editCommunication").value =
-p.communication || "";
-
-document.getElementById("paymentModal")
-.classList.add("show");
-
-}
-
-
-function closePaymentModal(){
-
-document.getElementById("paymentModal")
-.classList.remove("show");
-
-}
-
-
-function savePaymentEdit(){
-
-const id =
-document.getElementById("editPaymentId").value;
-
-const p =
-payments.find(x=>x.id===id);
-
-if(!p) return;
-
-const oldStates =
-Array.isArray(p.paidInstallments)
-? p.paidInstallments
-: [];
-
-const newCount =
-Math.max(
-1,
-parseInt(
-document.getElementById("editInstallments").value
-) || 1
-);
-
-p.beneficiary =
-document.getElementById("editBeneficiary").value.trim();
-
-p.iban =
-document.getElementById("editIBAN").value.trim();
-
-p.total =
-round2(
-parseFloat(
-document.getElementById("editTotal").value
-) || 0
-);
-
-p.installments=newCount;
-
-p.date =
-document.getElementById("editDate").value;
-
-p.communication =
-document.getElementById("editCommunication").value.trim();
-
-p.paidInstallments =
-Array(newCount)
-.fill(false)
-.map((_,i)=>!!oldStates[i]);
-
-p.paid=isFullyPaid(p);
-
-savePayments();
-
-closePaymentModal();
-
-renderAll();
-
-}
-
-
-/* ==========================================================
-   PAIEMENT MANUEL
-========================================================== */
-
-function manualPayment(id){
-
-const p =
-payments.find(x=>x.id===id);
-
-if(!p) return;
-
-const index =
-(p.paidInstallments || [])
-.findIndex(v=>!v);
-
-if(index===-1){
-
-alert("Ce paiement est déjà entièrement payé.");
-
-return;
-
-}
-
-const amounts =
-getInstallmentAmounts(p);
-
-const amount =
-amounts[index];
-
-if(confirm(
-"Marquer l'échéance " +
-(index+1) +
-"/" +
-amounts.length +
-" comme payée pour " +
-money(amount) +
-" ?"
-)){
-
-p.paidInstallments[index]=true;
-
-p.paid=isFullyPaid(p);
-
-savePayments();
-
-renderAll();
+alert("Code PIN incorrect");
+
+document.getElementById(
+"pinInput"
+).value="";
 
 }
 
 }
 
 
-/* ==========================================================
-   SUPPRIMER PAIEMENT
-========================================================== */
+/* =========================
+   PHOTOS PAIEMENTS
+========================= */
 
-function deletePayment(id){
+function handlePhoto(file){
 
-if(!confirm("Supprimer ce paiement ?")) return;
-
-payments =
-payments.filter(p=>p.id!==id);
-
-savePayments();
-
-renderAll();
-
-}
-
-
-/* ==========================================================
-   PHOTO
-========================================================== */
-
-function handlePaymentPhoto(input){
-
-const file=input.files && input.files[0];
-
-if(!file) return;
+if(!file)return;
 
 const reader=new FileReader();
 
@@ -2356,35 +2336,28 @@ const img=new Image();
 
 img.onload=function(){
 
-const canvas=document.createElement("canvas");
+const canvas=
+document.createElement("canvas");
 
-const max=1200;
+const maxWidth=1400;
 
 let width=img.width;
 let height=img.height;
 
-if(width>max){
+if(width>maxWidth){
 
-height =
-height * max / width;
+height=
+height*(maxWidth/width);
 
-width=max;
-
-}
-
-if(height>max){
-
-width =
-width * max / height;
-
-height=max;
+width=maxWidth;
 
 }
 
 canvas.width=width;
 canvas.height=height;
 
-const ctx=canvas.getContext("2d");
+const ctx=
+canvas.getContext("2d");
 
 ctx.drawImage(
 img,
@@ -2394,18 +2367,20 @@ width,
 height
 );
 
-paymentPhoto =
+addPhotoData=
 canvas.toDataURL(
 "image/jpeg",
 0.75
 );
 
-const preview =
-document.getElementById("payPhotoPreview");
-
-preview.src=paymentPhoto;
-
-preview.style.display="block";
+document.getElementById(
+"addPhotoPreview"
+).innerHTML=
+`
+<img
+src="${addPhotoData}"
+class="photoPreview">
+`;
 
 };
 
@@ -2418,334 +2393,380 @@ reader.readAsDataURL(file);
 }
 
 
-function showPaymentPhoto(id){
+document.getElementById(
+"cameraInput"
+).addEventListener(
+"change",
+function(){
 
-const p =
-payments.find(x=>x.id===id);
+handlePhoto(this.files[0]);
 
-if(!p || !p.photo) return;
-
-const win=window.open();
-
-if(win){
-
-win.document.write(
-`<img src="${p.photo}" style="max-width:100%">`
+}
 );
 
+
+document.getElementById(
+"galleryInput"
+).addEventListener(
+"change",
+function(){
+
+handlePhoto(this.files[0]);
+
+}
+);
+
+
+/* =========================
+   GESTION BALLON
+========================= */
+
+function toggleBalloonFields(){
+
+const enabled=
+document.getElementById(
+"balloonEnabled"
+).checked;
+
+const box=
+document.getElementById(
+"balloonBox"
+);
+
+const totalInput=
+document.getElementById(
+"totalAmount"
+);
+
+const totalLabel=
+document.getElementById(
+"totalAmountLabel"
+);
+
+if(enabled){
+
+box.classList.remove("hidden");
+
+totalLabel.textContent=
+"Montant total à payer (calculé)";
+
+totalInput.readOnly=true;
+
+totalInput.placeholder=
+"Calcul automatique";
+
+updateBalloonTotal();
+
+}else{
+
+box.classList.add("hidden");
+
+totalLabel.textContent=
+"Montant total";
+
+totalInput.readOnly=false;
+
+totalInput.placeholder=
+"0,00";
+
 }
 
 }
 
 
-/* ==========================================================
-   QR CODE
-========================================================== */
+function updateBalloonTotal(){
 
-function generateQR(id){
+const enabled=
+document.getElementById(
+"balloonEnabled"
+).checked;
 
-const p =
-payments.find(x=>x.id===id);
+if(!enabled)return;
 
-if(!p) return;
+const count=
+parseInt(
+document.getElementById(
+"installments"
+).value
+);
 
-const remaining =
-getRemaining(p);
+const regular=
+parseFloat(
+document.getElementById(
+"regularAmount"
+).value
+);
 
-if(remaining <= 0){
+const balloon=
+parseFloat(
+document.getElementById(
+"balloonAmount"
+).value
+);
 
-alert("Ce paiement est déjà entièrement payé.");
+if(
+isNaN(count)||
+count<2||
+isNaN(regular)||
+regular<0||
+isNaN(balloon)||
+balloon<0
+){
+
+document.getElementById(
+"balloonTotalInfo"
+).innerHTML=
+`
+Total des échéances :
+<strong>0,00 €</strong>
+`;
+
+document.getElementById(
+"totalAmount"
+).value="";
 
 return;
 
 }
 
-document.getElementById("qrcode")
-.innerHTML="";
-
-const data =
-"BCD\n" +
-"002\n" +
-"1\n" +
-"SCT\n" +
-"\n" +
-(p.iban || "") +
-"\n" +
-(p.beneficiary || "") +
-"\n" +
-"EUR" +
-remaining.toFixed(2) +
-"\n" +
-"\n" +
-(p.communication || "");
-
-new QRCode(
-document.getElementById("qrcode"),
-{
-text:data,
-width:220,
-height:220
-}
+const total=
+roundMoney(
+(count-1)*regular+
+balloon
 );
 
-document.getElementById("qrModal")
-.classList.add("show");
+document.getElementById(
+"totalAmount"
+).value=
+total.toFixed(2);
 
-}
-
-
-function closeQR(){
-
-document.getElementById("qrModal")
-.classList.remove("show");
-
-}
-
-
-/* ==========================================================
-   DOMICILIATIONS
-========================================================== */
-
-function toggleDomiciliationForm(){
-
-document.getElementById("domiciliationForm")
-.classList.toggle("hidden");
-
-}
-
-
-function calculateLoanMonthly(total,months,taeg){
-
-total=Number(total)||0;
-months=Number(months)||1;
-taeg=Number(taeg)||0;
-
-if(taeg<=0){
-
-return round2(total/months);
-
-}
-
-const monthlyRate =
-taeg / 100 / 12;
-
-return round2(
-total *
-monthlyRate /
-(
-1 -
-Math.pow(
-1+monthlyRate,
--months
-)
-);
-
-}
-
-
-/* ==========================================================
-   DERNIERE ECHEANCE DOMICILIATION
-========================================================== */
-
-function toggleLastInstallment(){
-
-const checked =
-document.getElementById("domLastDifferent").checked;
-
-document.getElementById("domLastInstallmentBox")
-.classList.toggle(
-"visible",
-checked
-);
-
-calculateDomiciliation();
-
-}
-
-
-function calculateDomiciliation(){
-
-const total =
-parseFloat(
-document.getElementById("domTotal").value
-) || 0;
-
-const months =
-parseInt(
-document.getElementById("domMonths").value
-) || 0;
-
-const taeg =
-parseFloat(
-document.getElementById("domTAEG").value
-) || 0;
-
-const lastDifferent =
-document.getElementById("domLastDifferent").checked;
-
-let monthly=0;
-let last=0;
-
-if(total>0 && months>0){
-
-monthly =
-calculateLoanMonthly(
-total,
-months,
-taeg
-);
-
-last =
-round2(
-total -
-monthly * (months-1)
-);
-
-}
-
-if(lastDifferent){
-
-const entered =
-parseFloat(
-document.getElementById("domLastInstallment").value
-);
-
-if(Number.isFinite(entered) && entered>0){
-
-last=round2(entered);
-
-}
-
-}
-
-const normalMonths =
-Math.max(0,months-1);
-
-let normalTotal =
-round2(monthly * normalMonths);
-
-let calculatedTotal =
-round2(normalTotal + last);
-
-let difference =
-round2(total-calculatedTotal);
-
-
-document.getElementById("domCalculation")
-.innerHTML=`
-
-<strong>Calcul :</strong><br>
-
-Mensualité normale :
-<strong>${money(monthly)}</strong><br>
-
-Nombre de mensualités normales :
-<strong>${normalMonths}</strong><br>
-
-Dernière échéance :
-<strong>${money(last)}</strong><br>
-
-Total calculé :
-<strong>${money(calculatedTotal)}</strong>
-
-${Math.abs(difference)>0.01
-? `<br><span style="color:#ff3b30">
-Écart : ${money(difference)}
-</span>`
-: `<br><span style="color:#34c759">
-✓ Total correspondant
-</span>`
-}
-
+document.getElementById(
+"balloonTotalInfo"
+).innerHTML=
+`
+Total des échéances :
+<strong>${euro(total)}</strong>
+<br>
+<span class="small">
+${count-1} × ${euro(regular)}
++ dernière échéance ${euro(balloon)}
+</span>
 `;
 
 }
 
 
-function addDomiciliation(){
+/* =========================
+   AJOUT PAIEMENT
+========================= */
 
-const alias =
-document.getElementById("domAlias").value.trim();
+function addPayment(){
 
-const beneficiary =
-document.getElementById("domBeneficiary").value.trim();
+const alias=
+document.getElementById(
+"alias"
+).value.trim();
 
-const iban =
-document.getElementById("domIBAN").value.trim();
+const beneficiary=
+document.getElementById(
+"beneficiary"
+).value.trim();
 
-const total =
-round2(
-parseFloat(
-document.getElementById("domTotal").value
-) || 0
-);
+const iban=
+document.getElementById(
+"iban"
+).value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
 
-const months =
+const balloonEnabled=
+document.getElementById(
+"balloonEnabled"
+).checked;
+
+const count=
 parseInt(
-document.getElementById("domMonths").value
-) || 0;
-
-const taeg =
-parseFloat(
-document.getElementById("domTAEG").value
-) || 0;
-
-const startDate =
-document.getElementById("domStartDate").value;
-
-const lastDifferent =
-document.getElementById("domLastDifferent").checked;
-
-let lastInstallment=null;
-
-if(lastDifferent){
-
-lastInstallment =
-round2(
-parseFloat(
-document.getElementById("domLastInstallment").value
-) || 0
+document.getElementById(
+"installments"
+).value
 );
 
-}
+const firstDate=
+document.getElementById(
+"firstDate"
+).value;
 
-if(!alias){
+const communication=
+document.getElementById(
+"communication"
+).value.trim();
 
-alert("Veuillez encoder une référence.");
-
-return;
-
-}
-
-if(total<=0){
-
-alert("Veuillez encoder le montant total.");
-
-return;
-
-}
-
-if(months<=0){
-
-alert("Veuillez encoder le nombre de mois.");
-
-return;
-
-}
-
-if(lastDifferent && lastInstallment<=0){
+if(
+!beneficiary||
+isNaN(count)||
+count<1||
+!firstDate
+){
 
 alert(
-"Veuillez encoder le montant de la dernière échéance."
+"Veuillez remplir les champs obligatoires."
 );
 
 return;
 
 }
 
-domiciliations.unshift({
+let total=0;
+let financedAmount=0;
+let regularAmount=0;
+let balloonAmount=0;
+let installments=[];
 
-id:uid(),
+if(balloonEnabled){
+
+financedAmount=
+parseFloat(
+document.getElementById(
+"financedAmount"
+).value
+);
+
+regularAmount=
+parseFloat(
+document.getElementById(
+"regularAmount"
+).value
+);
+
+balloonAmount=
+parseFloat(
+document.getElementById(
+"balloonAmount"
+).value
+);
+
+if(
+count<2||
+isNaN(regularAmount)||
+regularAmount<0||
+isNaN(balloonAmount)||
+balloonAmount<=0
+){
+
+alert(
+"Pour une dernière échéance différente, indique au minimum le nombre d'échéances, la mensualité normale et la dernière échéance."
+);
+
+return;
+
+}
+
+if(
+isNaN(financedAmount)||
+financedAmount<0
+){
+
+financedAmount=0;
+
+}
+
+total=
+roundMoney(
+(count-1)*regularAmount+
+balloonAmount
+);
+
+for(let i=0;i<count;i++){
+
+const isBalloon=
+i===count-1;
+
+installments.push({
+
+id:generateId(),
+
+date:addMonths(
+firstDate,
+i
+),
+
+amount:
+isBalloon
+?roundMoney(balloonAmount)
+:roundMoney(regularAmount),
+
+paid:false,
+
+balloon:isBalloon
+
+});
+
+}
+
+}else{
+
+const totalInput=
+parseFloat(
+document.getElementById(
+"totalAmount"
+).value
+);
+
+if(
+isNaN(totalInput)||
+totalInput<=0
+){
+
+alert(
+"Veuillez indiquer un montant total."
+);
+
+return;
+
+}
+
+total=
+roundMoney(totalInput);
+
+const base=
+Math.floor(
+(total/count)*100
+)/100;
+
+const last=
+roundMoney(
+total-base*(count-1)
+);
+
+for(let i=0;i<count;i++){
+
+installments.push({
+
+id:generateId(),
+
+date:addMonths(
+firstDate,
+i
+),
+
+amount:
+i===count-1
+?last
+:base,
+
+paid:false,
+
+balloon:false
+
+});
+
+}
+
+}
+
+data.push({
+
+id:generateId(),
 
 alias:alias,
 
@@ -2753,7 +2774,1752 @@ beneficiary:beneficiary,
 
 iban:iban,
 
-total:total,
+communication:communication,
+
+photo:addPhotoData,
+
+balloonEnabled:balloonEnabled,
+
+financedAmount:
+roundMoney(financedAmount),
+
+regularAmount:
+roundMoney(regularAmount),
+
+balloonAmount:
+roundMoney(balloonAmount),
+
+totalAmount:
+roundMoney(total),
+
+installments:installments
+
+});
+
+saveData();
+
+resetAddForm();
+
+selectedIds.clear();
+
+render();
+
+alert("Paiement ajouté.");
+
+}
+
+
+/* =========================
+   RESET PAIEMENT
+========================= */
+
+function resetAddForm(){
+
+document.getElementById("alias").value="";
+document.getElementById("beneficiary").value="";
+document.getElementById("iban").value="";
+document.getElementById("totalAmount").value="";
+document.getElementById("totalAmount").readOnly=false;
+
+document.getElementById("totalAmountLabel").textContent=
+"Montant total";
+
+document.getElementById("installments").value="1";
+
+document.getElementById("balloonEnabled").checked=false;
+document.getElementById("balloonBox").classList.add("hidden");
+
+document.getElementById("financedAmount").value="";
+document.getElementById("regularAmount").value="";
+document.getElementById("balloonAmount").value="";
+
+document.getElementById("balloonTotalInfo").innerHTML=
+`
+Total des échéances :
+<strong>0,00 €</strong>
+`;
+
+document.getElementById("firstDate").value="";
+document.getElementById("communication").value="";
+document.getElementById("addPhotoPreview").innerHTML="";
+document.getElementById("cameraInput").value="";
+document.getElementById("galleryInput").value="";
+
+addPhotoData="";
+
+}
+
+
+/* =========================
+   ONGLETS
+========================= */
+
+function showTab(tab){
+
+currentTab=tab;
+
+document.getElementById("tabUnpaid").classList.toggle(
+"active",
+tab==="unpaid"
+);
+
+document.getElementById("tabPaid").classList.toggle(
+"active",
+tab==="paid"
+);
+
+document.getElementById("unpaidList").classList.toggle(
+"hidden",
+tab!=="unpaid"
+);
+
+document.getElementById("paidList").classList.toggle(
+"hidden",
+tab!=="paid"
+);
+
+render();
+
+}
+
+
+/* =========================
+   AFFICHAGE PAIEMENTS
+========================= */
+
+function render(){
+
+normalizeData();
+
+const unpaidList=
+document.getElementById("unpaidList");
+
+const paidList=
+document.getElementById("paidList");
+
+unpaidList.innerHTML="";
+paidList.innerHTML="";
+
+let total=0;
+let paid=0;
+let unpaidCount=0;
+let paidCount=0;
+
+data.forEach(payment=>{
+
+payment.installments.forEach(inst=>{
+
+total+=Number(inst.amount||0);
+
+if(inst.paid){
+
+paid+=Number(inst.amount||0);
+paidCount++;
+
+}else{
+
+unpaidCount++;
+
+}
+
+});
+
+});
+
+document.getElementById("totalValue").textContent=euro(total);
+document.getElementById("paidValue").textContent=euro(paid);
+document.getElementById("remainingValue").textContent=euro(total-paid);
+document.getElementById("unpaidCount").textContent=unpaidCount;
+document.getElementById("paidCount").textContent=paidCount;
+
+data.forEach(payment=>{
+
+const visible=
+payment.installments.filter(
+i=>
+currentTab==="unpaid"
+?!i.paid
+:i.paid
+);
+
+if(!visible.length)return;
+
+const group=
+createPaymentGroup(
+payment,
+visible
+);
+
+if(currentTab==="unpaid")
+unpaidList.appendChild(group);
+else
+paidList.appendChild(group);
+
+});
+
+updateSelectionBar();
+
+}
+
+
+/* =========================
+   GROUPE PAIEMENT
+========================= */
+
+function createPaymentGroup(payment,installments){
+
+const group=document.createElement("div");
+group.className="paymentGroup";
+
+const header=document.createElement("div");
+header.className="paymentGroupHeader";
+
+const alias=payment.alias||"Sans alias";
+
+const totalInstallments=payment.installments.length;
+
+const paidInstallments=
+payment.installments.filter(i=>i.paid).length;
+
+const remainingInstallments=
+payment.installments.filter(i=>!i.paid).length;
+
+let extraInfo=
+`
+${totalInstallments}
+échéance(s)
+•
+${paidInstallments}
+payée(s)
+•
+${remainingInstallments}
+restante(s)
+`;
+
+if(payment.balloonEnabled){
+
+extraInfo+=
+`
+<br>
+💰 Total à payer :
+<strong>${euro(payment.totalAmount)}</strong>
+`;
+
+if(Number(payment.financedAmount)>0){
+
+extraInfo+=
+`
+<br>
+Montant financé :
+${euro(payment.financedAmount)}
+`;
+
+}
+
+extraInfo+=
+`
+<br>
+Dernière échéance :
+${euro(payment.balloonAmount)}
+`;
+
+}
+
+header.innerHTML=
+`
+<div class="paymentGroupAlias">
+${escapeHtml(alias)}
+</div>
+
+<div class="paymentGroupBeneficiary">
+${escapeHtml(payment.beneficiary)}
+</div>
+
+<div class="paymentGroupInfo">
+${extraInfo}
+</div>
+`;
+
+group.appendChild(header);
+
+installments.forEach(inst=>{
+
+group.appendChild(
+createInstallmentCard(
+payment,
+inst
+)
+);
+
+});
+
+return group;
+
+}
+
+
+/* =========================
+   CARTE ECHEANCE
+========================= */
+
+function createInstallmentCard(payment,inst){
+
+const card=document.createElement("div");
+
+card.className="installment";
+
+if(inst.paid)
+card.classList.add("paid");
+
+const top=document.createElement("div");
+top.className="installmentTop";
+
+const checkbox=document.createElement("input");
+
+checkbox.type="checkbox";
+checkbox.className="checkbox";
+
+const key=
+selectionKey(
+payment.id,
+inst.id
+);
+
+checkbox.checked=
+selectedIds.has(key);
+
+checkbox.addEventListener(
+"change",
+function(){
+
+if(this.checked)
+selectedIds.add(key);
+else
+selectedIds.delete(key);
+
+updateSelectionBar();
+
+}
+);
+
+const info=document.createElement("div");
+info.className="installmentInfo";
+
+const status=
+inst.paid
+?
+`<span class="badge badgePaid">PAYÉ</span>`
+:
+`<span class="badge badgeUnpaid">À PAYER</span>`;
+
+const balloonBadge=
+inst.balloon
+?
+`<span class="badge badgeBalloon">BALLON</span>`
+:"";
+
+info.innerHTML=
+`
+<div class="beneficiary">
+
+${escapeHtml(payment.beneficiary)}
+
+${status}
+
+${balloonBadge}
+
+</div>
+
+<div class="installmentDetails">
+
+Échéance :
+${formatDate(inst.date)}
+
+<br>
+
+Communication :
+${escapeHtml(payment.communication||"-")}
+
+</div>
+
+<div class="amount">
+${euro(inst.amount)}
+</div>
+`;
+
+top.appendChild(checkbox);
+top.appendChild(info);
+card.appendChild(top);
+
+const actions=document.createElement("div");
+actions.className="actions";
+
+const editBtn=document.createElement("button");
+editBtn.className="secondary";
+editBtn.textContent="✏️ Modifier";
+
+editBtn.onclick=function(){
+openEdit(payment.id,inst.id);
+};
+
+const paidBtn=document.createElement("button");
+
+paidBtn.className=
+inst.paid
+?"secondary"
+:"green";
+
+paidBtn.textContent=
+inst.paid
+?"↩️ À payer"
+:"✓ Payé";
+
+paidBtn.onclick=function(){
+togglePaid(payment.id,inst.id);
+};
+
+const manualBtn=document.createElement("button");
+manualBtn.className="secondary";
+manualBtn.textContent="💳 Payer";
+
+manualBtn.onclick=function(){
+openManual(payment.id,inst.id);
+};
+
+const qrBtn=document.createElement("button");
+qrBtn.className="qrButton";
+qrBtn.textContent="▣ QR";
+
+qrBtn.onclick=function(){
+openQR(payment,inst);
+};
+
+const calendarBtn=document.createElement("button");
+calendarBtn.className="secondary";
+calendarBtn.textContent="📅 Calendrier";
+
+calendarBtn.onclick=function(){
+addCalendar(payment,inst);
+};
+
+const deleteBtn=document.createElement("button");
+deleteBtn.className="danger";
+deleteBtn.textContent="🗑️ Supprimer";
+
+deleteBtn.onclick=function(){
+deleteInstallment(payment.id,inst.id);
+};
+
+actions.appendChild(editBtn);
+actions.appendChild(paidBtn);
+actions.appendChild(manualBtn);
+actions.appendChild(qrBtn);
+actions.appendChild(calendarBtn);
+actions.appendChild(deleteBtn);
+
+if(payment.photo){
+
+const photoBtn=document.createElement("button");
+photoBtn.className="secondary";
+photoBtn.textContent="📄 Document";
+
+photoBtn.onclick=function(){
+openPhoto(payment.id);
+};
+
+actions.appendChild(photoBtn);
+
+}
+
+card.appendChild(actions);
+
+return card;
+
+}
+
+
+/* =========================
+   SUPPRIMER ECHEANCE
+========================= */
+
+function deleteInstallment(paymentId,installmentId){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)return;
+
+if(!confirm("Supprimer cette échéance ?"))
+return;
+
+payment.installments=
+payment.installments.filter(
+i=>String(i.id)!==String(installmentId)
+);
+
+selectedIds.delete(
+selectionKey(paymentId,installmentId)
+);
+
+if(payment.installments.length===0){
+
+data=data.filter(
+p=>String(p.id)!==String(paymentId)
+);
+
+}
+
+saveData();
+render();
+
+}
+
+
+/* =========================
+   QR
+========================= */
+
+function createEPCQR(payment,inst){
+
+const name=
+String(payment.beneficiary||"")
+.trim()
+.substring(0,70);
+
+const iban=
+String(payment.iban||"")
+.replace(/\s/g,"")
+.toUpperCase();
+
+const amount=
+Number(inst.amount||0).toFixed(2);
+
+const communication=
+String(payment.communication||"")
+.trim()
+.substring(0,140);
+
+return[
+"BCD",
+"002",
+"1",
+"SCT",
+"",
+name,
+iban,
+"EUR"+amount,
+"",
+communication,
+""
+].join("\n");
+
+}
+
+
+function openQR(payment,inst){
+
+const iban=
+String(payment.iban||"")
+.replace(/\s/g,"")
+.toUpperCase();
+
+if(!iban){
+
+alert("Il faut un IBAN pour générer le QR.");
+return;
+
+}
+
+if(typeof QRCode==="undefined"){
+
+alert(
+"Le générateur QR n'a pas pu être chargé. Vérifie ta connexion internet."
+);
+
+return;
+
+}
+
+qrId={
+paymentId:payment.id,
+installmentId:inst.id
+};
+
+const qrBox=document.getElementById("qrCode");
+qrBox.innerHTML="";
+
+const payload=createEPCQR(payment,inst);
+
+new QRCode(
+qrBox,
+{
+text:payload,
+width:240,
+height:240,
+correctLevel:QRCode.CorrectLevel.M
+}
+);
+
+document.getElementById("qrInfo").innerHTML=
+`
+<strong>${escapeHtml(payment.beneficiary)}</strong>
+
+<br>
+
+IBAN :
+${escapeHtml(iban)}
+
+<br>
+
+Montant :
+${euro(inst.amount)}
+
+<br>
+
+Communication :
+${escapeHtml(payment.communication||"-")}
+`;
+
+document.getElementById("qrModal").classList.add("show");
+
+}
+
+
+function closeQR(){
+
+document.getElementById("qrModal").classList.remove("show");
+
+document.getElementById("qrCode").innerHTML="";
+
+qrId=null;
+
+}
+
+
+/* =========================
+   SELECTION
+========================= */
+
+function updateSelectionBar(){
+
+const bar=document.getElementById("selectionBar");
+const info=document.getElementById("selectionInfo");
+
+const count=selectedIds.size;
+
+if(count>0){
+
+bar.classList.add("show");
+
+info.textContent=
+count+
+(count>1?" sélectionnés":" sélectionné");
+
+}else{
+
+bar.classList.remove("show");
+
+}
+
+}
+
+
+function deleteSelected(){
+
+if(!selectedIds.size)return;
+
+if(!confirm("Supprimer les échéances sélectionnées ?"))
+return;
+
+data.forEach(payment=>{
+
+payment.installments=
+payment.installments.filter(
+inst=>{
+
+const key=
+selectionKey(payment.id,inst.id);
+
+return !selectedIds.has(key);
+
+});
+
+});
+
+data=
+data.filter(
+p=>p.installments.length>0
+);
+
+selectedIds.clear();
+
+saveData();
+render();
+
+}
+
+
+/* =========================
+   PAYE / A PAYER
+========================= */
+
+function togglePaid(paymentId,installmentId){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)return;
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst)return;
+
+inst.paid=!inst.paid;
+
+saveData();
+render();
+
+}
+
+
+/* =========================
+   MODIFICATION PAIEMENT
+========================= */
+
+function openEdit(paymentId,installmentId){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment){
+
+alert("Paiement introuvable.");
+return;
+
+}
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst){
+
+alert("Échéance introuvable.");
+return;
+
+}
+
+editId={
+paymentId:paymentId,
+installmentId:installmentId
+};
+
+document.getElementById("editAlias").value=
+payment.alias||"";
+
+document.getElementById("editBeneficiary").value=
+payment.beneficiary||"";
+
+document.getElementById("editIban").value=
+payment.iban||"";
+
+document.getElementById("editDate").value=
+inst.date||"";
+
+document.getElementById("editAmount").value=
+inst.amount??"";
+
+document.getElementById("editCommunication").value=
+payment.communication||"";
+
+document.getElementById("editModal").classList.add("show");
+
+}
+
+
+function closeEdit(){
+
+document.getElementById("editModal").classList.remove("show");
+editId=null;
+
+}
+
+
+function saveEdit(){
+
+if(!editId)return;
+
+const payment=
+data.find(
+p=>String(p.id)===String(editId.paymentId)
+);
+
+if(!payment){
+
+alert("Paiement introuvable.");
+return;
+
+}
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(editId.installmentId)
+);
+
+if(!inst){
+
+alert("Échéance introuvable.");
+return;
+
+}
+
+payment.alias=
+document.getElementById("editAlias").value.trim();
+
+payment.beneficiary=
+document.getElementById("editBeneficiary").value.trim();
+
+payment.iban=
+document.getElementById("editIban").value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+payment.communication=
+document.getElementById("editCommunication").value.trim();
+
+inst.date=
+document.getElementById("editDate").value;
+
+const amount=
+parseFloat(
+document.getElementById("editAmount").value
+);
+
+if(isNaN(amount)||amount<0){
+
+alert("Montant incorrect.");
+return;
+
+}
+
+inst.amount=roundMoney(amount);
+
+saveData();
+closeEdit();
+render();
+
+alert("Modification enregistrée.");
+
+}
+
+
+/* =========================
+   PAIEMENT MANUEL
+========================= */
+
+function openManual(paymentId,installmentId){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment)return;
+
+const inst=
+payment.installments.find(
+i=>String(i.id)===String(installmentId)
+);
+
+if(!inst)return;
+
+manualId={
+paymentId,
+installmentId
+};
+
+const content=
+document.getElementById("manualContent");
+
+content.innerHTML=
+`
+<div class="manualInfo">
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Bénéficiaire
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.beneficiary)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.beneficiary)}',
+this
+)">
+Copier
+</button>
+
+</div>
+
+<div class="manualLine">
+
+<div class="manualLabel">
+IBAN
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.iban||"-")}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.iban||"")}',
+this
+)">
+Copier
+</button>
+
+</div>
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Montant
+</div>
+
+<div class="manualValue">
+${euro(inst.amount)}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(Number(inst.amount).toFixed(2))}',
+this
+)">
+Copier
+</button>
+
+</div>
+
+<div class="manualLine">
+
+<div class="manualLabel">
+Communication
+</div>
+
+<div class="manualValue">
+${escapeHtml(payment.communication||"-")}
+</div>
+
+<button
+class="copyButton"
+onclick="copyText(
+'${escapeJs(payment.communication||"")}',
+this
+)">
+Copier
+</button>
+
+</div>
+
+</div>
+`;
+
+document.getElementById("manualModal").classList.add("show");
+
+}
+
+
+function closeManual(){
+
+document.getElementById("manualModal").classList.remove("show");
+
+manualId=null;
+
+resetCopyButtons();
+
+}
+
+
+function copyText(text,button){
+
+if(
+navigator.clipboard&&
+navigator.clipboard.writeText
+){
+
+navigator.clipboard.writeText(text)
+.then(()=>{
+
+button.textContent="✓ Copié";
+button.classList.add("copied");
+
+})
+.catch(()=>{
+
+fallbackCopy(text,button);
+
+});
+
+}else{
+
+fallbackCopy(text,button);
+
+}
+
+}
+
+
+function fallbackCopy(text,button){
+
+const textarea=document.createElement("textarea");
+
+textarea.value=text;
+
+document.body.appendChild(textarea);
+
+textarea.select();
+
+try{
+
+document.execCommand("copy");
+
+button.textContent="✓ Copié";
+button.classList.add("copied");
+
+}catch(e){
+
+alert("Impossible de copier.");
+
+}
+
+textarea.remove();
+
+}
+
+
+function resetCopyButtons(){
+
+document.querySelectorAll(".copyButton").forEach(
+b=>{
+
+b.textContent="Copier";
+
+b.classList.remove("copied");
+
+});
+
+}
+
+
+/* =========================
+   CALENDRIER
+========================= */
+
+function addCalendar(payment,inst){
+
+if(!inst.date)return;
+
+const date=inst.date.replaceAll("-","");
+
+const d2=new Date(inst.date+"T00:00:00");
+
+d2.setDate(d2.getDate()+1);
+
+const end=
+d2.toISOString()
+.substring(0,10)
+.replaceAll("-","");
+
+const title=
+(
+payment.alias
+?payment.alias+" - "
+:""
+)+
+payment.beneficiary;
+
+const details=
+"Montant : "+
+Number(inst.amount).toFixed(2)+
+" €\n"+
+"IBAN : "+
+(payment.iban||"")+
+"\n"+
+"Communication : "+
+(payment.communication||"");
+
+const url=
+"https://calendar.google.com/calendar/render?action=TEMPLATE"+
+"&text="+
+encodeURIComponent(title)+
+"&dates="+
+date+"/"+end+
+"&details="+
+encodeURIComponent(details);
+
+window.open(url,"_blank");
+
+}
+
+
+/* =========================
+   PHOTO PAIEMENT
+========================= */
+
+function openPhoto(paymentId){
+
+const payment=
+data.find(
+p=>String(p.id)===String(paymentId)
+);
+
+if(!payment||!payment.photo)return;
+
+photoId=paymentId;
+
+document.getElementById("photoModalImage").src=
+payment.photo;
+
+document.getElementById("photoModal").classList.add("show");
+
+}
+
+
+function closePhoto(){
+
+document.getElementById("photoModal").classList.remove("show");
+
+photoId=null;
+
+}
+
+
+function deletePhoto(){
+
+if(!photoId)return;
+
+const payment=
+data.find(
+p=>String(p.id)===String(photoId)
+);
+
+if(payment){
+
+if(!confirm("Supprimer ce document ?"))
+return;
+
+payment.photo="";
+
+saveData();
+
+}
+
+closePhoto();
+render();
+
+}
+
+
+/* ==================================================
+   DOMICILIATIONS
+================================================== */
+
+function loadDomiciliations(){
+
+try{
+
+const saved=
+localStorage.getItem("mesDomiciliations");
+
+if(saved){
+
+domiciliations=JSON.parse(saved);
+
+}else{
+
+domiciliations=[];
+
+}
+
+normalizeDomiciliations();
+
+}catch(e){
+
+console.error(
+"Erreur chargement domiciliations :",
+e
+);
+
+domiciliations=[];
+
+}
+
+renderDomiciliations();
+
+}
+
+
+function saveDomiciliations(){
+
+try{
+
+localStorage.setItem(
+"mesDomiciliations",
+JSON.stringify(domiciliations)
+);
+
+}catch(e){
+
+console.error(
+"Erreur sauvegarde domiciliations :",
+e
+);
+
+alert(
+"Impossible de sauvegarder les domiciliations."
+);
+
+}
+
+}
+
+
+function normalizeDomiciliations(){
+
+if(!Array.isArray(domiciliations))
+domiciliations=[];
+
+domiciliations.forEach(dom=>{
+
+if(!dom.id)
+dom.id=generateId();
+
+if(dom.alias===undefined)
+dom.alias="";
+
+if(dom.beneficiary===undefined)
+dom.beneficiary="";
+
+if(dom.iban===undefined)
+dom.iban="";
+
+if(dom.total===undefined)
+dom.total=0;
+
+if(dom.months===undefined)
+dom.months=1;
+
+if(dom.taeg===undefined)
+dom.taeg=0;
+
+if(dom.startDate===undefined)
+dom.startDate="";
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+
+/* =========================
+   PHOTOS
+========================= */
+
+if(!Array.isArray(dom.photos))
+dom.photos=[];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+if(dom.photos.length>2)
+dom.photos=dom.photos.slice(0,2);
+
+
+/* =========================
+   ECHEANCES
+========================= */
+
+dom.monthsPaid=
+dom.monthsPaid
+.map(n=>Number(n))
+.filter(
+n=>
+Number.isInteger(n)&&
+n>=1&&
+n<=Number(dom.months||1)
+)
+.filter(
+(n,index,array)=>
+array.indexOf(n)===index
+)
+.sort(
+(a,b)=>a-b
+);
+
+});
+
+}
+
+
+function toggleDomiciliationForm(){
+
+document.getElementById(
+"domiciliationForm"
+).classList.toggle("hidden");
+
+}
+
+
+function calculateLoanMonthly(total,months,taeg){
+
+total=Number(total)||0;
+months=parseInt(months)||0;
+taeg=Number(taeg)||0;
+
+if(total<=0||months<=0){
+return 0;
+}
+
+if(taeg<=0){
+return total/months;
+}
+
+const monthlyRate=(taeg/100)/12;
+
+const monthly=
+total*
+monthlyRate/
+(
+1-
+Math.pow(
+1+monthlyRate,
+-months
+)
+);
+
+if(!isFinite(monthly)){
+return 0;
+}
+
+return monthly;
+
+}
+
+
+function calculateDomiciliationEndDate(startDate,months){
+
+if(
+!startDate||
+!months||
+Number(months)<=0
+){
+return "";
+}
+
+return addMonthsSafe(
+startDate,
+Number(months)
+);
+
+}
+
+
+/* =========================
+   MONTANT ECHEANCE
+========================= */
+
+function getDomiciliationInstallmentAmount(dom,monthNumber){
+
+const total=
+Number(dom.total||0);
+
+const months=
+Math.max(
+1,
+Number(dom.months||1)
+);
+
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+Number(dom.taeg||0)
+);
+
+if(monthNumber===months){
+
+if(months===1){
+return roundMoney(total);
+}
+
+return roundMoney(
+total-
+(monthly*(months-1))
+);
+
+}
+
+return roundMoney(monthly);
+
+}
+
+
+/* =========================
+   MONTANT PAYE
+========================= */
+
+function getDomiciliationPaidAmount(dom){
+
+if(!Array.isArray(dom.monthsPaid))
+return 0;
+
+let result=0;
+
+dom.monthsPaid.forEach(monthNumber=>{
+
+result+=
+getDomiciliationInstallmentAmount(
+dom,
+Number(monthNumber)
+);
+
+});
+
+return roundMoney(result);
+
+}
+
+
+/* =========================
+   PROCHAINE ECHEANCE
+========================= */
+
+function getNextDomiciliationMonth(dom){
+
+const months=
+Math.max(
+1,
+Number(dom.months||1)
+);
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+for(let i=1;i<=months;i++){
+
+if(!dom.monthsPaid.includes(i))
+return i;
+
+}
+
+return null;
+
+}
+
+
+/* =========================
+   CALCUL FORMULAIRE
+========================= */
+
+function calculateDomiciliation(){
+
+const total=
+parseFloat(
+document.getElementById("domTotalAmount").value
+);
+
+const months=
+parseInt(
+document.getElementById("domMonths").value
+);
+
+const taeg=
+parseFloat(
+document.getElementById("domTaeg").value
+);
+
+const startDate=
+document.getElementById("domStartDate").value;
+
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
+
+const endDate=
+calculateDomiciliationEndDate(
+startDate,
+months
+);
+
+document.getElementById("domEndDate").value=endDate;
+
+document.getElementById(
+"domMonthlyResult"
+).innerHTML=
+`
+Mensualité estimée :
+<strong>
+${euro(monthly)}
+</strong>
+`;
+
+}
+
+
+/* ==================================================
+   PHOTOS DOMICILIATION - AJOUT
+================================================== */
+
+function compressDomiciliationPhoto(file,callback){
+
+if(!file){
+
+callback("");
+
+return;
+
+}
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const img=new Image();
+
+img.onload=function(){
+
+const canvas=document.createElement("canvas");
+
+const maxWidth=1400;
+
+let width=img.width;
+let height=img.height;
+
+if(width>maxWidth){
+
+height=
+height*(maxWidth/width);
+
+width=maxWidth;
+
+}
+
+canvas.width=width;
+canvas.height=height;
+
+const ctx=
+canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0,
+width,
+height
+);
+
+callback(
+canvas.toDataURL(
+"image/jpeg",
+0.75
+)
+);
+
+};
+
+img.src=e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+
+function handleDomiciliationAddPhoto(file,number){
+
+if(!file)return;
+
+compressDomiciliationPhoto(
+file,
+function(photo){
+
+if(number===1)
+domPhoto1=photo;
+
+if(number===2)
+domPhoto2=photo;
+
+renderAddDomiciliationPhotos();
+
+}
+);
+
+}
+
+
+function renderAddDomiciliationPhotos(){
+
+const box=
+document.getElementById(
+"domAddPhotosPreview"
+);
+
+if(!box)return;
+
+box.innerHTML="";
+
+[domPhoto1,domPhoto2].forEach(
+(photo,index)=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"domiciliationPhotoBox";
+
+if(photo){
+
+div.innerHTML=
+`
+<img
+src="${photo}"
+class="domiciliationPhoto">
+
+<div
+class="domiciliationPhotoActions">
+
+<button
+type="button"
+class="danger"
+onclick="removeAddDomiciliationPhoto(${index+1})">
+
+🗑️
+
+</button>
+
+</div>
+`;
+
+}else{
+
+div.innerHTML=
+`
+<div class="domiciliationPhotoEmpty">
+
+📷 Photo ${index+1}<br>
+Non ajoutée
+
+</div>
+`;
+
+}
+
+box.appendChild(div);
+
+});
+
+}
+
+
+function removeAddDomiciliationPhoto(number){
+
+if(number===1)
+domPhoto1="";
+
+if(number===2)
+domPhoto2="";
+
+renderAddDomiciliationPhotos();
+
+}
+
+
+/* =========================
+   AJOUT DOMICILIATION
+========================= */
+
+function addDomiciliation(){
+
+const alias=
+document.getElementById("domAlias").value.trim();
+
+const beneficiary=
+document.getElementById("domBeneficiary").value.trim();
+
+const iban=
+document.getElementById("domIban").value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+const total=
+parseFloat(
+document.getElementById("domTotalAmount").value
+);
+
+const months=
+parseInt(
+document.getElementById("domMonths").value
+);
+
+const taeg=
+parseFloat(
+document.getElementById("domTaeg").value
+);
+
+const startDate=
+document.getElementById("domStartDate").value;
+
+if(
+!beneficiary||
+isNaN(total)||
+total<=0||
+isNaN(months)||
+months<1||
+isNaN(taeg)||
+taeg<0||
+!startDate
+){
+
+alert(
+"Veuillez remplir les champs obligatoires."
+);
+
+return;
+
+}
+
+
+domiciliations.push({
+
+id:generateId(),
+
+alias:alias,
+
+beneficiary:beneficiary,
+
+iban:iban,
+
+total:roundMoney(total),
 
 months:months,
 
@@ -2761,20 +4527,19 @@ taeg:taeg,
 
 startDate:startDate,
 
-lastDifferent:lastDifferent,
+monthsPaid:[],
 
-lastInstallment:lastInstallment,
-
-monthsPaid:[]
+photos:[
+domPhoto1,
+domPhoto2
+]
 
 });
+
 
 saveDomiciliations();
 
 resetDomiciliationForm();
-
-document.getElementById("domiciliationForm")
-.classList.add("hidden");
 
 renderDomiciliations();
 
@@ -2783,280 +4548,1011 @@ alert("Domiciliation ajoutée.");
 }
 
 
+/* =========================
+   RESET DOMICILIATION
+========================= */
+
 function resetDomiciliationForm(){
 
 document.getElementById("domAlias").value="";
-
 document.getElementById("domBeneficiary").value="";
-
-document.getElementById("domIBAN").value="";
-
-document.getElementById("domTotal").value="";
-
-document.getElementById("domMonths").value="";
-
-document.getElementById("domTAEG").value="";
-
+document.getElementById("domIban").value="";
+document.getElementById("domTotalAmount").value="";
+document.getElementById("domMonths").value="1";
+document.getElementById("domTaeg").value="";
 document.getElementById("domStartDate").value="";
+document.getElementById("domEndDate").value="";
 
-document.getElementById("domLastDifferent").checked=false;
+document.getElementById(
+"domMonthlyResult"
+).innerHTML=
+`
+Mensualité estimée :
+<strong>0,00 €</strong>
+`;
 
-document.getElementById("domLastInstallment").value="";
+domPhoto1="";
+domPhoto2="";
 
-document.getElementById("domLastInstallmentBox")
-.classList.remove("visible");
+document.getElementById(
+"domAddPhotosPreview"
+).innerHTML="";
 
-document.getElementById("domCalculation")
-.innerHTML="";
+document.getElementById(
+"domiciliationForm"
+).classList.add("hidden");
 
 }
 
 
-/* ==========================================================
-   RENDER DOMICILIATIONS
-   IMPORTANT : UNE SEULE CARTE
-========================================================== */
+/* =========================
+   OUVRIR / FERMER ECHEANCES
+========================= */
+
+function toggleDomiciliationSchedule(id){
+
+const key=String(id);
+
+if(openedDomiciliationSchedules.has(key)){
+
+openedDomiciliationSchedules.delete(key);
+
+}else{
+
+openedDomiciliationSchedules.add(key);
+
+}
+
+renderDomiciliations();
+
+}
+
+
+/* =========================
+   COCHER ECHEANCE
+========================= */
+
+function toggleDomiciliationMonth(
+id,
+monthNumber,
+checked
+){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)return;
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+const month=Number(monthNumber);
+
+if(checked){
+
+if(!dom.monthsPaid.includes(month)){
+
+dom.monthsPaid.push(month);
+
+}
+
+}else{
+
+dom.monthsPaid=
+dom.monthsPaid.filter(
+m=>Number(m)!==month
+);
+
+}
+
+dom.monthsPaid=
+dom.monthsPaid
+.map(Number)
+.filter(
+(n,index,array)=>
+Number.isInteger(n)&&
+n>=1&&
+n<=Number(dom.months||1)&&
+array.indexOf(n)===index
+)
+.sort((a,b)=>a-b);
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+
+
+/* ==================================================
+   AFFICHAGE DOMICILIATIONS
+================================================== */
 
 function renderDomiciliations(){
 
-const list =
-document.getElementById("domiciliationsList");
+const list=
+document.getElementById("domiciliationList");
 
-if(domiciliations.length===0){
+if(!list)return;
+
+list.innerHTML="";
+
+if(!domiciliations.length){
 
 list.innerHTML=
-`<div class="empty">
+`
+<div class="domiciliationEmpty">
 Aucune domiciliation enregistrée.
-</div>`;
+</div>
+`;
 
 return;
 
 }
 
 
-list.innerHTML =
-domiciliations.map(d=>{
+let totalMensuel=0;
+let totalRestant=0;
 
-const months =
-Number(d.months || 1);
 
-const paid =
-Math.min(
-months,
-Array.isArray(d.monthsPaid)
-? d.monthsPaid.length
-: 0
+domiciliations.forEach(dom=>{
+
+const total=
+Number(dom.total||0);
+
+const months=
+Math.max(
+1,
+Number(dom.months||1)
 );
 
-const percent =
-months>0
-? Math.min(100,(paid/months)*100)
+const paidCount=
+Array.isArray(dom.monthsPaid)
+?dom.monthsPaid.length
 :0;
 
-const monthly =
+const remainingMonths=
+Math.max(
+0,
+months-paidCount
+);
+
+const monthly=
 calculateLoanMonthly(
-d.total,
+total,
 months,
-d.taeg
+Number(dom.taeg||0)
 );
 
-let last =
-d.lastDifferent
-? Number(d.lastInstallment || 0)
-: round2(
-d.total -
-monthly*(months-1)
+const paidAmount=
+getDomiciliationPaidAmount(dom);
+
+const remainingAmount=
+Math.max(
+0,
+roundMoney(total-paidAmount)
 );
 
-let monthlyDisplay=monthly;
+if(remainingMonths>0){
 
-if(d.lastDifferent){
-
-monthlyDisplay=monthly;
+totalMensuel+=monthly;
 
 }
 
-return `
+totalRestant+=remainingAmount;
 
-<div class="domiciliationCard">
-
-<div class="domHeader">
-
-<div>
-
-<div class="domTitle">
-${escapeHTML(d.alias)}
-</div>
-
-</div>
-
-<div class="domMonthly">
-${money(monthlyDisplay)}
-</div>
-
-</div>
+});
 
 
-<div class="domInfo">
+/* =========================
+   RESUME
+========================= */
 
-<div>
-Bénéficiaire :
-<strong>
-${escapeHTML(d.beneficiary || "-")}
-</strong>
-</div>
+const summary=
+document.createElement("div");
 
-${d.iban
-? `<div>IBAN : ${escapeHTML(d.iban)}</div>`
-: ""}
+summary.className="domiciliationSummary";
 
-<div>
-Montant total :
-<strong>${money(d.total)}</strong>
-</div>
-
-<div>
-TAEG :
-<strong>${Number(d.taeg || 0).toFixed(2)} %</strong>
-</div>
-
-<div>
-Durée :
-<strong>${months} mois</strong>
-</div>
-
-<div>
-Début :
-<strong>${formatDate(d.startDate)}</strong>
-</div>
-
-<div>
-Fin :
-<strong>
-${formatDate(
-addMonthsSafe(d.startDate,months-1)
-)}
-</strong>
-</div>
-
-<div>
-Mensualité :
-<strong>${money(monthly)}</strong>
-</div>
-
-${d.lastDifferent
-? `
-<div>
-Dernière échéance :
-<strong>${money(last)}</strong>
-</div>
+summary.innerHTML=
 `
-: ""}
+<div class="domiciliationSummaryBox">
 
-<div style="margin-top:6px;">
-Échéances payées :
-<strong>${paid} / ${months}</strong>
+<div class="domiciliationSummaryTitle">
+Domiciliations
+</div>
+
+<div class="domiciliationSummaryValue">
+${domiciliations.length}
 </div>
 
 </div>
 
+<div class="domiciliationSummaryBox">
 
-<div class="domProgress">
+<div class="domiciliationSummaryTitle">
+Mensuel
+</div>
 
-<div
-class="domProgressBar"
-style="width:${percent}%">
+<div class="domiciliationSummaryValue">
+${euro(totalMensuel)}
 </div>
 
 </div>
 
+<div class="domiciliationSummaryBox">
 
-<div class="domButtons">
+<div class="domiciliationSummaryTitle">
+Reste estimé
+</div>
 
-<button
-class="domButton green"
-onclick="payNextDomiciliationMonth('${d.id}')">
-✓ Marquer le mois payé
-</button>
-
-<button
-class="domButton"
-onclick="undoDomiciliationMonth('${d.id}')">
-↩️ Annuler dernier
-</button>
-
-<button
-class="domButton blue"
-onclick="openDomiciliationEdit('${d.id}')">
-✏️ Modifier
-</button>
-
-<button
-class="domButton red"
-onclick="deleteDomiciliation('${d.id}')">
-🗑️ Supprimer
-</button>
-
+<div class="domiciliationSummaryValue">
+${euro(totalRestant)}
 </div>
 
 </div>
-
 `;
 
-}).join("");
+list.appendChild(summary);
+
+
+/* =========================
+   UNE CARTE PAR DOMICILIATION
+========================= */
+
+domiciliations.forEach(dom=>{
+
+const total=
+Number(dom.total||0);
+
+const months=
+Math.max(
+1,
+Number(dom.months||1)
+);
+
+const taeg=
+Number(dom.taeg||0);
+
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
+
+const startDate=
+dom.startDate||"";
+
+const endDate=
+calculateDomiciliationEndDate(
+startDate,
+months
+);
+
+const paidCount=
+Array.isArray(dom.monthsPaid)
+?dom.monthsPaid.length
+:0;
+
+const remainingMonths=
+Math.max(
+0,
+months-paidCount
+);
+
+const paidAmount=
+getDomiciliationPaidAmount(dom);
+
+const remainingAmount=
+Math.max(
+0,
+roundMoney(total-paidAmount)
+);
+
+const progress=
+Math.min(
+100,
+(paidCount/months)*100
+);
+
+const nextMonth=
+getNextDomiciliationMonth(dom);
+
+const item=
+document.createElement("div");
+
+item.className="domiciliationItem";
+
+if(remainingMonths===0){
+
+item.classList.add("paid");
 
 }
 
 
-/* ==========================================================
-   PAYER MOIS DOMICILIATION
-========================================================== */
+/* =========================
+   INFOS
+========================= */
+
+item.innerHTML=
+`
+<div class="domiciliationAlias">
+${escapeHtml(dom.alias||"Sans alias")}
+</div>
+
+<div class="domiciliationBeneficiary">
+${escapeHtml(dom.beneficiary||"-")}
+</div>
+
+<div class="domiciliationDetails">
+
+IBAN :
+${escapeHtml(dom.iban||"-")}
+
+<br>
+
+Montant total :
+<strong>
+${euro(total)}
+</strong>
+
+<br>
+
+TAEG :
+<strong>
+${Number(taeg).toLocaleString(
+"fr-BE",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)} %
+</strong>
+
+<br>
+
+Durée :
+<strong>
+${months} mois
+</strong>
+
+<br>
+
+Date de début :
+<strong>
+${formatDate(startDate)||"-"}
+</strong>
+
+<br>
+
+Date de fin :
+<strong>
+${formatDate(endDate)||"-"}
+</strong>
+
+<br>
+
+Mensualité estimée :
+<strong>
+${euro(monthly)}
+</strong>
+
+<br>
+
+Échéances :
+<strong>
+${paidCount} / ${months}
+</strong>
+
+<br>
+
+Déjà payé :
+<strong>
+${euro(paidAmount)}
+</strong>
+
+<br>
+
+Reste :
+<strong>
+${euro(remainingAmount)}
+</strong>
+
+</div>
+
+<div class="domiciliationProgress">
+
+<div
+class="domiciliationProgressBar"
+style="width:${progress}%">
+</div>
+
+</div>
+`;
+
+
+
+/* =========================
+   PHOTOS
+========================= */
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+const photosBox=
+document.createElement("div");
+
+photosBox.className=
+"domiciliationPhotos";
+
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
+
+const photoBox=
+document.createElement("div");
+
+photoBox.className=
+"domiciliationPhotoBox";
+
+if(photo){
+
+photoBox.innerHTML=
+`
+<img
+src="${photo}"
+class="domiciliationPhoto"
+onclick="openDomiciliationPhoto('${dom.id}',${index})">
+
+<div class="domiciliationPhotoActions">
+
+<button
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+🔄 Remplacer
+
+</button>
+
+<button
+class="danger"
+onclick="deleteDomiciliationPhoto('${dom.id}',${index})">
+
+🗑️
+
+</button>
+
+</div>
+`;
+
+}else{
+
+photoBox.innerHTML=
+`
+<div class="domiciliationPhotoEmpty">
+
+📷 Photo ${index+1}<br>
+Non ajoutée
+
+</div>
+
+<div class="domiciliationPhotoActions">
+
+<button
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+📷 Ajouter
+
+</button>
+
+</div>
+`;
+
+}
+
+photosBox.appendChild(photoBox);
+
+});
+
+item.appendChild(photosBox);
+
+
+/* =========================
+   PROCHAINE ECHEANCE
+========================= */
+
+const nextBox=
+document.createElement("div");
+
+nextBox.className="domiciliationNext";
+
+if(nextMonth!==null){
+
+const nextDate=
+addMonthsSafe(
+startDate,
+nextMonth-1
+);
+
+const nextAmount=
+getDomiciliationInstallmentAmount(
+dom,
+nextMonth
+);
+
+nextBox.innerHTML=
+`
+<div class="domiciliationNextTop">
+
+<input
+type="checkbox"
+class="domiciliationCheckbox"
+title="Marquer cette échéance comme payée">
+
+<div class="domiciliationNextInfo">
+
+<div class="domiciliationNextTitle">
+Prochaine échéance • ${nextMonth}/${months}
+</div>
+
+<div class="domiciliationNextDate">
+${formatDate(nextDate)||"-"}
+</div>
+
+<div class="domiciliationNextAmount">
+${euro(nextAmount)}
+</div>
+
+</div>
+
+</div>
+`;
+
+const nextCheckbox=
+nextBox.querySelector("input");
+
+nextCheckbox.checked=false;
+
+nextCheckbox.addEventListener(
+"change",
+function(){
+
+toggleDomiciliationMonth(
+dom.id,
+nextMonth,
+this.checked
+);
+
+}
+);
+
+}else{
+
+nextBox.innerHTML=
+`
+<div
+style="
+text-align:center;
+font-weight:700;
+color:#167c2e;
+">
+
+✓ Toutes les échéances sont payées
+
+</div>
+`;
+
+}
+
+item.appendChild(nextBox);
+
+
+/* =========================
+   TABLEAU ECHEANCES
+========================= */
+
+const scheduleButton=
+document.createElement("button");
+
+scheduleButton.className=
+"secondary domiciliationScheduleButton";
+
+const scheduleOpen=
+openedDomiciliationSchedules.has(
+String(dom.id)
+);
+
+scheduleButton.textContent=
+scheduleOpen
+?"▲ Masquer les échéances"
+:"📋 Voir les échéances";
+
+scheduleButton.onclick=function(){
+
+toggleDomiciliationSchedule(dom.id);
+
+};
+
+item.appendChild(scheduleButton);
+
+
+const schedule=
+document.createElement("div");
+
+schedule.className="domiciliationSchedule";
+
+if(!scheduleOpen)
+schedule.classList.add("hidden");
+
+
+for(let month=1;month<=months;month++){
+
+const paid=
+Array.isArray(dom.monthsPaid)&&
+dom.monthsPaid.includes(month);
+
+const date=
+addMonthsSafe(
+startDate,
+month-1
+);
+
+const amount=
+getDomiciliationInstallmentAmount(
+dom,
+month
+);
+
+const row=
+document.createElement("div");
+
+row.className=
+"domiciliationMonth";
+
+if(paid)
+row.classList.add("paid");
+
+
+const checkbox=
+document.createElement("input");
+
+checkbox.type="checkbox";
+
+checkbox.checked=paid;
+
+checkbox.addEventListener(
+"change",
+function(){
+
+toggleDomiciliationMonth(
+dom.id,
+month,
+this.checked
+);
+
+}
+);
+
+
+const info=
+document.createElement("div");
+
+info.className="domiciliationMonthInfo";
+
+const lastBadge=
+month===months
+?
+`<span class="domiciliationLast">DERNIÈRE</span>`
+:"";
+
+info.innerHTML=
+`
+<div class="domiciliationMonthLabel">
+
+Échéance ${month}/${months}
+
+${paid
+?`<span class="badge badgePaid">PAYÉE</span>`
+:`<span class="badge badgeUnpaid">À PAYER</span>`
+}
+
+${lastBadge}
+
+</div>
+
+<div class="domiciliationMonthDate">
+${formatDate(date)||"-"}
+</div>
+
+<div class="domiciliationMonthAmount">
+${euro(amount)}
+</div>
+`;
+
+row.appendChild(checkbox);
+row.appendChild(info);
+
+schedule.appendChild(row);
+
+}
+
+item.appendChild(schedule);
+
+
+/* =========================
+   BOUTONS
+========================= */
+
+const actions=
+document.createElement("div");
+
+actions.className="domiciliationActions";
+
+
+const undoBtn=
+document.createElement("button");
+
+undoBtn.className="secondary";
+
+undoBtn.textContent=
+"↩️ Annuler dernier";
+
+undoBtn.onclick=function(){
+
+undoDomiciliationMonth(dom.id);
+
+};
+
+
+const editBtn=
+document.createElement("button");
+
+editBtn.className="secondary";
+
+editBtn.textContent=
+"✏️ Modifier";
+
+editBtn.onclick=function(){
+
+openDomiciliationEdit(dom.id);
+
+};
+
+
+const deleteBtn=
+document.createElement("button");
+
+deleteBtn.className="danger";
+
+deleteBtn.textContent=
+"🗑️ Supprimer";
+
+deleteBtn.onclick=function(){
+
+deleteDomiciliation(dom.id);
+
+};
+
+
+actions.appendChild(undoBtn);
+actions.appendChild(editBtn);
+actions.appendChild(deleteBtn);
+
+item.appendChild(actions);
+
+list.appendChild(item);
+
+});
+
+}
+
+
+/* =========================
+   PHOTO DOMICILIATION
+========================= */
+
+function replaceDomiciliationPhoto(id,index){
+
+const input=
+document.createElement("input");
+
+input.type="file";
+input.accept="image/*";
+input.capture="environment";
+
+input.onchange=function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+compressDomiciliationPhoto(
+file,
+function(photo){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)return;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+dom.photos[index]=photo;
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+);
+
+};
+
+input.click();
+
+}
+
+
+function deleteDomiciliationPhoto(id,index){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)return;
+
+if(
+!confirm(
+"Supprimer cette photo ?"
+)
+)return;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+dom.photos[index]="";
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+
+
+function openDomiciliationPhoto(id,index){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(
+!dom||
+!Array.isArray(dom.photos)||
+!dom.photos[index]
+)
+return;
+
+const modal=
+document.createElement("div");
+
+modal.style.position="fixed";
+modal.style.inset="0";
+modal.style.background="rgba(0,0,0,.9)";
+modal.style.zIndex="3000";
+modal.style.display="flex";
+modal.style.alignItems="center";
+modal.style.justifyContent="center";
+modal.style.padding="15px";
+
+const img=
+document.createElement("img");
+
+img.src=dom.photos[index];
+
+img.style.maxWidth="100%";
+img.style.maxHeight="90vh";
+img.style.objectFit="contain";
+img.style.borderRadius="12px";
+
+modal.appendChild(img);
+
+modal.onclick=function(){
+
+modal.remove();
+
+};
+
+document.body.appendChild(modal);
+
+}
+
+
+/* =========================
+   ANCIEN BOUTON
+========================= */
 
 function payNextDomiciliationMonth(id){
 
-const d =
-domiciliations.find(x=>x.id===id);
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
 
-if(!d) return;
+if(!dom)return;
 
-const months =
-Number(d.months || 1);
+const nextMonth=
+getNextDomiciliationMonth(dom);
 
-if(!Array.isArray(d.monthsPaid)){
-d.monthsPaid=[];
-}
+if(nextMonth===null){
 
-if(d.monthsPaid.length>=months){
-
-alert("Toutes les échéances sont déjà payées.");
+alert(
+"Cette domiciliation est entièrement payée."
+);
 
 return;
 
 }
 
-d.monthsPaid.push(
-d.monthsPaid.length+1
+toggleDomiciliationMonth(
+id,
+nextMonth,
+true
 );
-
-saveDomiciliations();
-
-renderDomiciliations();
 
 }
 
 
-/* ==========================================================
-   ANNULER DERNIER MOIS
-========================================================== */
+/* =========================
+   ANNULER DERNIER
+========================= */
 
 function undoDomiciliationMonth(id){
 
-const d =
-domiciliations.find(x=>x.id===id);
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
 
-if(!d || !d.monthsPaid.length) return;
+if(!dom)return;
 
-d.monthsPaid.pop();
+if(
+!Array.isArray(dom.monthsPaid)||
+!dom.monthsPaid.length
+){
+
+return;
+
+}
+
+if(
+!confirm(
+"Annuler le dernier mois payé ?"
+)
+){
+
+return;
+
+}
+
+dom.monthsPaid=
+dom.monthsPaid
+.map(Number)
+.sort((a,b)=>a-b);
+
+dom.monthsPaid.pop();
 
 saveDomiciliations();
 
@@ -3065,127 +5561,206 @@ renderDomiciliations();
 }
 
 
-/* ==========================================================
-   MODIFIER DOMICILIATION
-========================================================== */
+/* ==================================================
+   MODIFICATION DOMICILIATION
+================================================== */
 
 function openDomiciliationEdit(id){
 
-const d =
-domiciliations.find(x=>x.id===id);
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
 
-if(!d) return;
+if(!dom){
 
-document.getElementById("editDomId").value=id;
+alert("Domiciliation introuvable.");
+return;
 
-document.getElementById("editDomAlias").value =
-d.alias || "";
+}
 
-document.getElementById("editDomBeneficiary").value =
-d.beneficiary || "";
+domEditId=id;
 
-document.getElementById("editDomIBAN").value =
-d.iban || "";
+document.getElementById("domEditAlias").value=
+dom.alias||"";
 
-document.getElementById("editDomTotal").value =
-d.total || "";
+document.getElementById("domEditBeneficiary").value=
+dom.beneficiary||"";
 
-document.getElementById("editDomMonths").value =
-d.months || "";
+document.getElementById("domEditIban").value=
+dom.iban||"";
 
-document.getElementById("editDomTAEG").value =
-d.taeg || "";
+document.getElementById("domEditTotal").value=
+dom.total??"";
 
-document.getElementById("editDomStartDate").value =
-d.startDate || "";
+document.getElementById("domEditMonths").value=
+dom.months??1;
 
-document.getElementById("editDomLastDifferent").checked =
-!!d.lastDifferent;
+document.getElementById("domEditTaeg").value=
+dom.taeg??0;
 
-document.getElementById("editDomLastInstallment").value =
-d.lastInstallment || "";
-
-toggleEditLastInstallment();
+document.getElementById("domEditStartDate").value=
+dom.startDate||"";
 
 calculateEditDomiciliation();
 
-document.getElementById("domModal")
-.classList.add("show");
+renderEditDomiciliationPhotos(dom);
+
+document.getElementById(
+"domEditModal"
+).classList.add("show");
 
 }
 
 
-function toggleEditLastInstallment(){
+function renderEditDomiciliationPhotos(dom){
 
-const checked =
-document.getElementById("editDomLastDifferent")
-.checked;
+const box=
+document.getElementById("domEditPhotos");
 
-document.getElementById("editDomLastInstallmentBox")
-.classList.toggle(
-"visible",
-checked
+if(!box)return;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+box.innerHTML="";
+
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"domiciliationPhotoBox";
+
+if(photo){
+
+div.innerHTML=
+`
+<img
+src="${photo}"
+class="domiciliationPhoto"
+onclick="openDomiciliationPhoto('${dom.id}',${index})">
+
+<div class="domiciliationPhotoActions">
+
+<button
+type="button"
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+🔄 Remplacer
+
+</button>
+
+<button
+type="button"
+class="danger"
+onclick="deleteDomiciliationPhotoFromEdit('${dom.id}',${index})">
+
+🗑️
+
+</button>
+
+</div>
+`;
+
+}else{
+
+div.innerHTML=
+`
+<div class="domiciliationPhotoEmpty">
+
+📷 Photo ${index+1}<br>
+Non ajoutée
+
+</div>
+
+<div class="domiciliationPhotoActions">
+
+<button
+type="button"
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+📷 Ajouter
+
+</button>
+
+</div>
+`;
+
+}
+
+box.appendChild(div);
+
+});
+
+}
+
+
+function deleteDomiciliationPhotoFromEdit(id,index){
+
+deleteDomiciliationPhoto(id,index);
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
 );
 
-calculateEditDomiciliation();
+if(dom)
+renderEditDomiciliationPhotos(dom);
 
 }
 
 
 function calculateEditDomiciliation(){
 
-const total =
+const total=
 parseFloat(
-document.getElementById("editDomTotal").value
-) || 0;
-
-const months =
-parseInt(
-document.getElementById("editDomMonths").value
-) || 0;
-
-const taeg =
-parseFloat(
-document.getElementById("editDomTAEG").value
-) || 0;
-
-const lastDifferent =
-document.getElementById("editDomLastDifferent").checked;
-
-const monthly =
-total>0 && months>0
-? calculateLoanMonthly(total,months,taeg)
-:0;
-
-let last =
-months>0
-? round2(total-monthly*(months-1))
-:0;
-
-if(lastDifferent){
-
-const entered =
-parseFloat(
-document.getElementById("editDomLastInstallment").value
+document.getElementById("domEditTotal").value
 );
 
-if(Number.isFinite(entered) && entered>0){
+const months=
+parseInt(
+document.getElementById("domEditMonths").value
+);
 
-last=round2(entered);
+const taeg=
+parseFloat(
+document.getElementById("domEditTaeg").value
+);
 
-}
+const startDate=
+document.getElementById("domEditStartDate").value;
 
-}
+const monthly=
+calculateLoanMonthly(
+total,
+months,
+taeg
+);
 
-document.getElementById("editDomCalculation")
-.innerHTML=`
+const endDate=
+calculateDomiciliationEndDate(
+startDate,
+months
+);
 
-Mensualité normale :
-<strong>${money(monthly)}</strong><br>
+document.getElementById("domEditEndDate").value=endDate;
 
-Dernière échéance :
-<strong>${money(last)}</strong>
-
+document.getElementById(
+"domEditMonthlyResult"
+).innerHTML=
+`
+Mensualité estimée :
+<strong>
+${euro(monthly)}
+</strong>
 `;
 
 }
@@ -3193,70 +5768,107 @@ Dernière échéance :
 
 function saveDomiciliationEdit(){
 
-const id =
-document.getElementById("editDomId").value;
+if(!domEditId)return;
 
-const d =
-domiciliations.find(x=>x.id===id);
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(domEditId)
+);
 
-if(!d) return;
+if(!dom){
 
-const oldPaid =
-Array.isArray(d.monthsPaid)
-? d.monthsPaid
-: [];
+alert("Domiciliation introuvable.");
+return;
 
-const months =
-Math.max(
-1,
+}
+
+const alias=
+document.getElementById("domEditAlias").value.trim();
+
+const beneficiary=
+document.getElementById("domEditBeneficiary").value.trim();
+
+const iban=
+document.getElementById("domEditIban").value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+const total=
+parseFloat(
+document.getElementById("domEditTotal").value
+);
+
+const months=
 parseInt(
-document.getElementById("editDomMonths").value
-) || 1
+document.getElementById("domEditMonths").value
 );
 
-const lastDifferent =
-document.getElementById("editDomLastDifferent")
-.checked;
-
-d.alias =
-document.getElementById("editDomAlias").value.trim();
-
-d.beneficiary =
-document.getElementById("editDomBeneficiary").value.trim();
-
-d.iban =
-document.getElementById("editDomIBAN").value.trim();
-
-d.total =
-round2(
+const taeg=
 parseFloat(
-document.getElementById("editDomTotal").value
-) || 0
+document.getElementById("domEditTaeg").value
 );
 
-d.months=months;
+const startDate=
+document.getElementById("domEditStartDate").value;
 
-d.taeg =
-parseFloat(
-document.getElementById("editDomTAEG").value
-) || 0;
 
-d.startDate =
-document.getElementById("editDomStartDate").value;
+if(
+!beneficiary||
+isNaN(total)||
+total<=0||
+isNaN(months)||
+months<1||
+isNaN(taeg)||
+taeg<0||
+!startDate
+){
 
-d.lastDifferent=lastDifferent;
+alert(
+"Veuillez remplir correctement les champs obligatoires."
+);
 
-d.lastInstallment =
-lastDifferent
-? round2(
-parseFloat(
-document.getElementById("editDomLastInstallment").value
-) || 0
+return;
+
+}
+
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+
+dom.monthsPaid=
+dom.monthsPaid
+.map(Number)
+.filter(
+n=>
+Number.isInteger(n)&&
+n>=1&&
+n<=months
 )
-: null;
+.filter(
+(n,index,array)=>
+array.indexOf(n)===index
+)
+.sort((a,b)=>a-b);
 
-d.monthsPaid =
-oldPaid.filter(n=>Number(n)<=months);
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+if(dom.photos.length>2)
+dom.photos=dom.photos.slice(0,2);
+
+
+dom.alias=alias;
+dom.beneficiary=beneficiary;
+dom.iban=iban;
+dom.total=roundMoney(total);
+dom.months=months;
+dom.taeg=taeg;
+dom.startDate=startDate;
 
 saveDomiciliations();
 
@@ -3264,27 +5876,55 @@ closeDomiciliationEdit();
 
 renderDomiciliations();
 
+alert(
+"Modification enregistrée."
+);
+
 }
 
 
 function closeDomiciliationEdit(){
 
-document.getElementById("domModal")
-.classList.remove("show");
+document.getElementById(
+"domEditModal"
+).classList.remove("show");
+
+domEditId=null;
 
 }
 
 
-/* ==========================================================
+/* =========================
    SUPPRIMER DOMICILIATION
-========================================================== */
+========================= */
 
 function deleteDomiciliation(id){
 
-if(!confirm("Supprimer cette domiciliation ?")) return;
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
 
-domiciliations =
-domiciliations.filter(d=>d.id!==id);
+if(!dom)return;
+
+if(
+!confirm(
+"Supprimer cette domiciliation ?"
+)
+){
+
+return;
+
+}
+
+openedDomiciliationSchedules.delete(
+String(id)
+);
+
+domiciliations=
+domiciliations.filter(
+d=>String(d.id)!==String(id)
+);
 
 saveDomiciliations();
 
@@ -3293,33 +5933,210 @@ renderDomiciliations();
 }
 
 
-/* ==========================================================
-   CALCULATRICE
-========================================================== */
+/* =========================
+   EXPORT
+========================= */
 
-let calcValue="0";
+function exportData(){
+
+const backup={
+
+version:6,
+
+date:new Date().toISOString(),
+
+data:data,
+
+domiciliations:domiciliations
+
+};
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const url=
+URL.createObjectURL(blob);
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"mes-paiements-backup.json";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+setTimeout(
+()=>{
+URL.revokeObjectURL(url);
+},
+1000
+);
+
+}
+
+
+/* =========================
+   IMPORT
+========================= */
+
+document.getElementById(
+"importInput"
+).addEventListener(
+"change",
+function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+const reader=
+new FileReader();
+
+reader.onload=function(e){
+
+try{
+
+const backup=
+JSON.parse(
+e.target.result
+);
+
+if(
+backup.data&&
+Array.isArray(backup.data)
+){
+
+data=backup.data;
+
+normalizeData();
+
+if(
+Array.isArray(
+backup.domiciliations
+)
+){
+
+domiciliations=
+backup.domiciliations;
+
+normalizeDomiciliations();
+
+}
+
+selectedIds.clear();
+
+openedDomiciliationSchedules.clear();
+
+saveData();
+
+saveDomiciliations();
+
+render();
+
+renderDomiciliations();
+
+alert(
+"Importation réussie."
+);
+
+}else{
+
+alert(
+"Fichier de sauvegarde invalide."
+);
+
+}
+
+}catch(err){
+
+console.error(err);
+
+alert(
+"Impossible de lire la sauvegarde."
+);
+
+}
+
+};
+
+reader.readAsText(file);
+
+this.value="";
+
+}
+);
+
+
+/* =========================
+   SECURITE HTML
+========================= */
+
+function escapeHtml(value){
+
+return String(value??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+function escapeJs(value){
+
+return String(value??"")
+.replaceAll("\\","\\\\")
+.replaceAll("'","\\'")
+.replaceAll("\n","\\n")
+.replaceAll("\r","\\r");
+
+}
+
+
+/* =========================
+   CALCULETTE
+========================= */
+
+let calculatorValue="";
+
 
 function calcInput(value){
 
-if(calcValue==="0" && value!=="."){
-calcValue="";
-}
+calculatorValue+=value;
 
-calcValue += value;
-
-document.getElementById("calcDisplay")
-.textContent =
-calcValue.replace(/\./g,",");
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
 
 }
 
 
 function calcClear(){
 
-calcValue="0";
+calculatorValue="";
 
-document.getElementById("calcDisplay")
-.textContent="0";
+document.getElementById(
+"calcDisplay"
+).value="";
 
 }
 
@@ -3328,168 +6145,224 @@ function calcResult(){
 
 try{
 
-if(!/^[0-9+\-*/().\s]+$/.test(calcValue)){
-throw new Error();
-}
+if(!calculatorValue)return;
 
-const result =
+const safe=
+calculatorValue.replace(
+/[^0-9+\-*/().]/g,
+""
+);
+
+if(!safe)
+throw new Error();
+
+const result=
 Function(
 '"use strict";return ('+
-calcValue+
+safe+
 ')'
 )();
 
-if(!Number.isFinite(result)){
+if(
+typeof result!=="number"||
+!isFinite(result)
+){
+
 throw new Error();
+
 }
 
-calcValue =
+calculatorValue=
 String(
-round2(result)
+Math.round(
+(result+Number.EPSILON)*100
+)/100
 );
 
-document.getElementById("calcDisplay")
-.textContent =
-calcValue.replace(/\./g,",");
+document.getElementById(
+"calcDisplay"
+).value=
+calculatorValue;
 
 }catch(e){
 
-calcValue="0";
+document.getElementById(
+"calcDisplay"
+).value=
+"Erreur";
 
-document.getElementById("calcDisplay")
-.textContent="Erreur";
+calculatorValue="";
 
 }
 
 }
 
 
-/* ==========================================================
-   EXPORT
-========================================================== */
+/* =========================
+   EVENEMENTS MODALES
+========================= */
 
-function exportData(){
+document.getElementById(
+"editModal"
+).addEventListener(
+"click",
+function(e){
 
-const data={
+if(e.target===this)
+closeEdit();
 
-version:3,
-
-payments:payments,
-
-domiciliations:domiciliations
-
-};
-
-const blob =
-new Blob(
-[
-JSON.stringify(data,null,2)
-],
-{
-type:"application/json"
 }
 );
 
-const url =
-URL.createObjectURL(blob);
 
-const a =
-document.createElement("a");
+document.getElementById(
+"domEditModal"
+).addEventListener(
+"click",
+function(e){
 
-a.href=url;
-
-a.download =
-"mes-paiements-sauvegarde.json";
-
-a.click();
-
-URL.revokeObjectURL(url);
+if(e.target===this)
+closeDomiciliationEdit();
 
 }
+);
 
 
-/* ==========================================================
-   IMPORT
-========================================================== */
+document.getElementById(
+"manualModal"
+).addEventListener(
+"click",
+function(e){
 
-function importData(input){
-
-const file =
-input.files && input.files[0];
-
-if(!file) return;
-
-const reader =
-new FileReader();
-
-reader.onload=function(e){
-
-try{
-
-const data =
-JSON.parse(e.target.result);
-
-if(Array.isArray(data)){
-
-payments=data;
-
-}else{
-
-if(Array.isArray(data.payments)){
-payments=data.payments;
-}
-
-if(Array.isArray(data.domiciliations)){
-domiciliations=data.domiciliations;
-}
+if(e.target===this)
+closeManual();
 
 }
+);
 
-normalizePayments();
 
-normalizeDomiciliations();
+document.getElementById(
+"qrModal"
+).addEventListener(
+"click",
+function(e){
 
-savePayments();
-
-saveDomiciliations();
-
-renderAll();
-
-alert("Sauvegarde importée avec succès.");
-
-}catch(error){
-
-alert("Fichier de sauvegarde invalide.");
+if(e.target===this)
+closeQR();
 
 }
-
-input.value="";
-
-};
-
-reader.readAsText(file);
-
-}
+);
 
 
-/* ==========================================================
-   RENDER GLOBAL
-========================================================== */
+document.getElementById(
+"photoModal"
+).addEventListener(
+"click",
+function(e){
 
-function renderAll(){
-
-loadData();
-
-renderPayments();
-
-renderDomiciliations();
-
-updateSummary();
+if(e.target===this)
+closePhoto();
 
 }
+);
 
+
+/* =========================
+   PHOTOS DOMICILIATION
+========================= */
+
+document.getElementById(
+"domPhoto1Camera"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+1
+);
+
+this.value="";
+
+}
+);
+
+
+document.getElementById(
+"domPhoto2Camera"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+2
+);
+
+this.value="";
+
+}
+);
+
+
+document.getElementById(
+"domPhoto1Gallery"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+1
+);
+
+this.value="";
+
+}
+);
+
+
+document.getElementById(
+"domPhoto2Gallery"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+2
+);
+
+this.value="";
+
+}
+);
+
+
+/* =========================
+   ENTREE PIN
+========================= */
+
+document.getElementById(
+"pinInput"
+).addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter")
+checkPin();
+
+}
+);
+
+
+/* =========================
+   INITIALISATION PHOTOS
+========================= */
+
+renderAddDomiciliationPhotos();
 
 </script>
 
 </body>
-</html> 
+</html>
