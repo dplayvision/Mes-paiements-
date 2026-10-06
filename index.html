@@ -1365,7 +1365,57 @@ readonly>
 
 
 <!-- =========================
-     DERNIERE ECHEANCE DOMICILIATION
+     MENSUALITE MANUELLE
+========================= -->
+
+<div class="balloonOption">
+
+<input
+id="domManualMonthly"
+type="checkbox"
+onchange="toggleDomManualMonthly()">
+
+<label for="domManualMonthly">
+Mensualité fixée manuellement
+</label>
+
+</div>
+
+
+<div
+id="domManualMonthlyBox"
+class="balloonBox hidden">
+
+<div class="balloonTitle">
+💰 Mensualité réelle du contrat
+</div>
+
+<label>
+Montant de la mensualité
+</label>
+
+<input
+id="domManualMonthlyAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 313,14"
+oninput="calculateDomiciliation()">
+
+<div
+class="balloonInfo">
+
+La mensualité saisie sera utilisée pour toutes
+les échéances normales. Le calcul automatique
+du TAEG ne modifiera pas ce montant.
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     DERNIERE ECHEANCE
 ========================= -->
 
 <div class="balloonOption">
@@ -1515,9 +1565,8 @@ Mensualité estimée :
 <div class="domiciliationInfoBox">
 
 La mensualité est calculée automatiquement à partir
-du montant, de la durée et du TAEG saisi.
-Le calcul est indicatif et peut différer de celui
-de la banque.
+du montant, de la durée et du TAEG, sauf si tu coches
+« Mensualité fixée manuellement ».
 
 </div>
 
@@ -1794,6 +1843,97 @@ type="date"
 readonly>
 
 
+<!-- =========================
+     MENSUALITE MANUELLE EDIT
+========================= -->
+
+<div class="balloonOption">
+
+<input
+id="domEditManualMonthly"
+type="checkbox"
+onchange="toggleEditManualMonthly()">
+
+<label for="domEditManualMonthly">
+Mensualité fixée manuellement
+</label>
+
+</div>
+
+
+<div
+id="domEditManualMonthlyBox"
+class="balloonBox hidden">
+
+<div class="balloonTitle">
+💰 Mensualité réelle du contrat
+</div>
+
+<label>
+Montant de la mensualité
+</label>
+
+<input
+id="domEditManualMonthlyAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 313,14"
+oninput="calculateEditDomiciliation()">
+
+</div>
+
+
+<!-- =========================
+     DERNIERE ECHEANCE EDIT
+========================= -->
+
+<div class="balloonOption">
+
+<input
+id="domEditLastDifferent"
+type="checkbox"
+onchange="calculateEditDomiciliation()">
+
+<label for="domEditLastDifferent">
+Dernière échéance différente
+</label>
+
+</div>
+
+
+<div
+id="domEditLastInstallmentBox"
+class="balloonBox hidden">
+
+<div class="balloonTitle">
+💰 Dernière échéance différente
+</div>
+
+<label>
+Montant de la dernière échéance
+</label>
+
+<input
+id="domEditLastInstallment"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 7873,14"
+oninput="calculateEditDomiciliation()">
+
+<div
+id="domEditLastInstallmentInfo"
+class="balloonTotal">
+
+Dernière échéance :
+<strong>0,00 €</strong>
+
+</div>
+
+</div>
+
+
 <!-- PHOTOS MODIFICATION -->
 
 <label>
@@ -1818,7 +1958,8 @@ Mensualité estimée :
 <div class="domiciliationInfoBox">
 
 La mensualité est recalculée automatiquement
-si tu modifies le montant, la durée ou le TAEG.
+si tu modifies le montant, la durée ou le TAEG,
+sauf si la mensualité est fixée manuellement.
 
 </div>
 
@@ -3699,6 +3840,19 @@ dom.lastDifferent=false;
 if(dom.lastInstallment===undefined)
 dom.lastInstallment=0;
 
+
+/* =========================
+   NOUVEAU :
+   MENSUALITE MANUELLE
+========================= */
+
+if(dom.manualMonthly===undefined)
+dom.manualMonthly=false;
+
+if(dom.manualMonthlyAmount===undefined)
+dom.manualMonthlyAmount=0;
+
+
 if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
@@ -3806,6 +3960,64 @@ Number(months)
 }
 
 
+/* ==================================================
+   MENSUALITE MANUELLE
+================================================== */
+
+function toggleDomManualMonthly(){
+
+const checked=
+document.getElementById(
+"domManualMonthly"
+).checked;
+
+const box=
+document.getElementById(
+"domManualMonthlyBox"
+);
+
+if(checked){
+
+box.classList.remove("hidden");
+
+}else{
+
+box.classList.add("hidden");
+
+}
+
+calculateDomiciliation();
+
+}
+
+
+function toggleEditManualMonthly(){
+
+const checked=
+document.getElementById(
+"domEditManualMonthly"
+).checked;
+
+const box=
+document.getElementById(
+"domEditManualMonthlyBox"
+);
+
+if(checked){
+
+box.classList.remove("hidden");
+
+}else{
+
+box.classList.add("hidden");
+
+}
+
+calculateEditDomiciliation();
+
+}
+
+
 /* =========================
    DERNIERE ECHEANCE DOMICILIATION
 ========================= */
@@ -3852,12 +4064,38 @@ Math.max(
 Number(dom.months||1)
 );
 
-const monthly=
+
+/* =========================
+   MENSUALITE
+========================= */
+
+let monthly;
+
+if(
+dom.manualMonthly &&
+Number(dom.manualMonthlyAmount||0)>0
+){
+
+monthly=
+roundMoney(
+dom.manualMonthlyAmount
+);
+
+}else{
+
+monthly=
 calculateLoanMonthly(
 total,
 months,
 Number(dom.taeg||0)
 );
+
+}
+
+
+/* =========================
+   DERNIERE ECHEANCE
+========================= */
 
 if(monthNumber===months){
 
@@ -3969,17 +4207,54 @@ document.getElementById("domTaeg").value
 const startDate=
 document.getElementById("domStartDate").value;
 
+const manualMonthly=
+document.getElementById(
+"domManualMonthly"
+).checked;
+
+const manualAmount=
+parseFloat(
+document.getElementById(
+"domManualMonthlyAmount"
+).value
+);
+
 const lastDifferent=
 document.getElementById(
 "domLastDifferent"
 ).checked;
 
-const monthly=
+
+/* =========================
+   MENSUALITE
+========================= */
+
+let monthly;
+
+if(
+manualMonthly &&
+!isNaN(manualAmount) &&
+manualAmount>0
+){
+
+monthly=
+roundMoney(manualAmount);
+
+}else{
+
+monthly=
 calculateLoanMonthly(
 total,
 months,
 taeg
 );
+
+}
+
+
+/* =========================
+   DATE FIN
+========================= */
 
 const endDate=
 calculateDomiciliationEndDate(
@@ -3988,6 +4263,11 @@ months
 );
 
 document.getElementById("domEndDate").value=endDate;
+
+
+/* =========================
+   DERNIERE ECHEANCE
+========================= */
 
 let lastAmount=0;
 
@@ -4025,11 +4305,17 @@ roundMoney(entered);
 
 }
 
+
+/* =========================
+   AFFICHAGE
+========================= */
+
 document.getElementById(
 "domMonthlyResult"
 ).innerHTML=
 `
-Mensualité estimée :
+Mensualité
+${manualMonthly ? "fixée" : "estimée"} :
 <strong>
 ${euro(monthly)}
 </strong>
@@ -4259,12 +4545,52 @@ document.getElementById("domTaeg").value
 const startDate=
 document.getElementById("domStartDate").value;
 
+const manualMonthly=
+document.getElementById(
+"domManualMonthly"
+).checked;
+
+const manualMonthlyAmount=
+roundMoney(
+parseFloat(
+document.getElementById(
+"domManualMonthlyAmount"
+).value
+)||0
+);
+
 const lastDifferent=
 document.getElementById(
 "domLastDifferent"
 ).checked;
 
 let lastInstallment=0;
+
+
+/* =========================
+   VERIFICATION MENSUALITE
+========================= */
+
+if(manualMonthly){
+
+if(
+manualMonthlyAmount<=0
+){
+
+alert(
+"Veuillez indiquer le montant de la mensualité."
+);
+
+return;
+
+}
+
+}
+
+
+/* =========================
+   DERNIERE ECHEANCE
+========================= */
 
 if(lastDifferent){
 
@@ -4288,6 +4614,7 @@ return;
 }
 
 }
+
 
 if(
 !beneficiary||
@@ -4326,6 +4653,15 @@ months:months,
 taeg:taeg,
 
 startDate:startDate,
+
+/* NOUVEAU */
+
+manualMonthly:manualMonthly,
+
+manualMonthlyAmount:
+manualMonthly
+?manualMonthlyAmount
+:0,
 
 lastDifferent:lastDifferent,
 
@@ -4366,6 +4702,20 @@ document.getElementById("domMonths").value="1";
 document.getElementById("domTaeg").value="";
 document.getElementById("domStartDate").value="";
 document.getElementById("domEndDate").value="";
+
+
+document.getElementById(
+"domManualMonthly"
+).checked=false;
+
+document.getElementById(
+"domManualMonthlyAmount"
+).value="";
+
+document.getElementById(
+"domManualMonthlyBox"
+).classList.add("hidden");
+
 
 document.getElementById(
 "domLastDifferent"
@@ -4543,12 +4893,25 @@ Math.max(
 months-paidCount
 );
 
+
+/* =========================
+   MENSUALITE REELLE
+========================= */
+
 const monthly=
+dom.manualMonthly &&
+Number(dom.manualMonthlyAmount||0)>0
+
+?
+roundMoney(dom.manualMonthlyAmount)
+
+:
 calculateLoanMonthly(
 total,
 months,
 Number(dom.taeg||0)
 );
+
 
 const paidAmount=
 getDomiciliationPaidAmount(dom);
@@ -4556,7 +4919,9 @@ getDomiciliationPaidAmount(dom);
 const remainingAmount=
 Math.max(
 0,
-roundMoney(total-paidAmount)
+roundMoney(
+total-paidAmount
+)
 );
 
 if(remainingMonths>0){
@@ -4639,12 +5004,25 @@ Number(dom.months||1)
 const taeg=
 Number(dom.taeg||0);
 
+
+/* =========================
+   MENSUALITE REELLE
+========================= */
+
 const monthly=
+dom.manualMonthly &&
+Number(dom.manualMonthlyAmount||0)>0
+
+?
+roundMoney(dom.manualMonthlyAmount)
+
+:
 calculateLoanMonthly(
 total,
 months,
 taeg
 );
+
 
 const startDate=
 dom.startDate||"";
@@ -4672,7 +5050,9 @@ getDomiciliationPaidAmount(dom);
 const remainingAmount=
 Math.max(
 0,
-roundMoney(total-paidAmount)
+roundMoney(
+total-paidAmount
+)
 );
 
 const progress=
@@ -4758,10 +5138,18 @@ ${formatDate(endDate)||"-"}
 
 <br>
 
-Mensualité estimée :
+Mensualité
+${dom.manualMonthly ? "fixée" : "estimée"} :
 <strong>
 ${euro(monthly)}
 </strong>
+
+${dom.manualMonthly ? `
+<br>
+<span class="small">
+Mensualité du contrat
+</span>
+` : ""}
 
 <br>
 
@@ -5434,6 +5822,63 @@ dom.taeg??0;
 document.getElementById("domEditStartDate").value=
 dom.startDate||"";
 
+
+/* NOUVEAU */
+
+document.getElementById(
+"domEditManualMonthly"
+).checked=
+!!dom.manualMonthly;
+
+document.getElementById(
+"domEditManualMonthlyAmount"
+).value=
+dom.manualMonthlyAmount??"";
+
+
+if(dom.manualMonthly){
+
+document.getElementById(
+"domEditManualMonthlyBox"
+).classList.remove("hidden");
+
+}else{
+
+document.getElementById(
+"domEditManualMonthlyBox"
+).classList.add("hidden");
+
+}
+
+
+/* DERNIERE ECHEANCE */
+
+document.getElementById(
+"domEditLastDifferent"
+).checked=
+!!dom.lastDifferent;
+
+document.getElementById(
+"domEditLastInstallment"
+).value=
+dom.lastInstallment??"";
+
+
+if(dom.lastDifferent){
+
+document.getElementById(
+"domEditLastInstallmentBox"
+).classList.remove("hidden");
+
+}else{
+
+document.getElementById(
+"domEditLastInstallmentBox"
+).classList.add("hidden");
+
+}
+
+
 calculateEditDomiciliation();
 
 renderEditDomiciliationPhotos(dom);
@@ -5550,6 +5995,10 @@ renderEditDomiciliationPhotos(dom);
 }
 
 
+/* =========================
+   CALCUL MODIFICATION
+========================= */
+
 function calculateEditDomiciliation(){
 
 const total=
@@ -5570,12 +6019,46 @@ document.getElementById("domEditTaeg").value
 const startDate=
 document.getElementById("domEditStartDate").value;
 
-const monthly=
+
+const manualMonthly=
+document.getElementById(
+"domEditManualMonthly"
+).checked;
+
+const manualAmount=
+parseFloat(
+document.getElementById(
+"domEditManualMonthlyAmount"
+).value
+);
+
+
+/* MENSUALITE */
+
+let monthly;
+
+if(
+manualMonthly &&
+!isNaN(manualAmount) &&
+manualAmount>0
+){
+
+monthly=
+roundMoney(manualAmount);
+
+}else{
+
+monthly=
 calculateLoanMonthly(
 total,
 months,
 taeg
 );
+
+}
+
+
+/* DATE */
 
 const endDate=
 calculateDomiciliationEndDate(
@@ -5583,15 +6066,75 @@ startDate,
 months
 );
 
-document.getElementById("domEditEndDate").value=endDate;
+document.getElementById(
+"domEditEndDate"
+).value=endDate;
+
+
+/* DERNIERE */
+
+const lastDifferent=
+document.getElementById(
+"domEditLastDifferent"
+).checked;
+
+let lastAmount=0;
+
+if(
+months>0 &&
+!isNaN(total)
+){
+
+lastAmount=
+roundMoney(
+total-
+(monthly*(months-1))
+);
+
+}
+
+if(lastDifferent){
+
+const entered=
+parseFloat(
+document.getElementById(
+"domEditLastInstallment"
+).value
+);
+
+if(
+!isNaN(entered)&&
+entered>0
+){
+
+lastAmount=
+roundMoney(entered);
+
+}
+
+}
+
+
+/* AFFICHAGE */
 
 document.getElementById(
 "domEditMonthlyResult"
 ).innerHTML=
 `
-Mensualité estimée :
+Mensualité
+${manualMonthly ? "fixée" : "estimée"} :
 <strong>
 ${euro(monthly)}
+</strong>
+`;
+
+document.getElementById(
+"domEditLastInstallmentInfo"
+).innerHTML=
+`
+Dernière échéance :
+<strong>
+${euro(lastAmount)}
 </strong>
 `;
 
@@ -5644,6 +6187,40 @@ const startDate=
 document.getElementById("domEditStartDate").value;
 
 
+/* NOUVEAU */
+
+const manualMonthly=
+document.getElementById(
+"domEditManualMonthly"
+).checked;
+
+const manualMonthlyAmount=
+roundMoney(
+parseFloat(
+document.getElementById(
+"domEditManualMonthlyAmount"
+).value
+)||0
+);
+
+
+/* DERNIERE */
+
+const lastDifferent=
+document.getElementById(
+"domEditLastDifferent"
+).checked;
+
+const lastInstallment=
+roundMoney(
+parseFloat(
+document.getElementById(
+"domEditLastInstallment"
+).value
+)||0
+);
+
+
 if(
 !beneficiary||
 isNaN(total)||
@@ -5657,6 +6234,34 @@ taeg<0||
 
 alert(
 "Veuillez remplir correctement les champs obligatoires."
+);
+
+return;
+
+}
+
+
+if(
+manualMonthly &&
+manualMonthlyAmount<=0
+){
+
+alert(
+"Veuillez indiquer le montant de la mensualité."
+);
+
+return;
+
+}
+
+
+if(
+lastDifferent &&
+lastInstallment<=0
+){
+
+alert(
+"Veuillez indiquer le montant de la dernière échéance."
 );
 
 return;
@@ -5701,6 +6306,26 @@ dom.total=roundMoney(total);
 dom.months=months;
 dom.taeg=taeg;
 dom.startDate=startDate;
+
+
+/* NOUVEAU */
+
+dom.manualMonthly=
+manualMonthly;
+
+dom.manualMonthlyAmount=
+manualMonthly
+?manualMonthlyAmount
+:0;
+
+dom.lastDifferent=
+lastDifferent;
+
+dom.lastInstallment=
+lastDifferent
+?lastInstallment
+:0;
+
 
 saveDomiciliations();
 
@@ -5773,7 +6398,7 @@ function exportData(){
 
 const backup={
 
-version:6,
+version:7,
 
 date:new Date().toISOString(),
 
