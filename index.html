@@ -1173,91 +1173,7 @@ Nombre d'échéances
 id="installments"
 type="number"
 min="1"
-value="1"
-oninput="updateBalloonTotal()">
-
-
-<div class="balloonOption">
-
-<input
-id="balloonEnabled"
-type="checkbox"
-onchange="toggleBalloonFields()">
-
-<label for="balloonEnabled">
-Dernière échéance différente
-</label>
-
-</div>
-
-
-<div
-id="balloonBox"
-class="balloonBox hidden">
-
-<div class="balloonTitle">
-💰 Échéance finale / ballon
-</div>
-
-
-<label>
-Montant financé / emprunté
-</label>
-
-<input
-id="financedAmount"
-type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="Ex : 21600,00">
-
-
-<label>
-Montant de chaque échéance normale
-</label>
-
-<input
-id="regularAmount"
-type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="Ex : 313,14"
-oninput="updateBalloonTotal()">
-
-
-<label>
-Montant de la dernière échéance
-</label>
-
-<input
-id="balloonAmount"
-type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="Ex : 7873,14"
-oninput="updateBalloonTotal()">
-
-
-<div
-id="balloonTotalInfo"
-class="balloonTotal">
-
-Total des échéances :
-<strong>0,00 €</strong>
-
-</div>
-
-
-<div class="balloonInfo">
-
-Les échéances normales seront générées avec le
-montant indiqué ci-dessus. La dernière échéance
-aura son propre montant et sera automatiquement
-identifiée comme <strong>BALLON</strong>.
-
-</div>
-
-</div>
+value="1">
 
 
 <label>
@@ -1446,6 +1362,58 @@ Date de fin
 id="domEndDate"
 type="date"
 readonly>
+
+
+<!-- =========================
+     DERNIERE ECHEANCE DOMICILIATION
+========================= -->
+
+<div class="balloonOption">
+
+<input
+id="domLastDifferent"
+type="checkbox"
+onchange="toggleDomLastInstallment()">
+
+<label for="domLastDifferent">
+Dernière échéance différente
+</label>
+
+</div>
+
+
+<div
+id="domLastInstallmentBox"
+class="balloonBox hidden">
+
+<div class="balloonTitle">
+💰 Dernière échéance différente
+</div>
+
+
+<label>
+Montant de la dernière échéance
+</label>
+
+<input
+id="domLastInstallment"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="Ex : 7873,14"
+oninput="calculateDomiciliation()">
+
+
+<div
+id="domLastInstallmentInfo"
+class="balloonTotal">
+
+Dernière échéance :
+<strong>0,00 €</strong>
+
+</div>
+
+</div>
 
 
 <!-- =========================
@@ -2173,27 +2141,6 @@ p.communication="";
 if(!p.photo)
 p.photo="";
 
-if(typeof p.balloonEnabled!=="boolean")
-p.balloonEnabled=false;
-
-if(
-p.financedAmount===undefined||
-p.financedAmount===null
-)
-p.financedAmount=0;
-
-if(
-p.regularAmount===undefined||
-p.regularAmount===null
-)
-p.regularAmount=0;
-
-if(
-p.balloonAmount===undefined||
-p.balloonAmount===null
-)
-p.balloonAmount=0;
-
 if(!Array.isArray(p.installments))
 p.installments=[];
 
@@ -2418,145 +2365,6 @@ handlePhoto(this.files[0]);
 
 
 /* =========================
-   GESTION BALLON
-========================= */
-
-function toggleBalloonFields(){
-
-const enabled=
-document.getElementById(
-"balloonEnabled"
-).checked;
-
-const box=
-document.getElementById(
-"balloonBox"
-);
-
-const totalInput=
-document.getElementById(
-"totalAmount"
-);
-
-const totalLabel=
-document.getElementById(
-"totalAmountLabel"
-);
-
-if(enabled){
-
-box.classList.remove("hidden");
-
-totalLabel.textContent=
-"Montant total à payer (calculé)";
-
-totalInput.readOnly=true;
-
-totalInput.placeholder=
-"Calcul automatique";
-
-updateBalloonTotal();
-
-}else{
-
-box.classList.add("hidden");
-
-totalLabel.textContent=
-"Montant total";
-
-totalInput.readOnly=false;
-
-totalInput.placeholder=
-"0,00";
-
-}
-
-}
-
-
-function updateBalloonTotal(){
-
-const enabled=
-document.getElementById(
-"balloonEnabled"
-).checked;
-
-if(!enabled)return;
-
-const count=
-parseInt(
-document.getElementById(
-"installments"
-).value
-);
-
-const regular=
-parseFloat(
-document.getElementById(
-"regularAmount"
-).value
-);
-
-const balloon=
-parseFloat(
-document.getElementById(
-"balloonAmount"
-).value
-);
-
-if(
-isNaN(count)||
-count<2||
-isNaN(regular)||
-regular<0||
-isNaN(balloon)||
-balloon<0
-){
-
-document.getElementById(
-"balloonTotalInfo"
-).innerHTML=
-`
-Total des échéances :
-<strong>0,00 €</strong>
-`;
-
-document.getElementById(
-"totalAmount"
-).value="";
-
-return;
-
-}
-
-const total=
-roundMoney(
-(count-1)*regular+
-balloon
-);
-
-document.getElementById(
-"totalAmount"
-).value=
-total.toFixed(2);
-
-document.getElementById(
-"balloonTotalInfo"
-).innerHTML=
-`
-Total des échéances :
-<strong>${euro(total)}</strong>
-<br>
-<span class="small">
-${count-1} × ${euro(regular)}
-+ dernière échéance ${euro(balloon)}
-</span>
-`;
-
-}
-
-
-/* =========================
    AJOUT PAIEMENT
 ========================= */
 
@@ -2578,11 +2386,6 @@ document.getElementById(
 ).value.trim()
 .toUpperCase()
 .replace(/\s/g,"");
-
-const balloonEnabled=
-document.getElementById(
-"balloonEnabled"
-).checked;
 
 const count=
 parseInt(
@@ -2616,95 +2419,6 @@ return;
 
 }
 
-let total=0;
-let financedAmount=0;
-let regularAmount=0;
-let balloonAmount=0;
-let installments=[];
-
-if(balloonEnabled){
-
-financedAmount=
-parseFloat(
-document.getElementById(
-"financedAmount"
-).value
-);
-
-regularAmount=
-parseFloat(
-document.getElementById(
-"regularAmount"
-).value
-);
-
-balloonAmount=
-parseFloat(
-document.getElementById(
-"balloonAmount"
-).value
-);
-
-if(
-count<2||
-isNaN(regularAmount)||
-regularAmount<0||
-isNaN(balloonAmount)||
-balloonAmount<=0
-){
-
-alert(
-"Pour une dernière échéance différente, indique au minimum le nombre d'échéances, la mensualité normale et la dernière échéance."
-);
-
-return;
-
-}
-
-if(
-isNaN(financedAmount)||
-financedAmount<0
-){
-
-financedAmount=0;
-
-}
-
-total=
-roundMoney(
-(count-1)*regularAmount+
-balloonAmount
-);
-
-for(let i=0;i<count;i++){
-
-const isBalloon=
-i===count-1;
-
-installments.push({
-
-id:generateId(),
-
-date:addMonths(
-firstDate,
-i
-),
-
-amount:
-isBalloon
-?roundMoney(balloonAmount)
-:roundMoney(regularAmount),
-
-paid:false,
-
-balloon:isBalloon
-
-});
-
-}
-
-}else{
-
 const totalInput=
 parseFloat(
 document.getElementById(
@@ -2725,7 +2439,7 @@ return;
 
 }
 
-total=
+const total=
 roundMoney(totalInput);
 
 const base=
@@ -2737,6 +2451,8 @@ const last=
 roundMoney(
 total-base*(count-1)
 );
+
+let installments=[];
 
 for(let i=0;i<count;i++){
 
@@ -2762,8 +2478,6 @@ balloon:false
 
 }
 
-}
-
 data.push({
 
 id:generateId(),
@@ -2778,19 +2492,7 @@ communication:communication,
 
 photo:addPhotoData,
 
-balloonEnabled:balloonEnabled,
-
-financedAmount:
-roundMoney(financedAmount),
-
-regularAmount:
-roundMoney(regularAmount),
-
-balloonAmount:
-roundMoney(balloonAmount),
-
-totalAmount:
-roundMoney(total),
+totalAmount:total,
 
 installments:installments
 
@@ -2825,19 +2527,6 @@ document.getElementById("totalAmountLabel").textContent=
 "Montant total";
 
 document.getElementById("installments").value="1";
-
-document.getElementById("balloonEnabled").checked=false;
-document.getElementById("balloonBox").classList.add("hidden");
-
-document.getElementById("financedAmount").value="";
-document.getElementById("regularAmount").value="";
-document.getElementById("balloonAmount").value="";
-
-document.getElementById("balloonTotalInfo").innerHTML=
-`
-Total des échéances :
-<strong>0,00 €</strong>
-`;
 
 document.getElementById("firstDate").value="";
 document.getElementById("communication").value="";
@@ -2995,35 +2684,6 @@ payée(s)
 ${remainingInstallments}
 restante(s)
 `;
-
-if(payment.balloonEnabled){
-
-extraInfo+=
-`
-<br>
-💰 Total à payer :
-<strong>${euro(payment.totalAmount)}</strong>
-`;
-
-if(Number(payment.financedAmount)>0){
-
-extraInfo+=
-`
-<br>
-Montant financé :
-${euro(payment.financedAmount)}
-`;
-
-}
-
-extraInfo+=
-`
-<br>
-Dernière échéance :
-${euro(payment.balloonAmount)}
-`;
-
-}
 
 header.innerHTML=
 `
@@ -4033,6 +3693,12 @@ dom.taeg=0;
 if(dom.startDate===undefined)
 dom.startDate="";
 
+if(dom.lastDifferent===undefined)
+dom.lastDifferent=false;
+
+if(dom.lastInstallment===undefined)
+dom.lastInstallment=0;
+
 if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
@@ -4141,6 +3807,37 @@ Number(months)
 
 
 /* =========================
+   DERNIERE ECHEANCE DOMICILIATION
+========================= */
+
+function toggleDomLastInstallment(){
+
+const checked=
+document.getElementById(
+"domLastDifferent"
+).checked;
+
+const box=
+document.getElementById(
+"domLastInstallmentBox"
+);
+
+if(checked){
+
+box.classList.remove("hidden");
+
+}else{
+
+box.classList.add("hidden");
+
+}
+
+calculateDomiciliation();
+
+}
+
+
+/* =========================
    MONTANT ECHEANCE
 ========================= */
 
@@ -4164,8 +3861,23 @@ Number(dom.taeg||0)
 
 if(monthNumber===months){
 
+if(dom.lastDifferent){
+
+const last=
+Number(dom.lastInstallment||0);
+
+if(last>0){
+
+return roundMoney(last);
+
+}
+
+}
+
 if(months===1){
+
 return roundMoney(total);
+
 }
 
 return roundMoney(
@@ -4257,6 +3969,11 @@ document.getElementById("domTaeg").value
 const startDate=
 document.getElementById("domStartDate").value;
 
+const lastDifferent=
+document.getElementById(
+"domLastDifferent"
+).checked;
+
 const monthly=
 calculateLoanMonthly(
 total,
@@ -4272,6 +3989,42 @@ months
 
 document.getElementById("domEndDate").value=endDate;
 
+let lastAmount=0;
+
+if(
+months>0 &&
+!isNaN(total)
+){
+
+lastAmount=
+roundMoney(
+total-
+(monthly*(months-1))
+);
+
+}
+
+if(lastDifferent){
+
+const entered=
+parseFloat(
+document.getElementById(
+"domLastInstallment"
+).value
+);
+
+if(
+!isNaN(entered)&&
+entered>0
+){
+
+lastAmount=
+roundMoney(entered);
+
+}
+
+}
+
 document.getElementById(
 "domMonthlyResult"
 ).innerHTML=
@@ -4281,6 +4034,23 @@ Mensualité estimée :
 ${euro(monthly)}
 </strong>
 `;
+
+const info=
+document.getElementById(
+"domLastInstallmentInfo"
+);
+
+if(info){
+
+info.innerHTML=
+`
+Dernière échéance :
+<strong>
+${euro(lastAmount)}
+</strong>
+`;
+
+}
 
 }
 
@@ -4489,6 +4259,36 @@ document.getElementById("domTaeg").value
 const startDate=
 document.getElementById("domStartDate").value;
 
+const lastDifferent=
+document.getElementById(
+"domLastDifferent"
+).checked;
+
+let lastInstallment=0;
+
+if(lastDifferent){
+
+lastInstallment=
+roundMoney(
+parseFloat(
+document.getElementById(
+"domLastInstallment"
+).value
+)||0
+);
+
+if(lastInstallment<=0){
+
+alert(
+"Veuillez indiquer le montant de la dernière échéance."
+);
+
+return;
+
+}
+
+}
+
 if(
 !beneficiary||
 isNaN(total)||
@@ -4527,6 +4327,10 @@ taeg:taeg,
 
 startDate:startDate,
 
+lastDifferent:lastDifferent,
+
+lastInstallment:lastInstallment,
+
 monthsPaid:[],
 
 photos:[
@@ -4562,6 +4366,26 @@ document.getElementById("domMonths").value="1";
 document.getElementById("domTaeg").value="";
 document.getElementById("domStartDate").value="";
 document.getElementById("domEndDate").value="";
+
+document.getElementById(
+"domLastDifferent"
+).checked=false;
+
+document.getElementById(
+"domLastInstallment"
+).value="";
+
+document.getElementById(
+"domLastInstallmentBox"
+).classList.add("hidden");
+
+document.getElementById(
+"domLastInstallmentInfo"
+).innerHTML=
+`
+Dernière échéance :
+<strong>0,00 €</strong>
+`;
 
 document.getElementById(
 "domMonthlyResult"
@@ -4960,6 +4784,14 @@ Reste :
 ${euro(remainingAmount)}
 </strong>
 
+${dom.lastDifferent ? `
+<br>
+Dernière échéance :
+<strong>
+${euro(dom.lastInstallment)}
+</strong>
+` : ""}
+
 </div>
 
 <div class="domiciliationProgress">
@@ -4971,7 +4803,6 @@ style="width:${progress}%">
 
 </div>
 `;
-
 
 
 /* =========================
@@ -5417,7 +5248,8 @@ if(
 !confirm(
 "Supprimer cette photo ?"
 )
-)return;
+)
+return;
 
 if(!Array.isArray(dom.photos))
 dom.photos=["",""];
