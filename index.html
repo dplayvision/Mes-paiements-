@@ -524,6 +524,151 @@ color:#777;
 margin-bottom:15px;
 }
 
+
+/* =========================
+   DOMICILIATIONS
+========================= */
+
+.domiciliationCard{
+background:white;
+border-radius:18px;
+padding:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.domiciliationHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:14px;
+}
+
+.domiciliationTitle{
+font-size:19px;
+font-weight:750;
+}
+
+.domiciliationSummary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:7px;
+margin-bottom:14px;
+}
+
+.domiciliationSummaryBox{
+background:#f2f2f7;
+border-radius:12px;
+padding:9px 5px;
+text-align:center;
+}
+
+.domiciliationSummaryTitle{
+font-size:11px;
+color:#777;
+}
+
+.domiciliationSummaryValue{
+font-size:15px;
+font-weight:700;
+margin-top:3px;
+}
+
+.domiciliationItem{
+border:1px solid #e1e1e6;
+border-radius:15px;
+padding:14px;
+margin-top:10px;
+background:#fff;
+}
+
+.domiciliationItem.paid{
+background:#f3fff5;
+border-color:#b7e5c0;
+}
+
+.domiciliationAlias{
+font-size:17px;
+font-weight:750;
+color:#007aff;
+}
+
+.domiciliationBeneficiary{
+font-size:14px;
+font-weight:600;
+margin-top:3px;
+}
+
+.domiciliationDetails{
+font-size:13px;
+color:#666;
+margin-top:8px;
+line-height:1.6;
+}
+
+.domiciliationAmount{
+font-size:19px;
+font-weight:750;
+margin-top:8px;
+}
+
+.domiciliationActions{
+display:flex;
+flex-wrap:wrap;
+gap:7px;
+margin-top:10px;
+}
+
+.domiciliationActions button{
+padding:8px 10px;
+font-size:13px;
+}
+
+.domiciliationProgress{
+height:8px;
+background:#e5e5ea;
+border-radius:10px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.domiciliationProgressBar{
+height:100%;
+background:#34c759;
+border-radius:10px;
+}
+
+.domiciliationEmpty{
+background:#f2f2f7;
+border-radius:12px;
+padding:15px;
+text-align:center;
+color:#777;
+font-size:14px;
+margin-top:10px;
+}
+
+.domiciliationForm{
+margin-top:15px;
+padding-top:15px;
+border-top:1px solid #e5e5ea;
+}
+
+.domiciliationMonthly{
+background:#eaf4ff;
+border-radius:12px;
+padding:12px;
+margin-top:12px;
+font-size:14px;
+font-weight:600;
+}
+
+.domiciliationMonthly strong{
+font-size:20px;
+color:#007aff;
+}
+
 </style>
 </head>
 
@@ -733,6 +878,102 @@ onclick="addPayment()">
 Ajouter le paiement
 
 </button>
+
+</div>
+
+
+<!-- =========================
+     DOMICILIATIONS
+========================= -->
+
+<div class="domiciliationCard">
+
+<div class="domiciliationHeader">
+
+<div class="domiciliationTitle">
+🏦 Domiciliations
+</div>
+
+<button
+class="secondary"
+onclick="toggleDomiciliationForm()">
+
+＋ Ajouter
+
+</button>
+
+</div>
+
+
+<div id="domiciliationForm" class="domiciliationForm hidden">
+
+<h2>Ajouter une domiciliation</h2>
+
+<label>Alias / raccourci</label>
+
+<input
+id="domAlias"
+placeholder="Ex : Crédit maison">
+
+
+<label>Bénéficiaire</label>
+
+<input
+id="domBeneficiary"
+placeholder="Nom du bénéficiaire">
+
+
+<label>IBAN</label>
+
+<input
+id="domIban"
+placeholder="BE...">
+
+
+<label>Montant total</label>
+
+<input
+id="domTotalAmount"
+type="number"
+step="0.01"
+inputmode="decimal"
+placeholder="0,00"
+oninput="calculateDomiciliation()">
+
+
+<label>Nombre de mois</label>
+
+<input
+id="domMonths"
+type="number"
+min="1"
+value="1"
+oninput="calculateDomiciliation()">
+
+
+<div
+id="domMonthlyResult"
+class="domiciliationMonthly">
+
+Mensualité automatique :
+<strong>0,00 €</strong>
+
+</div>
+
+<br>
+
+<button
+class="primary"
+onclick="addDomiciliation()">
+
+Ajouter la domiciliation
+
+</button>
+
+</div>
+
+
+<div id="domiciliationList"></div>
 
 </div>
 
@@ -960,6 +1201,7 @@ Fermer
 const PIN="1157";
 
 let data=[];
+let domiciliations=[];
 let currentTab="unpaid";
 let selectedIds=new Set();
 let editId=null;
@@ -1073,6 +1315,8 @@ console.error("Erreur chargement :",e);
 data=[];
 
 }
+
+loadDomiciliations();
 
 render();
 
@@ -2527,9 +2771,10 @@ render();
 function exportData(){
 
 const backup={
-version:1,
+version:2,
 date:new Date().toISOString(),
-data:data
+data:data,
+domiciliations:domiciliations
 };
 
 const blob=new Blob(
@@ -2603,11 +2848,36 @@ data=backup.data;
 
 normalizeData();
 
+if(
+backup.domiciliations&&
+Array.isArray(backup.domiciliations)
+){
+
+domiciliations=
+backup.domiciliations;
+
+normalizeDomiciliations();
+
+}else{
+
+/*
+Anciennes sauvegardes :
+on conserve les paiements
+sans supprimer les domiciliations
+déjà présentes.
+*/
+
+}
+
 selectedIds.clear();
 
 saveData();
 
+saveDomiciliations();
+
 render();
+
+renderDomiciliations();
 
 alert("Importation réussie.");
 
@@ -2743,6 +3013,580 @@ document.getElementById(
 calculatorValue="";
 
 }
+
+}
+
+
+/* =========================
+   DOMICILIATIONS
+========================= */
+
+function loadDomiciliations(){
+
+try{
+
+const saved=
+localStorage.getItem("mesDomiciliations");
+
+if(saved){
+
+domiciliations=JSON.parse(saved);
+
+if(!Array.isArray(domiciliations))
+domiciliations=[];
+
+normalizeDomiciliations();
+
+}else{
+
+domiciliations=[];
+
+}
+
+}catch(e){
+
+console.error(
+"Erreur chargement domiciliations :",
+e
+);
+
+domiciliations=[];
+
+}
+
+renderDomiciliations();
+
+}
+
+
+function saveDomiciliations(){
+
+try{
+
+localStorage.setItem(
+"mesDomiciliations",
+JSON.stringify(domiciliations)
+);
+
+}catch(e){
+
+console.error(
+"Erreur sauvegarde domiciliations :",
+e
+);
+
+alert(
+"Impossible de sauvegarder les domiciliations."
+);
+
+}
+
+}
+
+
+function normalizeDomiciliations(){
+
+if(!Array.isArray(domiciliations))
+domiciliations=[];
+
+domiciliations.forEach(dom=>{
+
+if(!dom.id)
+dom.id=generateId();
+
+if(!dom.alias)
+dom.alias="";
+
+if(!dom.beneficiary)
+dom.beneficiary="";
+
+if(!dom.iban)
+dom.iban="";
+
+if(dom.total===undefined)
+dom.total=0;
+
+if(dom.months===undefined)
+dom.months=1;
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+});
+
+}
+
+
+function toggleDomiciliationForm(){
+
+document.getElementById(
+"domiciliationForm"
+).classList.toggle("hidden");
+
+}
+
+
+function calculateDomiciliation(){
+
+const total=parseFloat(
+document.getElementById(
+"domTotalAmount"
+).value
+);
+
+const months=parseInt(
+document.getElementById(
+"domMonths"
+).value
+);
+
+let monthly=0;
+
+if(
+!isNaN(total)&&
+total>0&&
+!isNaN(months)&&
+months>0
+){
+
+monthly=total/months;
+
+}
+
+document.getElementById(
+"domMonthlyResult"
+).innerHTML=
+`
+Mensualité automatique :
+<strong>${euro(monthly)}</strong>
+`;
+
+}
+
+
+function addDomiciliation(){
+
+const alias=
+document.getElementById(
+"domAlias"
+).value.trim();
+
+const beneficiary=
+document.getElementById(
+"domBeneficiary"
+).value.trim();
+
+const iban=
+document.getElementById(
+"domIban"
+).value.trim()
+.toUpperCase()
+.replace(/\s/g,"");
+
+const total=parseFloat(
+document.getElementById(
+"domTotalAmount"
+).value
+);
+
+const months=parseInt(
+document.getElementById(
+"domMonths"
+).value
+);
+
+
+if(
+!alias||
+!beneficiary||
+isNaN(total)||
+total<=0||
+isNaN(months)||
+months<1
+){
+
+alert(
+"Veuillez remplir les champs obligatoires."
+);
+
+return;
+
+}
+
+
+domiciliations.push({
+
+id:generateId(),
+
+alias:alias,
+
+beneficiary:beneficiary,
+
+iban:iban,
+
+total:total,
+
+months:months,
+
+monthsPaid:[]
+
+});
+
+
+saveDomiciliations();
+
+resetDomiciliationForm();
+
+renderDomiciliations();
+
+alert(
+"Domiciliation ajoutée."
+);
+
+}
+
+
+function resetDomiciliationForm(){
+
+document.getElementById(
+"domAlias"
+).value="";
+
+document.getElementById(
+"domBeneficiary"
+).value="";
+
+document.getElementById(
+"domIban"
+).value="";
+
+document.getElementById(
+"domTotalAmount"
+).value="";
+
+document.getElementById(
+"domMonths"
+).value="1";
+
+document.getElementById(
+"domMonthlyResult"
+).innerHTML=
+`
+Mensualité automatique :
+<strong>0,00 €</strong>
+`;
+
+document.getElementById(
+"domiciliationForm"
+).classList.add("hidden");
+
+}
+
+
+function renderDomiciliations(){
+
+const list=document.getElementById(
+"domiciliationList"
+);
+
+if(!list)
+return;
+
+list.innerHTML="";
+
+
+if(!domiciliations.length){
+
+list.innerHTML=
+`
+<div class="domiciliationEmpty">
+
+Aucune domiciliation enregistrée.
+
+</div>
+`;
+
+return;
+
+}
+
+
+domiciliations.forEach(dom=>{
+
+const total=Number(dom.total||0);
+
+const months=Math.max(
+1,
+Number(dom.months||1)
+);
+
+const monthly=total/months;
+
+const paidCount=
+Array.isArray(dom.monthsPaid)
+?dom.monthsPaid.length
+:0;
+
+const remainingMonths=Math.max(
+0,
+months-paidCount
+);
+
+const paidAmount=Math.min(
+total,
+monthly*paidCount
+);
+
+const remainingAmount=Math.max(
+0,
+total-paidAmount
+);
+
+const progress=
+Math.min(
+100,
+(paidCount/months)*100
+);
+
+
+const item=document.createElement("div");
+
+item.className=
+"domiciliationItem";
+
+if(
+remainingMonths===0
+){
+
+item.classList.add("paid");
+
+}
+
+
+item.innerHTML=
+`
+<div class="domiciliationAlias">
+
+${escapeHtml(
+dom.alias||"Sans alias"
+)}
+
+</div>
+
+<div class="domiciliationBeneficiary">
+
+${escapeHtml(
+dom.beneficiary||"-"
+)}
+
+</div>
+
+
+<div class="domiciliationDetails">
+
+IBAN :
+${escapeHtml(
+dom.iban||"-"
+)}
+
+<br>
+
+Montant total :
+<strong>
+${euro(total)}
+</strong>
+
+<br>
+
+Durée :
+<strong>
+${months} mois
+</strong>
+
+<br>
+
+Mensualité :
+<strong>
+${euro(monthly)}
+</strong>
+
+<br>
+
+Échéances :
+<strong>
+${paidCount} / ${months}
+</strong>
+
+<br>
+
+Déjà payé :
+<strong>
+${euro(paidAmount)}
+</strong>
+
+<br>
+
+Reste :
+<strong>
+${euro(remainingAmount)}
+</strong>
+
+</div>
+
+
+<div class="domiciliationProgress">
+
+<div
+class="domiciliationProgressBar"
+style="width:${progress}%">
+
+</div>
+
+</div>
+
+
+<div class="domiciliationActions">
+
+<button
+class="green"
+onclick="payNextDomiciliationMonth('${escapeJs(dom.id)}')">
+
+✓ Marquer le mois payé
+
+</button>
+
+<button
+class="secondary"
+onclick="undoDomiciliationMonth('${escapeJs(dom.id)}')">
+
+↩️ Annuler dernier
+
+</button>
+
+<button
+class="danger"
+onclick="deleteDomiciliation('${escapeJs(dom.id)}')">
+
+🗑️ Supprimer
+
+</button>
+
+</div>
+`;
+
+list.appendChild(item);
+
+});
+
+}
+
+
+function payNextDomiciliationMonth(id){
+
+const dom=domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)
+return;
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+const months=Math.max(
+1,
+Number(dom.months||1)
+);
+
+
+if(dom.monthsPaid.length>=months){
+
+alert(
+"Cette domiciliation est entièrement payée."
+);
+
+return;
+
+}
+
+
+const nextMonth=
+dom.monthsPaid.length+1;
+
+dom.monthsPaid.push(nextMonth);
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+
+
+function undoDomiciliationMonth(id){
+
+const dom=domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)
+return;
+
+if(
+!Array.isArray(dom.monthsPaid)||
+!dom.monthsPaid.length
+){
+
+return;
+
+}
+
+
+if(
+!confirm(
+"Annuler le dernier mois payé ?"
+)
+){
+
+return;
+
+}
+
+dom.monthsPaid.pop();
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+
+
+function deleteDomiciliation(id){
+
+const dom=domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)
+return;
+
+if(
+!confirm(
+"Supprimer cette domiciliation ?"
+)
+){
+
+return;
+
+}
+
+domiciliations=
+domiciliations.filter(
+d=>String(d.id)!==String(id)
+);
+
+saveDomiciliations();
+
+renderDomiciliations();
 
 }
 
