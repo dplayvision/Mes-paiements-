@@ -749,7 +749,7 @@ line-height:1.5;
 
 
 /* =========================
-   NOUVEAU : ECHEANCE DOMICILIATION
+   ECHEANCES DOMICILIATION
 ========================= */
 
 .domiciliationNext{
@@ -863,6 +863,80 @@ color:#5856d6;
 border-radius:6px;
 padding:3px 6px;
 margin-left:5px;
+}
+
+
+/* =========================
+   PHOTOS DOMICILIATION
+========================= */
+
+.domiciliationPhotos{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:12px;
+}
+
+.domiciliationPhotoBox{
+background:#f2f2f7;
+border-radius:14px;
+padding:8px;
+text-align:center;
+overflow:hidden;
+}
+
+.domiciliationPhoto{
+width:100%;
+height:140px;
+object-fit:cover;
+border-radius:10px;
+display:block;
+cursor:pointer;
+}
+
+.domiciliationPhotoEmpty{
+height:140px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#777;
+font-size:13px;
+line-height:1.5;
+}
+
+.domiciliationPhotoActions{
+display:flex;
+gap:5px;
+margin-top:7px;
+}
+
+.domiciliationPhotoActions button{
+flex:1;
+padding:7px 5px;
+font-size:12px;
+}
+
+.domiciliationPhotoButtons{
+display:flex;
+gap:8px;
+margin-top:8px;
+}
+
+.domiciliationPhotoButtons button{
+flex:1;
+}
+
+.domiciliationPhotoInput{
+display:none !important;
+}
+
+
+/* =========================
+   MODIFICATION PHOTOS
+========================= */
+
+.domEditPhotos{
+margin-top:10px;
 }
 
 </style>
@@ -1374,6 +1448,92 @@ type="date"
 readonly>
 
 
+<!-- =========================
+     PHOTOS DOMICILIATION
+========================= -->
+
+<label>
+Photos de la domiciliation
+</label>
+
+<div class="domiciliationPhotoButtons">
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto1Camera').click()">
+
+📷 Photo 1
+
+</button>
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto2Camera').click()">
+
+📷 Photo 2
+
+</button>
+
+</div>
+
+<input
+id="domPhoto1Camera"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*"
+capture="environment">
+
+<input
+id="domPhoto2Camera"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*"
+capture="environment">
+
+
+<div class="domiciliationPhotoButtons">
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto1Gallery').click()">
+
+🖼️ Photo 1
+
+</button>
+
+<button
+type="button"
+class="secondary"
+onclick="document.getElementById('domPhoto2Gallery').click()">
+
+🖼️ Photo 2
+
+</button>
+
+</div>
+
+<input
+id="domPhoto1Gallery"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*">
+
+<input
+id="domPhoto2Gallery"
+class="domiciliationPhotoInput"
+type="file"
+accept="image/*">
+
+
+<div
+id="domAddPhotosPreview"
+class="domiciliationPhotos">
+</div>
+
+
 <div
 id="domMonthlyResult"
 class="domiciliationMonthly">
@@ -1665,6 +1825,19 @@ id="domEditEndDate"
 type="date"
 readonly>
 
+
+<!-- PHOTOS MODIFICATION -->
+
+<label>
+Photos de la domiciliation
+</label>
+
+<div
+id="domEditPhotos"
+class="domiciliationPhotos">
+</div>
+
+
 <div
 id="domEditMonthlyResult"
 class="domiciliationMonthly">
@@ -1789,7 +1962,7 @@ Fermer
 
 
 <!-- ==================================================
-     PHOTO
+     PHOTO PAIEMENT
 ================================================== -->
 
 <div
@@ -1851,10 +2024,9 @@ let domEditId=null;
 
 let addPhotoData="";
 
-/*
-Permet de mémoriser quelles listes
-d'échéances sont ouvertes.
-*/
+let domPhoto1="";
+let domPhoto2="";
+
 let openedDomiciliationSchedules=new Set();
 
 
@@ -2001,7 +2173,6 @@ p.communication="";
 if(!p.photo)
 p.photo="";
 
-
 if(typeof p.balloonEnabled!=="boolean")
 p.balloonEnabled=false;
 
@@ -2022,7 +2193,6 @@ p.balloonAmount===undefined||
 p.balloonAmount===null
 )
 p.balloonAmount=0;
-
 
 if(!Array.isArray(p.installments))
 p.installments=[];
@@ -2151,7 +2321,7 @@ document.getElementById(
 
 
 /* =========================
-   PHOTOS
+   PHOTOS PAIEMENTS
 ========================= */
 
 function handlePhoto(file){
@@ -2248,7 +2418,7 @@ handlePhoto(this.files[0]);
 
 
 /* =========================
-   GESTION ECHEANCE BALLON
+   GESTION BALLON
 ========================= */
 
 function toggleBalloonFields(){
@@ -2272,7 +2442,6 @@ const totalLabel=
 document.getElementById(
 "totalAmountLabel"
 );
-
 
 if(enabled){
 
@@ -2314,7 +2483,6 @@ document.getElementById(
 
 if(!enabled)return;
 
-
 const count=
 parseInt(
 document.getElementById(
@@ -2335,7 +2503,6 @@ document.getElementById(
 "balloonAmount"
 ).value
 );
-
 
 if(
 isNaN(count)||
@@ -2362,19 +2529,16 @@ return;
 
 }
 
-
 const total=
 roundMoney(
 (count-1)*regular+
 balloon
 );
 
-
 document.getElementById(
 "totalAmount"
 ).value=
 total.toFixed(2);
-
 
 document.getElementById(
 "balloonTotalInfo"
@@ -2437,7 +2601,6 @@ document.getElementById(
 "communication"
 ).value.trim();
 
-
 if(
 !beneficiary||
 isNaN(count)||
@@ -2453,13 +2616,11 @@ return;
 
 }
 
-
 let total=0;
 let financedAmount=0;
 let regularAmount=0;
 let balloonAmount=0;
 let installments=[];
-
 
 if(balloonEnabled){
 
@@ -2484,7 +2645,6 @@ document.getElementById(
 ).value
 );
 
-
 if(
 count<2||
 isNaN(regularAmount)||
@@ -2501,7 +2661,6 @@ return;
 
 }
 
-
 if(
 isNaN(financedAmount)||
 financedAmount<0
@@ -2511,13 +2670,11 @@ financedAmount=0;
 
 }
 
-
 total=
 roundMoney(
 (count-1)*regularAmount+
 balloonAmount
 );
-
 
 for(let i=0;i<count;i++){
 
@@ -2568,10 +2725,8 @@ return;
 
 }
 
-
 total=
 roundMoney(totalInput);
-
 
 const base=
 Math.floor(
@@ -2582,7 +2737,6 @@ const last=
 roundMoney(
 total-base*(count-1)
 );
-
 
 for(let i=0;i<count;i++){
 
@@ -2609,7 +2763,6 @@ balloon:false
 }
 
 }
-
 
 data.push({
 
@@ -2643,7 +2796,6 @@ installments:installments
 
 });
 
-
 saveData();
 
 resetAddForm();
@@ -2658,7 +2810,7 @@ alert("Paiement ajouté.");
 
 
 /* =========================
-   RESET FORMULAIRE
+   RESET PAIEMENT
 ========================= */
 
 function resetAddForm(){
@@ -2753,7 +2905,6 @@ let paid=0;
 let unpaidCount=0;
 let paidCount=0;
 
-
 data.forEach(payment=>{
 
 payment.installments.forEach(inst=>{
@@ -2775,13 +2926,11 @@ unpaidCount++;
 
 });
 
-
 document.getElementById("totalValue").textContent=euro(total);
 document.getElementById("paidValue").textContent=euro(paid);
 document.getElementById("remainingValue").textContent=euro(total-paid);
 document.getElementById("unpaidCount").textContent=unpaidCount;
 document.getElementById("paidCount").textContent=paidCount;
-
 
 data.forEach(payment=>{
 
@@ -2807,7 +2956,6 @@ else
 paidList.appendChild(group);
 
 });
-
 
 updateSelectionBar();
 
@@ -3733,7 +3881,7 @@ window.open(url,"_blank");
 
 
 /* =========================
-   PHOTO
+   PHOTO PAIEMENT
 ========================= */
 
 function openPhoto(paymentId){
@@ -3889,10 +4037,24 @@ if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
 
-/*
-On nettoie les anciens numéros
-d'échéances invalides.
-*/
+/* =========================
+   PHOTOS
+========================= */
+
+if(!Array.isArray(dom.photos))
+dom.photos=[];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+if(dom.photos.length>2)
+dom.photos=dom.photos.slice(0,2);
+
+
+/* =========================
+   ECHEANCES
+========================= */
+
 dom.monthsPaid=
 dom.monthsPaid
 .map(n=>Number(n))
@@ -3979,7 +4141,7 @@ Number(months)
 
 
 /* =========================
-   MONTANT ECHEANCE DOMICILIATION
+   MONTANT ECHEANCE
 ========================= */
 
 function getDomiciliationInstallmentAmount(dom,monthNumber){
@@ -4000,14 +4162,6 @@ months,
 Number(dom.taeg||0)
 );
 
-
-/*
-La dernière échéance est ajustée
-pour que le total des échéances
-corresponde exactement au montant
-du crédit.
-*/
-
 if(monthNumber===months){
 
 if(months===1){
@@ -4027,7 +4181,7 @@ return roundMoney(monthly);
 
 
 /* =========================
-   MONTANT PAYE REEL
+   MONTANT PAYE
 ========================= */
 
 function getDomiciliationPaidAmount(dom){
@@ -4131,6 +4285,175 @@ ${euro(monthly)}
 }
 
 
+/* ==================================================
+   PHOTOS DOMICILIATION - AJOUT
+================================================== */
+
+function compressDomiciliationPhoto(file,callback){
+
+if(!file){
+
+callback("");
+
+return;
+
+}
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const img=new Image();
+
+img.onload=function(){
+
+const canvas=document.createElement("canvas");
+
+const maxWidth=1400;
+
+let width=img.width;
+let height=img.height;
+
+if(width>maxWidth){
+
+height=
+height*(maxWidth/width);
+
+width=maxWidth;
+
+}
+
+canvas.width=width;
+canvas.height=height;
+
+const ctx=
+canvas.getContext("2d");
+
+ctx.drawImage(
+img,
+0,
+0,
+width,
+height
+);
+
+callback(
+canvas.toDataURL(
+"image/jpeg",
+0.75
+)
+);
+
+};
+
+img.src=e.target.result;
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+
+function handleDomiciliationAddPhoto(file,number){
+
+if(!file)return;
+
+compressDomiciliationPhoto(
+file,
+function(photo){
+
+if(number===1)
+domPhoto1=photo;
+
+if(number===2)
+domPhoto2=photo;
+
+renderAddDomiciliationPhotos();
+
+}
+);
+
+}
+
+
+function renderAddDomiciliationPhotos(){
+
+const box=
+document.getElementById(
+"domAddPhotosPreview"
+);
+
+if(!box)return;
+
+box.innerHTML="";
+
+[domPhoto1,domPhoto2].forEach(
+(photo,index)=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"domiciliationPhotoBox";
+
+if(photo){
+
+div.innerHTML=
+`
+<img
+src="${photo}"
+class="domiciliationPhoto">
+
+<div
+class="domiciliationPhotoActions">
+
+<button
+type="button"
+class="danger"
+onclick="removeAddDomiciliationPhoto(${index+1})">
+
+🗑️
+
+</button>
+
+</div>
+`;
+
+}else{
+
+div.innerHTML=
+`
+<div class="domiciliationPhotoEmpty">
+
+📷 Photo ${index+1}<br>
+Non ajoutée
+
+</div>
+`;
+
+}
+
+box.appendChild(div);
+
+});
+
+}
+
+
+function removeAddDomiciliationPhoto(number){
+
+if(number===1)
+domPhoto1="";
+
+if(number===2)
+domPhoto2="";
+
+renderAddDomiciliationPhotos();
+
+}
+
+
 /* =========================
    AJOUT DOMICILIATION
 ========================= */
@@ -4165,7 +4488,6 @@ document.getElementById("domTaeg").value
 
 const startDate=
 document.getElementById("domStartDate").value;
-
 
 if(
 !beneficiary||
@@ -4205,7 +4527,12 @@ taeg:taeg,
 
 startDate:startDate,
 
-monthsPaid:[]
+monthsPaid:[],
+
+photos:[
+domPhoto1,
+domPhoto2
+]
 
 });
 
@@ -4244,6 +4571,13 @@ Mensualité estimée :
 <strong>0,00 €</strong>
 `;
 
+domPhoto1="";
+domPhoto2="";
+
+document.getElementById(
+"domAddPhotosPreview"
+).innerHTML="";
+
 document.getElementById(
 "domiciliationForm"
 ).classList.add("hidden");
@@ -4275,7 +4609,7 @@ renderDomiciliations();
 
 
 /* =========================
-   COCHER UNE ECHEANCE
+   COCHER ECHEANCE
 ========================= */
 
 function toggleDomiciliationMonth(
@@ -4332,9 +4666,9 @@ renderDomiciliations();
 }
 
 
-/* =========================
+/* ==================================================
    AFFICHAGE DOMICILIATIONS
-========================= */
+================================================== */
 
 function renderDomiciliations(){
 
@@ -4344,7 +4678,6 @@ document.getElementById("domiciliationList");
 if(!list)return;
 
 list.innerHTML="";
-
 
 if(!domiciliations.length){
 
@@ -4540,7 +4873,7 @@ item.classList.add("paid");
 
 
 /* =========================
-   INFOS PRINCIPALES
+   INFOS
 ========================= */
 
 item.innerHTML=
@@ -4640,6 +4973,95 @@ style="width:${progress}%">
 `;
 
 
+
+/* =========================
+   PHOTOS
+========================= */
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+const photosBox=
+document.createElement("div");
+
+photosBox.className=
+"domiciliationPhotos";
+
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
+
+const photoBox=
+document.createElement("div");
+
+photoBox.className=
+"domiciliationPhotoBox";
+
+if(photo){
+
+photoBox.innerHTML=
+`
+<img
+src="${photo}"
+class="domiciliationPhoto"
+onclick="openDomiciliationPhoto('${dom.id}',${index})">
+
+<div class="domiciliationPhotoActions">
+
+<button
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+🔄 Remplacer
+
+</button>
+
+<button
+class="danger"
+onclick="deleteDomiciliationPhoto('${dom.id}',${index})">
+
+🗑️
+
+</button>
+
+</div>
+`;
+
+}else{
+
+photoBox.innerHTML=
+`
+<div class="domiciliationPhotoEmpty">
+
+📷 Photo ${index+1}<br>
+Non ajoutée
+
+</div>
+
+<div class="domiciliationPhotoActions">
+
+<button
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+📷 Ajouter
+
+</button>
+
+</div>
+`;
+
+}
+
+photosBox.appendChild(photoBox);
+
+});
+
+item.appendChild(photosBox);
+
+
 /* =========================
    PROCHAINE ECHEANCE
 ========================= */
@@ -4648,7 +5070,6 @@ const nextBox=
 document.createElement("div");
 
 nextBox.className="domiciliationNext";
-
 
 if(nextMonth!==null){
 
@@ -4732,7 +5153,7 @@ item.appendChild(nextBox);
 
 
 /* =========================
-   BOUTON VOIR ECHEANCES
+   TABLEAU ECHEANCES
 ========================= */
 
 const scheduleButton=
@@ -4759,10 +5180,6 @@ toggleDomiciliationSchedule(dom.id);
 
 item.appendChild(scheduleButton);
 
-
-/* =========================
-   LISTE COMPLETE CACHEE
-========================= */
 
 const schedule=
 document.createElement("div");
@@ -4936,8 +5353,135 @@ list.appendChild(item);
 
 
 /* =========================
+   PHOTO DOMICILIATION
+========================= */
+
+function replaceDomiciliationPhoto(id,index){
+
+const input=
+document.createElement("input");
+
+input.type="file";
+input.accept="image/*";
+input.capture="environment";
+
+input.onchange=function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+compressDomiciliationPhoto(
+file,
+function(photo){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)return;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+dom.photos[index]=photo;
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+);
+
+};
+
+input.click();
+
+}
+
+
+function deleteDomiciliationPhoto(id,index){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(!dom)return;
+
+if(
+!confirm(
+"Supprimer cette photo ?"
+)
+)return;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+dom.photos[index]="";
+
+saveDomiciliations();
+
+renderDomiciliations();
+
+}
+
+
+function openDomiciliationPhoto(id,index){
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(
+!dom||
+!Array.isArray(dom.photos)||
+!dom.photos[index]
+)
+return;
+
+const modal=
+document.createElement("div");
+
+modal.style.position="fixed";
+modal.style.inset="0";
+modal.style.background="rgba(0,0,0,.9)";
+modal.style.zIndex="3000";
+modal.style.display="flex";
+modal.style.alignItems="center";
+modal.style.justifyContent="center";
+modal.style.padding="15px";
+
+const img=
+document.createElement("img");
+
+img.src=dom.photos[index];
+
+img.style.maxWidth="100%";
+img.style.maxHeight="90vh";
+img.style.objectFit="contain";
+img.style.borderRadius="12px";
+
+modal.appendChild(img);
+
+modal.onclick=function(){
+
+modal.remove();
+
+};
+
+document.body.appendChild(modal);
+
+}
+
+
+/* =========================
    ANCIEN BOUTON
-   CONSERVE POUR COMPATIBILITE
 ========================= */
 
 function payNextDomiciliationMonth(id){
@@ -5003,12 +5547,6 @@ return;
 
 }
 
-
-/*
-On prend la dernière échéance
-numérique réellement cochée.
-*/
-
 dom.monthsPaid=
 dom.monthsPaid
 .map(Number)
@@ -5023,9 +5561,9 @@ renderDomiciliations();
 }
 
 
-/* =========================
+/* ==================================================
    MODIFICATION DOMICILIATION
-========================= */
+================================================== */
 
 function openDomiciliationEdit(id){
 
@@ -5066,7 +5604,116 @@ dom.startDate||"";
 
 calculateEditDomiciliation();
 
-document.getElementById("domEditModal").classList.add("show");
+renderEditDomiciliationPhotos(dom);
+
+document.getElementById(
+"domEditModal"
+).classList.add("show");
+
+}
+
+
+function renderEditDomiciliationPhotos(dom){
+
+const box=
+document.getElementById("domEditPhotos");
+
+if(!box)return;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+box.innerHTML="";
+
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"domiciliationPhotoBox";
+
+if(photo){
+
+div.innerHTML=
+`
+<img
+src="${photo}"
+class="domiciliationPhoto"
+onclick="openDomiciliationPhoto('${dom.id}',${index})">
+
+<div class="domiciliationPhotoActions">
+
+<button
+type="button"
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+🔄 Remplacer
+
+</button>
+
+<button
+type="button"
+class="danger"
+onclick="deleteDomiciliationPhotoFromEdit('${dom.id}',${index})">
+
+🗑️
+
+</button>
+
+</div>
+`;
+
+}else{
+
+div.innerHTML=
+`
+<div class="domiciliationPhotoEmpty">
+
+📷 Photo ${index+1}<br>
+Non ajoutée
+
+</div>
+
+<div class="domiciliationPhotoActions">
+
+<button
+type="button"
+class="secondary"
+onclick="replaceDomiciliationPhoto('${dom.id}',${index})">
+
+📷 Ajouter
+
+</button>
+
+</div>
+`;
+
+}
+
+box.appendChild(div);
+
+});
+
+}
+
+
+function deleteDomiciliationPhotoFromEdit(id,index){
+
+deleteDomiciliationPhoto(id,index);
+
+const dom=
+domiciliations.find(
+d=>String(d.id)===String(id)
+);
+
+if(dom)
+renderEditDomiciliationPhotos(dom);
 
 }
 
@@ -5189,12 +5836,6 @@ if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
 
-/*
-On conserve les échéances cochées
-qui existent toujours après modification
-de la durée.
-*/
-
 dom.monthsPaid=
 dom.monthsPaid
 .map(Number)
@@ -5209,6 +5850,16 @@ n<=months
 array.indexOf(n)===index
 )
 .sort((a,b)=>a-b);
+
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+if(dom.photos.length>2)
+dom.photos=dom.photos.slice(0,2);
 
 
 dom.alias=alias;
@@ -5242,6 +5893,10 @@ domEditId=null;
 
 }
 
+
+/* =========================
+   SUPPRIMER DOMICILIATION
+========================= */
 
 function deleteDomiciliation(id){
 
@@ -5286,7 +5941,7 @@ function exportData(){
 
 const backup={
 
-version:5,
+version:6,
 
 date:new Date().toISOString(),
 
@@ -5544,7 +6199,7 @@ calculatorValue="";
 
 
 /* =========================
-   MODALES
+   EVENEMENTS MODALES
 ========================= */
 
 document.getElementById(
@@ -5613,6 +6268,78 @@ closePhoto();
 
 
 /* =========================
+   PHOTOS DOMICILIATION
+========================= */
+
+document.getElementById(
+"domPhoto1Camera"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+1
+);
+
+this.value="";
+
+}
+);
+
+
+document.getElementById(
+"domPhoto2Camera"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+2
+);
+
+this.value="";
+
+}
+);
+
+
+document.getElementById(
+"domPhoto1Gallery"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+1
+);
+
+this.value="";
+
+}
+);
+
+
+document.getElementById(
+"domPhoto2Gallery"
+).addEventListener(
+"change",
+function(){
+
+handleDomiciliationAddPhoto(
+this.files[0],
+2
+);
+
+this.value="";
+
+}
+);
+
+
+/* =========================
    ENTREE PIN
 ========================= */
 
@@ -5627,6 +6354,13 @@ checkPin();
 
 }
 );
+
+
+/* =========================
+   INITIALISATION PHOTOS
+========================= */
+
+renderAddDomiciliationPhotos();
 
 </script>
 
