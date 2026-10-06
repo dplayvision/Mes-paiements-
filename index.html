@@ -686,6 +686,10 @@ grid-template-columns:1fr 1fr;
 
 <body>
 
+<!-- =========================
+     PIN
+========================= -->
+
 <div id="pinScreen">
 
 <div class="pinBox">
@@ -716,15 +720,28 @@ Code incorrect
 
 </div>
 
+
+<!-- =========================
+     APP
+========================= -->
+
 <div id="app" class="hidden">
 
 <div class="header">
+
 <div class="headerTitle">
 Mes paiements
 </div>
+
 </div>
 
+
 <div class="container">
+
+
+<!-- =========================
+     RESUME
+========================= -->
 
 <div class="summaryGrid">
 
@@ -745,6 +762,11 @@ Mes paiements
 
 </div>
 
+
+<!-- =========================
+     ONGLETS
+========================= -->
+
 <div class="tabs">
 
 <button
@@ -763,9 +785,13 @@ Payés <span id="paidCount">0</span>
 
 </div>
 
+
 <div id="paymentsList"></div>
 
-<!-- AJOUTER UN PAIEMENT -->
+
+<!-- =========================
+     AJOUTER UN PAIEMENT
+========================= -->
 
 <div class="section">
 
@@ -865,7 +891,9 @@ Ajouter le paiement
 </div>
 
 
-<!-- DOMICILIATIONS -->
+<!-- =========================
+     DOMICILIATIONS
+========================= -->
 
 <div class="section">
 
@@ -940,7 +968,9 @@ oninput="calculateDomiciliation()">
 </div>
 
 
-<!-- DERNIERE ECHEANCE UNIQUEMENT DANS DOMICILIATION -->
+<!-- =================================
+     NOUVELLE OPTION UNIQUEMENT ICI
+================================= -->
 
 <div class="checkboxLine">
 
@@ -1011,7 +1041,9 @@ Annuler
 </div>
 
 
-<!-- CALCULATRICE -->
+<!-- =========================
+     CALCULATRICE
+========================= -->
 
 <div class="section">
 
@@ -1069,7 +1101,9 @@ onclick="calcInput('0')">
 </div>
 
 
-<!-- SAUVEGARDE -->
+<!-- =========================
+     SAUVEGARDE
+========================= -->
 
 <div class="section">
 
@@ -1102,12 +1136,15 @@ onchange="importData(this)">
 
 </div>
 
-</div>
 
 </div>
 
+</div>
 
-<!-- MODAL PAIEMENT -->
+
+<!-- =========================
+     MODAL PAIEMENT
+========================= -->
 
 <div id="paymentModal" class="modal">
 
@@ -1176,7 +1213,9 @@ Enregistrer
 </div>
 
 
-<!-- MODAL DOMICILIATION -->
+<!-- =========================
+     MODAL DOMICILIATION
+========================= -->
 
 <div id="domModal" class="modal">
 
@@ -1306,7 +1345,9 @@ Enregistrer
 </div>
 
 
-<!-- MODAL QR -->
+<!-- =========================
+     MODAL QR
+========================= -->
 
 <div id="qrModal" class="modal">
 
@@ -2602,9 +2643,7 @@ Nombre de mensualités normales :
 <strong>${normalMonths}</strong><br>
 
 Dernière échéance :
-<strong>${money(last)}</strong>
-
-<br>
+<strong>${money(last)}</strong><br>
 
 Total calculé :
 <strong>${money(calculatedTotal)}</strong>
@@ -2775,7 +2814,7 @@ document.getElementById("domCalculation")
 
 /* ==========================================================
    RENDER DOMICILIATIONS
-   UNE SEULE CARTE
+   IMPORTANT : UNE SEULE CARTE
 ========================================================== */
 
 function renderDomiciliations(){
@@ -2829,6 +2868,14 @@ d.total -
 monthly*(months-1)
 );
 
+let monthlyDisplay=monthly;
+
+if(d.lastDifferent){
+
+monthlyDisplay=monthly;
+
+}
+
 return `
 
 <div class="domiciliationCard">
@@ -2844,7 +2891,7 @@ ${escapeHTML(d.alias)}
 </div>
 
 <div class="domMonthly">
-${money(monthly)}
+${money(monthlyDisplay)}
 </div>
 
 </div>
@@ -3440,6 +3487,7 @@ renderDomiciliations();
 updateSummary();
 
 }
+
 
 </script>
 
