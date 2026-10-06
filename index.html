@@ -514,10 +514,25 @@ font-weight:600;
 
 .lastInstallmentBox{
 display:none;
+background:#eef6ff;
+border:1px solid #cce5ff;
+border-radius:12px;
+padding:11px;
+margin-bottom:12px;
 }
 
 .lastInstallmentBox.visible{
 display:block;
+}
+
+.lastInstallmentBox .formGroup{
+margin-bottom:0;
+}
+
+.lastInstallmentInfo{
+font-size:12px;
+color:#666;
+margin-top:5px;
 }
 
 /* =========================
@@ -968,9 +983,10 @@ oninput="calculateDomiciliation()">
 </div>
 
 
-<!-- =================================
-     NOUVELLE OPTION UNIQUEMENT ICI
-================================= -->
+<!-- =========================
+     DERNIERE ECHEANCE
+     UNIQUEMENT DOMICILIATION
+========================= -->
 
 <div class="checkboxLine">
 
@@ -980,10 +996,11 @@ type="checkbox"
 onchange="toggleLastInstallment()">
 
 <span>
-Dernière échéance différente
+☑ Dernière échéance différente
 </span>
 
 </div>
+
 
 <div
 id="domLastInstallmentBox"
@@ -1000,7 +1017,12 @@ id="domLastInstallment"
 type="number"
 step="0.01"
 inputmode="decimal"
+placeholder="Exemple : 300,00"
 oninput="calculateDomiciliation()">
+
+<div class="lastInstallmentInfo">
+Ce montant sera utilisé uniquement pour la dernière échéance de la domiciliation.
+</div>
 
 </div>
 
@@ -1278,6 +1300,11 @@ oninput="calculateEditDomiciliation()">
 </div>
 
 
+<!-- =========================
+     DERNIERE ECHEANCE
+     MODIFICATION DOMICILIATION
+========================= -->
+
 <div class="checkboxLine">
 
 <input
@@ -1286,10 +1313,11 @@ type="checkbox"
 onchange="toggleEditLastInstallment()">
 
 <span>
-Dernière échéance différente
+☑ Dernière échéance différente
 </span>
 
 </div>
+
 
 <div
 id="editDomLastInstallmentBox"
@@ -1305,7 +1333,12 @@ Montant de la dernière échéance (€)
 id="editDomLastInstallment"
 type="number"
 step="0.01"
+placeholder="Exemple : 300,00"
 oninput="calculateEditDomiciliation()">
+
+<div class="lastInstallmentInfo">
+Ce montant concerne uniquement la dernière échéance.
+</div>
 
 </div>
 
@@ -1443,7 +1476,9 @@ return d.toLocaleDateString("fr-BE");
 
 function round2(value){
 
-return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+return Math.round(
+(Number(value) + Number.EPSILON) * 100
+) / 100;
 
 }
 
@@ -1452,21 +1487,27 @@ function addMonthsSafe(dateString, months){
 
 if(!dateString) return "";
 
-const d = new Date(dateString + "T00:00:00");
+const d =
+new Date(dateString + "T00:00:00");
 
 const day = d.getDate();
 
 d.setDate(1);
 
-d.setMonth(d.getMonth() + Number(months));
+d.setMonth(
+d.getMonth() + Number(months)
+);
 
-const lastDay = new Date(
+const lastDay =
+new Date(
 d.getFullYear(),
 d.getMonth()+1,
 0
 ).getDate();
 
-d.setDate(Math.min(day,lastDay));
+d.setDate(
+Math.min(day,lastDay)
+);
 
 return d.toISOString().slice(0,10);
 
@@ -1497,7 +1538,8 @@ renderAll();
 document.getElementById("pinError")
 .style.display="block";
 
-document.getElementById("pinInput").value="";
+document.getElementById("pinInput")
+.value="";
 
 }
 
@@ -1505,7 +1547,9 @@ document.getElementById("pinInput").value="";
 
 
 document.getElementById("pinInput")
-.addEventListener("keydown",function(e){
+.addEventListener(
+"keydown",
+function(e){
 
 if(e.key === "Enter"){
 checkPin();
@@ -1579,7 +1623,8 @@ JSON.stringify(domiciliations)
 
 function normalizePayments(){
 
-payments = payments.map(p => {
+payments =
+payments.map(p => {
 
 let installments =
 Number(
@@ -1588,25 +1633,35 @@ p.echeances ??
 1
 );
 
-if(!Number.isFinite(installments) || installments < 1){
+if(
+!Number.isFinite(installments) ||
+installments < 1
+){
+
 installments=1;
+
 }
 
 installments=Math.floor(installments);
 
 let paidInstallments =
 Array.isArray(p.paidInstallments)
-? p.paidInstallments.slice(0,installments)
+? p.paidInstallments
+.slice(0,installments)
 : null;
 
 if(!paidInstallments){
 
 paidInstallments =
-Array(installments).fill(!!p.paid);
+Array(installments)
+.fill(!!p.paid);
 
 }
 
-while(paidInstallments.length < installments){
+while(
+paidInstallments.length <
+installments
+){
 
 paidInstallments.push(false);
 
@@ -1655,10 +1710,12 @@ total:Number(d.total || 0),
 
 taeg:Number(d.taeg || 0),
 
-lastDifferent:!!d.lastDifferent,
+lastDifferent:
+!!d.lastDifferent,
 
 lastInstallment:
-d.lastInstallment !== undefined
+d.lastInstallment !== undefined &&
+d.lastInstallment !== null
 ? Number(d.lastInstallment)
 : null
 
@@ -1677,10 +1734,14 @@ saveDomiciliations();
 
 function getInstallmentAmounts(payment){
 
-const total = round2(payment.total);
+const total =
+round2(payment.total);
 
 const count =
-Math.max(1,Number(payment.installments || 1));
+Math.max(
+1,
+Number(payment.installments || 1)
+);
 
 const base =
 round2(total / count);
@@ -1689,7 +1750,11 @@ const amounts=[];
 
 let accumulated=0;
 
-for(let i=0;i<count;i++){
+for(
+let i=0;
+i<count;
+i++
+){
 
 if(i === count-1){
 
@@ -1702,7 +1767,9 @@ round2(total - accumulated)
 amounts.push(base);
 
 accumulated =
-round2(accumulated + base);
+round2(
+accumulated + base
+);
 
 }
 
@@ -1723,7 +1790,8 @@ payment.paidInstallments || [];
 
 let total=0;
 
-amounts.forEach((amount,index)=>{
+amounts.forEach(
+(amount,index)=>{
 
 if(states[index]){
 total += amount;
@@ -1739,13 +1807,19 @@ return round2(total);
 function isFullyPaid(payment){
 
 const count =
-Number(payment.installments || 1);
+Number(
+payment.installments || 1
+);
 
 const states =
 payment.paidInstallments || [];
 
-return states.length >= count &&
-states.slice(0,count).every(Boolean);
+return (
+states.length >= count &&
+states
+.slice(0,count)
+.every(Boolean)
+);
 
 }
 
@@ -1764,15 +1838,21 @@ getPaidAmount(payment)
 function addPayment(){
 
 const beneficiary =
-document.getElementById("payBeneficiary").value.trim();
+document
+.getElementById("payBeneficiary")
+.value.trim();
 
 const iban =
-document.getElementById("payIBAN").value.trim();
+document
+.getElementById("payIBAN")
+.value.trim();
 
 const total =
 round2(
 parseFloat(
-document.getElementById("payTotal").value
+document
+.getElementById("payTotal")
+.value
 ) || 0
 );
 
@@ -1780,19 +1860,27 @@ const installments =
 Math.max(
 1,
 parseInt(
-document.getElementById("payInstallments").value
+document
+.getElementById("payInstallments")
+.value
 ) || 1
 );
 
 const date =
-document.getElementById("payDate").value;
+document
+.getElementById("payDate")
+.value;
 
 const communication =
-document.getElementById("payCommunication").value.trim();
+document
+.getElementById("payCommunication")
+.value.trim();
 
 if(!beneficiary){
 
-alert("Veuillez encoder le bénéficiaire.");
+alert(
+"Veuillez encoder le bénéficiaire."
+);
 
 return;
 
@@ -1800,7 +1888,9 @@ return;
 
 if(total <= 0){
 
-alert("Veuillez encoder un montant.");
+alert(
+"Veuillez encoder un montant."
+);
 
 return;
 
@@ -1823,7 +1913,8 @@ date:date,
 communication:communication,
 
 paidInstallments:
-Array(installments).fill(false),
+Array(installments)
+.fill(false),
 
 photo:paymentPhoto
 
@@ -1842,24 +1933,38 @@ alert("Paiement ajouté.");
 
 function resetPaymentForm(){
 
-document.getElementById("payBeneficiary").value="";
+document
+.getElementById("payBeneficiary")
+.value="";
 
-document.getElementById("payIBAN").value="";
+document
+.getElementById("payIBAN")
+.value="";
 
-document.getElementById("payTotal").value="";
+document
+.getElementById("payTotal")
+.value="";
 
-document.getElementById("payInstallments").value="1";
+document
+.getElementById("payInstallments")
+.value="1";
 
-document.getElementById("payDate").value="";
+document
+.getElementById("payDate")
+.value="";
 
-document.getElementById("payCommunication").value="";
+document
+.getElementById("payCommunication")
+.value="";
 
 paymentPhoto=null;
 
-document.getElementById("payPhotoPreview")
+document
+.getElementById("payPhotoPreview")
 .style.display="none";
 
-document.getElementById("payPhotoPreview")
+document
+.getElementById("payPhotoPreview")
 .src="";
 
 }
@@ -1869,17 +1974,28 @@ document.getElementById("payPhotoPreview")
    CHECKBOX ECHEANCE PAIEMENT
 ========================================================== */
 
-function togglePaymentInstallment(id,index){
+function togglePaymentInstallment(
+id,
+index
+){
 
 const payment =
-payments.find(p => p.id === id);
+payments.find(
+p => p.id === id
+);
 
 if(!payment) return;
 
-if(!Array.isArray(payment.paidInstallments)){
+if(
+!Array.isArray(
+payment.paidInstallments
+)
+){
 
 payment.paidInstallments =
-Array(payment.installments || 1)
+Array(
+payment.installments || 1
+)
 .fill(false);
 
 }
@@ -1904,10 +2020,13 @@ renderAll();
 function renderPayments(){
 
 const list =
-document.getElementById("paymentsList");
+document.getElementById(
+"paymentsList"
+);
 
 const filtered =
-payments.filter(payment => {
+payments.filter(
+payment => {
 
 const paid =
 isFullyPaid(payment);
@@ -1922,9 +2041,11 @@ return currentTab === "paid"
 if(filtered.length === 0){
 
 list.innerHTML =
-`<div class="section empty">
+`
+<div class="section empty">
 Aucun paiement dans cette catégorie.
-</div>`;
+</div>
+`;
 
 updateSummary();
 
@@ -1934,14 +2055,18 @@ return;
 
 
 list.innerHTML =
-filtered.map(renderPaymentCard).join("");
+filtered
+.map(renderPaymentCard)
+.join("");
 
 updateSummary();
 
 }
 
 
-function renderPaymentCard(payment){
+function renderPaymentCard(
+payment
+){
 
 const amounts =
 getInstallmentAmounts(payment);
@@ -1954,7 +2079,8 @@ getRemaining(payment);
 
 let installmentsHTML="";
 
-amounts.forEach((amount,index)=>{
+amounts.forEach(
+(amount,index)=>{
 
 const checked =
 !!(
@@ -1973,9 +2099,14 @@ type="checkbox"
 ${checked ? "checked" : ""}
 onchange="togglePaymentInstallment('${payment.id}',${index})">
 
-<span class="${checked ? "installmentPaid" : "installmentUnpaid"}">
+<span class="${
+checked
+? "installmentPaid"
+: "installmentUnpaid"
+}">
 
-Échéance ${index+1}/${amounts.length}
+Échéance
+${index+1}/${amounts.length}
 
 </span>
 
@@ -2001,7 +2132,9 @@ return `
 <div>
 
 <div class="paymentName">
-${escapeHTML(payment.beneficiary)}
+${escapeHTML(
+payment.beneficiary
+)}
 </div>
 
 <div class="paymentDate">
@@ -2019,26 +2152,46 @@ ${money(payment.total)}
 
 <div class="paymentInfo">
 
-${payment.iban
-? `<div>IBAN : ${escapeHTML(payment.iban)}</div>`
-: ""}
+${
+payment.iban
+?
+`<div>
+IBAN :
+${escapeHTML(payment.iban)}
+</div>`
+: ""
+}
 
-${payment.communication
-? `<div>Communication : ${escapeHTML(payment.communication)}</div>`
-: ""}
+${
+payment.communication
+?
+`<div>
+Communication :
+${escapeHTML(
+payment.communication
+)}
+</div>`
+: ""
+}
 
 <div class="amountLine">
+
 <span>Payé</span>
+
 <strong class="paidAmount">
 ${money(paidAmount)}
 </strong>
+
 </div>
 
 <div class="amountLine">
+
 <span>Reste</span>
+
 <strong class="remaining">
 ${money(remaining)}
 </strong>
+
 </div>
 
 </div>
@@ -2051,8 +2204,10 @@ ${installmentsHTML}
 </div>
 
 
-${payment.photo
-? `
+${
+payment.photo
+?
+`
 <button
 class="smallButton"
 style="width:100%;margin-top:8px;"
@@ -2060,7 +2215,8 @@ onclick="showPaymentPhoto('${payment.id}')">
 🖼️ Voir la facture
 </button>
 `
-: ""}
+: ""
+}
 
 
 <div class="paymentButtons">
@@ -2105,35 +2261,56 @@ onclick="deletePayment('${payment.id}')">
 function updateSummary(){
 
 let total=0;
+
 let paid=0;
 
-payments.forEach(payment=>{
+payments.forEach(
+payment=>{
 
-total += Number(payment.total || 0);
+total +=
+Number(
+payment.total || 0
+);
 
-paid += getPaidAmount(payment);
+paid +=
+getPaidAmount(payment);
 
 });
 
 const remaining =
-Math.max(0,round2(total-paid));
+Math.max(
+0,
+round2(total-paid)
+);
 
-document.getElementById("summaryTotal")
-.textContent=money(total);
+document
+.getElementById("summaryTotal")
+.textContent=
+money(total);
 
-document.getElementById("summaryPaid")
-.textContent=money(paid);
+document
+.getElementById("summaryPaid")
+.textContent=
+money(paid);
 
-document.getElementById("summaryRemaining")
-.textContent=money(remaining);
+document
+.getElementById("summaryRemaining")
+.textContent=
+money(remaining);
 
-document.getElementById("unpaidCount")
+document
+.getElementById("unpaidCount")
 .textContent =
-payments.filter(p=>!isFullyPaid(p)).length;
+payments.filter(
+p=>!isFullyPaid(p)
+).length;
 
-document.getElementById("paidCount")
+document
+.getElementById("paidCount")
 .textContent =
-payments.filter(p=>isFullyPaid(p)).length;
+payments.filter(
+p=>isFullyPaid(p)
+).length;
 
 }
 
@@ -2146,13 +2323,15 @@ function switchTab(tab){
 
 currentTab=tab;
 
-document.getElementById("tabUnpaid")
+document
+.getElementById("tabUnpaid")
 .classList.toggle(
 "active",
 tab==="unpaid"
 );
 
-document.getElementById("tabPaid")
+document
+.getElementById("tabPaid")
 .classList.toggle(
 "active",
 tab==="paid"
@@ -2170,31 +2349,48 @@ renderPayments();
 function openPaymentEdit(id){
 
 const p =
-payments.find(x=>x.id===id);
+payments.find(
+x=>x.id===id
+);
 
 if(!p) return;
 
-document.getElementById("editPaymentId").value=id;
+document
+.getElementById("editPaymentId")
+.value=id;
 
-document.getElementById("editBeneficiary").value =
+document
+.getElementById("editBeneficiary")
+.value=
 p.beneficiary || "";
 
-document.getElementById("editIBAN").value =
+document
+.getElementById("editIBAN")
+.value=
 p.iban || "";
 
-document.getElementById("editTotal").value =
+document
+.getElementById("editTotal")
+.value=
 p.total || "";
 
-document.getElementById("editInstallments").value =
+document
+.getElementById("editInstallments")
+.value=
 p.installments || 1;
 
-document.getElementById("editDate").value =
+document
+.getElementById("editDate")
+.value=
 p.date || "";
 
-document.getElementById("editCommunication").value =
+document
+.getElementById("editCommunication")
+.value=
 p.communication || "";
 
-document.getElementById("paymentModal")
+document
+.getElementById("paymentModal")
 .classList.add("show");
 
 }
@@ -2202,7 +2398,8 @@ document.getElementById("paymentModal")
 
 function closePaymentModal(){
 
-document.getElementById("paymentModal")
+document
+.getElementById("paymentModal")
 .classList.remove("show");
 
 }
@@ -2211,15 +2408,21 @@ document.getElementById("paymentModal")
 function savePaymentEdit(){
 
 const id =
-document.getElementById("editPaymentId").value;
+document
+.getElementById("editPaymentId")
+.value;
 
 const p =
-payments.find(x=>x.id===id);
+payments.find(
+x=>x.id===id
+);
 
 if(!p) return;
 
 const oldStates =
-Array.isArray(p.paidInstallments)
+Array.isArray(
+p.paidInstallments
+)
 ? p.paidInstallments
 : [];
 
@@ -2227,37 +2430,53 @@ const newCount =
 Math.max(
 1,
 parseInt(
-document.getElementById("editInstallments").value
+document
+.getElementById("editInstallments")
+.value
 ) || 1
 );
 
 p.beneficiary =
-document.getElementById("editBeneficiary").value.trim();
+document
+.getElementById("editBeneficiary")
+.value.trim();
 
 p.iban =
-document.getElementById("editIBAN").value.trim();
+document
+.getElementById("editIBAN")
+.value.trim();
 
 p.total =
 round2(
 parseFloat(
-document.getElementById("editTotal").value
+document
+.getElementById("editTotal")
+.value
 ) || 0
 );
 
-p.installments=newCount;
+p.installments=
+newCount;
 
 p.date =
-document.getElementById("editDate").value;
+document
+.getElementById("editDate")
+.value;
 
 p.communication =
-document.getElementById("editCommunication").value.trim();
+document
+.getElementById("editCommunication")
+.value.trim();
 
 p.paidInstallments =
 Array(newCount)
 .fill(false)
-.map((_,i)=>!!oldStates[i]);
+.map(
+(_,i)=>!!oldStates[i]
+);
 
-p.paid=isFullyPaid(p);
+p.paid =
+isFullyPaid(p);
 
 savePayments();
 
@@ -2275,17 +2494,23 @@ renderAll();
 function manualPayment(id){
 
 const p =
-payments.find(x=>x.id===id);
+payments.find(
+x=>x.id===id
+);
 
 if(!p) return;
 
 const index =
 (p.paidInstallments || [])
-.findIndex(v=>!v);
+.findIndex(
+v=>!v
+);
 
 if(index===-1){
 
-alert("Ce paiement est déjà entièrement payé.");
+alert(
+"Ce paiement est déjà entièrement payé."
+);
 
 return;
 
@@ -2326,10 +2551,16 @@ renderAll();
 
 function deletePayment(id){
 
-if(!confirm("Supprimer ce paiement ?")) return;
+if(
+!confirm(
+"Supprimer ce paiement ?"
+)
+) return;
 
 payments =
-payments.filter(p=>p.id!==id);
+payments.filter(
+p=>p.id!==id
+);
 
 savePayments();
 
@@ -2342,25 +2573,35 @@ renderAll();
    PHOTO
 ========================================================== */
 
-function handlePaymentPhoto(input){
+function handlePaymentPhoto(
+input
+){
 
-const file=input.files && input.files[0];
+const file =
+input.files &&
+input.files[0];
 
 if(!file) return;
 
-const reader=new FileReader();
+const reader =
+new FileReader();
 
 reader.onload=function(e){
 
-const img=new Image();
+const img =
+new Image();
 
 img.onload=function(){
 
-const canvas=document.createElement("canvas");
+const canvas =
+document.createElement(
+"canvas"
+);
 
 const max=1200;
 
 let width=img.width;
+
 let height=img.height;
 
 if(width>max){
@@ -2382,9 +2623,11 @@ height=max;
 }
 
 canvas.width=width;
+
 canvas.height=height;
 
-const ctx=canvas.getContext("2d");
+const ctx =
+canvas.getContext("2d");
 
 ctx.drawImage(
 img,
@@ -2401,15 +2644,21 @@ canvas.toDataURL(
 );
 
 const preview =
-document.getElementById("payPhotoPreview");
+document
+.getElementById(
+"payPhotoPreview"
+);
 
-preview.src=paymentPhoto;
+preview.src=
+paymentPhoto;
 
-preview.style.display="block";
+preview.style.display=
+"block";
 
 };
 
-img.src=e.target.result;
+img.src=
+e.target.result;
 
 };
 
@@ -2421,16 +2670,23 @@ reader.readAsDataURL(file);
 function showPaymentPhoto(id){
 
 const p =
-payments.find(x=>x.id===id);
+payments.find(
+x=>x.id===id
+);
 
 if(!p || !p.photo) return;
 
-const win=window.open();
+const win=
+window.open();
 
 if(win){
 
 win.document.write(
-`<img src="${p.photo}" style="max-width:100%">`
+`
+<img
+src="${p.photo}"
+style="max-width:100%">
+`
 );
 
 }
@@ -2445,7 +2701,9 @@ win.document.write(
 function generateQR(id){
 
 const p =
-payments.find(x=>x.id===id);
+payments.find(
+x=>x.id===id
+);
 
 if(!p) return;
 
@@ -2454,13 +2712,16 @@ getRemaining(p);
 
 if(remaining <= 0){
 
-alert("Ce paiement est déjà entièrement payé.");
+alert(
+"Ce paiement est déjà entièrement payé."
+);
 
 return;
 
 }
 
-document.getElementById("qrcode")
+document
+.getElementById("qrcode")
 .innerHTML="";
 
 const data =
@@ -2488,7 +2749,8 @@ height:220
 }
 );
 
-document.getElementById("qrModal")
+document
+.getElementById("qrModal")
 .classList.add("show");
 
 }
@@ -2496,7 +2758,8 @@ document.getElementById("qrModal")
 
 function closeQR(){
 
-document.getElementById("qrModal")
+document
+.getElementById("qrModal")
 .classList.remove("show");
 
 }
@@ -2508,21 +2771,36 @@ document.getElementById("qrModal")
 
 function toggleDomiciliationForm(){
 
-document.getElementById("domiciliationForm")
+document
+.getElementById(
+"domiciliationForm"
+)
 .classList.toggle("hidden");
 
 }
 
 
-function calculateLoanMonthly(total,months,taeg){
+/* ==========================================================
+   CALCUL MENSUALITE
+========================================================== */
+
+function calculateLoanMonthly(
+total,
+months,
+taeg
+){
 
 total=Number(total)||0;
+
 months=Number(months)||1;
+
 taeg=Number(taeg)||0;
 
 if(taeg<=0){
 
-return round2(total/months);
+return round2(
+total/months
+);
 
 }
 
@@ -2538,6 +2816,7 @@ Math.pow(
 1+monthlyRate,
 -months
 )
+)
 );
 
 }
@@ -2550,43 +2829,80 @@ Math.pow(
 function toggleLastInstallment(){
 
 const checked =
-document.getElementById("domLastDifferent").checked;
+document
+.getElementById(
+"domLastDifferent"
+)
+.checked;
 
-document.getElementById("domLastInstallmentBox")
-.classList.toggle(
+const box =
+document
+.getElementById(
+"domLastInstallmentBox"
+);
+
+box.classList.toggle(
 "visible",
 checked
 );
+
+if(!checked){
+
+document
+.getElementById(
+"domLastInstallment"
+)
+.value="";
+
+}
 
 calculateDomiciliation();
 
 }
 
 
+/* ==========================================================
+   CALCUL DOMICILIATION
+========================================================== */
+
 function calculateDomiciliation(){
 
 const total =
 parseFloat(
-document.getElementById("domTotal").value
+document
+.getElementById("domTotal")
+.value
 ) || 0;
 
 const months =
 parseInt(
-document.getElementById("domMonths").value
+document
+.getElementById("domMonths")
+.value
 ) || 0;
 
 const taeg =
 parseFloat(
-document.getElementById("domTAEG").value
+document
+.getElementById("domTAEG")
+.value
 ) || 0;
 
 const lastDifferent =
-document.getElementById("domLastDifferent").checked;
+document
+.getElementById(
+"domLastDifferent"
+)
+.checked;
 
 let monthly=0;
+
 let last=0;
 
-if(total>0 && months>0){
+if(
+total>0 &&
+months>0
+){
 
 monthly =
 calculateLoanMonthly(
@@ -2598,103 +2914,177 @@ taeg
 last =
 round2(
 total -
-monthly * (months-1)
+monthly *
+(months-1)
 );
 
 }
+
+
+/*
+Si l'utilisateur coche
+"dernière échéance différente"
+et encode un montant,
+on utilise exactement ce montant.
+*/
 
 if(lastDifferent){
 
 const entered =
 parseFloat(
-document.getElementById("domLastInstallment").value
+document
+.getElementById(
+"domLastInstallment"
+)
+.value
 );
 
-if(Number.isFinite(entered) && entered>0){
+if(
+Number.isFinite(entered) &&
+entered>0
+){
 
-last=round2(entered);
+last=
+round2(entered);
 
 }
 
 }
 
 const normalMonths =
-Math.max(0,months-1);
+Math.max(
+0,
+months-1
+);
 
-let normalTotal =
-round2(monthly * normalMonths);
+const normalTotal =
+round2(
+monthly *
+normalMonths
+);
 
-let calculatedTotal =
-round2(normalTotal + last);
+const calculatedTotal =
+round2(
+normalTotal + last
+);
 
-let difference =
-round2(total-calculatedTotal);
+const difference =
+round2(
+total-calculatedTotal
+);
 
 
-document.getElementById("domCalculation")
-.innerHTML=`
+let html="";
 
+if(total>0 && months>0){
+
+html +=
+`
 <strong>Calcul :</strong><br>
-
 Mensualité normale :
 <strong>${money(monthly)}</strong><br>
-
 Nombre de mensualités normales :
 <strong>${normalMonths}</strong><br>
-
 Dernière échéance :
 <strong>${money(last)}</strong><br>
-
 Total calculé :
 <strong>${money(calculatedTotal)}</strong>
+`;
 
-${Math.abs(difference)>0.01
-? `<br><span style="color:#ff3b30">
-Écart : ${money(difference)}
-</span>`
-: `<br><span style="color:#34c759">
+if(
+Math.abs(difference)>0.01
+){
+
+html +=
+`
+<br>
+<span style="color:#ff3b30">
+Écart par rapport au total :
+${money(difference)}
+</span>
+`;
+
+}else{
+
+html +=
+`
+<br>
+<span style="color:#34c759">
 ✓ Total correspondant
-</span>`
-}
-
+</span>
 `;
 
 }
 
+}else{
+
+html="";
+}
+
+document
+.getElementById(
+"domCalculation"
+)
+.innerHTML=html;
+
+}
+
+
+/* ==========================================================
+   AJOUT DOMICILIATION
+========================================================== */
 
 function addDomiciliation(){
 
 const alias =
-document.getElementById("domAlias").value.trim();
+document
+.getElementById("domAlias")
+.value.trim();
 
 const beneficiary =
-document.getElementById("domBeneficiary").value.trim();
+document
+.getElementById("domBeneficiary")
+.value.trim();
 
 const iban =
-document.getElementById("domIBAN").value.trim();
+document
+.getElementById("domIBAN")
+.value.trim();
 
 const total =
 round2(
 parseFloat(
-document.getElementById("domTotal").value
+document
+.getElementById("domTotal")
+.value
 ) || 0
 );
 
 const months =
 parseInt(
-document.getElementById("domMonths").value
+document
+.getElementById("domMonths")
+.value
 ) || 0;
 
 const taeg =
 parseFloat(
-document.getElementById("domTAEG").value
+document
+.getElementById("domTAEG")
+.value
 ) || 0;
 
 const startDate =
-document.getElementById("domStartDate").value;
+document
+.getElementById("domStartDate")
+.value;
 
 const lastDifferent =
-document.getElementById("domLastDifferent").checked;
+document
+.getElementById(
+"domLastDifferent"
+)
+.checked;
 
 let lastInstallment=null;
 
@@ -2703,7 +3093,11 @@ if(lastDifferent){
 lastInstallment =
 round2(
 parseFloat(
-document.getElementById("domLastInstallment").value
+document
+.getElementById(
+"domLastInstallment"
+)
+.value
 ) || 0
 );
 
@@ -2711,7 +3105,9 @@ document.getElementById("domLastInstallment").value
 
 if(!alias){
 
-alert("Veuillez encoder une référence.");
+alert(
+"Veuillez encoder une référence."
+);
 
 return;
 
@@ -2719,7 +3115,9 @@ return;
 
 if(total<=0){
 
-alert("Veuillez encoder le montant total.");
+alert(
+"Veuillez encoder le montant total."
+);
 
 return;
 
@@ -2727,13 +3125,18 @@ return;
 
 if(months<=0){
 
-alert("Veuillez encoder le nombre de mois.");
+alert(
+"Veuillez encoder le nombre de mois."
+);
 
 return;
 
 }
 
-if(lastDifferent && lastInstallment<=0){
+if(
+lastDifferent &&
+lastInstallment<=0
+){
 
 alert(
 "Veuillez encoder le montant de la dernière échéance."
@@ -2742,6 +3145,14 @@ alert(
 return;
 
 }
+
+
+/*
+Vérification du total.
+On ne bloque pas l'enregistrement :
+on conserve exactement le montant
+que l'utilisateur a encodé.
+*/
 
 domiciliations.unshift({
 
@@ -2763,7 +3174,10 @@ startDate:startDate,
 
 lastDifferent:lastDifferent,
 
-lastInstallment:lastInstallment,
+lastInstallment:
+lastDifferent
+? lastInstallment
+: null,
 
 monthsPaid:[]
 
@@ -2773,40 +3187,77 @@ saveDomiciliations();
 
 resetDomiciliationForm();
 
-document.getElementById("domiciliationForm")
+document
+.getElementById(
+"domiciliationForm"
+)
 .classList.add("hidden");
 
 renderDomiciliations();
 
-alert("Domiciliation ajoutée.");
+alert(
+"Domiciliation ajoutée."
+);
 
 }
 
 
+/* ==========================================================
+   RESET DOMICILIATION
+========================================================== */
+
 function resetDomiciliationForm(){
 
-document.getElementById("domAlias").value="";
+document
+.getElementById("domAlias")
+.value="";
 
-document.getElementById("domBeneficiary").value="";
+document
+.getElementById("domBeneficiary")
+.value="";
 
-document.getElementById("domIBAN").value="";
+document
+.getElementById("domIBAN")
+.value="";
 
-document.getElementById("domTotal").value="";
+document
+.getElementById("domTotal")
+.value="";
 
-document.getElementById("domMonths").value="";
+document
+.getElementById("domMonths")
+.value="";
 
-document.getElementById("domTAEG").value="";
+document
+.getElementById("domTAEG")
+.value="";
 
-document.getElementById("domStartDate").value="";
+document
+.getElementById("domStartDate")
+.value="";
 
-document.getElementById("domLastDifferent").checked=false;
+document
+.getElementById(
+"domLastDifferent"
+)
+.checked=false;
 
-document.getElementById("domLastInstallment").value="";
+document
+.getElementById(
+"domLastInstallment"
+)
+.value="";
 
-document.getElementById("domLastInstallmentBox")
+document
+.getElementById(
+"domLastInstallmentBox"
+)
 .classList.remove("visible");
 
-document.getElementById("domCalculation")
+document
+.getElementById(
+"domCalculation"
+)
 .innerHTML="";
 
 }
@@ -2814,20 +3265,27 @@ document.getElementById("domCalculation")
 
 /* ==========================================================
    RENDER DOMICILIATIONS
-   IMPORTANT : UNE SEULE CARTE
+   UNE SEULE CARTE PAR DOMICILIATION
 ========================================================== */
 
 function renderDomiciliations(){
 
 const list =
-document.getElementById("domiciliationsList");
+document
+.getElementById(
+"domiciliationsList"
+);
 
-if(domiciliations.length===0){
+if(
+domiciliations.length===0
+){
 
 list.innerHTML=
-`<div class="empty">
+`
+<div class="empty">
 Aucune domiciliation enregistrée.
-</div>`;
+</div>
+`;
 
 return;
 
@@ -2835,7 +3293,9 @@ return;
 
 
 list.innerHTML =
-domiciliations.map(d=>{
+domiciliations
+.map(
+d=>{
 
 const months =
 Number(d.months || 1);
@@ -2843,14 +3303,19 @@ Number(d.months || 1);
 const paid =
 Math.min(
 months,
-Array.isArray(d.monthsPaid)
+Array.isArray(
+d.monthsPaid
+)
 ? d.monthsPaid.length
 : 0
 );
 
 const percent =
 months>0
-? Math.min(100,(paid/months)*100)
+? Math.min(
+100,
+(paid/months)*100
+)
 :0;
 
 const monthly =
@@ -2860,21 +3325,26 @@ months,
 d.taeg
 );
 
-let last =
-d.lastDifferent
-? Number(d.lastInstallment || 0)
-: round2(
-d.total -
-monthly*(months-1)
-);
-
-let monthlyDisplay=monthly;
+let last;
 
 if(d.lastDifferent){
 
-monthlyDisplay=monthly;
+last =
+Number(
+d.lastInstallment || 0
+);
+
+}else{
+
+last =
+round2(
+d.total -
+monthly *
+(months-1)
+);
 
 }
+
 
 return `
 
@@ -2891,7 +3361,7 @@ ${escapeHTML(d.alias)}
 </div>
 
 <div class="domMonthly">
-${money(monthlyDisplay)}
+${money(monthly)}
 </div>
 
 </div>
@@ -2902,60 +3372,100 @@ ${money(monthlyDisplay)}
 <div>
 Bénéficiaire :
 <strong>
-${escapeHTML(d.beneficiary || "-")}
+${escapeHTML(
+d.beneficiary || "-"
+)}
 </strong>
 </div>
 
-${d.iban
-? `<div>IBAN : ${escapeHTML(d.iban)}</div>`
-: ""}
+${
+d.iban
+?
+`
+<div>
+IBAN :
+${escapeHTML(d.iban)}
+</div>
+`
+: ""
+}
 
 <div>
 Montant total :
-<strong>${money(d.total)}</strong>
+<strong>
+${money(d.total)}
+</strong>
 </div>
 
 <div>
 TAEG :
-<strong>${Number(d.taeg || 0).toFixed(2)} %</strong>
+<strong>
+${Number(
+d.taeg || 0
+).toFixed(2)} %
+</strong>
 </div>
 
 <div>
 Durée :
-<strong>${months} mois</strong>
+<strong>
+${months} mois
+</strong>
 </div>
 
 <div>
 Début :
-<strong>${formatDate(d.startDate)}</strong>
+<strong>
+${formatDate(
+d.startDate
+)}
+</strong>
 </div>
 
 <div>
 Fin :
 <strong>
 ${formatDate(
-addMonthsSafe(d.startDate,months-1)
+addMonthsSafe(
+d.startDate,
+months-1
+)
 )}
 </strong>
 </div>
 
 <div>
 Mensualité :
-<strong>${money(monthly)}</strong>
+<strong>
+${money(monthly)}
+</strong>
 </div>
 
-${d.lastDifferent
-? `
+
+${
+d.lastDifferent
+?
+`
 <div>
 Dernière échéance :
-<strong>${money(last)}</strong>
+<strong>
+${money(last)}
+</strong>
+</div>
+
+<div style="color:#007aff;font-size:12px;">
+✓ Dernière échéance différente activée
 </div>
 `
-: ""}
+: ""
+}
+
 
 <div style="margin-top:6px;">
 Échéances payées :
-<strong>${paid} / ${months}</strong>
+<strong>
+${paid} / ${months}
+</strong>
 </div>
 
 </div>
@@ -3003,7 +3513,9 @@ onclick="deleteDomiciliation('${d.id}')">
 
 `;
 
-}).join("");
+}
+)
+.join("");
 
 }
 
@@ -3015,20 +3527,30 @@ onclick="deleteDomiciliation('${d.id}')">
 function payNextDomiciliationMonth(id){
 
 const d =
-domiciliations.find(x=>x.id===id);
+domiciliations.find(
+x=>x.id===id
+);
 
 if(!d) return;
 
 const months =
 Number(d.months || 1);
 
-if(!Array.isArray(d.monthsPaid)){
+if(!Array.isArray(
+d.monthsPaid
+)){
+
 d.monthsPaid=[];
+
 }
 
-if(d.monthsPaid.length>=months){
+if(
+d.monthsPaid.length>=months
+){
 
-alert("Toutes les échéances sont déjà payées.");
+alert(
+"Toutes les échéances sont déjà payées."
+);
 
 return;
 
@@ -3052,9 +3574,14 @@ renderDomiciliations();
 function undoDomiciliationMonth(id){
 
 const d =
-domiciliations.find(x=>x.id===id);
+domiciliations.find(
+x=>x.id===id
+);
 
-if(!d || !d.monthsPaid.length) return;
+if(
+!d ||
+!d.monthsPaid.length
+) return;
 
 d.monthsPaid.pop();
 
@@ -3072,132 +3599,292 @@ renderDomiciliations();
 function openDomiciliationEdit(id){
 
 const d =
-domiciliations.find(x=>x.id===id);
+domiciliations.find(
+x=>x.id===id
+);
 
 if(!d) return;
 
-document.getElementById("editDomId").value=id;
+document
+.getElementById("editDomId")
+.value=id;
 
-document.getElementById("editDomAlias").value =
+document
+.getElementById("editDomAlias")
+.value=
 d.alias || "";
 
-document.getElementById("editDomBeneficiary").value =
+document
+.getElementById(
+"editDomBeneficiary"
+)
+.value=
 d.beneficiary || "";
 
-document.getElementById("editDomIBAN").value =
+document
+.getElementById("editDomIBAN")
+.value=
 d.iban || "";
 
-document.getElementById("editDomTotal").value =
+document
+.getElementById("editDomTotal")
+.value=
 d.total || "";
 
-document.getElementById("editDomMonths").value =
+document
+.getElementById("editDomMonths")
+.value=
 d.months || "";
 
-document.getElementById("editDomTAEG").value =
+document
+.getElementById("editDomTAEG")
+.value=
 d.taeg || "";
 
-document.getElementById("editDomStartDate").value =
+document
+.getElementById("editDomStartDate")
+.value=
 d.startDate || "";
 
-document.getElementById("editDomLastDifferent").checked =
+document
+.getElementById(
+"editDomLastDifferent"
+)
+.checked=
 !!d.lastDifferent;
 
-document.getElementById("editDomLastInstallment").value =
+document
+.getElementById(
+"editDomLastInstallment"
+)
+.value=
 d.lastInstallment || "";
 
 toggleEditLastInstallment();
 
 calculateEditDomiciliation();
 
-document.getElementById("domModal")
+document
+.getElementById("domModal")
 .classList.add("show");
 
 }
 
 
+/* ==========================================================
+   TOGGLE DERNIERE ECHEANCE MODIFICATION
+========================================================== */
+
 function toggleEditLastInstallment(){
 
 const checked =
-document.getElementById("editDomLastDifferent")
+document
+.getElementById(
+"editDomLastDifferent"
+)
 .checked;
 
-document.getElementById("editDomLastInstallmentBox")
-.classList.toggle(
+const box =
+document
+.getElementById(
+"editDomLastInstallmentBox"
+);
+
+box.classList.toggle(
 "visible",
 checked
 );
+
+if(!checked){
+
+document
+.getElementById(
+"editDomLastInstallment"
+)
+.value="";
+
+}
 
 calculateEditDomiciliation();
 
 }
 
 
+/* ==========================================================
+   CALCUL MODIFICATION DOMICILIATION
+========================================================== */
+
 function calculateEditDomiciliation(){
 
 const total =
 parseFloat(
-document.getElementById("editDomTotal").value
+document
+.getElementById(
+"editDomTotal"
+)
+.value
 ) || 0;
 
 const months =
 parseInt(
-document.getElementById("editDomMonths").value
+document
+.getElementById(
+"editDomMonths"
+)
+.value
 ) || 0;
 
 const taeg =
 parseFloat(
-document.getElementById("editDomTAEG").value
+document
+.getElementById(
+"editDomTAEG"
+)
+.value
 ) || 0;
 
 const lastDifferent =
-document.getElementById("editDomLastDifferent").checked;
+document
+.getElementById(
+"editDomLastDifferent"
+)
+.checked;
 
 const monthly =
 total>0 && months>0
-? calculateLoanMonthly(total,months,taeg)
+?
+calculateLoanMonthly(
+total,
+months,
+taeg
+)
 :0;
 
 let last =
 months>0
-? round2(total-monthly*(months-1))
+?
+round2(
+total -
+monthly *
+(months-1)
+)
 :0;
 
 if(lastDifferent){
 
 const entered =
 parseFloat(
-document.getElementById("editDomLastInstallment").value
+document
+.getElementById(
+"editDomLastInstallment"
+)
+.value
 );
 
-if(Number.isFinite(entered) && entered>0){
+if(
+Number.isFinite(entered) &&
+entered>0
+){
 
-last=round2(entered);
+last =
+round2(entered);
 
 }
 
 }
 
-document.getElementById("editDomCalculation")
-.innerHTML=`
+const normalMonths =
+Math.max(
+0,
+months-1
+);
+
+const calculatedTotal =
+round2(
+monthly *
+normalMonths +
+last
+);
+
+const difference =
+round2(
+total-calculatedTotal
+);
+
+
+let html=`
 
 Mensualité normale :
-<strong>${money(monthly)}</strong><br>
+<strong>
+${money(monthly)}
+</strong><br>
+
+Nombre de mensualités normales :
+<strong>
+${normalMonths}
+</strong><br>
 
 Dernière échéance :
-<strong>${money(last)}</strong>
+<strong>
+${money(last)}
+</strong><br>
 
+Total calculé :
+<strong>
+${money(calculatedTotal)}
+</strong>
+
+`;
+
+if(
+Math.abs(difference)>0.01
+){
+
+html +=
+`
+<br>
+<span style="color:#ff3b30">
+Écart :
+${money(difference)}
+</span>
+`;
+
+}else{
+
+html +=
+`
+<br>
+<span style="color:#34c759">
+✓ Total correspondant
+</span>
 `;
 
 }
 
+document
+.getElementById(
+"editDomCalculation"
+)
+.innerHTML=html;
+
+}
+
+
+/* ==========================================================
+   SAUVEGARDER MODIFICATION DOMICILIATION
+========================================================== */
 
 function saveDomiciliationEdit(){
 
 const id =
-document.getElementById("editDomId").value;
+document
+.getElementById("editDomId")
+.value;
 
 const d =
-domiciliations.find(x=>x.id===id);
+domiciliations.find(
+x=>x.id===id
+);
 
 if(!d) return;
 
@@ -3210,27 +3897,50 @@ const months =
 Math.max(
 1,
 parseInt(
-document.getElementById("editDomMonths").value
+document
+.getElementById(
+"editDomMonths"
+)
+.value
 ) || 1
 );
 
 const lastDifferent =
-document.getElementById("editDomLastDifferent")
+document
+.getElementById(
+"editDomLastDifferent"
+)
 .checked;
 
 d.alias =
-document.getElementById("editDomAlias").value.trim();
+document
+.getElementById(
+"editDomAlias"
+)
+.value.trim();
 
 d.beneficiary =
-document.getElementById("editDomBeneficiary").value.trim();
+document
+.getElementById(
+"editDomBeneficiary"
+)
+.value.trim();
 
 d.iban =
-document.getElementById("editDomIBAN").value.trim();
+document
+.getElementById(
+"editDomIBAN"
+)
+.value.trim();
 
 d.total =
 round2(
 parseFloat(
-document.getElementById("editDomTotal").value
+document
+.getElementById(
+"editDomTotal"
+)
+.value
 ) || 0
 );
 
@@ -3238,25 +3948,41 @@ d.months=months;
 
 d.taeg =
 parseFloat(
-document.getElementById("editDomTAEG").value
+document
+.getElementById(
+"editDomTAEG"
+)
+.value
 ) || 0;
 
 d.startDate =
-document.getElementById("editDomStartDate").value;
+document
+.getElementById(
+"editDomStartDate"
+)
+.value;
 
-d.lastDifferent=lastDifferent;
+d.lastDifferent =
+lastDifferent;
 
 d.lastInstallment =
 lastDifferent
-? round2(
+?
+round2(
 parseFloat(
-document.getElementById("editDomLastInstallment").value
+document
+.getElementById(
+"editDomLastInstallment"
+)
+.value
 ) || 0
 )
 : null;
 
 d.monthsPaid =
-oldPaid.filter(n=>Number(n)<=months);
+oldPaid.filter(
+n=>Number(n)<=months
+);
 
 saveDomiciliations();
 
@@ -3267,9 +3993,14 @@ renderDomiciliations();
 }
 
 
+/* ==========================================================
+   FERMER MODIFICATION
+========================================================== */
+
 function closeDomiciliationEdit(){
 
-document.getElementById("domModal")
+document
+.getElementById("domModal")
 .classList.remove("show");
 
 }
@@ -3281,10 +4012,16 @@ document.getElementById("domModal")
 
 function deleteDomiciliation(id){
 
-if(!confirm("Supprimer cette domiciliation ?")) return;
+if(
+!confirm(
+"Supprimer cette domiciliation ?"
+)
+) return;
 
 domiciliations =
-domiciliations.filter(d=>d.id!==id);
+domiciliations.filter(
+d=>d.id!==id
+);
 
 saveDomiciliations();
 
@@ -3299,17 +4036,29 @@ renderDomiciliations();
 
 let calcValue="0";
 
+
 function calcInput(value){
 
-if(calcValue==="0" && value!=="."){
+if(
+calcValue==="0" &&
+value!=="."
+){
+
 calcValue="";
+
 }
 
 calcValue += value;
 
-document.getElementById("calcDisplay")
+document
+.getElementById(
+"calcDisplay"
+)
 .textContent =
-calcValue.replace(/\./g,",");
+calcValue.replace(
+/\./g,
+","
+);
 
 }
 
@@ -3318,7 +4067,10 @@ function calcClear(){
 
 calcValue="0";
 
-document.getElementById("calcDisplay")
+document
+.getElementById(
+"calcDisplay"
+)
 .textContent="0";
 
 }
@@ -3328,8 +4080,13 @@ function calcResult(){
 
 try{
 
-if(!/^[0-9+\-*/().\s]+$/.test(calcValue)){
+if(
+!/^[0-9+\-*/().\s]+$/
+.test(calcValue)
+){
+
 throw new Error();
+
 }
 
 const result =
@@ -3339,8 +4096,12 @@ calcValue+
 ')'
 )();
 
-if(!Number.isFinite(result)){
+if(
+!Number.isFinite(result)
+){
+
 throw new Error();
+
 }
 
 calcValue =
@@ -3348,15 +4109,24 @@ String(
 round2(result)
 );
 
-document.getElementById("calcDisplay")
+document
+.getElementById(
+"calcDisplay"
+)
 .textContent =
-calcValue.replace(/\./g,",");
+calcValue.replace(
+/\./g,
+","
+);
 
 }catch(e){
 
 calcValue="0";
 
-document.getElementById("calcDisplay")
+document
+.getElementById(
+"calcDisplay"
+)
 .textContent="Erreur";
 
 }
@@ -3372,7 +4142,7 @@ function exportData(){
 
 const data={
 
-version:3,
+version:4,
 
 payments:payments,
 
@@ -3383,7 +4153,11 @@ domiciliations:domiciliations
 const blob =
 new Blob(
 [
-JSON.stringify(data,null,2)
+JSON.stringify(
+data,
+null,
+2
+)
 ],
 {
 type:"application/json"
@@ -3415,7 +4189,8 @@ URL.revokeObjectURL(url);
 function importData(input){
 
 const file =
-input.files && input.files[0];
+input.files &&
+input.files[0];
 
 if(!file) return;
 
@@ -3427,7 +4202,9 @@ reader.onload=function(e){
 try{
 
 const data =
-JSON.parse(e.target.result);
+JSON.parse(
+e.target.result
+);
 
 if(Array.isArray(data)){
 
@@ -3435,12 +4212,25 @@ payments=data;
 
 }else{
 
-if(Array.isArray(data.payments)){
+if(
+Array.isArray(
+data.payments
+)
+){
+
 payments=data.payments;
+
 }
 
-if(Array.isArray(data.domiciliations)){
-domiciliations=data.domiciliations;
+if(
+Array.isArray(
+data.domiciliations
+)
+){
+
+domiciliations =
+data.domiciliations;
+
 }
 
 }
@@ -3455,11 +4245,15 @@ saveDomiciliations();
 
 renderAll();
 
-alert("Sauvegarde importée avec succès.");
+alert(
+"Sauvegarde importée avec succès."
+);
 
 }catch(error){
 
-alert("Fichier de sauvegarde invalide.");
+alert(
+"Fichier de sauvegarde invalide."
+);
 
 }
 
@@ -3487,7 +4281,6 @@ renderDomiciliations();
 updateSummary();
 
 }
-
 
 </script>
 
