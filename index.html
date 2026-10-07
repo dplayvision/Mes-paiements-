@@ -1,9 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Paiements</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; margin: 0; padding: 15px; color: #1e293b; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .section { background: white; border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; font-size: 1.25em; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        .hidden { display: none !important; }
+        button { cursor: pointer; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.9em; transition: 0.2s; }
+        button.primary { background: #2563eb; color: white; }
+        button.secondary { background: #e2e8f0; color: #334155; }
+        button.danger { background: #ef4444; color: white; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; margin-bottom: 10px; font-size: 0.9em; }
+        
+        /* Domiciliations Classiques */
+        .domiciliationItem { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+        .domiciliationScheduleButton { margin-top: 8px; width: 100%; }
+        .domiciliationSchedule { margin-top: 8px; background: #f1f5f9; padding: 8px; border-radius: 6px; }
+        .domiciliationMonth { display: flex; align-items: center; justify-content: space-between; padding: 6px; border-bottom: 1px solid #e2e8f0; }
+        .domiciliationMonth.paid { opacity: 0.6; text-decoration: line-through; }
+        .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-weight: bold; }
+        .badgePaid { background: #dcfce7; color: #166534; }
+        .badgeUnpaid { background: #fee2e2; color: #991b1b; }
+        .domiciliationActions { display: flex; gap: 8px; margin-top: 10px; }
+
+        /* Domiciliations Permanentes */
+        .permanentItem { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .permanentHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .permanentName { font-weight: 700; font-size: 1.05em; color: #0f172a; }
+        .permanentAmount { font-weight: 700; color: #2563eb; font-size: 1.05em; }
+        .permanentMeta { font-size: 0.85em; color: #64748b; margin-bottom: 10px; }
+        .permanentStats { background: #f8fafc; border-left: 3px solid #2563eb; border-radius: 4px; padding: 8px 12px; font-size: 0.88em; color: #334155; line-height: 1.5; margin-bottom: 10px; }
+        
+        /* Calculette */
+        .calcGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
+        .calcGrid button { padding: 12px; font-size: 1.1em; background: #f1f5f9; color: #0f172a; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- RUBRIQUE : DOMICILIATIONS PERMANENTES AUTOMATIQUES -->
+    <div class="section">
+        <h2>🏦 Domiciliations permanentes</h2>
+        <button class="primary" onclick="togglePermanentForm()">+ Ajouter une domiciliation permanente</button>
+
+        <div id="permanentForm" class="hidden" style="margin-top: 15px; background: #f1f5f9; padding: 12px; border-radius: 8px;">
+            <label style="font-size:0.8em; color:#64748b;">Nom / Organisme :</label>
+            <input type="text" id="permName" placeholder="ex: Solidaris">
+            
+            <label style="font-size:0.8em; color:#64748b;">Montant mensuel (€) :</label>
+            <input type="number" step="0.01" id="permAmount" placeholder="ex: 13.00">
+            
+            <label style="font-size:0.8em; color:#64748b;">Date de début :</label>
+            <input type="date" id="permStartDate">
+            
+            <label style="font-size:0.8em; color:#64748b;">Jour du prélèvement (1 à 31) :</label>
+            <input type="number" min="1" max="31" id="permDay" value="10" placeholder="ex: 10">
+            
+            <div style="display:flex; gap:8px;">
+                <button class="primary" onclick="addPermanentDomiciliation()">Enregistrer</button>
+                <button class="secondary" onclick="togglePermanentForm()">Annuler</button>
+            </div>
+        </div>
+
+        <div id="permanentList" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- RUBRIQUE : DOMICILIATIONS ECHEANCE / DUREE LIMITEE -->
+    <div class="section">
+        <h2>📋 Domiciliations à échéances</h2>
+        <div id="domiciliationsList"></div>
+    </div>
+
+    <!-- RUBRIQUE : CALCULETTE -->
+    <div class="section">
+        <h2>🧮 Calculette</h2>
+        <input type="text" id="calcDisplay" value="0" readonly style="text-align: right; font-size: 1.2em; font-weight: bold;">
+        <div class="calcGrid">
+            <button onclick="calcClear()">C</button>
+            <button onclick="calcInput('/')">/</button>
+            <button onclick="calcInput('*')">*</button>
+            <button onclick="calcInput('-')">-</button>
+            <button onclick="calcInput('7')">7</button>
+            <button onclick="calcInput('8')">8</button>
+            <button onclick="calcInput('9')">9</button>
+            <button onclick="calcInput('+')">+</button>
+            <button onclick="calcInput('4')">4</button>
+            <button onclick="calcInput('5')">5</button>
+            <button onclick="calcInput('6')">6</button>
+            <button onclick="calcResult()" style="grid-row: span 2; background: #2563eb; color: white;">=</button>
+            <button onclick="calcInput('1')">1</button>
+            <button onclick="calcInput('2')">2</button>
+            <button onclick="calcInput('3')">3</button>
+            <button onclick="calcInput('0')" style="grid-column: span 2;">0</button>
+            <button onclick="calcInput('.')">.</button>
+        </div>
+    </div>
+
+    <!-- RUBRIQUE : SAUVEGARDE ET RESTAURATION -->
+    <div class="section">
+        <h2>💾 Sauvegarde / Restauration</h2>
+        <div style="display: flex; gap: 10px;">
+            <button class="secondary" onclick="exportData()">📤 Exporter</button>
+            <label class="button secondary" style="display: inline-block; padding: 8px 14px; background: #e2e8f0; border-radius: 6px; cursor: pointer;">
+                📥 Importer
+                <input type="file" id="importInput" accept=".json" style="display: none;">
+            </label>
+        </div>
+    </div>
+
+</div>
+
+<script>
 /* ==================================================
-   DOMICILIATIONS PERMANENTES (Automatiques sans boutons)
+   VARIABLES ET OUTILS UTILITAIRES
 ================================================== */
-
+let data = [];
+let domiciliations = [];
 let permanentDomiciliations = [];
+let openedDomiciliationSchedules = new Set();
 
+function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+function escapeHtml(str) {
+    if (!str) return "";
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function euro(val) {
+    return (parseFloat(val) || 0).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+}
+
+function roundMoney(val) {
+    return Math.round((val + Number.EPSILON) * 100) / 100;
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const p = dateStr.split("-");
+    return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : dateStr;
+}
+
+function addMonthsSafe(dateStr, monthsToAdd) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "";
+    d.setMonth(d.getMonth() + monthsToAdd);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
+function getDomiciliationInstallmentAmount(dom, m) {
+    return dom.amount || 0;
+}
+
+/* ==================================================
+   DOMICILIATIONS CLASSIQUES (AVEC ECHEANCIER)
+================================================== */
+function saveDomiciliations() {
+    try {
+        localStorage.setItem("mesDomiciliations", JSON.stringify(domiciliations));
+    } catch (e) {
+        alert("Erreur de sauvegarde.");
+    }
+}
+
+function renderDomiciliations() {
+    const list = document.getElementById("domiciliationsList");
+    if (!list) return;
+    list.innerHTML = "";
+
+    if (!domiciliations || domiciliations.length === 0) {
+        list.innerHTML = `<div style="text-align:center; color:#888;">Aucune domiciliation à échéance.</div>`;
+        return;
+    }
+
+    domiciliations.forEach(dom => {
+        const item = document.createElement("div");
+        item.className = "domiciliationItem";
+
+        const months = parseInt(dom.monthsCount) || 12;
+        const nextBox = document.createElement("div");
+
+        nextBox.innerHTML = `
+            <div style="text-align:center; font-weight:700; margin-bottom: 8px;">
+                ${escapeHtml(dom.name)} - ${euro(dom.amount)} / mois
+            </div>
+        `;
+        item.appendChild(nextBox);
+
+        const scheduleBtn = document.createElement("button");
+        scheduleBtn.className = "secondary domiciliationScheduleButton";
+        const scheduleOpen = openedDomiciliationSchedules.has(String(dom.id));
+        scheduleBtn.textContent = scheduleOpen ? "▲ Masquer le calendrier" : "📋 Voir les échéances";
+        scheduleBtn.onclick = function() {
+            toggleDomiciliationSchedule(dom.id);
+        };
+        item.appendChild(scheduleBtn);
+
+        const schedule = document.createElement("div");
+        schedule.className = "domiciliationSchedule";
+        if (!scheduleOpen) schedule.classList.add("hidden");
+
+        for (let m = 1; m <= months; m++) {
+            const isPaid = (dom.monthsPaid || []).includes(m);
+            const mDate = addMonthsSafe(dom.startDate, m - 1);
+            const mAmount = getDomiciliationInstallmentAmount(dom, m);
+
+            const row = document.createElement("div");
+            row.className = "domiciliationMonth" + (isPaid ? " paid" : "");
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.style.width = "auto";
+            checkbox.checked = isPaid;
+            checkbox.onchange = function() {
+                toggleDomiciliationMonth(dom.id, m, this.checked);
+            };
+
+            const info = document.createElement("div");
+            info.style.flex = "1";
+            info.style.marginLeft = "10px";
+            info.innerHTML = `
+                <div>
+                    Mois ${m}/${months}
+                    ${isPaid ? '<span class="badge badgePaid">PAYÉ</span>' : '<span class="badge badgeUnpaid">À PAYER</span>'}
+                </div>
+                <div style="font-size:0.8em; color:#64748b;">${formatDate(mDate) || "-"} - ${euro(mAmount)}</div>
+            `;
+
+            row.appendChild(checkbox);
+            row.appendChild(info);
+            schedule.appendChild(row);
+        }
+        item.appendChild(schedule);
+
+        const actions = document.createElement("div");
+        actions.className = "domiciliationActions";
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "danger";
+        delBtn.textContent = "🗑️ Supprimer";
+        delBtn.onclick = () => deleteDomiciliation(dom.id);
+
+        actions.appendChild(delBtn);
+        item.appendChild(actions);
+
+        list.appendChild(item);
+    });
+}
+
+function toggleDomiciliationSchedule(id) {
+    const key = String(id);
+    if (openedDomiciliationSchedules.has(key)) openedDomiciliationSchedules.delete(key);
+    else openedDomiciliationSchedules.add(key);
+    renderDomiciliations();
+}
+
+function toggleDomiciliationMonth(id, monthIndex, isChecked) {
+    const dom = domiciliations.find(d => String(d.id) === String(id));
+    if (!dom) return;
+    if (!dom.monthsPaid) dom.monthsPaid = [];
+    if (isChecked) {
+        if (!dom.monthsPaid.includes(monthIndex)) dom.monthsPaid.push(monthIndex);
+    } else {
+        dom.monthsPaid = dom.monthsPaid.filter(m => m !== monthIndex);
+    }
+    saveDomiciliations();
+    renderDomiciliations();
+}
+
+function deleteDomiciliation(id) {
+    if (!confirm("Supprimer cette domiciliation ?")) return;
+    domiciliations = domiciliations.filter(d => String(d.id) !== String(id));
+    saveDomiciliations();
+    renderDomiciliations();
+}
+
+/* ==================================================
+   DOMICILIATIONS PERMANENTES (AUTOMATIQUES)
+================================================== */
 function loadPermanentDomiciliations() {
     try {
         const saved = localStorage.getItem("mesPermanentDomiciliations");
@@ -23,59 +308,56 @@ function savePermanentDomiciliations() {
 }
 
 function togglePermanentForm() {
-    const form = document.getElementById("permanentForm");
-    if (form) form.classList.toggle("hidden");
+    document.getElementById("permanentForm").classList.toggle("hidden");
 }
 
 function addPermanentDomiciliation() {
-    const name = document.getElementById("permName") ? document.getElementById("permName").value.trim() : "";
-    const amount = parseFloat(document.getElementById("permAmount") ? document.getElementById("permAmount").value : 0);
-    const startDateStr = document.getElementById("permStartDate") ? document.getElementById("permStartDate").value : "";
-    const day = parseInt(document.getElementById("permDay") ? document.getElementById("permDay").value : 1, 10);
+    const name = document.getElementById("permName").value.trim();
+    const amount = parseFloat(document.getElementById("permAmount").value);
+    const startDateStr = document.getElementById("permStartDate").value;
+    const day = parseInt(document.getElementById("permDay").value, 10);
 
     if (!name || isNaN(amount) || amount <= 0 || !startDateStr || isNaN(day) || day < 1 || day > 31) {
         alert("Veuillez remplir correctement tous les champs.");
         return;
     }
 
-    const newPerm = {
-        id: typeof generateId === "function" ? generateId() : Date.now().toString(),
+    permanentDomiciliations.push({
+        id: generateId(),
         name: name,
-        amount: amount,
+        amount: roundMoney(amount),
         startDate: startDateStr,
         day: day
-    };
+    });
 
-    permanentDomiciliations.push(newPerm);
     savePermanentDomiciliations();
-    
-    // Reinitialisation des champs du formulaire
-    if (document.getElementById("permName")) document.getElementById("permName").value = "";
-    if (document.getElementById("permAmount")) document.getElementById("permAmount").value = "";
-    if (document.getElementById("permStartDate")) document.getElementById("permStartDate").value = "";
-    if (document.getElementById("permDay")) document.getElementById("permDay").value = "10";
-    
+
+    document.getElementById("permName").value = "";
+    document.getElementById("permAmount").value = "";
+    document.getElementById("permStartDate").value = "";
+    document.getElementById("permDay").value = "10";
+
     togglePermanentForm();
     renderPermanentDomiciliations();
 }
 
 /**
- * Calcul automatique des prélèvements écoulés et de la prochaine échéance
+ * Moteur de calcul automatique :
+ * Calcule le nombre de mois écoulés et la prochaine échéance
  */
 function calculatePermanentStats(startDateStr, day, amount) {
     const today = new Date();
     const start = new Date(startDateStr);
-    
+
     if (isNaN(start.getTime())) {
         return { count: 0, total: 0, nextDate: "-" };
     }
 
-    // 1. Calcul des mois écoulés depuis la date de début jusqu’à aujourd'hui
     let yearDiff = today.getFullYear() - start.getFullYear();
     let monthDiff = today.getMonth() - start.getMonth();
     let totalMonths = yearDiff * 12 + monthDiff;
 
-    // Si le jour de prélèvement du mois en cours est déjà passé ou atteint, on compte le mois actuel
+    // Si le jour fixé est atteint ou dépassé dans le mois en cours
     if (today.getDate() >= day) {
         totalMonths += 1;
     }
@@ -83,34 +365,30 @@ function calculatePermanentStats(startDateStr, day, amount) {
     const count = Math.max(0, totalMonths);
     const total = count * amount;
 
-    // 2. Calcul du prochain prélèvement
+    // Calcul de la date du prochain prélèvement
     let nextYear = today.getFullYear();
-    let nextMonth = today.getMonth(); // 0-indexé
+    let nextMonth = today.getMonth();
 
     if (today.getDate() >= day) {
-        nextMonth += 1; // Passe au mois suivant
+        nextMonth += 1;
         if (nextMonth > 11) {
             nextMonth = 0;
             nextYear += 1;
         }
     }
 
-    // Sécurité pour les mois qui n'ont pas 31 jours (ex: 28 ou 30)
     const maxDaysInNextMonth = new Date(nextYear, nextMonth + 1, 0).getDate();
     const actualDay = Math.min(day, maxDaysInNextMonth);
-
     const nextDateObj = new Date(nextYear, nextMonth, actualDay);
-    
-    // Format DD/MM/YYYY
+
     const d = String(nextDateObj.getDate()).padStart(2, '0');
     const m = String(nextDateObj.getMonth() + 1).padStart(2, '0');
     const y = nextDateObj.getFullYear();
-    const nextDateStr = `${d}/${m}/${y}`;
 
     return {
         count: count,
         total: total,
-        nextDate: nextDateStr
+        nextDate: `${d}/${m}/${y}`
     };
 }
 
@@ -120,7 +398,7 @@ function renderPermanentDomiciliations() {
     list.innerHTML = "";
 
     if (!permanentDomiciliations || permanentDomiciliations.length === 0) {
-        list.innerHTML = `<div style="text-align:center; padding: 20px; color: #888;">Aucune domiciliation permanente.</div>`;
+        list.innerHTML = `<div style="text-align:center; color:#888; padding: 10px;">Aucune domiciliation permanente.</div>`;
         return;
     }
 
@@ -128,31 +406,26 @@ function renderPermanentDomiciliations() {
         const stats = calculatePermanentStats(p.startDate, p.day, p.amount);
         const item = document.createElement("div");
         item.className = "permanentItem";
-        item.style.cssText = "background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.04);";
-
-        // Formatage lisible de la date de début
-        const sParts = p.startDate.split("-");
-        const formattedStartDate = sParts.length === 3 ? `${sParts[2]}/${sParts[1]}/${sParts[0]}` : p.startDate;
 
         item.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-weight: 700; font-size: 1.1em; color: #1e293b;">${escapeHtml ? escapeHtml(p.name) : p.name}</span>
-                <span style="font-weight: 700; color: #2563eb; font-size: 1.1em;">${p.amount.toFixed(2).replace('.', ',')} € / mois</span>
+            <div class="permanentHeader">
+                <span class="permanentName">${escapeHtml(p.name)}</span>
+                <span class="permanentAmount">${euro(p.amount)} / mois</span>
             </div>
             
-            <div style="font-size: 0.9em; color: #64748b; margin-bottom: 12px; line-height: 1.5;">
-                Début : ${formattedStartDate}<br>
-                Jour du mois : <strong>${p.day}</strong>
+            <div class="permanentMeta">
+                Début : ${formatDate(p.startDate)}<br>
+                Jour : <strong>${p.day}</strong>
             </div>
 
-            <div style="background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 0.92em; color: #334155; margin-bottom: 12px;">
+            <div class="permanentStats">
                 • <strong>Prochain prélèvement :</strong> ${stats.nextDate}<br>
-                • <strong>Total prélevé :</strong> ${stats.total.toFixed(2).replace('.', ',')} €<br>
-                • <strong>${stats.count} prélèvements</strong> effectués
+                • <strong>Total prélevé :</strong> ${euro(stats.total)}<br>
+                • <strong>${stats.count} prélèvements</strong>
             </div>
 
             <div style="text-align: right;">
-                <button class="danger" onclick="deletePermanent('${p.id}')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">🗑️ Supprimer</button>
+                <button class="danger" onclick="deletePermanent('${p.id}')">🗑️ Supprimer</button>
             </div>
         `;
         list.appendChild(item);
@@ -160,34 +433,93 @@ function renderPermanentDomiciliations() {
 }
 
 function deletePermanent(id) {
-    if (!confirm("Voulez-vous vraiment supprimer cette domiciliation permanente ?")) return;
+    if (!confirm("Supprimer cette domiciliation permanente ?")) return;
     permanentDomiciliations = permanentDomiciliations.filter(p => String(p.id) !== String(id));
     savePermanentDomiciliations();
     renderPermanentDomiciliations();
 }
 
 /* ==================================================
-   INTEGRATION HTML À PLACER DANS LA PAGE
+   CALCULETTE
 ================================================== */
-/* 
-Collez cette structure HTML à l'endroit souhaité dans votre interface :
+let calcExpr = "";
 
-<div class="section">
-    <h2>🏦 Domiciliations permanentes</h2>
-    <button class="primary" onclick="togglePermanentForm()">+ Ajouter une domiciliation permanente</button>
+function calcInput(val) {
+    calcExpr += val;
+    document.getElementById("calcDisplay").value = calcExpr;
+}
 
-    <div id="permanentForm" class="hidden" style="margin-top: 15px; background: #f1f5f9; padding: 15px; border-radius: 8px;">
-        <input type="text" id="permName" placeholder="Nom (ex: Solidaris)" style="width:100%; margin-bottom:8px; padding:8px;">
-        <input type="number" step="0.01" id="permAmount" placeholder="Montant mensuel (ex: 13)" style="width:100%; margin-bottom:8px; padding:8px;">
-        <label style="font-size: 0.85em; color: #64748b;">Date de début :</label>
-        <input type="date" id="permStartDate" style="width:100%; margin-bottom:8px; padding:8px;">
-        <label style="font-size: 0.85em; color: #64748b;">Jour du mois (1 à 31) :</label>
-        <input type="number" min="1" max="31" id="permDay" value="10" placeholder="Jour (ex: 10)" style="width:100%; margin-bottom:8px; padding:8px;">
-        
-        <button class="primary" onclick="addPermanentDomiciliation()">Enregistrer</button>
-        <button class="secondary" onclick="togglePermanentForm()">Annuler</button>
-    </div>
+function calcClear() {
+    calcExpr = "";
+    document.getElementById("calcDisplay").value = "0";
+}
 
-    <div id="permanentList" style="margin-top: 15px;"></div>
-</div>
-*/
+function calcResult() {
+    try {
+        const res = eval(calcExpr);
+        calcExpr = String(res);
+        document.getElementById("calcDisplay").value = res;
+    } catch (e) {
+        document.getElementById("calcDisplay").value = "Erreur";
+        calcExpr = "";
+    }
+}
+
+/* ==================================================
+   EXPORTEUR / IMPORTEUR DE DONNÉES
+================================================== */
+function exportData() {
+    const backup = {
+        data,
+        domiciliations,
+        permanentDomiciliations,
+        exportDate: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `sauvegarde_paiements_${new Date().toISOString().substring(0,10)}.json`;
+    a.click();
+}
+
+document.getElementById("importInput").addEventListener("change", function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (imported.data) data = imported.data;
+            if (imported.domiciliations) domiciliations = imported.domiciliations;
+            if (imported.permanentDomiciliations) permanentDomiciliations = imported.permanentDomiciliations;
+
+            localStorage.setItem("mesDomiciliations", JSON.stringify(domiciliations));
+            savePermanentDomiciliations();
+
+            renderDomiciliations();
+            renderPermanentDomiciliations();
+
+            alert("Sauvegarde restaurée avec succès !");
+        } catch (err) {
+            alert("Fichier de sauvegarde invalide.");
+        }
+    };
+    reader.readAsText(file);
+});
+
+/* ==================================================
+   INITIALISATION
+================================================== */
+document.addEventListener("DOMContentLoaded", function() {
+    try {
+        const savedDom = localStorage.getItem("mesDomiciliations");
+        domiciliations = savedDom ? JSON.parse(savedDom) : [];
+    } catch(e) { domiciliations = []; }
+
+    renderDomiciliations();
+    loadPermanentDomiciliations();
+});
+</script>
+</body>
+</html>
