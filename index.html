@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 
@@ -2774,7 +2774,8 @@ p.iban="";
 if(p.communication===undefined)
 p.communication="";
 
-
+if(p.photo===undefined)
+p.photo="";
 
 if(!Array.isArray(p.installments))
 p.installments=[];
@@ -3045,7 +3046,7 @@ iban,
 
 communication,
 
-
+photo:addPhotoData,
 
 totalAmount:roundMoney(total),
 
@@ -3408,7 +3409,7 @@ card.appendChild(done);
 
 }
 
-if(false){
+if(payment.photo){
 
 const photos=
 document.createElement("div");
@@ -3423,7 +3424,7 @@ photoBox.className="paymentPhotoBox";
 photoBox.innerHTML=
 `
 <img
-src=""
+src="${payment.photo}"
 class="paymentPhoto"
 onclick="openPhoto('${payment.id}')">
 
@@ -3677,7 +3678,7 @@ actions.appendChild(qrBtn);
 actions.appendChild(calendarBtn);
 actions.appendChild(deleteBtn);
 
-if(false){
+if(payment.photo){
 
 const documentBtn=
 document.createElement("button");
@@ -4334,11 +4335,12 @@ data.find(
 p=>String(p.id)===String(paymentId)
 );
 
-if(!payment)return;
+if(!payment||!payment.photo)return;
 
 photoId=paymentId;
 
 document.getElementById("photoModalImage").src=
+payment.photo;
 
 document.getElementById("photoModal")
 .classList.add("show");
@@ -4376,7 +4378,7 @@ if(!payment)return;
 if(!confirm("Supprimer ce document ?"))
 return;
 
-
+payment.photo="";
 
 saveData();
 
@@ -4477,11 +4479,14 @@ dom.manualMonthlyAmount=0;
 if(!Array.isArray(dom.monthsPaid))
 dom.monthsPaid=[];
 
+if(!Array.isArray(dom.photos))
+dom.photos=[];
 
+while(dom.photos.length<2)
+dom.photos.push("");
 
-
-
-
+if(dom.photos.length>2)
+dom.photos=dom.photos.slice(0,2);
 
 dom.monthsPaid=
 dom.monthsPaid
@@ -5513,9 +5518,11 @@ style="width:${progress}%">
 </div>
 `;
 
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
 
-
-
+while(dom.photos.length<2)
+dom.photos.push("");
 
 const photosBox=
 document.createElement("div");
@@ -5523,7 +5530,7 @@ document.createElement("div");
 photosBox.className=
 "domiciliationPhotos";
 
-[0,1].forEach(
+dom.photos.slice(0,2).forEach(
 (photo,index)=>{
 
 const photoBox=
@@ -5591,13 +5598,6 @@ onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
 `;
 
 }
-
-setPhotoFromDb(
-photoBox.querySelector("img"),
-"permanent",
-dom.id,
-index
-);
 
 photosBox.appendChild(photoBox);
 
@@ -5941,11 +5941,13 @@ d=>String(d.id)===String(id)
 
 if(!dom)return;
 
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
 
+while(dom.photos.length<2)
+dom.photos.push("");
 
-
-
-
+dom.photos[index]=photo;
 
 saveDomiciliations();
 
@@ -5991,9 +5993,10 @@ if(!dom)return;
 if(!confirm("Supprimer cette photo ?"))
 return;
 
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
 
-
-
+dom.photos[index]="";
 
 saveDomiciliations();
 
@@ -6008,7 +6011,11 @@ domiciliations.find(
 d=>String(d.id)===String(id)
 );
 
-if(!dom)
+if(
+!dom||
+!dom.photos||
+!dom.photos[index]
+)
 return;
 
 const modal=
@@ -6026,12 +6033,7 @@ modal.style.padding="15px";
 const img=
 document.createElement("img");
 
-setPhotoFromDb(
-img,
-"domiciliation",
-id,
-index
-);
+img.src=dom.photos[index];
 
 img.style.maxWidth="100%";
 img.style.maxHeight="90vh";
@@ -6135,13 +6137,16 @@ document.getElementById("domEditPhotos");
 
 if(!box)return;
 
-if(false)
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
 box.innerHTML="";
 
-[0,1].forEach(
-(index)=>{
-
-const photo=index===0?"":"";
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
 
 const div=
 document.createElement("div");
@@ -6614,11 +6619,14 @@ dom.startDate="";
 if(dom.communication===undefined)
 dom.communication="";
 
+if(!Array.isArray(dom.photos))
+dom.photos=[];
 
+while(dom.photos.length<2)
+dom.photos.push("");
 
-
-
-
+if(dom.photos.length>2)
+dom.photos=dom.photos.slice(0,2);
 
 });
 
@@ -7100,7 +7108,8 @@ if(photo){
 div.innerHTML=
 `
 <img
-class="permanentPhoto pending">
+src="${photo}"
+class="permanentPhoto">
 
 <div class="permanentPhotoActions">
 
@@ -7177,11 +7186,13 @@ d=>String(d.id)===String(id)
 
 if(!dom)return;
 
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
 
+while(dom.photos.length<2)
+dom.photos.push("");
 
-
-
-
+dom.photos[index]=photo;
 
 savePermanentDomiciliations();
 
@@ -7224,9 +7235,10 @@ if(
 )
 return;
 
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
 
-
-
+dom.photos[index]="";
 
 savePermanentDomiciliations();
 
@@ -7253,7 +7265,11 @@ permanentDomiciliations.find(
 d=>String(d.id)===String(id)
 );
 
-if(!dom)
+if(
+!dom||
+!dom.photos||
+!dom.photos[index]
+)
 return;
 
 const modal=
@@ -7271,12 +7287,8 @@ modal.style.padding="15px";
 const img=
 document.createElement("img");
 
-setPhotoFromDb(
-img,
-"permanent",
-id,
-index
-);
+img.src=
+dom.photos[index];
 
 img.style.maxWidth="100%";
 img.style.maxHeight="90vh";
@@ -7631,16 +7643,20 @@ item.appendChild(nextBox);
 
 /* PHOTOS */
 
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
 const photosBox=
 document.createElement("div");
 
 photosBox.className=
 "permanentPhotos";
 
-[0,1].forEach(
-(index)=>{
-
-const photo=index===0?"":"";
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
 
 const photoBox=
 document.createElement("div");
@@ -7653,7 +7669,8 @@ if(photo){
 photoBox.innerHTML=
 `
 <img
-class="permanentPhoto pending"
+src="${photo}"
+class="permanentPhoto"
 onclick="openPermanentPhoto('${dom.id}',${index})">
 
 <div class="permanentPhotoActions">
@@ -7706,13 +7723,6 @@ onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
 `;
 
 }
-
-setPhotoFromDb(
-photoBox.querySelector("img"),
-"permanent",
-dom.id,
-index
-);
 
 photosBox.appendChild(photoBox);
 
@@ -7833,13 +7843,16 @@ document.getElementById(
 
 if(!box)return;
 
-if(false)
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
 box.innerHTML="";
 
-[0,1].forEach(
-(index)=>{
-
-const photo=index===0?"":"";
+dom.photos.slice(0,2).forEach(
+(photo,index)=>{
 
 const div=
 document.createElement("div");
@@ -7852,7 +7865,8 @@ if(photo){
 div.innerHTML=
 `
 <img
-class="permanentPhoto pending"
+src="${photo}"
+class="permanentPhoto"
 onclick="openPermanentPhoto('${dom.id}',${index})">
 
 <div class="permanentPhotoActions">
