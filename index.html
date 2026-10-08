@@ -1357,10 +1357,6 @@ margin-bottom:15px;
 
 <body>
 
-<!-- ==================================================
-     CONNEXION
-================================================== -->
-
 <div id="loginScreen" class="login">
 
 <div class="loginBox">
@@ -1394,10 +1390,6 @@ Ouvrir
 
 </div>
 
-<!-- ==================================================
-     APPLICATION
-================================================== -->
-
 <div id="app" class="hidden">
 
 <div class="header">
@@ -1405,10 +1397,6 @@ Mes paiements
 </div>
 
 <div class="container">
-
-<!-- ==================================================
-     RESUME
-================================================== -->
 
 <div class="summary">
 
@@ -1455,10 +1443,6 @@ class="summaryValue">
 </div>
 
 </div>
-
-<!-- ==================================================
-     ONGLETS
-================================================== -->
 
 <div class="tabs">
 
@@ -1508,10 +1492,6 @@ Supprimer
 id="paidList"
 class="hidden">
 </div>
-
-<!-- ==================================================
-     AJOUTER PAIEMENT
-================================================== -->
 
 <div class="card">
 
@@ -1622,10 +1602,6 @@ Ajouter le paiement
 </button>
 
 </div>
-
-<!-- ==================================================
-     DOMICILIATIONS
-================================================== -->
 
 <div class="domiciliationCard">
 
@@ -1907,10 +1883,6 @@ Ajouter la domiciliation
 
 </div>
 
-<!-- ==================================================
-     DOMICILIATIONS PERMANENTES
-================================================== -->
-
 <div class="permanentCard">
 
 <div class="permanentHeader">
@@ -2082,10 +2054,6 @@ Ajouter la domiciliation permanente
 
 </div>
 
-<!-- ==================================================
-     CALCULETTE
-================================================== -->
-
 <div class="card">
 
 <h2>
@@ -2131,10 +2099,6 @@ onclick="calcResult()">
 
 </div>
 
-<!-- ==================================================
-     SAUVEGARDE
-================================================== -->
-
 <div class="card">
 
 <h2>
@@ -2162,10 +2126,6 @@ accept=".json">
 
 </div>
 </div>
-
-<!-- ==================================================
-     MODIFICATION PAIEMENT
-================================================== -->
 
 <div
 id="editModal"
@@ -2213,10 +2173,6 @@ Enregistrer
 
 </div>
 </div>
-
-<!-- ==================================================
-     MODIFICATION DOMICILIATION
-================================================== -->
 
 <div
 id="domEditModal"
@@ -2384,10 +2340,6 @@ Enregistrer
 </div>
 </div>
 
-<!-- ==================================================
-     MODIFICATION DOMICILIATION PERMANENTE
-================================================== -->
-
 <div
 id="permanentEditModal"
 class="modal">
@@ -2479,10 +2431,6 @@ Enregistrer
 </div>
 </div>
 
-<!-- ==================================================
-     PAIEMENT MANUEL
-================================================== -->
-
 <div
 id="manualModal"
 class="modal">
@@ -2507,10 +2455,6 @@ Fermer
 
 </div>
 </div>
-
-<!-- ==================================================
-     QR
-================================================== -->
 
 <div
 id="qrModal"
@@ -2550,10 +2494,6 @@ Fermer
 
 </div>
 </div>
-
-<!-- ==================================================
-     PHOTO
-================================================== -->
 
 <div
 id="photoModal"
@@ -2692,14 +2632,16 @@ return photoDbPromise;
 
 }
 
+/* ==================================================
+   CORRECTION : SAUVEGARDE PHOTO
+================================================== */
+
 async function savePhotoDB(key,data){
 
 if(!key){
 
 throw new Error(
-
 "Clé photo manquante."
-
 );
 
 }
@@ -2719,28 +2661,20 @@ return new Promise(
 (resolve,reject)=>{
 
 const transaction=
-
 db.transaction(
-
 PHOTO_STORE_NAME,
-
 "readwrite"
-
 );
 
 const store=
-
 transaction.objectStore(
-
 PHOTO_STORE_NAME
-
 );
 
 const request=
-
 store.put({
 
-key:key,
+key:String(key),
 
 data:data
 
@@ -2755,15 +2689,10 @@ resolve(true);
 request.onerror=function(){
 
 reject(
-
 request.error||
-
 new Error(
-
 "Impossible d'enregistrer la photo."
-
 )
-
 );
 
 };
@@ -2774,38 +2703,9 @@ new Error(
 
 }
 
-const db=
-await openPhotoDB();
-
-return new Promise(
-(resolve,reject)=>{
-
-const tx=
-db.transaction(
-PHOTO_STORE_NAME,
-"readwrite"
-);
-
-tx.objectStore(
-PHOTO_STORE_NAME
-).put({
-key:String(key),
-data:data||""
-});
-
-tx.oncomplete=()=>resolve();
-
-tx.onerror=()=>reject(
-tx.error||
-new Error(
-"Impossible d'enregistrer la photo."
-)
-);
-
-}
-);
-
-}
+/* ==================================================
+   LECTURE PHOTO
+================================================== */
 
 async function getPhotoDB(key){
 
@@ -3600,11 +3500,8 @@ renderPermanentDomiciliations();
 async function checkPin(){
 
 const value=
-
 document.getElementById(
-
 "pinInput"
-
 ).value;
 
 if(value!==PIN){
@@ -3612,9 +3509,7 @@ if(value!==PIN){
 alert("Code PIN incorrect");
 
 document.getElementById(
-
 "pinInput"
-
 ).value="";
 
 return;
@@ -3624,39 +3519,27 @@ return;
 try{
 
 document.getElementById(
-
 "app"
-
 ).classList.remove("hidden");
 
 await loadData();
 
 document.getElementById(
-
 "loginScreen"
-
 ).classList.add("hidden");
 
 }catch(e){
 
 console.error(
-
 "ERREUR OUVERTURE :",
-
 e
-
 );
 
 alert(
-
 "Impossible d'ouvrir l'application.\n\n"+
-
 (e?.name||"Erreur")+
-
 "\n"+
-
 (e?.message||e)
-
 );
 
 }
@@ -5325,7 +5208,6 @@ button.classList.remove(
 
 }
 );
-}
 
 /* ==================================================
    QR
@@ -7446,311 +7328,382 @@ await saveDomiciliations();
 renderDomiciliations();
 
 }
+<!-- PARTIE 2/2 -->
 
-/* ==================================================
-   PHOTOS DOMICILIATION
-================================================== */
+async function getPhotoDB(key){
 
-function chooseDomiciliationPhoto(
-id,
-index,
-source
-){
+const db=
+await openPhotoDB();
 
-const input=
-document.createElement(
-"input"
+return new Promise(
+(resolve,reject)=>{
+
+const tx=
+db.transaction(
+PHOTO_STORE_NAME,
+"readonly"
 );
 
-input.type="file";
-input.accept="image/*";
+const req=
+tx.objectStore(
+PHOTO_STORE_NAME
+).get(String(key));
 
-if(source==="camera")
-input.capture="environment";
-
-input.onchange=function(){
-
-const file=
-input.files?.[0];
-
-if(!file)return;
-
-compressDomiciliationPhoto(
-file,
-async function(photo){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
+req.onsuccess=()=>resolve(
+req.result?.data||""
 );
 
-if(!dom)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-dom.photos[index]=photo;
-
-await saveDomiciliations();
-
-renderDomiciliations();
-
-if(
-domEditId &&
-String(domEditId)===
-String(id)
-){
-
-renderEditDomiciliationPhotos(
-dom
-);
-
-}
-
-}
-);
-
-};
-
-input.click();
-
-}
-
-function replaceDomiciliationPhoto(
-id,
-index
-){
-
-chooseDomiciliationPhoto(
-id,
-index,
-"camera"
-);
-
-}
-
-async function deleteDomiciliationPhoto(
-id,
-index
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(
-!confirm(
-"Supprimer cette photo ?"
+req.onerror=()=>reject(
+req.error||
+new Error(
+"Impossible de lire la photo."
 )
+);
+
+}
+);
+
+}
+
+async function deletePhotoDB(key){
+
+const db=
+await openPhotoDB();
+
+return new Promise(
+(resolve,reject)=>{
+
+const tx=
+db.transaction(
+PHOTO_STORE_NAME,
+"readwrite"
+);
+
+tx.objectStore(
+PHOTO_STORE_NAME
+).delete(String(key));
+
+tx.oncomplete=()=>resolve();
+
+tx.onerror=()=>reject(
+tx.error||
+new Error(
+"Impossible de supprimer la photo."
 )
-return;
+);
 
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
+}
+);
 
-dom.photos[index]="";
+}
+
+
+function paymentPhotoKey(id){
+
+return "payment_"+String(id);
+
+}
+
+function domiciliationPhotoKey(id,index){
+
+return "dom_"+String(id)+"_"+String(index);
+
+}
+
+function permanentPhotoKey(id,index){
+
+return "permanent_"+
+String(id)+
+"_"+String(index);
+
+}
+
+
+/* =========================
+   UTILITAIRES
+========================= */
+
+function generateId(){
+
+return Date.now().toString(36)+
+Math.random().toString(36).substring(2);
+
+}
+
+
+function getCleanDataForStorage(){
+
+return data.map(p=>{
+
+const copy={...p};
+
+copy.photo="";
+
+copy.installments=
+Array.isArray(p.installments)
+?p.installments.map(i=>({...i}))
+:[];
+
+return copy;
+
+});
+
+}
+
+
+function getCleanDomiciliationsForStorage(){
+
+return domiciliations.map(dom=>{
+
+const copy={...dom};
+
+copy.photos=["",""];
+
+copy.monthsPaid=
+Array.isArray(dom.monthsPaid)
+?[...dom.monthsPaid]
+:[];
+
+return copy;
+
+});
+
+}
+
+
+function getCleanPermanentDomiciliationsForStorage(){
+
+return permanentDomiciliations.map(dom=>{
+
+const copy={...dom};
+
+copy.photos=["",""];
+
+return copy;
+
+});
+
+}
+
+
+/* =========================
+   SAUVEGARDE PAIEMENTS
+========================= */
+
+async function saveData(){
 
 try{
 
-await deletePhotoDB(
-domiciliationPhotoKey(
-id,
-index
-)
+const cleanData=
+getCleanDataForStorage();
+
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(cleanData)
 );
+
+return true;
 
 }catch(e){
 
 console.error(e);
 
-}
-
-await saveDomiciliations();
-
-renderDomiciliations();
-
-}
-
-function openDomiciliationPhoto(
-id,
-index
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
+alert(
+"Impossible de sauvegarder les paiements."
 );
 
-if(
-!dom||
-!dom.photos||
-!dom.photos[index]
+return false;
+
+}
+
+}
+
+
+/* =========================
+   MIGRATION PHOTOS
+========================= */
+
+async function migratePhotosToIndexedDB(){
+
+try{
+
+let changed=false;
+
+for(const payment of data){
+
+if(payment.photo){
+
+await savePhotoDB(
+paymentPhotoKey(payment.id),
+payment.photo
+);
+
+payment.photo="";
+
+changed=true;
+
+}
+
+}
+
+for(const dom of domiciliations){
+
+if(!dom.id){
+
+dom.id=generateId();
+
+changed=true;
+
+}
+
+if(!Array.isArray(dom.photos)){
+
+dom.photos=["",""];
+
+changed=true;
+
+}
+
+while(dom.photos.length<2){
+
+dom.photos.push("");
+
+changed=true;
+
+}
+
+for(let i=0;i<2;i++){
+
+if(dom.photos[i]){
+
+await savePhotoDB(
+domiciliationPhotoKey(
+dom.id,
+i
+),
+dom.photos[i]
+);
+
+dom.photos[i]="";
+
+changed=true;
+
+}
+
+}
+
+}
+
+for(const dom of permanentDomiciliations){
+
+if(!dom.id){
+
+dom.id=generateId();
+
+changed=true;
+
+}
+
+if(!Array.isArray(dom.photos)){
+
+dom.photos=["",""];
+
+changed=true;
+
+}
+
+while(dom.photos.length<2){
+
+dom.photos.push("");
+
+changed=true;
+
+}
+
+for(let i=0;i<2;i++){
+
+if(dom.photos[i]){
+
+await savePhotoDB(
+permanentPhotoKey(
+dom.id,
+i
+),
+dom.photos[i]
+);
+
+dom.photos[i]="";
+
+changed=true;
+
+}
+
+}
+
+}
+
+if(changed){
+
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(
+getCleanDataForStorage()
 )
-return;
-
-const modal=
-document.createElement(
-"div"
 );
 
-modal.style.position="fixed";
-modal.style.inset="0";
-modal.style.background=
-"rgba(0,0,0,.9)";
-modal.style.zIndex="3000";
-modal.style.display="flex";
-modal.style.alignItems="center";
-modal.style.justifyContent=
-"center";
-modal.style.padding="15px";
-
-const img=
-document.createElement(
-"img"
+localStorage.setItem(
+"mesDomiciliations",
+JSON.stringify(
+getCleanDomiciliationsForStorage()
+)
 );
 
-img.src=
-dom.photos[index];
-
-img.style.maxWidth="100%";
-img.style.maxHeight="90vh";
-img.style.objectFit="contain";
-img.style.borderRadius="12px";
-
-modal.appendChild(img);
-
-modal.onclick=function(){
-
-modal.remove();
-
-};
-
-document.body.appendChild(
-modal
+localStorage.setItem(
+"mesDomiciliationsPermanentes",
+JSON.stringify(
+getCleanPermanentDomiciliationsForStorage()
+)
 );
 
 }
 
-/* ==================================================
-   MODIFICATION DOMICILIATION
-================================================== */
+}catch(e){
 
-function openDomiciliationEdit(
-id
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
+console.error(
+"Erreur migration photos :",
+e
 );
 
-if(!dom)return;
+throw e;
 
-domEditId=id;
+}
 
-document.getElementById(
-"domEditAlias"
-).value=
-dom.alias||"";
+}
 
-document.getElementById(
-"domEditBeneficiary"
-).value=
-dom.beneficiary||"";
 
-document.getElementById(
-"domEditIban"
-).value=
-dom.iban||"";
+/* =========================
+   CHARGEMENT PHOTOS
+========================= */
 
-document.getElementById(
-"domEditTotal"
-).value=
-dom.total??"";
+async function loadAllPhotos(){
 
-document.getElementById(
-"domEditMonths"
-).value=
-dom.months??1;
+for(const payment of data){
 
-document.getElementById(
-"domEditTaeg"
-).value=
-dom.taeg??0;
+if(payment.id){
 
-document.getElementById(
-"domEditStartDate"
-).value=
-dom.startDate||"";
-
-document.getElementById(
-"domEditManualMonthly"
-).checked=
-!!dom.manualMonthly;
-
-document.getElementById(
-"domEditManualMonthlyAmount"
-).value=
-dom.manualMonthlyAmount??"";
-
-document.getElementById(
-"domEditManualMonthlyBox"
-).classList.toggle(
-"hidden",
-!dom.manualMonthly
-);
-
-document.getElementById(
-"domEditLastDifferent"
-).checked=
-!!dom.lastDifferent;
-
-document.getElementById(
-"domEditLastInstallment"
-).value=
-dom.lastInstallment??"";
-
-document.getElementById(
-"domEditLastInstallmentBox"
-).classList.toggle(
-"hidden",
-!dom.lastDifferent
-);
-
-calculateEditDomiciliation();
-
-renderEditDomiciliationPhotos(
-dom
-);
-
-document.getElementById(
-"domEditModal"
-).classList.add(
-"show"
+payment.photo=
+await getPhotoDB(
+paymentPhotoKey(payment.id)
 );
 
 }
 
-function renderEditDomiciliationPhotos(
-dom
-){
+}
 
-const box=
-document.getElementById(
-"domEditPhotos"
-);
+for(const dom of domiciliations){
 
-if(!box)return;
+if(!dom.id)
+continue;
 
 if(!Array.isArray(dom.photos))
 dom.photos=["",""];
@@ -7758,488 +7711,84 @@ dom.photos=["",""];
 while(dom.photos.length<2)
 dom.photos.push("");
 
-box.innerHTML="";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"domiciliationPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="domiciliationPhoto"
-onclick="openDomiciliationPhoto('${dom.id}',${index})">
-
-<div class="domiciliationPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-type="button"
-class="danger"
-onclick="deleteDomiciliationPhotoFromEdit('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="domiciliationPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="domiciliationPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
-
-}
-
-box.appendChild(
-div
-);
-
-}
-);
-
-}
-
-async function deleteDomiciliationPhotoFromEdit(
-id,
-index
-){
-
-await deleteDomiciliationPhoto(
-id,
-index
-);
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(dom)
-renderEditDomiciliationPhotos(
-dom
-);
-
-}
-
-function calculateEditDomiciliation(){
-
-const total=
-parseFloat(
-document.getElementById(
-"domEditTotal"
-).value
-);
-
-const months=
-parseInt(
-document.getElementById(
-"domEditMonths"
-).value
-);
-
-const taeg=
-parseFloat(
-document.getElementById(
-"domEditTaeg"
-).value
-);
-
-const startDate=
-document.getElementById(
-"domEditStartDate"
-).value;
-
-const manual=
-document.getElementById(
-"domEditManualMonthly"
-).checked;
-
-const manualAmount=
-parseFloat(
-document.getElementById(
-"domEditManualMonthlyAmount"
-).value
-);
-
-let monthly;
-
-if(
-manual &&
-!isNaN(manualAmount)&&
-manualAmount>0
-){
-
-monthly=
-roundMoney(
-manualAmount
-);
-
-}else{
-
-monthly=
-calculateLoanMonthly(
-total,
-months,
-taeg
-);
-
-}
-
-document.getElementById(
-"domEditEndDate"
-).value=
-calculateDomiciliationEndDate(
-startDate,
-months
-);
-
-let lastAmount=0;
-
-if(
-months>0&&
-!isNaN(total)
-){
-
-lastAmount=
-roundMoney(
-total-monthly*(months-1)
-);
-
-}
-
-if(
-document.getElementById(
-"domEditLastDifferent"
-).checked
-){
-
-const entered=
-parseFloat(
-document.getElementById(
-"domEditLastInstallment"
-).value
-);
-
-if(
-!isNaN(entered)&&
-entered>0
-)
-lastAmount=
-roundMoney(entered);
-
-}
-
-document.getElementById(
-"domEditMonthlyResult"
-).innerHTML=
-`
-Mensualité ${manual?"fixée":"estimée"} :
-<strong>${euro(monthly)}</strong>
-`;
-
-document.getElementById(
-"domEditLastInstallmentInfo"
-).innerHTML=
-`
-Dernière échéance :
-<strong>${euro(lastAmount)}</strong>
-`;
-
-}
-
-async function saveDomiciliationEdit(){
-
-if(!domEditId)
-return;
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(domEditId)
-);
-
-if(!dom)return;
-
-const total=
-parseFloat(
-document.getElementById(
-"domEditTotal"
-).value
-);
-
-const months=
-parseInt(
-document.getElementById(
-"domEditMonths"
-).value
-);
-
-const taeg=
-parseFloat(
-document.getElementById(
-"domEditTaeg"
-).value
-);
-
-const startDate=
-document.getElementById(
-"domEditStartDate"
-).value;
-
-const manualMonthly=
-document.getElementById(
-"domEditManualMonthly"
-).checked;
-
-const manualAmount=
-roundMoney(
-parseFloat(
-document.getElementById(
-"domEditManualMonthlyAmount"
-).value
-)||0
-);
-
-const lastDifferent=
-document.getElementById(
-"domEditLastDifferent"
-).checked;
-
-const lastAmount=
-roundMoney(
-parseFloat(
-document.getElementById(
-"domEditLastInstallment"
-).value
-)||0
-);
-
-if(
-isNaN(total)||
-total<=0||
-isNaN(months)||
-months<1||
-isNaN(taeg)||
-taeg<0||
-!startDate
-){
-
-alert(
-"Veuillez remplir correctement les champs obligatoires."
-);
-
-return;
-
-}
-
-if(
-manualMonthly&&
-manualAmount<=0
-){
-
-alert(
-"Veuillez indiquer le montant de la mensualité."
-);
-
-return;
-
-}
-
-if(
-lastDifferent&&
-lastAmount<=0
-){
-
-alert(
-"Veuillez indiquer le montant de la dernière échéance."
-);
-
-return;
-
-}
-
-dom.alias=
-document.getElementById(
-"domEditAlias"
-).value.trim();
-
-dom.beneficiary=
-document.getElementById(
-"domEditBeneficiary"
-).value.trim();
-
-dom.iban=
-document.getElementById(
-"domEditIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
-
-dom.total=
-roundMoney(total);
-
-dom.months=months;
-dom.taeg=taeg;
-dom.startDate=startDate;
-
-dom.manualMonthly=
-manualMonthly;
-
-dom.manualMonthlyAmount=
-manualMonthly
-?
-manualAmount
-:
-0;
-
-dom.lastDifferent=
-lastDifferent;
-
-dom.lastInstallment=
-lastDifferent
-?
-lastAmount
-:
-0;
-
-dom.monthsPaid=
-dom.monthsPaid
-.map(Number)
-.filter(
-n=>
-Number.isInteger(n)&&
-n>=1&&
-n<=months
-)
-.filter(
-(n,index,array)=>
-array.indexOf(n)===index
-)
-.sort(
-(a,b)=>a-b
-);
-
-await saveDomiciliations();
-
-closeDomiciliationEdit();
-
-renderDomiciliations();
-
-alert(
-"Modification enregistrée."
-);
-
-}
-
-function closeDomiciliationEdit(){
-
-document.getElementById(
-"domEditModal"
-).classList.remove(
-"show"
-);
-
-domEditId=null;
-
-}
-
-async function deleteDomiciliation(
-id
-){
-
-if(
-!confirm(
-"Supprimer cette domiciliation ?"
-)
-)
-return;
-
-openedDomiciliationSchedules.delete(
-String(id)
-);
-
-domiciliations=
-domiciliations.filter(
-d=>String(d.id)!==
-String(id)
-);
-
 for(let i=0;i<2;i++){
 
-try{
-
-await deletePhotoDB(
+dom.photos[i]=
+await getPhotoDB(
 domiciliationPhotoKey(
-id,
+dom.id,
 i
 )
 );
 
+}
+
+}
+
+for(const dom of permanentDomiciliations){
+
+if(!dom.id)
+continue;
+
+if(!Array.isArray(dom.photos))
+dom.photos=["",""];
+
+while(dom.photos.length<2)
+dom.photos.push("");
+
+for(let i=0;i<2;i++){
+
+dom.photos[i]=
+await getPhotoDB(
+permanentPhotoKey(
+dom.id,
+i
+)
+);
+
+}
+
+}
+
+}
+
+
+/* =========================
+   CHARGEMENT DOMICILIATIONS
+========================= */
+
+function loadDomiciliations(){
+
+try{
+
+const saved=
+localStorage.getItem(
+"mesDomiciliations"
+);
+
+if(saved){
+
+domiciliations=
+JSON.parse(saved);
+
+normalizeDomiciliations();
+
+}else{
+
+domiciliations=[];
+
+}
+
 }catch(e){
 
 console.error(e);
 
-}
+domiciliations=[];
 
 }
 
-await saveDomiciliations();
-
-renderDomiciliations();
-
 }
 
-/* ==================================================
-   DOMICILIATIONS PERMANENTES
-================================================== */
 
 function loadPermanentDomiciliations(){
 
@@ -8250,13 +7799,18 @@ localStorage.getItem(
 "mesDomiciliationsPermanentes"
 );
 
-if(saved)
+if(saved){
+
 permanentDomiciliations=
 JSON.parse(saved);
-else
-permanentDomiciliations=[];
 
 normalizePermanentDomiciliations();
+
+}else{
+
+permanentDomiciliations=[];
+
+}
 
 }catch(e){
 
@@ -8268,981 +7822,194 @@ permanentDomiciliations=[];
 
 }
 
-function normalizePermanentDomiciliations(){
 
-if(!Array.isArray(
-permanentDomiciliations
-))
-permanentDomiciliations=[];
+/* =========================
+   SAUVEGARDE DOMICILIATIONS
+========================= */
 
-permanentDomiciliations.forEach(
-dom=>{
+async function saveDomiciliations(){
+
+try{
+
+const cleanData=
+getCleanDomiciliationsForStorage();
+
+localStorage.setItem(
+"mesDomiciliations",
+JSON.stringify(cleanData)
+);
+
+return true;
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Impossible de sauvegarder les domiciliations."
+);
+
+return false;
+
+}
+
+}
+
+
+async function savePermanentDomiciliations(){
+
+try{
+
+console.log(
+"=== SAUVEGARDE DOMICILIATIONS PERMANENTES ==="
+);
+
+console.log(
+"Nombre :",
+permanentDomiciliations.length
+);
+
+for(const dom of permanentDomiciliations){
+
+if(!dom.id){
+
+dom.id=generateId();
+
+}
+
+if(!Array.isArray(dom.photos)){
+
+dom.photos=["",""];
+
+}
+
+while(dom.photos.length<2){
+
+dom.photos.push("");
+
+}
+
+for(let i=0;i<2;i++){
+
+const key=
+permanentPhotoKey(
+dom.id,
+i
+);
+
+if(dom.photos[i]){
+
+await savePhotoDB(
+key,
+dom.photos[i]
+);
+
+}else{
+
+await deletePhotoDB(key);
+
+}
+
+}
+
+}
+
+const cleanData=
+getCleanPermanentDomiciliationsForStorage();
+
+const json=
+JSON.stringify(cleanData);
+
+localStorage.setItem(
+"mesDomiciliationsPermanentes",
+json
+);
+
+console.log(
+"SAUVEGARDE DOMICILIATIONS PERMANENTES OK"
+);
+
+return true;
+
+}catch(e){
+
+console.error(
+"ERREUR COMPLETE savePermanentDomiciliations :",
+e
+);
+
+alert(
+"ERREUR EXACTE :\n\n"+
+(e?.name||"Erreur")+
+"\n"+
+(e?.message||e)
+);
+
+return false;
+
+}
+
+}
+
+
+/* =========================
+   NORMALISATION
+========================= */
+
+function normalizeData(){
+
+if(!Array.isArray(data))
+data=[];
+
+data.forEach(p=>{
+
+if(!p.id)
+p.id=generateId();
+
+if(!Array.isArray(p.installments))
+p.installments=[];
+
+if(p.photo===undefined)
+p.photo="";
+
+});
+
+}
+
+
+function normalizeDomiciliations(){
+
+if(!Array.isArray(domiciliations))
+domiciliations=[];
+
+domiciliations.forEach(dom=>{
 
 if(!dom.id)
 dom.id=generateId();
 
-if(dom.alias===undefined)
-dom.alias="";
-
-if(dom.beneficiary===undefined)
-dom.beneficiary="";
-
-if(dom.iban===undefined)
-dom.iban="";
-
-if(dom.amount===undefined)
-dom.amount=0;
-
-if(dom.startDate===undefined)
-dom.startDate="";
-
-if(dom.communication===undefined)
-dom.communication="";
-
 if(!Array.isArray(dom.photos))
-dom.photos=[];
+dom.photos=["",""];
 
 while(dom.photos.length<2)
 dom.photos.push("");
 
-if(dom.photos.length>2)
-dom.photos=
-dom.photos.slice(0,2);
-
-}
-);
-
-}
-
-/* ==================================================
-   CALCULS DOMICILIATIONS PERMANENTES
-================================================== */
-
-function getCurrentYear(){
-
-return new Date().getFullYear();
-
-}
-
-function getPermanentStartDateObject(
-dom
-){
-
-if(!dom.startDate)
-return null;
-
-const d=
-new Date(
-dom.startDate+"T00:00:00"
-);
-
-if(isNaN(d.getTime()))
-return null;
-
-return d;
-
-}
-
-function getPermanentPaidMonthsForYear(
-dom,
-year
-){
-
-const start=
-getPermanentStartDateObject(
-dom
-);
-
-if(!start)return 0;
-
-const startYear=
-start.getFullYear();
-
-const startMonth=
-start.getMonth();
-
-const now=
-new Date();
-
-const currentYear=
-now.getFullYear();
-
-let firstMonth=0;
-let lastMonth=11;
-
-if(year<startYear)
-return 0;
-
-if(year===startYear)
-firstMonth=startMonth;
-
-if(year>currentYear)
-return 0;
-
-if(year===currentYear){
-
-lastMonth=
-Math.min(
-11,
-now.getMonth()
-);
-
-}
-
-if(
-year===startYear&&
-year===currentYear
-){
-
-lastMonth=
-Math.min(
-11,
-now.getMonth()
-);
-
-}
-
-if(lastMonth<firstMonth)
-return 0;
-
-return lastMonth-firstMonth+1;
-
-}
-
-function getPermanentTotalMonthsForYear(
-dom,
-year
-){
-
-const start=
-getPermanentStartDateObject(
-dom
-);
-
-if(!start)return 0;
-
-const startYear=
-start.getFullYear();
-
-const startMonth=
-start.getMonth();
-
-if(year<startYear)
-return 0;
-
-if(year===startYear)
-return 12-startMonth;
-
-return 12;
-
-}
-
-function getPermanentPaidAmountForYear(
-dom,
-year
-){
-
-const months=
-getPermanentPaidMonthsForYear(
-dom,
-year
-);
-
-return roundMoney(
-months*
-Number(dom.amount||0)
-);
-
-}
-
-function getPermanentPlannedAmountForYear(
-dom,
-year
-){
-
-const months=
-getPermanentTotalMonthsForYear(
-dom,
-year
-);
-
-return roundMoney(
-months*
-Number(dom.amount||0)
-);
-
-}
-
-function getPermanentRemainingAmountForYear(
-dom,
-year
-){
-
-const planned=
-getPermanentPlannedAmountForYear(
-dom,
-year
-);
-
-const paid=
-getPermanentPaidAmountForYear(
-dom,
-year
-);
-
-return Math.max(
-0,
-roundMoney(
-planned-paid
-)
-);
-
-}
-
-function getPermanentNextDate(
-dom
-){
-
-const start=
-getPermanentStartDateObject(
-dom
-);
-
-if(!start)return null;
-
-const now=
-new Date();
-
-const currentYear=
-now.getFullYear();
-
-const currentMonth=
-now.getMonth();
-
-const startYear=
-start.getFullYear();
-
-const startMonth=
-start.getMonth();
-
-if(
-startYear>currentYear||
-(
-startYear===currentYear&&
-startMonth>currentMonth
-)
-){
-
-return new Date(start);
-
-}
-
-let nextYear=
-currentYear;
-
-let nextMonth=
-currentMonth+1;
-
-if(nextMonth>11){
-
-nextMonth=0;
-nextYear++;
-
-}
-
-const day=
-start.getDate();
-
-const lastDay=
-new Date(
-nextYear,
-nextMonth+1,
-0
-).getDate();
-
-return new Date(
-nextYear,
-nextMonth,
-Math.min(
-day,
-lastDay
-)
-);
-
-}
-
-/* ==================================================
-   FORM PERMANENTE
-================================================== */
-
-function togglePermanentForm(){
-
-document.getElementById(
-"permanentForm"
-).classList.toggle(
-"hidden"
-);
-
-}
-
-async function addPermanentDomiciliation(){
-
-const alias=
-document.getElementById(
-"permanentAlias"
-).value.trim();
-
-const beneficiary=
-document.getElementById(
-"permanentBeneficiary"
-).value.trim();
-
-const iban=
-document.getElementById(
-"permanentIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
-
-const amount=
-parseFloat(
-document.getElementById(
-"permanentAmount"
-).value
-);
-
-const startDate=
-document.getElementById(
-"permanentStartDate"
-).value;
-
-const communication=
-document.getElementById(
-"permanentCommunication"
-).value.trim();
-
-if(
-!beneficiary||
-isNaN(amount)||
-amount<=0||
-!startDate
-){
-
-alert(
-"Veuillez remplir les champs obligatoires."
-);
-
-return;
-
-}
-
-permanentDomiciliations.push({
-
-id:generateId(),
-
-alias,
-
-beneficiary,
-
-iban,
-
-amount:
-roundMoney(amount),
-
-startDate,
-
-communication,
-
-photos:[
-permanentPhoto1,
-permanentPhoto2
-]
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
 
 });
 
-await savePermanentDomiciliations();
-
-resetPermanentForm();
-
-renderPermanentDomiciliations();
-
-alert(
-"Domiciliation permanente ajoutée."
-);
-
 }
 
-function resetPermanentForm(){
 
-document.getElementById(
-"permanentAlias"
-).value="";
+function normalizePermanentDomiciliations(){
 
-document.getElementById(
-"permanentBeneficiary"
-).value="";
+if(!Array.isArray(permanentDomiciliations))
+permanentDomiciliations=[];
 
-document.getElementById(
-"permanentIban"
-).value="";
+permanentDomiciliations.forEach(dom=>{
 
-document.getElementById(
-"permanentAmount"
-).value="";
-
-document.getElementById(
-"permanentStartDate"
-).value="";
-
-document.getElementById(
-"permanentCommunication"
-).value="";
-
-permanentPhoto1="";
-permanentPhoto2="";
-
-document.getElementById(
-"permanentAddPhotosPreview"
-).innerHTML="";
-
-document.getElementById(
-"permanentForm"
-).classList.add(
-"hidden"
-);
-
-}
-
-/* ==================================================
-   PHOTOS PERMANENTES
-================================================== */
-
-function compressPermanentPhoto(
-file,
-callback
-){
-
-if(!file){
-
-callback("");
-
-return;
-
-}
-
-const reader=
-new FileReader();
-
-reader.onload=function(e){
-
-const img=new Image();
-
-img.onload=function(){
-
-const canvas=
-document.createElement(
-"canvas"
-);
-
-const maxWidth=1400;
-
-let width=img.width;
-let height=img.height;
-
-if(width>maxWidth){
-
-height=
-height*(maxWidth/width);
-
-width=maxWidth;
-
-}
-
-canvas.width=width;
-canvas.height=height;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.drawImage(
-img,
-0,
-0,
-width,
-height
-);
-
-callback(
-canvas.toDataURL(
-"image/jpeg",
-0.75
-)
-);
-
-};
-
-img.src=e.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-function handlePermanentAddPhoto(
-file,
-number
-){
-
-if(!file)return;
-
-compressPermanentPhoto(
-file,
-function(photo){
-
-if(number===1)
-permanentPhoto1=photo;
-
-if(number===2)
-permanentPhoto2=photo;
-
-renderPermanentAddPhotos();
-
-}
-);
-
-}
-
-function renderPermanentAddPhotos(){
-
-const box=
-document.getElementById(
-"permanentAddPhotosPreview"
-);
-
-if(!box)return;
-
-box.innerHTML="";
-
-[
-permanentPhoto1,
-permanentPhoto2
-].forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"permanentPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="permanentPhoto">
-
-<div class="permanentPhotoActions">
-
-<button
-type="button"
-class="danger"
-onclick="removePermanentAddPhoto(${index+1})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="permanentPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-`;
-
-}
-
-box.appendChild(div);
-
-}
-);
-
-}
-
-function removePermanentAddPhoto(
-number
-){
-
-if(number===1)
-permanentPhoto1="";
-
-if(number===2)
-permanentPhoto2="";
-
-renderPermanentAddPhotos();
-
-}
-/* ==================================================
-   RENDU DOMICILIATIONS PERMANENTES
-================================================== */
-
-function renderPermanentDomiciliations(){
-
-const list=
-document.getElementById(
-"permanentList"
-);
-
-if(!list)return;
-
-list.innerHTML="";
-
-if(!permanentDomiciliations.length){
-
-list.innerHTML=
-`
-<div class="permanentEmpty">
-Aucune domiciliation permanente enregistrée.
-</div>
-`;
-
-return;
-
-}
-
-const year=
-getCurrentYear();
-
-let monthlyTotal=0;
-let paidYearTotal=0;
-let plannedYearTotal=0;
-
-permanentDomiciliations.forEach(
-dom=>{
-
-const amount=
-Number(dom.amount||0);
-
-const paid=
-getPermanentPaidAmountForYear(
-dom,
-year
-);
-
-const planned=
-getPermanentPlannedAmountForYear(
-dom,
-year
-);
-
-monthlyTotal+=amount;
-paidYearTotal+=paid;
-plannedYearTotal+=planned;
-
-}
-);
-
-const summary=
-document.createElement(
-"div"
-);
-
-summary.className=
-"permanentSummary";
-
-summary.innerHTML=
-`
-<div class="permanentSummaryBox">
-
-<div class="permanentSummaryTitle">
-Domiciliations
-</div>
-
-<div class="permanentSummaryValue">
-${permanentDomiciliations.length}
-</div>
-
-</div>
-
-<div class="permanentSummaryBox">
-
-<div class="permanentSummaryTitle">
-Mensuel
-</div>
-
-<div class="permanentSummaryValue">
-${euro(monthlyTotal)}
-</div>
-
-</div>
-
-<div class="permanentSummaryBox">
-
-<div class="permanentSummaryTitle">
-Payé ${year}
-</div>
-
-<div class="permanentSummaryValue">
-${euro(paidYearTotal)}
-</div>
-
-</div>
-`;
-
-list.appendChild(summary);
-
-permanentDomiciliations.forEach(
-dom=>{
-
-const amount=
-Number(dom.amount||0);
-
-const paidMonths=
-getPermanentPaidMonthsForYear(
-dom,
-year
-);
-
-const totalMonths=
-getPermanentTotalMonthsForYear(
-dom,
-year
-);
-
-const paidAmount=
-getPermanentPaidAmountForYear(
-dom,
-year
-);
-
-const plannedAmount=
-getPermanentPlannedAmountForYear(
-dom,
-year
-);
-
-const remainingAmount=
-getPermanentRemainingAmountForYear(
-dom,
-year
-);
-
-const progress=
-plannedAmount>0
-?
-Math.min(
-100,
-(paidAmount/plannedAmount)*100
-)
-:
-0;
-
-const nextDate=
-getPermanentNextDate(
-dom
-);
-
-const item=
-document.createElement(
-"div"
-);
-
-item.className=
-"permanentItem";
-
-item.innerHTML=
-`
-<div class="permanentAlias">
-
-${escapeHtml(
-dom.alias||"Sans alias"
-)}
-
-<span class="badge badgePaid">
-AUTOMATIQUE
-</span>
-
-</div>
-
-<div class="permanentBeneficiary">
-
-${escapeHtml(
-dom.beneficiary||"-"
-)}
-
-</div>
-
-<div class="permanentDetails">
-
-IBAN :
-${escapeHtml(
-dom.iban||"-"
-)}
-
-<br>
-
-Date de début :
-<strong>
-${formatDate(
-dom.startDate
-)||"-"}
-</strong>
-
-${
-dom.communication
-?
-`
-<br>
-
-Communication :
-<strong>
-${escapeHtml(
-dom.communication
-)}
-</strong>
-`
-:
-""
-}
-
-</div>
-
-<div class="permanentMonthly">
-
-<div class="permanentMonthlyLabel">
-Montant prélevé chaque mois
-</div>
-
-<div class="permanentMonthlyAmount">
-${euro(amount)}
-</div>
-
-</div>
-
-<div class="permanentYearBox">
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Mois prélevés en ${year}
-</div>
-
-<div class="permanentYearValue">
-${paidMonths} / ${totalMonths}
-</div>
-
-</div>
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Déjà prélevé
-</div>
-
-<div class="permanentYearValue">
-${euro(paidAmount)}
-</div>
-
-</div>
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Prévu pour ${year}
-</div>
-
-<div class="permanentYearValue">
-${euro(plannedAmount)}
-</div>
-
-</div>
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Reste ${year}
-</div>
-
-<div class="permanentYearValue">
-${euro(remainingAmount)}
-</div>
-
-</div>
-
-</div>
-
-<div class="permanentProgress">
-
-<div
-class="permanentProgressBar"
-style="width:${progress}%">
-</div>
-
-</div>
-`;
-
-if(nextDate){
-
-const next=
-document.createElement(
-"div"
-);
-
-next.className=
-"permanentNext";
-
-next.innerHTML=
-`
-<div class="permanentNextTitle">
-Prochain prélèvement automatique
-</div>
-
-<div class="permanentNextDate">
-${nextDate.toLocaleDateString(
-"fr-BE"
-)}
-</div>
-
-<div class="permanentNextAmount">
-${euro(amount)}
-</div>
-`;
-
-item.appendChild(next);
-
-}else{
-
-const done=
-document.createElement(
-"div"
-);
-
-done.className=
-"permanentNext";
-
-done.innerHTML=
-`
-<div style="
-text-align:center;
-font-weight:700;
-color:#167c2e;
-">
-✓ Aucune prochaine échéance déterminée
-</div>
-`;
-
-item.appendChild(done);
-
-}
+if(!dom.id)
+dom.id=generateId();
 
 if(!Array.isArray(dom.photos))
 dom.photos=["",""];
@@ -9250,878 +8017,59 @@ dom.photos=["",""];
 while(dom.photos.length<2)
 dom.photos.push("");
 
-const photosBox=
-document.createElement(
-"div"
-);
-
-photosBox.className=
-"permanentPhotos";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const photoBox=
-document.createElement(
-"div"
-);
-
-photoBox.className=
-"permanentPhotoBox";
-
-if(photo){
-
-photoBox.innerHTML=
-`
-<img
-src="${photo}"
-class="permanentPhoto"
-onclick="openPermanentPhoto('${dom.id}',${index})">
-
-<div class="permanentPhotoActions">
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-class="danger"
-onclick="deletePermanentPhoto('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-photoBox.innerHTML=
-`
-<div class="permanentPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="permanentPhotoActions">
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
+});
 
 }
 
-photosBox.appendChild(
-photoBox
-);
 
-}
-);
+/* =========================
+   CHARGEMENT GLOBAL
+========================= */
 
-item.appendChild(
-photosBox
-);
+async function loadData(){
 
-const actions=
-document.createElement(
-"div"
-);
-
-actions.className=
-"permanentActions";
-
-const editButton=
-document.createElement(
-"button"
-);
-
-editButton.className=
-"secondary";
-
-editButton.textContent=
-"✏️ Modifier";
-
-editButton.onclick=function(){
-
-openPermanentEdit(
-dom.id
-);
-
-};
-
-const deleteButton=
-document.createElement(
-"button"
-);
-
-deleteButton.className=
-"danger";
-
-deleteButton.textContent=
-"🗑️ Supprimer";
-
-deleteButton.onclick=function(){
-
-deletePermanentDomiciliation(
-dom.id
-);
-
-};
-
-actions.appendChild(
-editButton
-);
-
-actions.appendChild(
-deleteButton
-);
-
-item.appendChild(
-actions
-);
-
-list.appendChild(
-item
-);
-
-}
-);
-
-}
-
-/* ==================================================
-   PHOTOS DOMICILIATIONS PERMANENTES
-================================================== */
-
-function choosePermanentPhoto(
-id,
-index,
-source
-){
-
-const input=
-document.createElement(
-"input"
-);
-
-input.type="file";
-input.accept="image/*";
-
-if(source==="camera")
-input.capture="environment";
-
-input.onchange=function(){
-
-const file=
-input.files?.[0];
-
-if(!file)return;
-
-compressPermanentPhoto(
-file,
-async function(photo){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-dom.photos[index]=photo;
+try{
 
 const saved=
-await savePermanentDomiciliations();
+localStorage.getItem(
+"mesPaiements"
+);
 
 if(saved){
 
-renderPermanentDomiciliations();
-
-if(
-permanentEditId &&
-String(permanentEditId)===
-String(id)
-){
-
-renderPermanentEditPhotos(
-dom
-);
-
-}
-
-}
-
-}
-);
-
-};
-
-input.click();
-
-}
-
-async function deletePermanentPhoto(
-id,
-index
-){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(
-!confirm(
-"Supprimer cette photo ?"
-)
-)
-return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-dom.photos[index]="";
-
-try{
-
-await deletePhotoDB(
-permanentPhotoKey(
-id,
-index
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-await savePermanentDomiciliations();
-
-renderPermanentDomiciliations();
-
-if(
-permanentEditId &&
-String(permanentEditId)===
-String(id)
-){
-
-renderPermanentEditPhotos(
-dom
-);
-
-}
-
-}
-
-function openPermanentPhoto(
-id,
-index
-){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(
-!dom||
-!dom.photos||
-!dom.photos[index]
-)
-return;
-
-const modal=
-document.createElement(
-"div"
-);
-
-modal.style.position="fixed";
-modal.style.inset="0";
-modal.style.background=
-"rgba(0,0,0,.9)";
-modal.style.zIndex="3000";
-modal.style.display="flex";
-modal.style.alignItems="center";
-modal.style.justifyContent=
-"center";
-modal.style.padding="15px";
-
-const img=
-document.createElement(
-"img"
-);
-
-img.src=
-dom.photos[index];
-
-img.style.maxWidth="100%";
-img.style.maxHeight="90vh";
-img.style.objectFit="contain";
-img.style.borderRadius="12px";
-
-modal.appendChild(img);
-
-modal.onclick=function(){
-
-modal.remove();
-
-};
-
-document.body.appendChild(
-modal
-);
-
-}
-
-/* ==================================================
-   MODIFICATION DOMICILIATION PERMANENTE
-================================================== */
-
-function openPermanentEdit(
-id
-){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-permanentEditId=id;
-
-document.getElementById(
-"permanentEditAlias"
-).value=
-dom.alias||"";
-
-document.getElementById(
-"permanentEditBeneficiary"
-).value=
-dom.beneficiary||"";
-
-document.getElementById(
-"permanentEditIban"
-).value=
-dom.iban||"";
-
-document.getElementById(
-"permanentEditAmount"
-).value=
-dom.amount??"";
-
-document.getElementById(
-"permanentEditStartDate"
-).value=
-dom.startDate||"";
-
-document.getElementById(
-"permanentEditCommunication"
-).value=
-dom.communication||"";
-
-renderPermanentEditPhotos(
-dom
-);
-
-document.getElementById(
-"permanentEditModal"
-).classList.add(
-"show"
-);
-
-}
-
-function renderPermanentEditPhotos(
-dom
-){
-
-const box=
-document.getElementById(
-"permanentEditPhotos"
-);
-
-if(!box)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-box.innerHTML="";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"permanentPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="permanentPhoto"
-onclick="openPermanentPhoto('${dom.id}',${index})">
-
-<div class="permanentPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-type="button"
-class="danger"
-onclick="deletePermanentPhotoFromEdit('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="permanentPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="permanentPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
-
-}
-
-box.appendChild(
-div
-);
-
-}
-);
-
-}
-
-async function deletePermanentPhotoFromEdit(
-id,
-index
-){
-
-await deletePermanentPhoto(
-id,
-index
-);
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(dom)
-renderPermanentEditPhotos(
-dom
-);
-
-}
-
-async function savePermanentEdit(){
-
-if(!permanentEditId)
-return;
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(permanentEditId)
-);
-
-if(!dom)return;
-
-const amount=
-parseFloat(
-document.getElementById(
-"permanentEditAmount"
-).value
-);
-
-const startDate=
-document.getElementById(
-"permanentEditStartDate"
-).value;
-
-if(
-isNaN(amount)||
-amount<=0||
-!startDate
-){
-
-alert(
-"Veuillez remplir les champs obligatoires."
-);
-
-return;
-
-}
-
-dom.alias=
-document.getElementById(
-"permanentEditAlias"
-).value.trim();
-
-dom.beneficiary=
-document.getElementById(
-"permanentEditBeneficiary"
-).value.trim();
-
-dom.iban=
-document.getElementById(
-"permanentEditIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
-
-dom.amount=
-roundMoney(amount);
-
-dom.startDate=
-startDate;
-
-dom.communication=
-document.getElementById(
-"permanentEditCommunication"
-).value.trim();
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-const saved=
-await savePermanentDomiciliations();
-
-if(!saved)
-return;
-
-closePermanentEdit();
-
-renderPermanentDomiciliations();
-
-alert(
-"Modification enregistrée."
-);
-
-}
-
-function closePermanentEdit(){
-
-document.getElementById(
-"permanentEditModal"
-).classList.remove(
-"show"
-);
-
-permanentEditId=null;
-
-}
-
-async function deletePermanentDomiciliation(
-id
-){
-
-if(
-!confirm(
-"Supprimer cette domiciliation permanente ?"
-)
-)
-return;
-
-permanentDomiciliations=
-permanentDomiciliations.filter(
-d=>String(d.id)!==
-String(id)
-);
-
-for(let i=0;i<2;i++){
-
-try{
-
-await deletePhotoDB(
-permanentPhotoKey(
-id,
-i
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-await savePermanentDomiciliations();
-
-renderPermanentDomiciliations();
-
-}
-
-/* ==================================================
-   IMPORT / EXPORT
-================================================== */
-
-async function exportData(){
-
-try{
-
-const backup={
-
-version:10,
-
-date:new Date().toISOString(),
-
-data:
-getCleanDataForStorage(),
-
-domiciliations:
-getCleanDomiciliationsForStorage(),
-
-permanentDomiciliations:
-getCleanPermanentDomiciliationsForStorage()
-
-};
-
-const json=
-JSON.stringify(
-backup,
-null,
-2
-);
-
-const blob=
-new Blob(
-[json],
-{
-type:"application/json"
-}
-);
-
-const url=
-URL.createObjectURL(blob);
-
-const a=
-document.createElement("a");
-
-a.href=url;
-
-a.download=
-"mes-paiements-sauvegarde-"+
-new Date()
-.toISOString()
-.substring(0,10)+
-".json";
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-URL.revokeObjectURL(url);
-
-alert(
-"Sauvegarde exportée."
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Impossible d'exporter la sauvegarde."
-);
-
-}
-
-}
-
-document.getElementById(
-"importInput"
-).addEventListener(
-"change",
-function(){
-
-const file=
-this.files?.[0];
-
-if(!file)return;
-
-const reader=
-new FileReader();
-
-reader.onload=async function(e){
-
-try{
-
-const backup=
-JSON.parse(
-e.target.result
-);
-
-if(
-!backup||
-typeof backup!=="object"
-){
-
-throw new Error(
-"Fichier invalide."
-);
-
-}
-
-if(
-!Array.isArray(
-backup.data
-)
-&&
-!Array.isArray(
-backup.domiciliations
-)
-&&
-!Array.isArray(
-backup.permanentDomiciliations
-)
-){
-
-throw new Error(
-"Aucune donnée reconnue dans la sauvegarde."
-);
-
-}
-
-if(
-!confirm(
-"Importer cette sauvegarde ? Les données actuelles seront remplacées."
-)
-)
-return;
-
-if(
-Array.isArray(
-backup.data
-)
-){
-
-data=backup.data;
+data=JSON.parse(saved);
 
 normalizeData();
 
 }
 
-if(
-Array.isArray(
-backup.domiciliations
-)
-){
+}catch(e){
 
-domiciliations=
-backup.domiciliations;
+console.error(e);
 
-normalizeDomiciliations();
+data=[];
 
 }
 
-if(
-Array.isArray(
-backup.permanentDomiciliations
-)
-){
+loadDomiciliations();
 
-permanentDomiciliations=
-backup.permanentDomiciliations;
+loadPermanentDomiciliations();
 
-normalizePermanentDomiciliations();
-
-}
+try{
 
 await migratePhotosToIndexedDB();
 
-await saveData();
-
-await saveDomiciliations();
-
-await savePermanentDomiciliations();
-
 await loadAllPhotos();
+
+}catch(e){
+
+console.error(e);
+
+alert(
+"Impossible de charger les photos."
+);
+
+}
 
 render();
 
@@ -10129,73 +8077,27 @@ renderDomiciliations();
 
 renderPermanentDomiciliations();
 
-alert(
-"Sauvegarde importée avec succès."
-);
-
-}catch(err){
-
-console.error(err);
-
-alert(
-"Impossible d'importer la sauvegarde.\n\n"+
-(err?.message||err)
-);
-
 }
 
-};
 
-reader.readAsText(file);
+/* =========================
+   PIN
+========================= */
 
-this.value="";
+async function checkPin(){
 
-}
-);
-
-/* ==================================================
-   CALCULETTE
-================================================== */
-
-function calcInput(value){
-
-const display=
+const value=
 document.getElementById(
-"calcDisplay"
-);
+"pinInput"
+).value;
 
-display.value+=value;
+if(value!==PIN){
 
-}
-
-function calcClear(){
+alert("Code PIN incorrect");
 
 document.getElementById(
-"calcDisplay"
+"pinInput"
 ).value="";
-
-}
-
-function calcResult(){
-
-const display=
-document.getElementById(
-"calcDisplay"
-);
-
-const expression=
-display.value;
-
-if(!expression)
-return;
-
-if(
-!/^[0-9+\-*/.()\s]+$/.test(
-expression
-)
-){
-
-display.value="Erreur";
 
 return;
 
@@ -10203,172 +8105,150 @@ return;
 
 try{
 
-const result=
-Function(
-'"use strict";return ('+
-expression+
-')'
-)();
+document.getElementById(
+"app"
+).classList.remove("hidden");
 
-if(
-typeof result!=="number"||
-!isFinite(result)
-){
+await loadData();
 
-display.value="Erreur";
-
-return;
-
-}
-
-display.value=
-String(
-roundMoney(result)
-);
+document.getElementById(
+"loginScreen"
+).classList.add("hidden");
 
 }catch(e){
 
-display.value="Erreur";
+console.error(
+"ERREUR OUVERTURE :",
+e
+);
+
+alert(
+"Impossible d'ouvrir l'application.\n\n"+
+(e?.name||"Erreur")+
+"\n"+
+(e?.message||e)
+);
 
 }
 
 }
 
-/* ==================================================
+
+/* =========================
+   SUITE DU CODE
+========================= */
+
+function saveLocalData(){
+
+localStorage.setItem(
+"mesPaiements",
+JSON.stringify(
+getCleanDataForStorage()
+)
+);
+
+}
+
+
+function updateSummary(){
+
+let total=0;
+let paid=0;
+
+data.forEach(p=>{
+
+const amount=
+Number(p.amount)||0;
+
+total+=amount;
+
+if(p.paid){
+
+paid+=amount;
+
+}
+
+});
+
+const remaining=
+total-paid;
+
+const totalEl=
+document.getElementById("totalAmount");
+
+const paidEl=
+document.getElementById("paidAmount");
+
+const remainingEl=
+document.getElementById(
+"remainingAmount"
+);
+
+if(totalEl)
+totalEl.textContent=
+total.toFixed(2)+" €";
+
+if(paidEl)
+paidEl.textContent=
+paid.toFixed(2)+" €";
+
+if(remainingEl)
+remainingEl.textContent=
+remaining.toFixed(2)+" €";
+
+}
+
+
+/* =========================
    INITIALISATION
-================================================== */
+========================= */
 
-document.getElementById(
-"permanentPhoto1Camera"
-).addEventListener(
-"change",
+document.addEventListener(
+"DOMContentLoaded",
 function(){
 
-handlePermanentAddPhoto(
-this.files?.[0],
-1
+const pinInput=
+document.getElementById(
+"pinInput"
 );
 
-this.value="";
+if(pinInput){
+
+pinInput.addEventListener(
+"keydown",
+function(e){
+
+if(e.key==="Enter"){
+
+checkPin();
+
+}
 
 }
 );
 
-document.getElementById(
-"permanentPhoto2Camera"
-).addEventListener(
-"change",
-function(){
+}
 
-handlePermanentAddPhoto(
-this.files?.[0],
-2
+const pinButton=
+document.getElementById(
+"pinButton"
 );
 
-this.value="";
+if(pinButton){
+
+pinButton.addEventListener(
+"click",
+checkPin
+);
 
 }
-);
-
-document.getElementById(
-"permanentPhoto1Gallery"
-).addEventListener(
-"change",
-function(){
-
-handlePermanentAddPhoto(
-this.files?.[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"permanentPhoto2Gallery"
-).addEventListener(
-"change",
-function(){
-
-handlePermanentAddPhoto(
-this.files?.[0],
-2
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto1Camera"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files?.[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto2Camera"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files?.[0],
-2
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto1Gallery"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files?.[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto2Gallery"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files?.[0],
-2
-);
-
-this.value="";
-
-}
-);
 
 renderAddDomiciliationPhotos();
 
 renderPermanentAddPhotos();
+
+}
+);
 
 </script>
 
