@@ -3358,6 +3358,107 @@ async function savePermanentDomiciliations(){
 
 try{
 
+console.log("=== SAUVEGARDE DOMICILIATIONS PERMANENTES ===");
+console.log("Nombre :", permanentDomiciliations.length);
+
+for(const dom of permanentDomiciliations){
+
+console.log("Domiciliation :", dom);
+
+if(!dom.id){
+dom.id=generateId();
+console.log("ID généré :", dom.id);
+}
+
+if(!Array.isArray(dom.photos)){
+dom.photos=["",""];
+}
+
+while(dom.photos.length<2){
+dom.photos.push("");
+}
+
+for(let i=0;i<2;i++){
+
+const key=
+permanentPhotoKey(
+dom.id,
+i
+);
+
+console.log(
+"Photo",
+i,
+"clé :",
+key,
+"présente :",
+!!dom.photos[i]
+);
+
+if(dom.photos[i]){
+
+await savePhotoDB(
+key,
+dom.photos[i]
+);
+
+}else{
+
+await deletePhotoDB(key);
+
+}
+
+}
+
+}
+
+console.log(
+"Données avant localStorage :",
+getCleanPermanentDomiciliationsForStorage()
+);
+
+const cleanData=
+getCleanPermanentDomiciliationsForStorage();
+
+const json=
+JSON.stringify(cleanData);
+
+console.log(
+"Taille localStorage :",
+json.length
+);
+
+localStorage.setItem(
+"mesDomiciliationsPermanentes",
+json
+);
+
+console.log("SAUVEGARDE OK");
+
+return true;
+
+}catch(e){
+
+console.error(
+"ERREUR COMPLETE savePermanentDomiciliations :",
+e
+);
+
+alert(
+"ERREUR EXACTE :\n\n"+
+(e?.name||"Erreur")+
+"\n"+
+(e?.message||e)
+);
+
+return false;
+
+}
+
+}
+
+try{
+
 for(
 const dom of permanentDomiciliations
 ){
