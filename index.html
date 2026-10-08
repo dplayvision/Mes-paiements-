@@ -23,97 +23,34 @@ box-sizing:border-box;
 
 body{
 margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-background:#f2f2f7;
-color:#111;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:#f4f5f7;
+color:#1c1c1e;
 }
 
-button,input{
-font-family:inherit;
+button,
+input,
+select{
+font:inherit;
+}
+
+button{
+cursor:pointer;
 }
 
 .header{
-background:#007aff;
+background:#111827;
 color:white;
-padding:calc(env(safe-area-inset-top) + 15px) 18px 16px;
+padding:18px 16px;
 font-size:22px;
 font-weight:700;
+text-align:center;
 }
 
 .container{
 padding:15px;
-padding-bottom:40px;
-max-width:700px;
+max-width:900px;
 margin:auto;
-}
-
-.card{
-background:white;
-border-radius:18px;
-padding:16px;
-margin-bottom:15px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-h2{
-font-size:19px;
-margin:0 0 14px;
-}
-
-label{
-display:block;
-font-size:14px;
-font-weight:600;
-margin:12px 0 6px;
-}
-
-input{
-width:100%;
-padding:13px;
-border:1px solid #d1d1d6;
-border-radius:11px;
-font-size:16px;
-background:#fff;
-}
-
-input[readonly]{
-background:#f2f2f7;
-color:#555;
-}
-
-button{
-border:0;
-border-radius:11px;
-padding:11px 14px;
-font-size:15px;
-font-weight:600;
-cursor:pointer;
-}
-
-.primary{
-background:#007aff;
-color:white;
-width:100%;
-}
-
-.secondary{
-background:#e9e9ee;
-color:#111;
-}
-
-.danger{
-background:#ff3b30;
-color:white;
-}
-
-.green{
-background:#34c759;
-color:white;
-}
-
-.qrButton{
-background:#5856d6;
-color:white;
 }
 
 .summary{
@@ -123,20 +60,20 @@ gap:8px;
 margin-bottom:15px;
 }
 
-.summaryBox{
+.summaryCard{
 background:white;
-border-radius:15px;
+border-radius:14px;
 padding:12px 8px;
 text-align:center;
-box-shadow:0 2px 7px rgba(0,0,0,.05);
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.summaryTitle{
+.summaryCard .label{
 font-size:12px;
-color:#666;
+color:#777;
 }
 
-.summaryValue{
+.summaryCard .value{
 font-size:18px;
 font-weight:700;
 margin-top:4px;
@@ -144,1212 +81,348 @@ margin-top:4px;
 
 .tabs{
 display:flex;
-background:#dddde2;
-border-radius:11px;
-padding:3px;
-margin-bottom:15px;
+gap:8px;
+margin-bottom:12px;
 }
 
 .tab{
 flex:1;
-text-align:center;
-padding:9px;
-border-radius:9px;
+padding:11px;
+border:0;
+border-radius:10px;
+background:#e5e7eb;
 font-weight:600;
-font-size:14px;
 }
 
 .tab.active{
-background:white;
-box-shadow:0 1px 3px rgba(0,0,0,.15);
+background:#111827;
+color:white;
 }
 
-.selectionBar{
-display:none;
-background:#fff;
-border-radius:14px;
-padding:12px;
+.card{
+background:white;
+border-radius:15px;
+padding:14px;
 margin-bottom:12px;
-align-items:center;
-justify-content:space-between;
-gap:8px;
-}
-
-.selectionBar.show{
-display:flex;
-}
-
-.selectionInfo{
-font-size:14px;
-font-weight:600;
-}
-
-/* ==================================================
-   AJOUTS DE PAIEMENT
-================================================== */
-
-.paymentCard{
-background:white;
-border-radius:18px;
-padding:16px;
-margin-bottom:15px;
 box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.paymentHeader{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:14px;
-}
-
-.paymentTitle{
-font-size:19px;
-font-weight:750;
-}
-
-.paymentSummary{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-bottom:14px;
-}
-
-.paymentSummaryBox{
-background:#f2f2f7;
-border-radius:12px;
-padding:9px 5px;
-text-align:center;
-}
-
-.paymentSummaryTitle{
-font-size:11px;
-color:#777;
-}
-
-.paymentSummaryValue{
-font-size:15px;
+.cardTitle{
+font-size:17px;
 font-weight:700;
-margin-top:3px;
+margin-bottom:10px;
 }
 
-.paymentItem{
-border:1px solid #e1e1e6;
+label{
+display:block;
+font-size:13px;
+font-weight:600;
+margin-bottom:5px;
+}
+
+input,
+select{
+width:100%;
+padding:11px;
+border:1px solid #d1d5db;
+border-radius:9px;
+background:white;
+margin-bottom:10px;
+outline:none;
+}
+
+input:focus,
+select:focus{
+border-color:#111827;
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.btn{
+border:0;
+border-radius:10px;
+padding:11px 14px;
+font-weight:700;
+}
+
+.btnPrimary{
+background:#111827;
+color:white;
+}
+
+.btnGreen{
+background:#16a34a;
+color:white;
+}
+
+.btnRed{
+background:#dc2626;
+color:white;
+}
+
+.btnBlue{
+background:#2563eb;
+color:white;
+}
+
+.btnGray{
+background:#e5e7eb;
+color:#111827;
+}
+
+.actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+}
+
+.payment{
+background:white;
 border-radius:15px;
 padding:14px;
-margin-top:10px;
-background:#fff;
+margin-bottom:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.paymentItem.paid{
-background:#f3fff5;
-border-color:#b7e5c0;
+.paymentTop{
+display:flex;
+justify-content:space-between;
+gap:10px;
 }
 
 .paymentAlias{
-font-size:17px;
-font-weight:750;
-color:#007aff;
-}
-
-.paymentBeneficiary{
-font-size:14px;
-font-weight:600;
-margin-top:3px;
-}
-
-.paymentDetails{
-font-size:13px;
-color:#666;
-margin-top:8px;
-line-height:1.6;
+font-weight:700;
+font-size:16px;
 }
 
 .paymentAmount{
-font-size:19px;
-font-weight:750;
-margin-top:8px;
+font-weight:700;
+font-size:17px;
 }
 
-.paymentProgress{
-height:8px;
-background:#e5e5ea;
-border-radius:10px;
-overflow:hidden;
-margin-top:10px;
-}
-
-.paymentProgressBar{
-height:100%;
-background:#34c759;
-border-radius:10px;
-}
-
-.paymentNext{
-background:#eaf4ff;
-border-radius:14px;
-padding:12px;
-margin-top:12px;
-}
-
-.paymentNextTop{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.paymentCheckbox{
-width:22px !important;
-height:22px !important;
-margin:0 !important;
-padding:0 !important;
-flex-shrink:0;
-}
-
-.paymentNextInfo{
-flex:1;
-min-width:0;
-}
-
-.paymentNextTitle{
+.small{
 font-size:12px;
-color:#777;
+color:#6b7280;
 }
 
-.paymentNextDate{
-font-size:15px;
-font-weight:700;
-margin-top:2px;
+.hidden{
+display:none!important;
 }
 
-.paymentNextAmount{
-font-size:18px;
-font-weight:750;
-color:#007aff;
-margin-top:3px;
-}
-
-.paymentScheduleButton{
-width:100%;
-margin-top:10px;
-}
-
-.paymentSchedule{
-margin-top:10px;
-}
-
-.paymentSchedule.hidden{
-display:none !important;
-}
-
-.paymentMonth{
+.photoPreview{
 display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-border:1px solid #e1e1e6;
-border-radius:12px;
-margin-top:7px;
-background:#fff;
-}
-
-.paymentMonth.paid{
-background:#f3fff5;
-border-color:#b7e5c0;
-}
-
-.paymentMonth input{
-width:21px !important;
-height:21px !important;
-margin:0 !important;
-padding:0 !important;
-flex-shrink:0;
-}
-
-.paymentMonthInfo{
-flex:1;
-min-width:0;
-}
-
-.paymentMonthLabel{
-font-size:12px;
-color:#777;
-}
-
-.paymentMonthDate{
-font-size:14px;
-font-weight:700;
-margin-top:2px;
-}
-
-.paymentMonthAmount{
-font-size:15px;
-font-weight:700;
-margin-top:2px;
-}
-
-.paymentLast{
-font-size:10px;
-font-weight:700;
-background:#e5e2ff;
-color:#5856d6;
-border-radius:6px;
-padding:3px 6px;
-margin-left:5px;
-}
-
-.paymentActions{
-display:flex;
+gap:8px;
 flex-wrap:wrap;
-gap:7px;
-margin-top:10px;
+margin-top:5px;
 }
 
-.paymentActions button{
-padding:8px 10px;
-font-size:13px;
-}
-
-/* ==================================================
-   PHOTOS PAIEMENT
-================================================== */
-
-.paymentPhotos{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin-top:12px;
-}
-
-.paymentPhotoBox{
-background:#f2f2f7;
-border-radius:14px;
-padding:8px;
-text-align:center;
-overflow:hidden;
-}
-
-.paymentPhoto{
-width:100%;
-height:140px;
+.photoPreview img{
+width:90px;
+height:90px;
 object-fit:cover;
 border-radius:10px;
-display:block;
-cursor:pointer;
+border:1px solid #ddd;
 }
 
-.paymentPhotoActions{
+.photoButtons{
 display:flex;
-gap:5px;
-margin-top:7px;
+gap:7px;
+flex-wrap:wrap;
+margin-bottom:8px;
 }
 
-.paymentPhotoActions button{
+.photoButtons button{
 flex:1;
-padding:7px 5px;
-font-size:12px;
+min-width:120px;
 }
 
-/* ==================================================
-   DOMICILIATIONS
-================================================== */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:15px;
+z-index:1000;
+}
 
-.domiciliationCard{
+.modalContent{
 background:white;
-border-radius:18px;
+width:100%;
+max-width:600px;
+max-height:90vh;
+overflow:auto;
+border-radius:16px;
 padding:16px;
-margin-bottom:15px;
-box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.domiciliationHeader{
+.modalHeader{
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:10px;
-margin-bottom:14px;
+margin-bottom:12px;
 }
 
-.domiciliationTitle{
-font-size:19px;
-font-weight:750;
+.close{
+border:0;
+background:#eee;
+width:35px;
+height:35px;
+border-radius:50%;
+font-size:20px;
 }
 
-.domiciliationSummary{
+.loginScreen{
+position:fixed;
+inset:0;
+background:#111827;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+padding:20px;
+}
+
+.loginBox{
+background:white;
+border-radius:18px;
+padding:25px;
+width:100%;
+max-width:350px;
+text-align:center;
+}
+
+.loginBox h2{
+margin-top:0;
+}
+
+.pinDots{
+font-size:25px;
+letter-spacing:7px;
+margin:15px 0;
+}
+
+.keypad{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-bottom:14px;
+gap:8px;
 }
 
-.domiciliationSummaryBox{
-background:#f2f2f7;
+.keypad button{
+height:55px;
+border:0;
 border-radius:12px;
-padding:9px 5px;
-text-align:center;
-}
-
-.domiciliationSummaryTitle{
-font-size:11px;
-color:#777;
-}
-
-.domiciliationSummaryValue{
-font-size:15px;
+background:#e5e7eb;
+font-size:20px;
 font-weight:700;
-margin-top:3px;
 }
 
-.domiciliationItem{
-border:1px solid #e1e1e6;
+.domCard{
+background:white;
 border-radius:15px;
 padding:14px;
-margin-top:10px;
-background:#fff;
+margin-bottom:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
-.domiciliationItem.paid{
-background:#f3fff5;
-border-color:#b7e5c0;
-}
-
-.domiciliationAlias{
-font-size:17px;
-font-weight:750;
-color:#007aff;
-}
-
-.domiciliationBeneficiary{
-font-size:14px;
-font-weight:600;
-margin-top:3px;
-}
-
-.domiciliationDetails{
-font-size:13px;
-color:#666;
-margin-top:8px;
-line-height:1.6;
-}
-
-.domiciliationAmount{
-font-size:19px;
-font-weight:750;
-margin-top:8px;
-}
-
-.domiciliationActions{
+.domHeader{
 display:flex;
-flex-wrap:wrap;
-gap:7px;
-margin-top:10px;
-}
-
-.domiciliationActions button{
-padding:8px 10px;
-font-size:13px;
-}
-
-.domiciliationProgress{
-height:8px;
-background:#e5e5ea;
-border-radius:10px;
-overflow:hidden;
-margin-top:10px;
-}
-
-.domiciliationProgressBar{
-height:100%;
-background:#34c759;
-border-radius:10px;
-}
-
-.domiciliationEmpty{
-background:#f2f2f7;
-border-radius:12px;
-padding:15px;
-text-align:center;
-color:#777;
-font-size:14px;
-margin-top:10px;
-}
-
-.domiciliationForm{
-margin-top:15px;
-padding-top:15px;
-border-top:1px solid #e5e5ea;
-}
-
-.domiciliationMonthly{
-background:#eaf4ff;
-border-radius:12px;
-padding:12px;
-margin-top:12px;
-font-size:14px;
-font-weight:600;
-}
-
-.domiciliationMonthly strong{
-font-size:20px;
-color:#007aff;
-}
-
-.domiciliationInfoBox{
-background:#f2f2f7;
-border-radius:12px;
-padding:11px;
-margin-top:10px;
-font-size:12px;
-color:#666;
-line-height:1.5;
-}
-
-.domiciliationNext{
-background:#eaf4ff;
-border-radius:14px;
-padding:12px;
-margin-top:12px;
-}
-
-.domiciliationNextTop{
-display:flex;
-align-items:center;
+justify-content:space-between;
+align-items:flex-start;
 gap:10px;
 }
 
-.domiciliationCheckbox{
-width:22px !important;
-height:22px !important;
-margin:0 !important;
-padding:0 !important;
-flex-shrink:0;
-}
-
-.domiciliationNextInfo{
-flex:1;
-min-width:0;
-}
-
-.domiciliationNextTitle{
-font-size:12px;
-color:#777;
-}
-
-.domiciliationNextDate{
-font-size:15px;
+.domTitle{
+font-size:16px;
 font-weight:700;
-margin-top:2px;
 }
 
-.domiciliationNextAmount{
-font-size:18px;
-font-weight:750;
-color:#007aff;
-margin-top:3px;
+.domAmount{
+font-weight:700;
 }
 
-.domiciliationScheduleButton{
-width:100%;
+.domDetails{
+font-size:13px;
+color:#6b7280;
+margin-top:5px;
+}
+
+.domSchedule{
 margin-top:10px;
+padding-top:10px;
+border-top:1px solid #eee;
 }
-
-.domiciliationSchedule{
-margin-top:10px;
-}
-
-.domiciliationSchedule.hidden{
-display:none !important;
-}
-
-.domiciliationMonth{
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-border:1px solid #e1e1e6;
-border-radius:12px;
-margin-top:7px;
-background:#fff;
-}
-
-.domiciliationMonth.paid{
-background:#f3fff5;
-border-color:#b7e5c0;
-}
-
-.domiciliationMonth input{
-width:21px !important;
-height:21px !important;
-margin:0 !important;
-padding:0 !important;
-flex-shrink:0;
-}
-
-.domiciliationMonthInfo{
-flex:1;
-min-width:0;
-}
-
-.domiciliationMonthLabel{
-font-size:12px;
-color:#777;
-}
-
-.domiciliationMonthDate{
-font-size:14px;
-font-weight:700;
-margin-top:2px;
-}
-
-.domiciliationMonthAmount{
-font-size:15px;
-font-weight:700;
-margin-top:2px;
-}
-
-.domiciliationLast{
-font-size:10px;
-font-weight:700;
-background:#e5e2ff;
-color:#5856d6;
-border-radius:6px;
-padding:3px 6px;
-margin-left:5px;
-}
-
-/* ==================================================
-   DOMICILIATIONS PERMANENTES
-================================================== */
 
 .permanentCard{
 background:white;
-border-radius:18px;
-padding:16px;
-margin-bottom:15px;
+border-radius:15px;
+padding:14px;
+margin-bottom:10px;
 box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
 
 .permanentHeader{
 display:flex;
 justify-content:space-between;
-align-items:center;
 gap:10px;
-margin-bottom:14px;
 }
 
 .permanentTitle{
-font-size:19px;
-font-weight:750;
-}
-
-.permanentSummary{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-bottom:14px;
-}
-
-.permanentSummaryBox{
-background:#f2f2f7;
-border-radius:12px;
-padding:10px 5px;
-text-align:center;
-}
-
-.permanentSummaryTitle{
-font-size:11px;
-color:#777;
-}
-
-.permanentSummaryValue{
-font-size:15px;
 font-weight:700;
-margin-top:3px;
-}
-
-.permanentItem{
-border:1px solid #e1e1e6;
-border-radius:15px;
-padding:14px;
-margin-top:10px;
-background:#fff;
-}
-
-.permanentAlias{
-font-size:17px;
-font-weight:750;
-color:#007aff;
-}
-
-.permanentBeneficiary{
-font-size:14px;
-font-weight:600;
-margin-top:3px;
-}
-
-.permanentDetails{
-font-size:13px;
-color:#666;
-margin-top:8px;
-line-height:1.65;
-}
-
-.permanentMonthly{
-background:#eaf4ff;
-border-radius:14px;
-padding:13px;
-margin-top:12px;
-}
-
-.permanentMonthlyLabel{
-font-size:12px;
-color:#777;
-}
-
-.permanentMonthlyAmount{
-font-size:23px;
-font-weight:800;
-color:#007aff;
-margin-top:3px;
-}
-
-.permanentYearBox{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:8px;
-margin-top:10px;
-}
-
-.permanentYearCell{
-background:#f2f2f7;
-border-radius:12px;
-padding:10px;
-}
-
-.permanentYearLabel{
-font-size:11px;
-color:#777;
-}
-
-.permanentYearValue{
 font-size:16px;
-font-weight:750;
-margin-top:3px;
 }
 
-.permanentProgress{
-height:8px;
-background:#e5e5ea;
-border-radius:10px;
-overflow:hidden;
-margin-top:12px;
-}
-
-.permanentProgressBar{
-height:100%;
-background:#34c759;
-border-radius:10px;
-}
-
-.permanentNext{
-background:#f3f0ff;
-border-radius:14px;
-padding:12px;
-margin-top:12px;
-}
-
-.permanentNextTitle{
-font-size:12px;
-color:#777;
-}
-
-.permanentNextDate{
-font-size:15px;
+.permanentAmount{
 font-weight:700;
-margin-top:2px;
 }
 
-.permanentNextAmount{
-font-size:18px;
-font-weight:750;
-color:#5856d6;
-margin-top:3px;
-}
-
-.permanentActions{
-display:flex;
-flex-wrap:wrap;
-gap:7px;
-margin-top:10px;
-}
-
-.permanentActions button{
-padding:8px 10px;
+.permanentInfo{
 font-size:13px;
-}
-
-.permanentEmpty{
-background:#f2f2f7;
-border-radius:12px;
-padding:15px;
-text-align:center;
-color:#777;
-font-size:14px;
-margin-top:10px;
-}
-
-.permanentForm{
-margin-top:15px;
-padding-top:15px;
-border-top:1px solid #e5e5ea;
-}
-
-.permanentInfoBox{
-background:#f2f2f7;
-border-radius:12px;
-padding:11px;
-margin-top:10px;
-font-size:12px;
-color:#666;
-line-height:1.5;
-}
-
-.permanentPhotoButtons{
-display:flex;
-gap:8px;
-margin-top:8px;
-}
-
-.permanentPhotoButtons button{
-flex:1;
-}
-
-.permanentPhotoInput{
-display:none !important;
+color:#6b7280;
+margin-top:5px;
 }
 
 .permanentPhotos{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin-top:12px;
-}
-
-.permanentPhotoBox{
-background:#f2f2f7;
-border-radius:14px;
-padding:8px;
-text-align:center;
-overflow:hidden;
-}
-
-.permanentPhoto{
-width:100%;
-height:140px;
-object-fit:cover;
-border-radius:10px;
-display:block;
-cursor:pointer;
-}
-
-.permanentPhotoEmpty{
-height:140px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#777;
-font-size:13px;
-line-height:1.5;
-}
-
-.permanentPhotoActions{
-display:flex;
-gap:5px;
-margin-top:7px;
-}
-
-.permanentPhotoActions button{
-flex:1;
-padding:7px 5px;
-font-size:12px;
-}
-
-/* ==================================================
-   COMMUN
-================================================== */
-
-.balloonOption{
-display:flex;
-align-items:center;
-gap:10px;
-background:#f2f2f7;
-border-radius:12px;
-padding:12px;
-margin-top:15px;
-}
-
-.balloonOption input{
-width:21px;
-height:21px;
-margin:0;
-flex-shrink:0;
-}
-
-.balloonOption label{
-margin:0;
-font-size:14px;
-font-weight:700;
-}
-
-.balloonBox{
-background:#eaf4ff;
-border-radius:14px;
-padding:13px;
-margin-top:10px;
-}
-
-.balloonTitle{
-font-size:14px;
-font-weight:750;
-color:#007aff;
-margin-bottom:8px;
-}
-
-.balloonInfo{
-font-size:12px;
-color:#666;
-line-height:1.5;
-margin-top:10px;
-}
-
-.balloonTotal{
-background:white;
-border-radius:10px;
-padding:10px;
-margin-top:10px;
-font-size:14px;
-}
-
-.balloonTotal strong{
-color:#007aff;
-font-size:17px;
-}
-
-.photoButtons{
-display:flex;
-gap:8px;
-}
-
-.photoButtons button{
-flex:1;
-}
-
-.photoPreview{
-max-width:100%;
-max-height:180px;
-display:block;
-margin-top:10px;
-border-radius:10px;
-}
-
-.domiciliationPhotos{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin-top:12px;
-}
-
-.domiciliationPhotoBox{
-background:#f2f2f7;
-border-radius:14px;
-padding:8px;
-text-align:center;
-overflow:hidden;
-}
-
-.domiciliationPhoto{
-width:100%;
-height:140px;
-object-fit:cover;
-border-radius:10px;
-display:block;
-cursor:pointer;
-}
-
-.domiciliationPhotoEmpty{
-height:140px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#777;
-font-size:13px;
-line-height:1.5;
-}
-
-.domiciliationPhotoActions{
-display:flex;
-gap:5px;
-margin-top:7px;
-}
-
-.domiciliationPhotoActions button{
-flex:1;
-padding:7px 5px;
-font-size:12px;
-}
-
-.domiciliationPhotoButtons{
 display:flex;
 gap:8px;
 margin-top:8px;
 }
 
-.domiciliationPhotoButtons button{
-flex:1;
+.permanentPhotos img{
+width:75px;
+height:75px;
+object-fit:cover;
+border-radius:9px;
 }
 
-.domiciliationPhotoInput{
-display:none !important;
-}
-
-.small{
-font-size:12px;
-color:#777;
-}
-
-.badge{
-display:inline-block;
-font-size:11px;
-font-weight:700;
-padding:4px 7px;
-border-radius:7px;
-margin-left:5px;
-}
-
-.badgePaid{
-background:#d8f8df;
-color:#167c2e;
-}
-
-.badgeUnpaid{
-background:#ffe0dd;
-color:#c62820;
-}
-
-.badgeBalloon{
-background:#e5e2ff;
-color:#5856d6;
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.45);
-display:none;
-align-items:center;
-justify-content:center;
-padding:18px;
-z-index:1000;
-}
-
-.modal.show{
-display:flex;
-}
-
-.modalBox{
-background:white;
-width:100%;
-max-width:500px;
-max-height:90vh;
-overflow:auto;
-border-radius:20px;
-padding:18px;
-}
-
-.modalTitle{
-font-size:20px;
-font-weight:750;
-margin-bottom:12px;
-}
-
-.modalActions{
-display:flex;
-gap:8px;
-margin-top:15px;
-}
-
-.modalActions button{
-flex:1;
-}
-
-.manualInfo{
-background:#f2f2f7;
-border-radius:12px;
-padding:12px;
-margin-bottom:10px;
-}
-
-.manualLine{
-margin-bottom:12px;
-}
-
-.manualLabel{
-font-size:12px;
-color:#777;
-}
-
-.manualValue{
-font-size:15px;
-font-weight:600;
-word-break:break-word;
-margin-top:2px;
-}
-
-.copyButton{
-margin-top:5px;
-background:#e9e9ee;
-font-size:12px;
-padding:7px 10px;
-}
-
-.copyButton.copied{
-background:#34c759;
-color:white;
-}
-
-.login{
-position:fixed;
-inset:0;
-background:#f2f2f7;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:25px;
-z-index:2000;
-}
-
-.loginBox{
-background:white;
-width:100%;
-max-width:360px;
-border-radius:22px;
-padding:25px;
-box-shadow:0 5px 25px rgba(0,0,0,.12);
-text-align:center;
-}
-
-.loginTitle{
-font-size:25px;
-font-weight:800;
-margin-bottom:8px;
-}
-
-.loginText{
-font-size:14px;
-color:#777;
-margin-bottom:18px;
-}
-
-#pinInput{
-text-align:center;
-font-size:25px;
-letter-spacing:8px;
-}
-
-.hidden{
-display:none !important;
-}
-
-input[type="file"]{
-display:none;
-}
-
-.photoModalImage{
-max-width:100%;
-max-height:75vh;
-display:block;
-margin:auto;
-border-radius:12px;
-}
-
-.photoModalButtons{
-display:flex;
-gap:8px;
-margin-top:12px;
-}
-
-.photoModalButtons button{
-flex:1;
-}
-
-.qrContainer{
-text-align:center;
-padding:10px 0;
-}
-
-#qrCode{
-display:flex;
-justify-content:center;
-align-items:center;
-padding:10px;
-background:white;
-}
-
-#qrCode img,
-#qrCode canvas{
-margin:auto;
-}
-
-.qrInfo{
-background:#f2f2f7;
-border-radius:12px;
-padding:12px;
-margin-top:12px;
-font-size:13px;
-line-height:1.5;
-text-align:left;
-}
-
-.qrWarning{
-font-size:12px;
-color:#777;
-margin-top:10px;
-text-align:center;
-}
-
-.calculatorDisplay{
-font-size:25px;
-font-weight:700;
-text-align:right;
-background:#f2f2f7;
-margin-bottom:10px;
-}
-
-.calculatorGrid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:7px;
-}
-
-.calculatorGrid button{
-font-size:18px;
-padding:14px 5px;
-}
-
-.calculatorEquals{
-margin-top:8px;
-width:100%;
-font-size:18px;
-}
-
-.empty{
+.calculator{
 background:white;
 border-radius:15px;
-padding:20px;
-text-align:center;
-color:#777;
-margin-bottom:15px;
+padding:14px;
+margin-bottom:12px;
+}
+
+.result{
+font-size:18px;
+font-weight:700;
+margin-top:8px;
+}
+
+@media(max-width:600px){
+
+.row{
+grid-template-columns:1fr;
+}
+
+.summaryCard .value{
+font-size:16px;
+}
+
 }
 
 </style>
@@ -1357,46 +430,37 @@ margin-bottom:15px;
 
 <body>
 
-<!-- ==================================================
-     CONNEXION
-================================================== -->
-
-<div id="loginScreen" class="login">
+<div id="loginScreen" class="loginScreen">
 
 <div class="loginBox">
 
-<div class="loginTitle">
-Mes paiements
-</div>
+<h2>Mes paiements</h2>
 
-<div class="loginText">
-Entrez votre code PIN
-</div>
+<div id="pinDots" class="pinDots">○ ○ ○ ○</div>
 
-<input
-id="pinInput"
-type="password"
-inputmode="numeric"
-maxlength="4"
-placeholder="••••">
+<div class="keypad">
 
-<br><br>
+<button onclick="enterPin('1')">1</button>
+<button onclick="enterPin('2')">2</button>
+<button onclick="enterPin('3')">3</button>
 
-<button
-class="primary"
-onclick="checkPin()">
+<button onclick="enterPin('4')">4</button>
+<button onclick="enterPin('5')">5</button>
+<button onclick="enterPin('6')">6</button>
 
-Ouvrir
+<button onclick="enterPin('7')">7</button>
+<button onclick="enterPin('8')">8</button>
+<button onclick="enterPin('9')">9</button>
 
-</button>
+<button onclick="clearPin()">⌫</button>
+<button onclick="enterPin('0')">0</button>
+<button onclick="validatePin()">✓</button>
 
 </div>
 
 </div>
 
-<!-- ==================================================
-     APPLICATION
-================================================== -->
+</div>
 
 <div id="app" class="hidden">
 
@@ -1406,196 +470,132 @@ Mes paiements
 
 <div class="container">
 
-<!-- ==================================================
-     RESUME
-================================================== -->
-
 <div class="summary">
 
-<div class="summaryBox">
-
-<div class="summaryTitle">
-Total
+<div class="summaryCard">
+<div class="label">Total</div>
+<div id="totalValue" class="value">0,00 €</div>
 </div>
 
-<div
-id="totalValue"
-class="summaryValue">
-0,00 €
+<div class="summaryCard">
+<div class="label">Payé</div>
+<div id="paidValue" class="value">0,00 €</div>
 </div>
 
-</div>
-
-<div class="summaryBox">
-
-<div class="summaryTitle">
-Payé
-</div>
-
-<div
-id="paidValue"
-class="summaryValue">
-0,00 €
+<div class="summaryCard">
+<div class="label">Reste</div>
+<div id="remainingValue" class="value">0,00 €</div>
 </div>
 
 </div>
-
-<div class="summaryBox">
-
-<div class="summaryTitle">
-Reste
-</div>
-
-<div
-id="remainingValue"
-class="summaryValue">
-0,00 €
-</div>
-
-</div>
-
-</div>
-
-<!-- ==================================================
-     ONGLETS
-================================================== -->
 
 <div class="tabs">
 
-<div
+<button
 id="tabUnpaid"
 class="tab active"
 onclick="showTab('unpaid')">
+À payer (<span id="unpaidCount">0</span>)
+</button>
 
-À payer
-(<span id="unpaidCount">0</span>)
-
-</div>
-
-<div
+<button
 id="tabPaid"
 class="tab"
 onclick="showTab('paid')">
-
-Payé
-(<span id="paidCount">0</span>)
-
-</div>
-
-</div>
-
-<div
-id="selectionBar"
-class="selectionBar">
-
-<div
-id="selectionInfo"
-class="selectionInfo">
-0 sélectionné
-</div>
-
-<button
-class="danger"
-onclick="deleteSelected()">
-Supprimer
+Payé (<span id="paidCount">0</span>)
 </button>
 
 </div>
 
 <div id="unpaidList"></div>
 
-<div
-id="paidList"
-class="hidden">
+<div id="paidList" class="hidden"></div>
+
+<div id="selectionBar" class="card hidden">
+
+<div id="selectionInfo"></div>
+
+<div class="actions">
+
+<button
+class="btn btnGreen"
+onclick="paySelected()">
+Payer
+</button>
+
+<button
+class="btn btnRed"
+onclick="deleteSelected()">
+Supprimer
+</button>
+
 </div>
 
-<!-- ==================================================
-     AJOUTER PAIEMENT
-================================================== -->
+</div>
 
 <div class="card">
 
-<h2>
-Ajouter un paiement
-</h2>
+<div class="cardTitle">
+➕ Ajouter un paiement
+</div>
 
-<label>
-Alias / raccourci
-</label>
+<div class="row">
 
-<input
-id="alias"
-placeholder="Ex : Taxe maison">
+<div>
+<label>Alias</label>
+<input id="alias" type="text">
+</div>
 
-<label>
-Bénéficiaire
-</label>
+<div>
+<label>Bénéficiaire</label>
+<input id="beneficiary" type="text">
+</div>
 
-<input
-id="beneficiary"
-placeholder="Nom du bénéficiaire">
+</div>
 
-<label>
-IBAN
-</label>
+<label>IBAN</label>
+<input id="iban" type="text">
 
-<input
-id="iban"
-placeholder="BE...">
+<div class="row">
 
-<label>
-Montant total
-</label>
+<div>
+<label>Montant total</label>
+<input id="totalAmount" type="number" step="0.01">
+</div>
 
-<input
-id="totalAmount"
-type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="0,00">
+<div>
+<label>Nombre d'échéances</label>
+<input id="installments" type="number">
+</div>
 
-<label>
-Nombre d'échéances
-</label>
+</div>
 
-<input
-id="installments"
-type="number"
-min="1"
-value="1">
+<div class="row">
 
-<label>
-Première échéance
-</label>
+<div>
+<label>Première date</label>
+<input id="firstDate" type="date">
+</div>
 
-<input
-id="firstDate"
-type="date">
+<div>
+<label>Communication</label>
+<input id="communication" type="text">
+</div>
 
-<label>
-Communication
-</label>
-
-<input
-id="communication"
-placeholder="Communication">
-
-<label>
-Document
-</label>
+</div>
 
 <div class="photoButtons">
 
 <button
-class="secondary"
+class="btn btnGray"
 onclick="document.getElementById('cameraInput').click()">
 📷 Appareil photo
 </button>
 
 <button
-class="secondary"
+class="btn btnGray"
 onclick="document.getElementById('galleryInput').click()">
-🖼️ Mes photos
+🖼️ Galerie
 </button>
 
 </div>
@@ -1604,299 +604,200 @@ onclick="document.getElementById('galleryInput').click()">
 id="cameraInput"
 type="file"
 accept="image/*"
-capture="environment">
+capture="environment"
+class="hidden"
+onchange="handlePaymentPhoto(this)">
 
 <input
 id="galleryInput"
 type="file"
-accept="image/*">
+accept="image/*"
+class="hidden"
+onchange="handlePaymentPhoto(this)">
 
-<div id="addPhotoPreview"></div>
-
-<br>
+<div id="addPhotoPreview" class="photoPreview"></div>
 
 <button
-class="primary"
+class="btn btnPrimary"
 onclick="addPayment()">
-Ajouter le paiement
+Ajouter
 </button>
 
 </div>
 
-<!-- ==================================================
-     DOMICILIATIONS
-================================================== -->
+<div class="card">
 
-<div class="domiciliationCard">
-
-<div class="domiciliationHeader">
-
-<div class="domiciliationTitle">
+<div class="cardTitle">
 🏦 Domiciliations
 </div>
 
-<button
-class="secondary"
-onclick="toggleDomiciliationForm()">
-＋ Ajouter
-</button>
+<div id="domiciliationForm">
+
+<div class="row">
+
+<div>
+<label>Alias</label>
+<input id="domAlias" type="text">
+</div>
+
+<div>
+<label>Bénéficiaire</label>
+<input id="domBeneficiary" type="text">
+</div>
 
 </div>
 
-<div
-id="domiciliationForm"
-class="domiciliationForm hidden">
+<label>IBAN</label>
+<input id="domIban" type="text">
 
-<h2>
-Ajouter une domiciliation
-</h2>
+<div class="row">
 
-<label>
-Alias / raccourci
-</label>
+<div>
+<label>Montant total</label>
+<input id="domTotalAmount" type="number" step="0.01">
+</div>
 
-<input
-id="domAlias"
-placeholder="Ex : Crédit maison">
+<div>
+<label>Nombre de mois</label>
+<input id="domMonths" type="number">
+</div>
 
-<label>
-Bénéficiaire
-</label>
+</div>
 
-<input
-id="domBeneficiary"
-placeholder="Nom du bénéficiaire">
+<div class="row">
 
-<label>
-IBAN
-</label>
+<div>
+<label>TAEG (%)</label>
+<input id="domTaeg" type="number" step="0.01">
+</div>
 
-<input
-id="domIban"
-placeholder="BE...">
+<div>
+<label>Date de début</label>
+<input id="domStartDate" type="date">
+</div>
 
-<label>
-Montant total
-</label>
+</div>
 
-<input
-id="domTotalAmount"
-type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="0,00"
-oninput="calculateDomiciliation()">
+<label>Date de fin</label>
+<input id="domEndDate" type="date">
 
 <label>
-Nombre de mois
-</label>
-
-<input
-id="domMonths"
-type="number"
-min="1"
-value="1"
-oninput="calculateDomiciliation()">
-
-<label>
-TAEG (%)
-</label>
-
-<input
-id="domTaeg"
-type="number"
-step="0.01"
-min="0"
-inputmode="decimal"
-placeholder="Ex : 3"
-oninput="calculateDomiciliation()">
-
-<label>
-Date de début
-</label>
-
-<input
-id="domStartDate"
-type="date"
-onchange="calculateDomiciliation()">
-
-<label>
-Date de fin
-</label>
-
-<input
-id="domEndDate"
-type="date"
-readonly>
-
-<div class="balloonOption">
-
 <input
 id="domManualMonthly"
 type="checkbox"
-onchange="toggleDomManualMonthly()">
-
-<label for="domManualMonthly">
-Mensualité fixée manuellement
+onchange="toggleManualMonthly()">
+Mensualité manuelle
 </label>
-
-</div>
 
 <div
 id="domManualMonthlyBox"
-class="balloonBox hidden">
+class="hidden">
 
-<div class="balloonTitle">
-💰 Mensualité réelle du contrat
-</div>
-
-<label>
-Montant de la mensualité
-</label>
-
+<label>Montant mensuel</label>
 <input
 id="domManualMonthlyAmount"
 type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="Ex : 313,14"
-oninput="calculateDomiciliation()">
-
-<div class="balloonInfo">
-La mensualité saisie sera utilisée pour toutes les échéances normales.
-</div>
+step="0.01">
 
 </div>
 
-<div class="balloonOption">
-
+<label>
 <input
 id="domLastDifferent"
 type="checkbox"
-onchange="toggleDomLastInstallment()">
-
-<label for="domLastDifferent">
+onchange="toggleLastDifferent()">
 Dernière échéance différente
 </label>
 
-</div>
-
 <div
 id="domLastInstallmentBox"
-class="balloonBox hidden">
+class="hidden">
 
-<div class="balloonTitle">
-💰 Dernière échéance différente
-</div>
-
-<label>
-Montant de la dernière échéance
-</label>
-
+<label>Dernière échéance</label>
 <input
 id="domLastInstallment"
 type="number"
-step="0.01"
-inputmode="decimal"
-placeholder="Ex : 7873,14"
-oninput="calculateDomiciliation()">
+step="0.01">
 
 <div
 id="domLastInstallmentInfo"
-class="balloonTotal">
-Dernière échéance :
-<strong>0,00 €</strong>
+class="small">
 </div>
 
 </div>
 
-<label>
-Photos de la domiciliation
-</label>
-
-<div class="domiciliationPhotoButtons">
+<div class="photoButtons">
 
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('domPhoto1Camera').click()">
+id="domPhoto1Camera"
+class="btn btnGray"
+onclick="document.getElementById('domPhoto1CameraInput').click()">
 📷 Photo 1
 </button>
 
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('domPhoto2Camera').click()">
+id="domPhoto2Camera"
+class="btn btnGray"
+onclick="document.getElementById('domPhoto2CameraInput').click()">
 📷 Photo 2
 </button>
 
-</div>
-
-<input
-id="domPhoto1Camera"
-class="domiciliationPhotoInput"
-type="file"
-accept="image/*"
-capture="environment">
-
-<input
-id="domPhoto2Camera"
-class="domiciliationPhotoInput"
-type="file"
-accept="image/*"
-capture="environment">
-
-<div class="domiciliationPhotoButtons">
-
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('domPhoto1Gallery').click()">
-🖼️ Photo 1
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="document.getElementById('domPhoto2Gallery').click()">
-🖼️ Photo 2
-</button>
-
-</div>
-
-<input
 id="domPhoto1Gallery"
-class="domiciliationPhotoInput"
-type="file"
-accept="image/*">
+class="btn btnGray"
+onclick="document.getElementById('domPhoto1GalleryInput').click()">
+🖼️ Galerie 1
+</button>
+
+<button
+id="domPhoto2Gallery"
+class="btn btnGray"
+onclick="document.getElementById('domPhoto2GalleryInput').click()">
+🖼️ Galerie 2
+</button>
+
+</div>
 
 <input
-id="domPhoto2Gallery"
-class="domiciliationPhotoInput"
+id="domPhoto1CameraInput"
 type="file"
-accept="image/*">
+accept="image/*"
+capture="environment"
+class="hidden"
+onchange="handleDomPhoto(this,0)">
 
-<div
-id="domAddPhotosPreview"
-class="domiciliationPhotos">
-</div>
+<input
+id="domPhoto2CameraInput"
+type="file"
+accept="image/*"
+capture="environment"
+class="hidden"
+onchange="handleDomPhoto(this,1)">
+
+<input
+id="domPhoto1GalleryInput"
+type="file"
+accept="image/*"
+class="hidden"
+onchange="handleDomPhoto(this,0)">
+
+<input
+id="domPhoto2GalleryInput"
+type="file"
+accept="image/*"
+class="hidden"
+onchange="handleDomPhoto(this,1)">
+
+<div id="domAddPhotosPreview" class="photoPreview"></div>
 
 <div
 id="domMonthlyResult"
-class="domiciliationMonthly">
-Mensualité estimée :
-<strong>0,00 €</strong>
+class="result">
+Mensualité : 0,00 €
 </div>
-
-<div class="domiciliationInfoBox">
-La mensualité est calculée automatiquement à partir du montant,
-de la durée et du TAEG, sauf si tu coches « Mensualité fixée manuellement ».
-</div>
-
-<br>
 
 <button
-class="primary"
+class="btn btnPrimary"
 onclick="addDomiciliation()">
 Ajouter la domiciliation
 </button>
@@ -1907,171 +808,120 @@ Ajouter la domiciliation
 
 </div>
 
-<!-- ==================================================
-     DOMICILIATIONS PERMANENTES
-================================================== -->
+<div class="card">
 
-<div class="permanentCard">
-
-<div class="permanentHeader">
-
-<div class="permanentTitle">
+<div class="cardTitle">
 🔄 Domiciliations permanentes
 </div>
 
-<button
-class="secondary"
-onclick="togglePermanentForm()">
-＋ Ajouter
-</button>
+<div id="permanentForm">
+
+<div class="row">
+
+<div>
+<label>Alias</label>
+<input id="permanentAlias" type="text">
+</div>
+
+<div>
+<label>Bénéficiaire</label>
+<input id="permanentBeneficiary" type="text">
+</div>
 
 </div>
 
-<div
-id="permanentForm"
-class="permanentForm hidden">
+<label>IBAN</label>
+<input id="permanentIban" type="text">
 
-<h2>
-Ajouter une domiciliation permanente
-</h2>
+<div class="row">
 
-<label>
-Alias / raccourci
-</label>
-
-<input
-id="permanentAlias"
-placeholder="Ex : Solidaris">
-
-<label>
-Bénéficiaire
-</label>
-
-<input
-id="permanentBeneficiary"
-placeholder="Nom du bénéficiaire">
-
-<label>
-IBAN
-</label>
-
-<input
-id="permanentIban"
-placeholder="BE...">
-
-<label>
-Montant mensuel
-</label>
-
+<div>
+<label>Montant</label>
 <input
 id="permanentAmount"
 type="number"
-step="0.01"
-min="0"
-inputmode="decimal"
-placeholder="Ex : 13,00">
+step="0.01">
+</div>
 
-<label>
-Date de début
-</label>
-
+<div>
+<label>Date de début</label>
 <input
 id="permanentStartDate"
 type="date">
+</div>
 
-<label>
-Communication
-</label>
+</div>
 
+<label>Communication</label>
 <input
 id="permanentCommunication"
-placeholder="Communication éventuelle">
+type="text">
 
-<label>
-Photos
-</label>
-
-<div class="permanentPhotoButtons">
+<div class="photoButtons">
 
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('permanentPhoto1Camera').click()">
+class="btn btnGray"
+onclick="document.getElementById('permanentPhoto1CameraInput').click()">
 📷 Photo 1
 </button>
 
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('permanentPhoto2Camera').click()">
+class="btn btnGray"
+onclick="document.getElementById('permanentPhoto2CameraInput').click()">
 📷 Photo 2
 </button>
 
-</div>
-
-<input
-id="permanentPhoto1Camera"
-class="permanentPhotoInput"
-type="file"
-accept="image/*"
-capture="environment">
-
-<input
-id="permanentPhoto2Camera"
-class="permanentPhotoInput"
-type="file"
-accept="image/*"
-capture="environment">
-
-<div class="permanentPhotoButtons">
-
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('permanentPhoto1Gallery').click()">
-🖼️ Photo 1
+class="btn btnGray"
+onclick="document.getElementById('permanentPhoto1GalleryInput').click()">
+🖼️ Galerie 1
 </button>
 
 <button
-type="button"
-class="secondary"
-onclick="document.getElementById('permanentPhoto2Gallery').click()">
-🖼️ Photo 2
+class="btn btnGray"
+onclick="document.getElementById('permanentPhoto2GalleryInput').click()">
+🖼️ Galerie 2
 </button>
 
 </div>
 
 <input
-id="permanentPhoto1Gallery"
-class="permanentPhotoInput"
+id="permanentPhoto1CameraInput"
 type="file"
-accept="image/*">
+accept="image/*"
+capture="environment"
+class="hidden"
+onchange="handlePermanentPhoto(this,0)">
 
 <input
-id="permanentPhoto2Gallery"
-class="permanentPhotoInput"
+id="permanentPhoto2CameraInput"
 type="file"
-accept="image/*">
+accept="image/*"
+capture="environment"
+class="hidden"
+onchange="handlePermanentPhoto(this,1)">
+
+<input
+id="permanentPhoto1GalleryInput"
+type="file"
+accept="image/*"
+class="hidden"
+onchange="handlePermanentPhoto(this,0)">
+
+<input
+id="permanentPhoto2GalleryInput"
+type="file"
+accept="image/*"
+class="hidden"
+onchange="handlePermanentPhoto(this,1)">
 
 <div
 id="permanentAddPhotosPreview"
-class="permanentPhotos">
+class="photoPreview">
 </div>
-
-<div class="permanentInfoBox">
-
-Le prélèvement est considéré comme automatique chaque mois.
-Aucun bouton « payé » n'est nécessaire.
-
-L'application calcule automatiquement combien a été prélevé
-depuis le début de l'année et combien est prévu pour l'année.
-
-</div>
-
-<br>
 
 <button
-class="primary"
+class="btn btnPrimary"
 onclick="addPermanentDomiciliation()">
 Ajouter la domiciliation permanente
 </button>
@@ -2082,510 +932,228 @@ Ajouter la domiciliation permanente
 
 </div>
 
-<!-- ==================================================
-     CALCULETTE
-================================================== -->
+<div class="calculator">
 
-<div class="card">
+<div class="cardTitle">
+🧮 Calculatrice
+</div>
 
-<h2>
-🧮 Calculette
-</h2>
+<div class="row">
 
+<div>
+<label>Montant</label>
 <input
-id="calcDisplay"
-class="calculatorDisplay"
-type="text"
-readonly
-placeholder="0">
+id="calcAmount"
+type="number"
+step="0.01"
+oninput="calculate()">
+</div>
 
-<div class="calculatorGrid">
-
-<button class="secondary" onclick="calcInput('7')">7</button>
-<button class="secondary" onclick="calcInput('8')">8</button>
-<button class="secondary" onclick="calcInput('9')">9</button>
-<button class="secondary" onclick="calcInput('/')">÷</button>
-
-<button class="secondary" onclick="calcInput('4')">4</button>
-<button class="secondary" onclick="calcInput('5')">5</button>
-<button class="secondary" onclick="calcInput('6')">6</button>
-<button class="secondary" onclick="calcInput('*')">×</button>
-
-<button class="secondary" onclick="calcInput('1')">1</button>
-<button class="secondary" onclick="calcInput('2')">2</button>
-<button class="secondary" onclick="calcInput('3')">3</button>
-<button class="secondary" onclick="calcInput('-')">−</button>
-
-<button class="secondary" onclick="calcInput('0')">0</button>
-<button class="secondary" onclick="calcInput('.')">.</button>
-<button class="danger" onclick="calcClear()">C</button>
-<button class="secondary" onclick="calcInput('+')">+</button>
+<div>
+<label>Nombre de mois</label>
+<input
+id="calcMonths"
+type="number"
+oninput="calculate()">
+</div>
 
 </div>
 
-<button
-class="primary calculatorEquals"
-onclick="calcResult()">
-= Calculer
-</button>
-
+<div id="calcResult" class="result">
+0,00 €
 </div>
 
-<!-- ==================================================
-     SAUVEGARDE
-================================================== -->
+</div>
 
 <div class="card">
 
-<h2>
-Sauvegarde
-</h2>
+<div class="cardTitle">
+💾 Données
+</div>
+
+<div class="actions">
 
 <button
-class="secondary"
+class="btn btnBlue"
 onclick="exportData()">
-Exporter mes données
+Exporter
 </button>
 
 <button
-class="secondary"
+class="btn btnGray"
 onclick="document.getElementById('importInput').click()">
-Importer une sauvegarde
+Importer
 </button>
+
+</div>
 
 <input
 id="importInput"
 type="file"
-accept=".json">
+accept=".json"
+class="hidden"
+onchange="importData(this)">
 
 </div>
 
 </div>
+
 </div>
 
-<!-- ==================================================
-     MODIFICATION PAIEMENT
-================================================== -->
+<!-- MODAL EDITION PAIEMENT -->
 
 <div
-id="editModal"
-class="modal">
+id="editPaymentModal"
+class="modal hidden">
 
-<div class="modalBox">
+<div class="modalContent">
 
-<div class="modalTitle">
-Modifier l'échéance
-</div>
+<div class="modalHeader">
 
-<label>Alias</label>
-<input id="editAlias">
-
-<label>Bénéficiaire</label>
-<input id="editBeneficiary">
-
-<label>IBAN</label>
-<input id="editIban">
-
-<label>Date</label>
-<input id="editDate" type="date">
-
-<label>Montant</label>
-<input id="editAmount" type="number" step="0.01">
-
-<label>Communication</label>
-<input id="editCommunication">
-
-<div class="modalActions">
+<h3>Modifier le paiement</h3>
 
 <button
-class="secondary"
-onclick="closeEdit()">
-Annuler
-</button>
-
-<button
-class="primary"
-onclick="saveEdit()">
-Enregistrer
+class="close"
+onclick="closeModal('editPaymentModal')">
+×
 </button>
 
 </div>
 
-</div>
+<div id="editPaymentContent"></div>
+
 </div>
 
-<!-- ==================================================
-     MODIFICATION DOMICILIATION
-================================================== -->
+</div>
+
+<!-- MODAL DOMICILIATION -->
 
 <div
-id="domEditModal"
-class="modal">
+id="editDomModal"
+class="modal hidden">
 
-<div class="modalBox">
+<div class="modalContent">
 
-<div class="modalTitle">
-Modifier la domiciliation
-</div>
+<div class="modalHeader">
 
-<label>Alias / raccourci</label>
-<input id="domEditAlias">
-
-<label>Bénéficiaire</label>
-<input id="domEditBeneficiary">
-
-<label>IBAN</label>
-<input id="domEditIban">
-
-<label>Montant total</label>
-
-<input
-id="domEditTotal"
-type="number"
-step="0.01"
-oninput="calculateEditDomiciliation()">
-
-<label>Nombre de mois</label>
-
-<input
-id="domEditMonths"
-type="number"
-min="1"
-oninput="calculateEditDomiciliation()">
-
-<label>TAEG (%)</label>
-
-<input
-id="domEditTaeg"
-type="number"
-step="0.01"
-min="0"
-oninput="calculateEditDomiciliation()">
-
-<label>Date de début</label>
-
-<input
-id="domEditStartDate"
-type="date"
-onchange="calculateEditDomiciliation()">
-
-<label>Date de fin</label>
-
-<input
-id="domEditEndDate"
-type="date"
-readonly>
-
-<div class="balloonOption">
-
-<input
-id="domEditManualMonthly"
-type="checkbox"
-onchange="toggleEditManualMonthly()">
-
-<label for="domEditManualMonthly">
-Mensualité fixée manuellement
-</label>
-
-</div>
-
-<div
-id="domEditManualMonthlyBox"
-class="balloonBox hidden">
-
-<div class="balloonTitle">
-💰 Mensualité réelle du contrat
-</div>
-
-<label>
-Montant de la mensualité
-</label>
-
-<input
-id="domEditManualMonthlyAmount"
-type="number"
-step="0.01"
-oninput="calculateEditDomiciliation()">
-
-</div>
-
-<div class="balloonOption">
-
-<input
-id="domEditLastDifferent"
-type="checkbox"
-onchange="calculateEditDomiciliation()">
-
-<label for="domEditLastDifferent">
-Dernière échéance différente
-</label>
-
-</div>
-
-<div
-id="domEditLastInstallmentBox"
-class="balloonBox hidden">
-
-<div class="balloonTitle">
-💰 Dernière échéance différente
-</div>
-
-<label>
-Montant de la dernière échéance
-</label>
-
-<input
-id="domEditLastInstallment"
-type="number"
-step="0.01"
-oninput="calculateEditDomiciliation()">
-
-<div
-id="domEditLastInstallmentInfo"
-class="balloonTotal">
-Dernière échéance :
-<strong>0,00 €</strong>
-</div>
-
-</div>
-
-<label>
-Photos de la domiciliation
-</label>
-
-<div
-id="domEditPhotos"
-class="domiciliationPhotos">
-</div>
-
-<div
-id="domEditMonthlyResult"
-class="domiciliationMonthly">
-Mensualité estimée :
-<strong>0,00 €</strong>
-</div>
-
-<div class="modalActions">
+<h3>Modifier la domiciliation</h3>
 
 <button
-class="secondary"
-onclick="closeDomiciliationEdit()">
-Annuler
-</button>
-
-<button
-class="primary"
-onclick="saveDomiciliationEdit()">
-Enregistrer
+class="close"
+onclick="closeModal('editDomModal')">
+×
 </button>
 
 </div>
 
-</div>
+<div id="editDomContent"></div>
+
 </div>
 
-<!-- ==================================================
-     MODIFICATION DOMICILIATION PERMANENTE
-================================================== -->
+</div>
+
+<!-- MODAL DOMICILIATION PERMANENTE -->
 
 <div
-id="permanentEditModal"
-class="modal">
+id="editPermanentModal"
+class="modal hidden">
 
-<div class="modalBox">
+<div class="modalContent">
 
-<div class="modalTitle">
-Modifier la domiciliation permanente
-</div>
+<div class="modalHeader">
 
-<label>
-Alias / raccourci
-</label>
-
-<input
-id="permanentEditAlias">
-
-<label>
-Bénéficiaire
-</label>
-
-<input
-id="permanentEditBeneficiary">
-
-<label>
-IBAN
-</label>
-
-<input
-id="permanentEditIban">
-
-<label>
-Montant mensuel
-</label>
-
-<input
-id="permanentEditAmount"
-type="number"
-step="0.01"
-min="0">
-
-<label>
-Date de début
-</label>
-
-<input
-id="permanentEditStartDate"
-type="date">
-
-<label>
-Communication
-</label>
-
-<input
-id="permanentEditCommunication">
-
-<label>
-Photos
-</label>
-
-<div
-id="permanentEditPhotos"
-class="permanentPhotos">
-</div>
-
-<div class="permanentInfoBox">
-
-Les prélèvements sont calculés automatiquement chaque mois.
-Aucune validation manuelle n'est nécessaire.
-
-</div>
-
-<div class="modalActions">
+<h3>Modifier la domiciliation permanente</h3>
 
 <button
-class="secondary"
-onclick="closePermanentEdit()">
-Annuler
-</button>
-
-<button
-class="primary"
-onclick="savePermanentEdit()">
-Enregistrer
+class="close"
+onclick="closeModal('editPermanentModal')">
+×
 </button>
 
 </div>
 
-</div>
+<div id="editPermanentContent"></div>
+
 </div>
 
-<!-- ==================================================
-     PAIEMENT MANUEL
-================================================== -->
+</div>
+
+<!-- MODAL PAIEMENT MANUEL -->
 
 <div
-id="manualModal"
-class="modal">
+id="manualPaymentModal"
+class="modal hidden">
 
-<div class="modalBox">
+<div class="modalContent">
 
-<div class="modalTitle">
-Paiement manuel
-</div>
+<div class="modalHeader">
 
-<div id="manualContent"></div>
-
-<div class="modalActions">
+<h3>Paiement manuel</h3>
 
 <button
-class="secondary"
-onclick="closeManual()">
-Fermer
+class="close"
+onclick="closeModal('manualPaymentModal')">
+×
 </button>
 
 </div>
 
-</div>
+<div id="manualPaymentContent"></div>
+
 </div>
 
-<!-- ==================================================
-     QR
-================================================== -->
+</div>
+
+<!-- MODAL QR -->
 
 <div
 id="qrModal"
-class="modal">
+class="modal hidden">
 
-<div class="modalBox">
+<div class="modalContent">
 
-<div class="modalTitle">
-▣ QR paiement
+<div class="modalHeader">
+
+<h3>QR Code</h3>
+
+<button
+class="close"
+onclick="closeModal('qrModal')">
+×
+</button>
+
 </div>
-
-<div class="qrContainer">
 
 <div id="qrCode"></div>
 
-<div
-id="qrInfo"
-class="qrInfo">
-</div>
-
-<div class="qrWarning">
-Scanne ce QR avec une application bancaire compatible.
-Vérifie toujours les informations avant de valider le paiement.
 </div>
 
 </div>
 
-<div class="modalActions">
-
-<button
-class="secondary"
-onclick="closeQR()">
-Fermer
-</button>
-
-</div>
-
-</div>
-</div>
-
-<!-- ==================================================
-     PHOTO
-================================================== -->
+<!-- MODAL PHOTO -->
 
 <div
 id="photoModal"
-class="modal">
+class="modal hidden">
 
-<div class="modalBox">
+<div class="modalContent">
 
-<div class="modalTitle">
-Document
-</div>
+<div class="modalHeader">
 
-<img
-id="photoModalImage"
-class="photoModalImage">
-
-<div class="photoModalButtons">
+<h3>Photo</h3>
 
 <button
-class="danger"
-onclick="deletePhoto()">
-Supprimer
-</button>
-
-<button
-class="secondary"
-onclick="closePhoto()">
-Fermer
+class="close"
+onclick="closeModal('photoModal')">
+×
 </button>
 
 </div>
 
+<div id="photoModalContent"></div>
+
 </div>
+
 </div>
 
 <script>
@@ -2594,49 +1162,99 @@ Fermer
    VARIABLES
 ================================================== */
 
-const PIN="1157";
-
 let data=[];
+
 let domiciliations=[];
+
 let permanentDomiciliations=[];
+
+let currentPin="";
+
+const CORRECT_PIN="1157";
 
 let currentTab="unpaid";
 
-let selectedIds=new Set();
+let selectedPayments=new Set();
 
-let editId=null;
-let manualId=null;
-let photoId=null;
-let qrId=null;
+let currentPaymentPhoto="";
 
-let domEditId=null;
-let permanentEditId=null;
+let currentDomPhotos=["",""];
 
-let addPhotoData="";
+let currentPermanentPhotos=["",""];
 
-let domPhoto1="";
-let domPhoto2="";
+let editingPaymentId=null;
 
-let permanentPhoto1="";
-let permanentPhoto2="";
+let editingDomId=null;
 
-let openedPaymentSchedules=new Set();
-let openedDomiciliationSchedules=new Set();
+let editingPermanentId=null;
+
+
+/* ==================================================
+   UTILITAIRES
+================================================== */
+
+function generateId(){
+
+return Date.now().toString(36)+
+Math.random().toString(36).substring(2,9);
+
+}
+
+function roundMoney(value){
+
+return Math.round(
+(Number(value)||0)*100
+)/100;
+
+}
+
+function money(value){
+
+return new Intl.NumberFormat(
+"fr-BE",
+{
+style:"currency",
+currency:"EUR"
+}
+).format(
+Number(value)||0
+);
+
+}
+
+function formatDate(date){
+
+if(!date)return "";
+
+const d=new Date(date+"T00:00:00");
+
+if(isNaN(d))return date;
+
+return d.toLocaleDateString(
+"fr-BE"
+);
+
+}
+
 
 /* ==================================================
    INDEXEDDB PHOTOS
 ================================================== */
 
 const PHOTO_DB_NAME="MesPaiementsPhotosDB";
+
 const PHOTO_DB_VERSION=1;
+
 const PHOTO_STORE_NAME="photos";
 
 let photoDbPromise=null;
 
+
 function openPhotoDB(){
 
-if(photoDbPromise)
+if(photoDbPromise){
 return photoDbPromise;
+}
 
 photoDbPromise=new Promise(
 (resolve,reject)=>{
@@ -2647,15 +1265,14 @@ PHOTO_DB_NAME,
 PHOTO_DB_VERSION
 );
 
-request.onupgradeneeded=function(){
+request.onupgradeneeded=
+function(event){
 
-const db=request.result;
+const db=event.target.result;
 
-if(
-!db.objectStoreNames.contains(
+if(!db.objectStoreNames.contains(
 PHOTO_STORE_NAME
-)
-){
+)){
 
 db.createObjectStore(
 PHOTO_STORE_NAME,
@@ -2668,29 +1285,26 @@ keyPath:"key"
 
 };
 
-request.onsuccess=function(){
+request.onsuccess=
+function(event){
 
-resolve(request.result);
-
-};
-
-request.onerror=function(){
-
-reject(
-request.error||
-new Error(
-"IndexedDB indisponible."
-)
-);
+resolve(event.target.result);
 
 };
 
-}
-);
+request.onerror=
+function(){
+
+reject(request.error);
+
+};
+
+});
 
 return photoDbPromise;
 
 }
+
 
 async function savePhotoDB(key,data){
 
@@ -2706,26 +1320,26 @@ PHOTO_STORE_NAME,
 "readwrite"
 );
 
+const store=
 tx.objectStore(
 PHOTO_STORE_NAME
-).put({
-key:String(key),
-data:data||""
+);
+
+store.put({
+key:key,
+data:data
 });
 
-tx.oncomplete=()=>resolve();
+tx.oncomplete=
+()=>resolve();
 
-tx.onerror=()=>reject(
-tx.error||
-new Error(
-"Impossible d'enregistrer la photo."
-)
-);
+tx.onerror=
+()=>reject(tx.error);
 
-}
-);
+});
 
 }
+
 
 async function getPhotoDB(key){
 
@@ -2741,26 +1355,30 @@ PHOTO_STORE_NAME,
 "readonly"
 );
 
-const req=
+const store=
 tx.objectStore(
 PHOTO_STORE_NAME
-).get(String(key));
-
-req.onsuccess=()=>resolve(
-req.result?.data||""
 );
 
-req.onerror=()=>reject(
-req.error||
-new Error(
-"Impossible de lire la photo."
-)
+const request=
+store.get(key);
+
+request.onsuccess=
+()=>resolve(
+request.result
+? request.result.data
+: ""
 );
+
+request.onerror=
+()=>reject(
+request.error
+);
+
+});
 
 }
-);
 
-}
 
 async function deletePhotoDB(key){
 
@@ -2776,228 +1394,47 @@ PHOTO_STORE_NAME,
 "readwrite"
 );
 
+const store=
 tx.objectStore(
 PHOTO_STORE_NAME
-).delete(String(key));
-
-tx.oncomplete=()=>resolve();
-
-tx.onerror=()=>reject(
-tx.error||
-new Error(
-"Impossible de supprimer la photo."
-)
 );
 
-}
-);
+store.delete(key);
+
+tx.oncomplete=
+()=>resolve();
+
+tx.onerror=
+()=>reject(tx.error);
+
+});
 
 }
+
 
 function paymentPhotoKey(id){
 
-return "payment_"+String(id);
+return "payment_"+id;
 
 }
+
 
 function domiciliationPhotoKey(id,index){
 
-return "dom_"+
-String(id)+
-"_"+String(index);
+return "dom_"+id+"_"+index;
 
 }
+
 
 function permanentPhotoKey(id,index){
 
-return "permanent_"+
-String(id)+
-"_"+String(index);
+return "permanent_"+id+"_"+index;
 
 }
+
 
 /* ==================================================
-   OUTILS
-================================================== */
-
-function euro(value){
-
-return Number(value||0).toLocaleString(
-"fr-BE",
-{
-style:"currency",
-currency:"EUR"
-}
-);
-
-}
-
-function roundMoney(value){
-
-return Math.round(
-(Number(value)||0)*100
-)/100;
-
-}
-
-function generateId(){
-
-return Date.now().toString()+
-Math.random().toString(36).substring(2,9);
-
-}
-
-function formatDate(date){
-
-if(!date)return "";
-
-const d=new Date(date+"T00:00:00");
-
-return d.toLocaleDateString("fr-BE");
-
-}
-
-function addMonths(date,months){
-
-const d=new Date(date+"T00:00:00");
-
-d.setMonth(d.getMonth()+months);
-
-return d.toISOString().substring(0,10);
-
-}
-
-function addMonthsSafe(date,months){
-
-if(!date)return "";
-
-const parts=date.split("-");
-
-if(parts.length!==3)return "";
-
-const year=parseInt(parts[0]);
-const month=parseInt(parts[1]);
-const day=parseInt(parts[2]);
-
-if(
-isNaN(year)||
-isNaN(month)||
-isNaN(day)
-)return "";
-
-const totalMonths=
-(month-1)+Number(months||0);
-
-const targetYear=
-year+
-Math.floor(totalMonths/12);
-
-const targetMonth=
-((totalMonths%12)+12)%12;
-
-const lastDay=
-new Date(
-targetYear,
-targetMonth+1,
-0
-).getDate();
-
-const targetDay=
-Math.min(day,lastDay);
-
-return String(targetYear)+
-"-"+
-String(targetMonth+1).padStart(2,"0")+
-"-"+
-String(targetDay).padStart(2,"0");
-
-}
-
-function selectionKey(paymentId,installmentId){
-
-return String(paymentId)+"::"+String(installmentId);
-
-}
-
-/* ==================================================
-   SECURITE
-================================================== */
-
-function escapeHtml(value){
-
-return String(value??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-function escapeJs(value){
-
-return String(value??"")
-.replaceAll("\\","\\\\")
-.replaceAll("'","\\'")
-.replaceAll("\n","\\n")
-.replaceAll("\r","\\r");
-
-}
-
-/* ==================================================
-   NORMALISATION PAIEMENTS
-================================================== */
-
-function normalizeData(){
-
-if(!Array.isArray(data))
-data=[];
-
-data.forEach(p=>{
-
-if(!p.id)
-p.id=generateId();
-
-if(p.alias===undefined)
-p.alias="";
-
-if(p.beneficiary===undefined)
-p.beneficiary="";
-
-if(p.iban===undefined)
-p.iban="";
-
-if(p.communication===undefined)
-p.communication="";
-
-if(p.photo===undefined)
-p.photo="";
-
-if(!Array.isArray(p.installments))
-p.installments=[];
-
-p.installments.forEach(i=>{
-
-if(!i.id)
-i.id=generateId();
-
-if(typeof i.paid!=="boolean")
-i.paid=false;
-
-if(i.amount===undefined)
-i.amount=0;
-
-if(i.date===undefined)
-i.date="";
-
-});
-
-});
-
-}
-
-/* ==================================================
-   COPIES PROPRES POUR LOCALSTORAGE
+   NETTOYAGE STOCKAGE
 ================================================== */
 
 function getCleanDataForStorage(){
@@ -3009,23 +1446,14 @@ const copy={
 ...p
 };
 
-copy.photo="";
-
-copy.installments=
-Array.isArray(p.installments)
-?
-p.installments.map(
-i=>({...i})
-)
-:
-[];
+delete copy.photo;
 
 return copy;
 
-}
-);
+});
 
 }
+
 
 function getCleanDomiciliationsForStorage(){
 
@@ -3036,21 +1464,14 @@ const copy={
 ...dom
 };
 
-copy.photos=["",""];
-
-copy.monthsPaid=
-Array.isArray(dom.monthsPaid)
-?
-[...dom.monthsPaid]
-:
-[];
+delete copy.photos;
 
 return copy;
 
-}
-);
+});
 
 }
+
 
 function getCleanPermanentDomiciliationsForStorage(){
 
@@ -3061,24 +1482,121 @@ const copy={
 ...dom
 };
 
-copy.photos=["",""];
+delete copy.photos;
 
 return copy;
 
-}
-);
+});
 
 }
+
 
 /* ==================================================
-   MIGRATION ANCIENNES PHOTOS
+   NORMALISATION
+================================================== */
+
+function normalizeData(){
+
+if(!Array.isArray(data)){
+data=[];
+}
+
+data=data.map(
+p=>{
+
+if(!p.id){
+p.id=generateId();
+}
+
+if(p.paid===undefined){
+p.paid=false;
+}
+
+if(!p.amount){
+p.amount=
+roundMoney(
+p.totalAmount||
+p.monthlyAmount||
+0
+);
+}
+
+return p;
+
+});
+
+}
+
+
+function normalizeDomiciliations(){
+
+if(!Array.isArray(domiciliations)){
+domiciliations=[];
+}
+
+domiciliations=
+domiciliations.map(
+dom=>{
+
+if(!dom.id){
+dom.id=generateId();
+}
+
+if(!Array.isArray(dom.photos)){
+dom.photos=["",""];
+}
+
+while(dom.photos.length<2){
+dom.photos.push("");
+}
+
+return dom;
+
+});
+
+}
+
+
+function normalizePermanentDomiciliations(){
+
+if(!Array.isArray(
+permanentDomiciliations
+)){
+
+permanentDomiciliations=[];
+
+}
+
+permanentDomiciliations=
+permanentDomiciliations.map(
+dom=>{
+
+if(!dom.id){
+dom.id=generateId();
+}
+
+if(!Array.isArray(dom.photos)){
+dom.photos=["",""];
+}
+
+while(dom.photos.length<2){
+dom.photos.push("");
+}
+
+return dom;
+
+});
+
+}
+
+
+/* ==================================================
+   MIGRATION PHOTOS
 ================================================== */
 
 async function migratePhotosToIndexedDB(){
 
-let changedPayments=false;
-let changedDoms=false;
-let changedPermanent=false;
+let changed=false;
 
 for(const p of data){
 
@@ -3089,9 +1607,9 @@ paymentPhotoKey(p.id),
 p.photo
 );
 
-p.photo="";
+delete p.photo;
 
-changedPayments=true;
+changed=true;
 
 }
 
@@ -3099,24 +1617,30 @@ changedPayments=true;
 
 for(const dom of domiciliations){
 
-if(!Array.isArray(dom.photos))
+if(!dom.id){
+dom.id=generateId();
+changed=true;
+}
+
+if(!Array.isArray(dom.photos)){
 dom.photos=["",""];
+}
 
-while(dom.photos.length<2)
-dom.photos.push("");
-
-for(let i=0;i<2;i++){
+for(let i=0;i<dom.photos.length;i++){
 
 if(dom.photos[i]){
 
 await savePhotoDB(
-domiciliationPhotoKey(dom.id,i),
+domiciliationPhotoKey(
+dom.id,
+i
+),
 dom.photos[i]
 );
 
 dom.photos[i]="";
 
-changedDoms=true;
+changed=true;
 
 }
 
@@ -3125,27 +1649,37 @@ changedDoms=true;
 }
 
 for(
-const dom of permanentDomiciliations
+const dom
+of permanentDomiciliations
 ){
 
-if(!Array.isArray(dom.photos))
+if(!dom.id){
+
+dom.id=generateId();
+
+changed=true;
+
+}
+
+if(!Array.isArray(dom.photos)){
 dom.photos=["",""];
+}
 
-while(dom.photos.length<2)
-dom.photos.push("");
-
-for(let i=0;i<2;i++){
+for(let i=0;i<dom.photos.length;i++){
 
 if(dom.photos[i]){
 
 await savePhotoDB(
-permanentPhotoKey(dom.id,i),
+permanentPhotoKey(
+dom.id,
+i
+),
 dom.photos[i]
 );
 
 dom.photos[i]="";
 
-changedPermanent=true;
+changed=true;
 
 }
 
@@ -3153,7 +1687,7 @@ changedPermanent=true;
 
 }
 
-if(changedPayments){
+if(changed){
 
 localStorage.setItem(
 "mesPaiements",
@@ -3162,20 +1696,12 @@ getCleanDataForStorage()
 )
 );
 
-}
-
-if(changedDoms){
-
 localStorage.setItem(
 "mesDomiciliations",
 JSON.stringify(
 getCleanDomiciliationsForStorage()
 )
 );
-
-}
-
-if(changedPermanent){
 
 localStorage.setItem(
 "mesDomiciliationsPermanentes",
@@ -3187,6 +1713,7 @@ getCleanPermanentDomiciliationsForStorage()
 }
 
 }
+
 
 /* ==================================================
    CHARGEMENT DES PHOTOS
@@ -3205,11 +1732,9 @@ paymentPhotoKey(p.id)
 
 for(const dom of domiciliations){
 
-if(!Array.isArray(dom.photos))
+if(!Array.isArray(dom.photos)){
 dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
+}
 
 for(let i=0;i<2;i++){
 
@@ -3226,14 +1751,13 @@ i
 }
 
 for(
-const dom of permanentDomiciliations
+const dom
+of permanentDomiciliations
 ){
 
-if(!Array.isArray(dom.photos))
+if(!Array.isArray(dom.photos)){
 dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
+}
 
 for(let i=0;i<2;i++){
 
@@ -3250,6 +1774,7 @@ i
 }
 
 }
+
 
 /* ==================================================
    SAUVEGARDES INDEXEDDB
@@ -3291,22 +1816,22 @@ getCleanDataForStorage()
 console.error(e);
 
 alert(
-"Impossible de sauvegarder 
+"Impossible de sauvegarder les données."
+);
 
-async function savePermanentDomiciliations(){
+}
+
+}
+
+
+async function saveDomiciliations(){
 
 try{
 
-console.log("=== SAUVEGARDE DOMICILIATIONS PERMANENTES ===");
-console.log("Nombre :", permanentDomiciliations.length);
-
-for(const dom of permanentDomiciliations){
-
-console.log("Domiciliation :", dom);
+for(const dom of domiciliations){
 
 if(!dom.id){
 dom.id=generateId();
-console.log("ID généré :", dom.id);
 }
 
 if(!Array.isArray(dom.photos)){
@@ -3320,18 +1845,9 @@ dom.photos.push("");
 for(let i=0;i<2;i++){
 
 const key=
-permanentPhotoKey(
+domiciliationPhotoKey(
 dom.id,
 i
-);
-
-console.log(
-"Photo",
-i,
-"clé :",
-key,
-"présente :",
-!!dom.photos[i]
 );
 
 if(dom.photos[i]){
@@ -3351,10 +1867,88 @@ await deletePhotoDB(key);
 
 }
 
-console.log(
-"Données avant localStorage :",
-getCleanPermanentDomiciliationsForStorage()
+localStorage.setItem(
+"mesDomiciliations",
+JSON.stringify(
+getCleanDomiciliationsForStorage()
+)
 );
+
+return true;
+
+}catch(e){
+
+console.error(
+"ERREUR saveDomiciliations :",
+e
+);
+
+alert(
+"Impossible de sauvegarder les domiciliations.\n\n"+
+(e?.message||e)
+);
+
+return false;
+
+}
+
+}
+
+
+async function savePermanentDomiciliations(){
+
+try{
+
+console.log(
+"=== SAUVEGARDE DOMICILIATIONS PERMANENTES ==="
+);
+
+console.log(
+"Nombre :",
+permanentDomiciliations.length
+);
+
+for(
+const dom
+of permanentDomiciliations
+){
+
+if(!dom.id){
+dom.id=generateId();
+}
+
+if(!Array.isArray(dom.photos)){
+dom.photos=["",""];
+}
+
+while(dom.photos.length<2){
+dom.photos.push("");
+}
+
+for(let i=0;i<2;i++){
+
+const key=
+permanentPhotoKey(
+dom.id,
+i
+);
+
+if(dom.photos[i]){
+
+await savePhotoDB(
+key,
+dom.photos[i]
+);
+
+}else{
+
+await deletePhotoDB(key);
+
+}
+
+}
+
+}
 
 const cleanData=
 getCleanPermanentDomiciliationsForStorage();
@@ -3372,7 +1966,9 @@ localStorage.setItem(
 json
 );
 
-console.log("SAUVEGARDE OK");
+console.log(
+"SAUVEGARDE DOMICILIATIONS PERMANENTES OK"
+);
 
 return true;
 
@@ -3396,61 +1992,6 @@ return false;
 
 }
 
-try{
-
-for(
-const dom of permanentDomiciliations
-){
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-for(let i=0;i<2;i++){
-
-const key=
-permanentPhotoKey(
-dom.id,
-i
-);
-
-if(dom.photos[i]){
-
-await savePhotoDB(
-key,
-dom.photos[i]
-);
-
-}else{
-
-await deletePhotoDB(key);
-
-}
-
-}
-
-}
-
-localStorage.setItem(
-"mesDomiciliationsPermanentes",
-JSON.stringify(
-getCleanPermanentDomiciliationsForStorage()
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Impossible de sauvegarder les domiciliations permanentes."
-);
-
-}
-
-}
 
 /* ==================================================
    CHARGEMENT
@@ -3482,6 +2023,7 @@ data=[];
 }
 
 loadDomiciliations();
+
 loadPermanentDomiciliations();
 
 try{
@@ -3508,73 +2050,207 @@ renderPermanentDomiciliations();
 
 }
 
+
+function loadDomiciliations(){
+
+try{
+
+const saved=
+localStorage.getItem(
+"mesDomiciliations"
+);
+
+if(saved){
+
+domiciliations=
+JSON.parse(saved);
+
+}
+
+}catch(e){
+
+console.error(e);
+
+domiciliations=[];
+
+}
+
+normalizeDomiciliations();
+
+}
+
+
+function loadPermanentDomiciliations(){
+
+try{
+
+const saved=
+localStorage.getItem(
+"mesDomiciliationsPermanentes"
+);
+
+if(saved){
+
+permanentDomiciliations=
+JSON.parse(saved);
+
+}
+
+}catch(e){
+
+console.error(e);
+
+permanentDomiciliations=[];
+
+}
+
+normalizePermanentDomiciliations();
+
+}
+
+
 /* ==================================================
    PIN
 ================================================== */
 
-async function checkPin(){
+function updatePinDisplay(){
 
-const value=
+let result="";
+
+for(let i=0;i<4;i++){
+
+result+=
+i<currentPin.length
+?"● "
+:"○ ";
+
+}
+
 document.getElementById(
-"pinInput"
-).value;
+"pinDots"
+).textContent=result;
 
-if(value===PIN){
+}
+
+
+function enterPin(number){
+
+if(currentPin.length>=4){
+return;
+}
+
+currentPin+=number;
+
+updatePinDisplay();
+
+if(currentPin.length===4){
+
+setTimeout(
+validatePin,
+150
+);
+
+}
+
+}
+
+
+function clearPin(){
+
+currentPin=
+currentPin.slice(
+0,
+-1
+);
+
+updatePinDisplay();
+
+}
+
+
+function validatePin(){
+
+if(currentPin===CORRECT_PIN){
 
 document.getElementById(
 "loginScreen"
-).classList.add("hidden");
+).classList.add(
+"hidden"
+);
 
 document.getElementById(
 "app"
-).classList.remove("hidden");
+).classList.remove(
+"hidden"
+);
 
-await loadData();
+loadData();
 
 }else{
 
-alert("Code PIN incorrect");
+alert("Code incorrect");
 
-document.getElementById(
-"pinInput"
-).value="";
+currentPin="";
+
+updatePinDisplay();
+
+}
 
 }
 
-}
 
 /* ==================================================
-   PHOTO AJOUT PAIEMENT
+   PHOTOS
 ================================================== */
 
-function handlePhoto(file){
+function resizeImage(
+file,
+callback
+){
 
-if(!file)return;
-
-const reader=new FileReader();
+const reader=
+new FileReader();
 
 reader.onload=function(e){
 
-const img=new Image();
+const img=
+new Image();
 
 img.onload=function(){
 
-const canvas=
-document.createElement("canvas");
+let width=
+img.width;
 
-const maxWidth=1400;
+let height=
+img.height;
 
-let width=img.width;
-let height=img.height;
+const max=1200;
 
-if(width>maxWidth){
+if(width>max){
 
-height=height*(maxWidth/width);
-width=maxWidth;
+height=
+height*max/width;
+
+width=max;
 
 }
 
+if(height>max){
+
+width=
+width*max/height;
+
+height=max;
+
+}
+
+const canvas=
+document.createElement(
+"canvas"
+);
+
 canvas.width=width;
+
 canvas.height=height;
 
 const ctx=
@@ -3588,20 +2264,12 @@ width,
 height
 );
 
-addPhotoData=
+callback(
 canvas.toDataURL(
 "image/jpeg",
-0.75
+0.7
+)
 );
-
-document.getElementById(
-"addPhotoPreview"
-).innerHTML=
-`
-<img
-src="${addPhotoData}"
-class="photoPreview">
-`;
 
 };
 
@@ -3613,37 +2281,333 @@ reader.readAsDataURL(file);
 
 }
 
-document.getElementById(
-"cameraInput"
-).addEventListener(
-"change",
-function(){
 
-handlePhoto(
-this.files[0]
-);
+function handlePaymentPhoto(input){
+
+if(!input.files||!input.files[0]){
+return;
+}
+
+resizeImage(
+input.files[0],
+function(base64){
+
+currentPaymentPhoto=base64;
+
+document.getElementById(
+"addPhotoPreview"
+).innerHTML=
+`<img src="${base64}">`;
+
+});
 
 }
-);
 
-document.getElementById(
-"galleryInput"
-).addEventListener(
-"change",
-function(){
 
-handlePhoto(
-this.files[0]
-);
+function handleDomPhoto(input,index){
+
+if(!input.files||!input.files[0]){
+return;
+}
+
+resizeImage(
+input.files[0],
+function(base64){
+
+currentDomPhotos[index]=base64;
+
+renderDomPhotoPreview();
+
+});
 
 }
-);
+
+
+function handlePermanentPhoto(input,index){
+
+if(!input.files||!input.files[0]){
+return;
+}
+
+resizeImage(
+input.files[0],
+function(base64){
+
+currentPermanentPhotos[index]=base64;
+
+renderPermanentPhotoPreview();
+
+});
+
+}
+
+
+function renderDomPhotoPreview(){
+
+let html="";
+
+for(
+const photo
+of currentDomPhotos
+){
+
+if(photo){
+
+html+=
+`<img src="${photo}">`;
+
+}
+
+}
+
+document.getElementById(
+"domAddPhotosPreview"
+).innerHTML=html;
+
+}
+
+
+function renderPermanentPhotoPreview(){
+
+let html="";
+
+for(
+const photo
+of currentPermanentPhotos
+){
+
+if(photo){
+
+html+=
+`<img src="${photo}">`;
+
+}
+
+}
+
+document.getElementById(
+"permanentAddPhotosPreview"
+).innerHTML=html;
+
+}
+
 
 /* ==================================================
-   AJOUT PAIEMENT
+   FORMULAIRES
 ================================================== */
 
-async function addPayment(){
+function toggleManualMonthly(){
+
+const checked=
+document.getElementById(
+"domManualMonthly"
+).checked;
+
+document.getElementById(
+"domManualMonthlyBox"
+).classList.toggle(
+"hidden",
+!checked
+);
+
+}
+
+
+function toggleLastDifferent(){
+
+const checked=
+document.getElementById(
+"domLastDifferent"
+).checked;
+
+document.getElementById(
+"domLastInstallmentBox"
+).classList.toggle(
+"hidden",
+!checked
+);
+
+}
+
+
+function calculateDomiciliation(){
+
+const total=
+Number(
+document.getElementById(
+"domTotalAmount"
+).value
+)||0;
+
+const months=
+Number(
+document.getElementById(
+"domMonths"
+).value
+)||0;
+
+const manual=
+document.getElementById(
+"domManualMonthly"
+).checked;
+
+let monthly=0;
+
+if(manual){
+
+monthly=
+Number(
+document.getElementById(
+"domManualMonthlyAmount"
+).value
+)||0;
+
+}else if(months>0){
+
+monthly=
+total/months;
+
+}
+
+document.getElementById(
+"domMonthlyResult"
+).textContent=
+"Mensualité : "+
+money(monthly);
+
+}
+
+
+[
+"domTotalAmount",
+"domMonths",
+"domTaeg",
+"domManualMonthlyAmount"
+].forEach(
+id=>{
+
+const el=
+document.getElementById(id);
+
+if(el){
+
+el.addEventListener(
+"input",
+calculateDomiciliation
+);
+
+}
+
+});
+
+
+function resetPermanentForm(){
+
+document.getElementById(
+"permanentAlias"
+).value="";
+
+document.getElementById(
+"permanentBeneficiary"
+).value="";
+
+document.getElementById(
+"permanentIban"
+).value="";
+
+document.getElementById(
+"permanentAmount"
+).value="";
+
+document.getElementById(
+"permanentStartDate"
+).value="";
+
+document.getElementById(
+"permanentCommunication"
+).value="";
+
+currentPermanentPhotos=["",""];
+
+renderPermanentPhotoPreview();
+
+}
+
+
+function resetDomForm(){
+
+document.getElementById(
+"domAlias"
+).value="";
+
+document.getElementById(
+"domBeneficiary"
+).value="";
+
+document.getElementById(
+"domIban"
+).value="";
+
+document.getElementById(
+"domTotalAmount"
+).value="";
+
+document.getElementById(
+"domMonths"
+).value="";
+
+document.getElementById(
+"domTaeg"
+).value="";
+
+document.getElementById(
+"domStartDate"
+).value="";
+
+document.getElementById(
+"domEndDate"
+).value="";
+
+document.getElementById(
+"domManualMonthly"
+).checked=false;
+
+document.getElementById(
+"domManualMonthlyBox"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"domManualMonthlyAmount"
+).value="";
+
+document.getElementById(
+"domLastDifferent"
+).checked=false;
+
+document.getElementById(
+"domLastInstallmentBox"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"domLastInstallment"
+).value="";
+
+currentDomPhotos=["",""];
+
+renderDomPhotoPreview();
+
+}
+
+
+/* ==================================================
+   PAIEMENTS
+================================================== */
+
+function addPayment(){
 
 const alias=
 document.getElementById(
@@ -3658,24 +2622,21 @@ document.getElementById(
 const iban=
 document.getElementById(
 "iban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
+).value.trim();
 
-const total=
-parseFloat(
+const totalAmount=
+Number(
 document.getElementById(
 "totalAmount"
 ).value
-);
+)||0;
 
-const count=
-parseInt(
+const installments=
+Number(
 document.getElementById(
 "installments"
 ).value
-);
+)||1;
 
 const firstDate=
 document.getElementById(
@@ -3687,60 +2648,20 @@ document.getElementById(
 "communication"
 ).value.trim();
 
-if(
-!beneficiary||
-isNaN(total)||
-total<=0||
-isNaN(count)||
-count<1||
-!firstDate
-){
+if(!alias||!totalAmount){
 
 alert(
-"Veuillez remplir les champs obligatoires."
+"Veuillez remplir au minimum l'alias et le montant."
 );
 
 return;
 
 }
 
-const base=
-Math.floor(
-(total/count)*100
-)/100;
-
-const last=
+const monthly=
 roundMoney(
-total-base*(count-1)
+totalAmount/installments
 );
-
-let installments=[];
-
-for(
-let i=0;
-i<count;
-i++
-){
-
-installments.push({
-
-id:generateId(),
-
-date:addMonths(
-firstDate,
-i
-),
-
-amount:
-i===count-1
-?last
-:base,
-
-paid:false
-
-});
-
-}
 
 data.push({
 
@@ -3752,28 +2673,27 @@ beneficiary,
 
 iban,
 
+totalAmount:
+
+roundMoney(totalAmount),
+
+installments,
+
+firstDate,
+
 communication,
 
-photo:addPhotoData,
+monthlyAmount:monthly,
 
-totalAmount:
-roundMoney(total),
+amount:monthly,
 
-installments
+paid:false,
+
+photo:currentPaymentPhoto||""
 
 });
 
-await saveData();
-
-resetAddForm();
-
-render();
-
-alert("Paiement ajouté.");
-
-}
-
-function resetAddForm(){
+saveData();
 
 document.getElementById(
 "alias"
@@ -3793,7 +2713,7 @@ document.getElementById(
 
 document.getElementById(
 "installments"
-).value="1";
+).value="";
 
 document.getElementById(
 "firstDate"
@@ -3803,25 +2723,69 @@ document.getElementById(
 "communication"
 ).value="";
 
+currentPaymentPhoto="";
+
 document.getElementById(
 "addPhotoPreview"
 ).innerHTML="";
 
-document.getElementById(
-"cameraInput"
-).value="";
-
-document.getElementById(
-"galleryInput"
-).value="";
-
-addPhotoData="";
+render();
 
 }
 
-/* ==================================================
-   ONGLETS
-================================================== */
+
+function paySelected(){
+
+for(
+const id
+of selectedPayments
+){
+
+const p=
+data.find(
+x=>x.id===id
+);
+
+if(p){
+p.paid=true;
+}
+
+}
+
+selectedPayments.clear();
+
+saveData();
+
+render();
+
+}
+
+
+function deleteSelected(){
+
+if(!selectedPayments.size){
+return;
+}
+
+if(!confirm(
+"Supprimer les paiements sélectionnés ?"
+)){
+return;
+}
+
+data=
+data.filter(
+p=>!selectedPayments.has(p.id)
+);
+
+selectedPayments.clear();
+
+saveData();
+
+render();
+
+}
+
 
 function showTab(tab){
 
@@ -3855,2333 +2819,246 @@ document.getElementById(
 tab!=="paid"
 );
 
-render();
-
 }
 
+
 /* ==================================================
-   RENDER PRINCIPAL
+   RENDU PAIEMENTS
 ================================================== */
 
 function render(){
 
-normalizeData();
-
-const unpaidList=
-document.getElementById(
-"unpaidList"
+const unpaid=
+data.filter(
+p=>!p.paid
 );
 
-const paidList=
-document.getElementById(
-"paidList"
+const paid=
+data.filter(
+p=>p.paid
 );
-
-unpaidList.innerHTML="";
-paidList.innerHTML="";
-
-let total=0;
-let paid=0;
-let unpaidCount=0;
-let paidCount=0;
-
-data.forEach(payment=>{
-
-payment.installments.forEach(
-inst=>{
-
-total+=Number(
-inst.amount||0
-);
-
-if(inst.paid){
-
-paid+=Number(
-inst.amount||0
-);
-
-paidCount++;
-
-}else{
-
-unpaidCount++;
-
-}
-
-});
-
-});
-
-document.getElementById(
-"totalValue"
-).textContent=euro(total);
-
-document.getElementById(
-"paidValue"
-).textContent=euro(paid);
-
-document.getElementById(
-"remainingValue"
-).textContent=
-euro(total-paid);
 
 document.getElementById(
 "unpaidCount"
 ).textContent=
-unpaidCount;
+unpaid.length;
 
 document.getElementById(
 "paidCount"
 ).textContent=
-paidCount;
-
-data.forEach(
-payment=>{
-
-const visible=
-payment.installments.filter(
-inst=>
-currentTab==="unpaid"
-?
-!inst.paid
-:
-inst.paid
-);
-
-if(!visible.length)return;
-
-const card=
-createPaymentCard(payment);
-
-if(currentTab==="unpaid")
-unpaidList.appendChild(card);
-else
-paidList.appendChild(card);
-
-});
-
-updateSelectionBar();
-
-}
-/* ==================================================
-   CARTE PAIEMENT
-================================================== */
-
-function createPaymentCard(payment){
-
-const card=
-document.createElement("div");
-
-card.className=
-"paymentCard";
+paid.length;
 
 const total=
-payment.installments.reduce(
-(sum,i)=>
-sum+Number(i.amount||0),
+data.reduce(
+(s,p)=>
+s+
+Number(
+p.amount||
+p.monthlyAmount||
+0
+),
 0
 );
 
-const paidInstallments=
-payment.installments.filter(
-i=>i.paid
-);
-
-const paidCount=
-paidInstallments.length;
-
-const months=
-payment.installments.length;
-
-const remainingMonths=
-months-paidCount;
-
-const paidAmount=
-paidInstallments.reduce(
-(sum,i)=>
-sum+Number(i.amount||0),
+const paidTotal=
+paid.reduce(
+(s,p)=>
+s+
+Number(
+p.amount||
+p.monthlyAmount||
+0
+),
 0
 );
 
-const remainingAmount=
-Math.max(
-0,
-roundMoney(total-paidAmount)
-);
+document.getElementById(
+"totalValue"
+).textContent=
+money(total);
+
+document.getElementById(
+"paidValue"
+).textContent=
+money(paidTotal);
+
+document.getElementById(
+"remainingValue"
+).textContent=
+money(total-paidTotal);
+
+document.getElementById(
+"unpaidList"
+).innerHTML=
+unpaid.map(
+paymentCard
+).join("");
+
+document.getElementById(
+"paidList"
+).innerHTML=
+paid.map(
+paymentCard
+).join("");
 
-const progress=
-months>0
-?
-Math.min(
-100,
-(paidCount/months)*100
-)
-:
-0;
-
-const header=
-document.createElement("div");
-
-header.className=
-"paymentHeader";
-
-header.innerHTML=
-`
-<div class="paymentTitle">
-${escapeHtml(
-payment.alias||"Sans alias"
-)}
-</div>
-`;
-
-card.appendChild(header);
-
-const summary=
-document.createElement("div");
-
-summary.className=
-"paymentSummary";
-
-summary.innerHTML=
-`
-<div class="paymentSummaryBox">
-<div class="paymentSummaryTitle">
-Échéances
-</div>
-<div class="paymentSummaryValue">
-${months}
-</div>
-</div>
-
-<div class="paymentSummaryBox">
-<div class="paymentSummaryTitle">
-Déjà payé
-</div>
-<div class="paymentSummaryValue">
-${euro(paidAmount)}
-</div>
-</div>
-
-<div class="paymentSummaryBox">
-<div class="paymentSummaryTitle">
-Reste
-</div>
-<div class="paymentSummaryValue">
-${euro(remainingAmount)}
-</div>
-</div>
-`;
-
-card.appendChild(summary);
-
-const item=
-document.createElement("div");
-
-item.className=
-"paymentItem";
-
-if(remainingMonths===0)
-item.classList.add("paid");
-
-item.innerHTML=
-`
-<div class="paymentAlias">
-${escapeHtml(
-payment.alias||"Sans alias"
-)}
-</div>
-
-<div class="paymentBeneficiary">
-${escapeHtml(
-payment.beneficiary||"-"
-)}
-</div>
-
-<div class="paymentDetails">
-
-IBAN :
-${escapeHtml(
-payment.iban||"-"
-)}
-
-<br>
-
-Montant total :
-<strong>${euro(total)}</strong>
-
-<br>
-
-Échéances :
-<strong>${paidCount} / ${months}</strong>
-
-<br>
-
-Déjà payé :
-<strong>${euro(paidAmount)}</strong>
-
-<br>
-
-Reste :
-<strong>${euro(remainingAmount)}</strong>
-
-${
-payment.communication
-?
-`
-<br>
-Communication :
-<strong>
-${escapeHtml(
-payment.communication
-)}
-</strong>
-`
-:
-""
-}
-
-</div>
-
-<div class="paymentProgress">
-<div
-class="paymentProgressBar"
-style="width:${progress}%">
-</div>
-</div>
-`;
-
-card.appendChild(item);
-
-const nextIndex=
-payment.installments.findIndex(
-i=>!i.paid
-);
-
-if(nextIndex!==-1){
-
-const next=
-payment.installments[nextIndex];
-
-const nextBox=
-document.createElement("div");
-
-nextBox.className=
-"paymentNext";
-
-nextBox.innerHTML=
-`
-<div class="paymentNextTop">
-
-<input
-type="checkbox"
-class="paymentCheckbox">
-
-<div class="paymentNextInfo">
-
-<div class="paymentNextTitle">
-Prochaine échéance •
-${nextIndex+1}/${months}
-</div>
-
-<div class="paymentNextDate">
-${formatDate(next.date)||"-"}
-</div>
-
-<div class="paymentNextAmount">
-${euro(next.amount)}
-</div>
-
-</div>
-
-</div>
-`;
-
-const checkbox=
-nextBox.querySelector("input");
-
-checkbox.addEventListener(
-"change",
-function(){
-
-if(this.checked){
-
-togglePaid(
-payment.id,
-next.id
-);
-
-}
-
-}
-);
-
-card.appendChild(nextBox);
-
-}else{
-
-const done=
-document.createElement("div");
-
-done.className=
-"paymentNext";
-
-done.innerHTML=
-`
-<div style="
-text-align:center;
-font-weight:700;
-color:#167c2e;
-">
-✓ Toutes les échéances sont payées
-</div>
-`;
-
-card.appendChild(done);
-
-}
-
-if(payment.photo){
-
-const photos=
-document.createElement("div");
-
-photos.className=
-"paymentPhotos";
-
-const photoBox=
-document.createElement("div");
-
-photoBox.className=
-"paymentPhotoBox";
-
-photoBox.innerHTML=
-`
-<img
-src="${payment.photo}"
-class="paymentPhoto"
-onclick="openPhoto('${payment.id}')">
-
-<div class="paymentPhotoActions">
-
-<button
-class="secondary"
-onclick="openPhoto('${payment.id}')">
-📄 Document
-</button>
-
-<button
-class="danger"
-onclick="deletePhotoFromPayment('${payment.id}')">
-🗑️
-</button>
-
-</div>
-`;
-
-photos.appendChild(photoBox);
-
-card.appendChild(photos);
-
-}
-
-const scheduleButton=
-document.createElement("button");
-
-scheduleButton.className=
-"secondary paymentScheduleButton";
-
-const scheduleOpen=
-openedPaymentSchedules.has(
-String(payment.id)
-);
-
-scheduleButton.textContent=
-scheduleOpen
-?
-"▲ Masquer les échéances"
-:
-"📋 Voir les échéances";
-
-scheduleButton.onclick=function(){
-
-togglePaymentSchedule(
-payment.id
-);
-
-};
-
-card.appendChild(scheduleButton);
-
-const schedule=
-document.createElement("div");
-
-schedule.className=
-"paymentSchedule";
-
-if(!scheduleOpen)
-schedule.classList.add("hidden");
-
-payment.installments.forEach(
-(inst,index)=>{
-
-const row=
-document.createElement("div");
-
-row.className=
-"paymentMonth";
-
-if(inst.paid)
-row.classList.add("paid");
-
-const checkbox=
-document.createElement("input");
-
-checkbox.type="checkbox";
-checkbox.checked=!!inst.paid;
-
-checkbox.addEventListener(
-"change",
-function(){
-
-togglePaid(
-payment.id,
-inst.id
-);
-
-}
-);
-
-const info=
-document.createElement("div");
-
-info.className=
-"paymentMonthInfo";
-
-const status=
-inst.paid
-?
-`<span class="badge badgePaid">PAYÉE</span>`
-:
-`<span class="badge badgeUnpaid">À PAYER</span>`;
-
-const lastBadge=
-index===
-payment.installments.length-1
-?
-`<span class="paymentLast">DERNIÈRE</span>`
-:
-"";
-
-info.innerHTML=
-`
-<div class="paymentMonthLabel">
-Échéance ${index+1}/${months}
-${status}
-${lastBadge}
-</div>
-
-<div class="paymentMonthDate">
-${formatDate(inst.date)||"-"}
-</div>
-
-<div class="paymentMonthAmount">
-${euro(inst.amount)}
-</div>
-`;
-
-row.appendChild(checkbox);
-row.appendChild(info);
-
-schedule.appendChild(row);
-
-}
-);
-
-card.appendChild(schedule);
-
-const actions=
-document.createElement("div");
-
-actions.className=
-"paymentActions";
-
-const editBtn=
-document.createElement("button");
-
-editBtn.className=
-"secondary";
-
-editBtn.textContent=
-"✏️ Modifier";
-
-editBtn.onclick=function(){
-
-const next=
-payment.installments.find(
-i=>!i.paid
-)
-||
-payment.installments[0];
-
-if(next)
-openEdit(
-payment.id,
-next.id
-);
-
-};
-
-const paidBtn=
-document.createElement("button");
-
-paidBtn.className=
-nextIndex!==-1
-?
-"green"
-:
-"secondary";
-
-paidBtn.textContent=
-nextIndex!==-1
-?
-"✓ Payé"
-:
-"↩️ À payer";
-
-paidBtn.onclick=function(){
-
-const target=
-payment.installments.find(
-i=>!i.paid
-)
-||
-payment.installments[
-payment.installments.length-1
-];
-
-if(target)
-togglePaid(
-payment.id,
-target.id
-);
-
-};
-
-const manualBtn=
-document.createElement("button");
-
-manualBtn.className=
-"secondary";
-
-manualBtn.textContent=
-"💳 Payer";
-
-manualBtn.onclick=function(){
-
-const target=
-payment.installments.find(
-i=>!i.paid
-)
-||
-payment.installments[0];
-
-if(target)
-openManual(
-payment.id,
-target.id
-);
-
-};
-
-const qrBtn=
-document.createElement("button");
-
-qrBtn.className=
-"qrButton";
-
-qrBtn.textContent="▣ QR";
-
-qrBtn.onclick=function(){
-
-const target=
-payment.installments.find(
-i=>!i.paid
-)
-||
-payment.installments[0];
-
-if(target)
-openQR(
-payment,
-target
-);
-
-};
-
-const calendarBtn=
-document.createElement("button");
-
-calendarBtn.className=
-"secondary";
-
-calendarBtn.textContent=
-"📅 Calendrier";
-
-calendarBtn.onclick=function(){
-
-const target=
-payment.installments.find(
-i=>!i.paid
-)
-||
-payment.installments[0];
-
-if(target)
-addCalendar(
-payment,
-target
-);
-
-};
-
-const deleteBtn=
-document.createElement("button");
-
-deleteBtn.className=
-"danger";
-
-deleteBtn.textContent=
-"🗑️ Supprimer";
-
-deleteBtn.onclick=function(){
-
-deletePayment(
-payment.id
-);
-
-};
-
-actions.appendChild(editBtn);
-actions.appendChild(paidBtn);
-actions.appendChild(manualBtn);
-actions.appendChild(qrBtn);
-actions.appendChild(calendarBtn);
-actions.appendChild(deleteBtn);
-
-if(payment.photo){
-
-const documentBtn=
-document.createElement("button");
-
-documentBtn.className=
-"secondary";
-
-documentBtn.textContent=
-"📄 Document";
-
-documentBtn.onclick=function(){
-
-openPhoto(
-payment.id
-);
-
-};
-
-actions.appendChild(
-documentBtn
-);
-
-}
-
-card.appendChild(actions);
-
-return card;
-
-}
-
-function togglePaymentSchedule(id){
-
-const key=String(id);
-
-if(
-openedPaymentSchedules.has(key)
-){
-
-openedPaymentSchedules.delete(key);
-
-}else{
-
-openedPaymentSchedules.add(key);
-
-}
-
-render();
-
-}
-
-async function togglePaid(
-paymentId,
-installmentId
-){
-
-const payment=
-data.find(
-p=>String(p.id)===
-String(paymentId)
-);
-
-if(!payment)return;
-
-const inst=
-payment.installments.find(
-i=>String(i.id)===
-String(installmentId)
-);
-
-if(!inst)return;
-
-inst.paid=!inst.paid;
-
-await saveData();
-
-render();
-
-}
-
-async function deletePayment(paymentId){
-
-const payment=
-data.find(
-p=>String(p.id)===
-String(paymentId)
-);
-
-if(!payment)return;
-
-if(
-!confirm(
-"Supprimer ce paiement et toutes ses échéances ?"
-)
-)
-return;
-
-data=
-data.filter(
-p=>String(p.id)!==
-String(paymentId)
-);
-
-openedPaymentSchedules.delete(
-String(paymentId)
-);
-
-try{
-
-await deletePhotoDB(
-paymentPhotoKey(paymentId)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-await saveData();
-
-render();
-
-}
-
-function updateSelectionBar(){
-
-const bar=
 document.getElementById(
 "selectionBar"
+).classList.toggle(
+"hidden",
+selectedPayments.size===0
 );
 
-const info=
 document.getElementById(
 "selectionInfo"
-);
+).textContent=
+selectedPayments.size+
+" sélectionné(s)";
 
-const count=
-selectedIds.size;
+}
 
-if(count>0){
 
-bar.classList.add("show");
+function paymentCard(p){
 
-info.textContent=
-count+
-(
-count>1
-?
-" sélectionnés"
-:
-" sélectionné"
-);
+return `
+
+<div class="payment">
+
+<div class="paymentTop">
+
+<div>
+
+<div class="paymentAlias">
+${escapeHtml(p.alias||"Paiement")}
+</div>
+
+<div class="small">
+${escapeHtml(p.beneficiary||"")}
+</div>
+
+</div>
+
+<div class="paymentAmount">
+${money(
+p.amount||
+p.monthlyAmount||
+0
+)}
+</div>
+
+</div>
+
+<div class="small">
+${p.firstDate
+?formatDate(p.firstDate)
+:""}
+</div>
+
+<div class="actions" style="margin-top:10px">
+
+<button
+class="btn btnGray"
+onclick="toggleSelectPayment('${p.id}')">
+${selectedPayments.has(p.id)
+?"☑️ Sélectionné"
+:"☐ Sélectionner"}
+</button>
+
+<button
+class="btn btnBlue"
+onclick="openEditPayment('${p.id}')">
+Modifier
+</button>
+
+<button
+class="btn btnRed"
+onclick="deletePayment('${p.id}')">
+Supprimer
+</button>
+
+<button
+class="btn btnGray"
+onclick="showPaymentPhoto('${p.id}')">
+📷
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function toggleSelectPayment(id){
+
+if(selectedPayments.has(id)){
+
+selectedPayments.delete(id);
 
 }else{
 
-bar.classList.remove("show");
+selectedPayments.add(id);
 
 }
 
+render();
+
 }
 
-async function deleteSelected(){
 
-if(!selectedIds.size)
+function deletePayment(id){
+
+if(!confirm(
+"Supprimer ce paiement ?"
+)){
 return;
+}
 
-if(
-!confirm(
-"Supprimer les échéances sélectionnées ?"
-)
-)
-return;
-
-const paymentsToDelete=[];
-
-data.forEach(
-payment=>{
-
-const hadInstallments=
-payment.installments.length;
-
-payment.installments=
-payment.installments.filter(
-inst=>{
-
-return !selectedIds.has(
-selectionKey(
-payment.id,
-inst.id
-)
+const p=
+data.find(
+x=>x.id===id
 );
 
-});
+if(p){
 
-if(
-hadInstallments>0&&
-payment.installments.length===0
-){
-
-paymentsToDelete.push(
-payment.id
+deletePhotoDB(
+paymentPhotoKey(id)
 );
 
 }
-
-}
-);
 
 data=
 data.filter(
-p=>p.installments.length>0
+p=>p.id!==id
 );
 
-for(
-const paymentId
-of paymentsToDelete
-){
+selectedPayments.delete(id);
 
-try{
-
-await deletePhotoDB(
-paymentPhotoKey(paymentId)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-openedPaymentSchedules.delete(
-String(paymentId)
-);
-
-}
-
-selectedIds.clear();
-
-await saveData();
+saveData();
 
 render();
 
 }
 
-function openEdit(
-paymentId,
-installmentId
-){
 
-const payment=
-data.find(
-p=>String(p.id)===
-String(paymentId)
-);
+function escapeHtml(value){
 
-if(!payment)return;
-
-const inst=
-payment.installments.find(
-i=>String(i.id)===
-String(installmentId)
-);
-
-if(!inst)return;
-
-editId={
-paymentId,
-installmentId
-};
-
-document.getElementById(
-"editAlias"
-).value=
-payment.alias||"";
-
-document.getElementById(
-"editBeneficiary"
-).value=
-payment.beneficiary||"";
-
-document.getElementById(
-"editIban"
-).value=
-payment.iban||"";
-
-document.getElementById(
-"editDate"
-).value=
-inst.date||"";
-
-document.getElementById(
-"editAmount"
-).value=
-inst.amount??"";
-
-document.getElementById(
-"editCommunication"
-).value=
-payment.communication||"";
-
-document.getElementById(
-"editModal"
-).classList.add("show");
+return String(value??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
-function closeEdit(){
-
-document.getElementById(
-"editModal"
-).classList.remove("show");
-
-editId=null;
-
-}
-
-async function saveEdit(){
-
-if(!editId)return;
-
-const payment=
-data.find(
-p=>String(p.id)===
-String(editId.paymentId)
-);
-
-if(!payment)return;
-
-const inst=
-payment.installments.find(
-i=>String(i.id)===
-String(editId.installmentId)
-);
-
-if(!inst)return;
-
-const amount=
-parseFloat(
-document.getElementById(
-"editAmount"
-).value
-);
-
-if(isNaN(amount)||amount<0){
-
-alert("Montant incorrect.");
-
-return;
-
-}
-
-payment.alias=
-document.getElementById(
-"editAlias"
-).value.trim();
-
-payment.beneficiary=
-document.getElementById(
-"editBeneficiary"
-).value.trim();
-
-payment.iban=
-document.getElementById(
-"editIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
-
-payment.communication=
-document.getElementById(
-"editCommunication"
-).value.trim();
-
-inst.date=
-document.getElementById(
-"editDate"
-).value;
-
-inst.amount=
-roundMoney(amount);
-
-await saveData();
-
-closeEdit();
-
-render();
-
-alert(
-"Modification enregistrée."
-);
-
-}
-
-function openManual(
-paymentId,
-installmentId
-){
-
-const payment=
-data.find(
-p=>String(p.id)===
-String(paymentId)
-);
-
-if(!payment)return;
-
-const inst=
-payment.installments.find(
-i=>String(i.id)===
-String(installmentId)
-);
-
-if(!inst)return;
-
-manualId={
-paymentId,
-installmentId
-};
-
-document.getElementById(
-"manualContent"
-).innerHTML=
-`
-<div class="manualInfo">
-
-<div class="manualLine">
-
-<div class="manualLabel">
-Bénéficiaire
-</div>
-
-<div class="manualValue">
-${escapeHtml(
-payment.beneficiary
-)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-payment.beneficiary
-)}',
-this
-)">
-Copier
-</button>
-
-</div>
-
-<div class="manualLine">
-
-<div class="manualLabel">
-IBAN
-</div>
-
-<div class="manualValue">
-${escapeHtml(
-payment.iban||"-"
-)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-payment.iban||""
-)}',
-this
-)">
-Copier
-</button>
-
-</div>
-
-<div class="manualLine">
-
-<div class="manualLabel">
-Montant
-</div>
-
-<div class="manualValue">
-${euro(inst.amount)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-Number(inst.amount).toFixed(2)
-)}',
-this
-)">
-Copier
-</button>
-
-</div>
-
-<div class="manualLine">
-
-<div class="manualLabel">
-Communication
-</div>
-
-<div class="manualValue">
-${escapeHtml(
-payment.communication||"-"
-)}
-</div>
-
-<button
-class="copyButton"
-onclick="copyText(
-'${escapeJs(
-payment.communication||""
-)}',
-this
-)">
-Copier
-</button>
-
-</div>
-
-</div>
-`;
-
-document.getElementById(
-"manualModal"
-).classList.add("show");
-
-}
-
-function closeManual(){
-
-document.getElementById(
-"manualModal"
-).classList.remove("show");
-
-manualId=null;
-
-resetCopyButtons();
-
-}
-
-function copyText(text,button){
-
-if(
-navigator.clipboard&&
-navigator.clipboard.writeText
-){
-
-navigator.clipboard.writeText(text)
-.then(()=>{
-
-button.textContent="✓ Copié";
-
-button.classList.add(
-"copied"
-);
-
-})
-.catch(
-()=>fallbackCopy(
-text,
-button
-)
-);
-
-}else{
-
-fallbackCopy(
-text,
-button
-);
-
-}
-
-}
-
-function fallbackCopy(text,button){
-
-const textarea=
-document.createElement(
-"textarea"
-);
-
-textarea.value=text;
-
-document.body.appendChild(
-textarea
-);
-
-textarea.select();
-
-try{
-
-document.execCommand("copy");
-
-button.textContent=
-"✓ Copié";
-
-button.classList.add(
-"copied"
-);
-
-}catch(e){
-
-alert(
-"Impossible de copier."
-);
-
-}
-
-textarea.remove();
-
-}
-
-function resetCopyButtons(){
-
-document.querySelectorAll(
-".copyButton"
-)
-.forEach(
-button=>{
-
-button.textContent=
-"Copier";
-
-button.classList.remove(
-"copied"
-);
-
-}
-);
-
-}
-
-/* ==================================================
-   QR
-================================================== */
-
-function createEPCQR(
-payment,
-inst
-){
-
-const name=
-String(
-payment.beneficiary||""
-)
-.trim()
-.substring(0,70);
-
-const iban=
-String(
-payment.iban||""
-)
-.replace(/\s/g,"")
-.toUpperCase();
-
-const amount=
-Number(
-inst.amount||0
-).toFixed(2);
-
-const communication=
-String(
-payment.communication||""
-)
-.trim()
-.substring(0,140);
-
-return[
-"BCD",
-"002",
-"1",
-"SCT",
-"",
-name,
-iban,
-"EUR"+amount,
-"",
-communication,
-""
-].join("\n");
-
-}
-
-function openQR(
-payment,
-inst
-){
-
-const iban=
-String(
-payment.iban||""
-)
-.replace(/\s/g,"")
-.toUpperCase();
-
-if(!iban){
-
-alert(
-"Il faut un IBAN pour générer le QR."
-);
-
-return;
-
-}
-
-if(typeof QRCode==="undefined"){
-
-alert(
-"Le générateur QR n'a pas pu être chargé."
-);
-
-return;
-
-}
-
-qrId={
-paymentId:payment.id,
-installmentId:inst.id
-};
-
-const qrBox=
-document.getElementById(
-"qrCode"
-);
-
-qrBox.innerHTML="";
-
-const payload=
-createEPCQR(
-payment,
-inst
-);
-
-new QRCode(
-qrBox,
-{
-text:payload,
-width:240,
-height:240,
-correctLevel:
-QRCode.CorrectLevel.M
-}
-);
-
-document.getElementById(
-"qrInfo"
-).innerHTML=
-`
-<strong>
-${escapeHtml(
-payment.beneficiary
-)}
-</strong>
-
-<br>
-
-IBAN :
-${escapeHtml(iban)}
-
-<br>
-
-Montant :
-${euro(inst.amount)}
-
-<br>
-
-Communication :
-${escapeHtml(
-payment.communication||"-"
-)}
-`;
-
-document.getElementById(
-"qrModal"
-).classList.add("show");
-
-}
-
-function closeQR(){
-
-document.getElementById(
-"qrModal"
-).classList.remove("show");
-
-document.getElementById(
-"qrCode"
-).innerHTML="";
-
-qrId=null;
-
-}
-
-/* ==================================================
-   CALENDRIER
-================================================== */
-
-function addCalendar(
-payment,
-inst
-){
-
-if(!inst.date)return;
-
-const date=
-inst.date.replaceAll(
-"-",
-""
-);
-
-const d2=
-new Date(
-inst.date+"T00:00:00"
-);
-
-d2.setDate(
-d2.getDate()+1
-);
-
-const end=
-d2.toISOString()
-.substring(0,10)
-.replaceAll("-","");
-
-const title=
-(
-payment.alias
-?
-payment.alias+" - "
-:
-""
-)+
-payment.beneficiary;
-
-const details=
-"Montant : "+
-Number(inst.amount).toFixed(2)+
-" €\n"+
-"IBAN : "+
-(payment.iban||"")+
-"\n"+
-"Communication : "+
-(payment.communication||"");
-
-const url=
-"https://calendar.google.com/calendar/render?action=TEMPLATE"+
-"&text="+
-encodeURIComponent(title)+
-"&dates="+
-date+"/"+end+
-"&details="+
-encodeURIComponent(details);
-
-window.open(
-url,
-"_blank"
-);
-
-}
-
-/* ==================================================
-   DOCUMENT PAIEMENT
-================================================== */
-
-function openPhoto(paymentId){
-
-const payment=
-data.find(
-p=>String(p.id)===
-String(paymentId)
-);
-
-if(
-!payment||
-!payment.photo
-)
-return;
-
-photoId=paymentId;
-
-document.getElementById(
-"photoModalImage"
-).src=
-payment.photo;
-
-document.getElementById(
-"photoModal"
-).classList.add("show");
-
-}
-
-function closePhoto(){
-
-document.getElementById(
-"photoModal"
-).classList.remove("show");
-
-photoId=null;
-
-}
-
-async function deletePhoto(){
-
-if(!photoId)return;
-
-await deletePhotoFromPayment(
-photoId
-);
-
-closePhoto();
-
-}
-
-async function deletePhotoFromPayment(
-paymentId
-){
-
-const payment=
-data.find(
-p=>String(p.id)===
-String(paymentId)
-);
-
-if(!payment)return;
-
-if(
-!confirm(
-"Supprimer ce document ?"
-)
-)
-return;
-
-payment.photo="";
-
-await deletePhotoDB(
-paymentPhotoKey(paymentId)
-);
-
-await saveData();
-
-render();
-
-}
 
 /* ==================================================
    DOMICILIATIONS
 ================================================== */
 
-function loadDomiciliations(){
-
-try{
-
-const saved=
-localStorage.getItem(
-"mesDomiciliations"
-);
-
-if(saved)
-domiciliations=
-JSON.parse(saved);
-else
-domiciliations=[];
-
-normalizeDomiciliations();
-
-}catch(e){
-
-console.error(e);
-
-domiciliations=[];
-
-}
-
-}
-
-function normalizeDomiciliations(){
-
-if(!Array.isArray(domiciliations))
-domiciliations=[];
-
-domiciliations.forEach(
-dom=>{
-
-if(!dom.id)
-dom.id=generateId();
-
-if(dom.alias===undefined)
-dom.alias="";
-
-if(dom.beneficiary===undefined)
-dom.beneficiary="";
-
-if(dom.iban===undefined)
-dom.iban="";
-
-if(dom.total===undefined)
-dom.total=0;
-
-if(dom.months===undefined)
-dom.months=1;
-
-if(dom.taeg===undefined)
-dom.taeg=0;
-
-if(dom.startDate===undefined)
-dom.startDate="";
-
-if(dom.lastDifferent===undefined)
-dom.lastDifferent=false;
-
-if(dom.lastInstallment===undefined)
-dom.lastInstallment=0;
-
-if(dom.manualMonthly===undefined)
-dom.manualMonthly=false;
-
-if(dom.manualMonthlyAmount===undefined)
-dom.manualMonthlyAmount=0;
-
-if(!Array.isArray(dom.monthsPaid))
-dom.monthsPaid=[];
-
-if(!Array.isArray(dom.photos))
-dom.photos=[];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-if(dom.photos.length>2)
-dom.photos=
-dom.photos.slice(0,2);
-
-dom.monthsPaid=
-dom.monthsPaid
-.map(Number)
-.filter(
-n=>
-Number.isInteger(n)&&
-n>=1&&
-n<=Number(
-dom.months||1
-)
-)
-.filter(
-(n,index,array)=>
-array.indexOf(n)===index
-)
-.sort(
-(a,b)=>a-b
-);
-
-}
-);
-
-}
-
-/* ==================================================
-   FORM DOMICILIATION
-================================================== */
-
-function toggleDomiciliationForm(){
-
-document.getElementById(
-"domiciliationForm"
-).classList.toggle(
-"hidden"
-);
-
-}
-
-function calculateLoanMonthly(
-total,
-months,
-taeg
-){
-
-total=Number(total)||0;
-months=parseInt(months)||0;
-taeg=Number(taeg)||0;
-
-if(
-total<=0||
-months<=0
-)
-return 0;
-
-if(taeg<=0)
-return total/months;
-
-const monthlyRate=
-(taeg/100)/12;
-
-const monthly=
-total*monthlyRate/
-(
-1-
-Math.pow(
-1+monthlyRate,
--months
-)
-);
-
-return isFinite(monthly)
-?
-monthly
-:
-0;
-
-}
-
-function calculateDomiciliationEndDate(
-startDate,
-months
-){
-
-if(
-!startDate||
-!months
-)
-return "";
-
-return addMonthsSafe(
-startDate,
-Number(months)
-);
-
-}
-
-function toggleDomManualMonthly(){
-
-const checked=
-document.getElementById(
-"domManualMonthly"
-).checked;
-
-document.getElementById(
-"domManualMonthlyBox"
-).classList.toggle(
-"hidden",
-!checked
-);
-
-calculateDomiciliation();
-
-}
-
-function toggleEditManualMonthly(){
-
-const checked=
-document.getElementById(
-"domEditManualMonthly"
-).checked;
-
-document.getElementById(
-"domEditManualMonthlyBox"
-).classList.toggle(
-"hidden",
-!checked
-);
-
-calculateEditDomiciliation();
-
-}
-
-function toggleDomLastInstallment(){
-
-const checked=
-document.getElementById(
-"domLastDifferent"
-).checked;
-
-document.getElementById(
-"domLastInstallmentBox"
-).classList.toggle(
-"hidden",
-!checked
-);
-
-calculateDomiciliation();
-
-}
-
-function getDomiciliationInstallmentAmount(
-dom,
-monthNumber
-){
-
-const total=
-Number(dom.total||0);
-
-const months=
-Math.max(
-1,
-Number(dom.months||1)
-);
-
-let monthly;
-
-if(
-dom.manualMonthly &&
-Number(
-dom.manualMonthlyAmount||0
-)>0
-){
-
-monthly=
-roundMoney(
-dom.manualMonthlyAmount
-);
-
-}else{
-
-monthly=
-calculateLoanMonthly(
-total,
-months,
-Number(dom.taeg||0)
-);
-
-}
-
-if(monthNumber===months){
-
-if(
-dom.lastDifferent &&
-Number(
-dom.lastInstallment||0
-)>0
-){
-
-return roundMoney(
-dom.lastInstallment
-);
-
-}
-
-if(months===1)
-return roundMoney(total);
-
-return roundMoney(
-total-monthly*(months-1)
-);
-
-}
-
-return roundMoney(monthly);
-
-}
-
-function getDomiciliationPaidAmount(
-dom
-){
-
-if(
-!Array.isArray(dom.monthsPaid)
-)
-return 0;
-
-let result=0;
-
-dom.monthsPaid.forEach(
-monthNumber=>{
-
-result+=
-getDomiciliationInstallmentAmount(
-dom,
-Number(monthNumber)
-);
-
-}
-);
-
-return roundMoney(result);
-
-}
-
-function getNextDomiciliationMonth(
-dom
-){
-
-const months=
-Math.max(
-1,
-Number(dom.months||1)
-);
-
-for(
-let i=1;
-i<=months;
-i++
-){
-
-if(
-!dom.monthsPaid.includes(i)
-)
-return i;
-
-}
-
-return null;
-
-}
-
-function calculateDomiciliation(){
-
-const total=
-parseFloat(
-document.getElementById(
-"domTotalAmount"
-).value
-);
-
-const months=
-parseInt(
-document.getElementById(
-"domMonths"
-).value
-);
-
-const taeg=
-parseFloat(
-document.getElementById(
-"domTaeg"
-).value
-);
-
-const startDate=
-document.getElementById(
-"domStartDate"
-).value;
-
-const manual=
-document.getElementById(
-"domManualMonthly"
-).checked;
-
-const manualAmount=
-parseFloat(
-document.getElementById(
-"domManualMonthlyAmount"
-).value
-);
-
-let monthly;
-
-if(
-manual &&
-!isNaN(manualAmount)&&
-manualAmount>0
-){
-
-monthly=
-roundMoney(manualAmount);
-
-}else{
-
-monthly=
-calculateLoanMonthly(
-total,
-months,
-taeg
-);
-
-}
-
-document.getElementById(
-"domEndDate"
-).value=
-calculateDomiciliationEndDate(
-startDate,
-months
-);
-
-let lastAmount=0;
-
-if(
-months>0&&
-!isNaN(total)
-){
-
-lastAmount=
-roundMoney(
-total-monthly*(months-1)
-);
-
-}
-
-if(
-document.getElementById(
-"domLastDifferent"
-).checked
-){
-
-const entered=
-parseFloat(
-document.getElementById(
-"domLastInstallment"
-).value
-);
-
-if(
-!isNaN(entered)&&
-entered>0
-)
-lastAmount=
-roundMoney(entered);
-
-}
-
-document.getElementById(
-"domMonthlyResult"
-).innerHTML=
-`
-Mensualité ${manual?"fixée":"estimée"} :
-<strong>${euro(monthly)}</strong>
-`;
-
-document.getElementById(
-"domLastInstallmentInfo"
-).innerHTML=
-`
-Dernière échéance :
-<strong>${euro(lastAmount)}</strong>
-`;
-
-}
-
-/* ==================================================
-   PHOTOS DOMICILIATION
-================================================== */
-
-function compressDomiciliationPhoto(
-file,
-callback
-){
-
-if(!file){
-
-callback("");
-
-return;
-
-}
-
-const reader=
-new FileReader();
-
-reader.onload=function(e){
-
-const img=new Image();
-
-img.onload=function(){
-
-const canvas=
-document.createElement(
-"canvas"
-);
-
-const maxWidth=1400;
-
-let width=img.width;
-let height=img.height;
-
-if(width>maxWidth){
-
-height=
-height*(maxWidth/width);
-
-width=maxWidth;
-
-}
-
-canvas.width=width;
-canvas.height=height;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.drawImage(
-img,
-0,
-0,
-width,
-height
-);
-
-callback(
-canvas.toDataURL(
-"image/jpeg",
-0.75
-)
-);
-
-};
-
-img.src=e.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-function handleDomiciliationAddPhoto(
-file,
-number
-){
-
-if(!file)return;
-
-compressDomiciliationPhoto(
-file,
-function(photo){
-
-if(number===1)
-domPhoto1=photo;
-
-if(number===2)
-domPhoto2=photo;
-
-renderAddDomiciliationPhotos();
-
-}
-);
-
-}
-
-function renderAddDomiciliationPhotos(){
-
-const box=
-document.getElementById(
-"domAddPhotosPreview"
-);
-
-box.innerHTML="";
-
-[
-domPhoto1,
-domPhoto2
-].forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"domiciliationPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="domiciliationPhoto">
-
-<div class="domiciliationPhotoActions">
-
-<button
-type="button"
-class="danger"
-onclick="removeAddDomiciliationPhoto(${index+1})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="domiciliationPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-`;
-
-}
-
-box.appendChild(div);
-
-}
-);
-
-}
-
-function removeAddDomiciliationPhoto(
-number
-){
-
-if(number===1)
-domPhoto1="";
-
-if(number===2)
-domPhoto2="";
-
-renderAddDomiciliationPhotos();
-
-}
-
-/* ==================================================
-   AJOUT DOMICILIATION
-================================================== */
-
-async function addDomiciliation(){
+function addDomiciliation(){
 
 const alias=
 document.getElementById(
@@ -6196,50 +3073,50 @@ document.getElementById(
 const iban=
 document.getElementById(
 "domIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
+).value.trim();
 
-const total=
-parseFloat(
+const totalAmount=
+Number(
 document.getElementById(
 "domTotalAmount"
 ).value
-);
+)||0;
 
 const months=
-parseInt(
+Number(
 document.getElementById(
 "domMonths"
 ).value
-);
+)||0;
 
 const taeg=
-parseFloat(
+Number(
 document.getElementById(
 "domTaeg"
 ).value
-);
+)||0;
 
 const startDate=
 document.getElementById(
 "domStartDate"
 ).value;
 
-const manualMonthly=
+const endDate=
+document.getElementById(
+"domEndDate"
+).value;
+
+const manual=
 document.getElementById(
 "domManualMonthly"
 ).checked;
 
-const manualMonthlyAmount=
-roundMoney(
-parseFloat(
+const manualMonthly=
+Number(
 document.getElementById(
 "domManualMonthlyAmount"
 ).value
-)||0
-);
+)||0;
 
 const lastDifferent=
 document.getElementById(
@@ -6247,58 +3124,30 @@ document.getElementById(
 ).checked;
 
 const lastInstallment=
-roundMoney(
-parseFloat(
+Number(
 document.getElementById(
 "domLastInstallment"
 ).value
-)||0
-);
+)||0;
 
-if(
-!beneficiary||
-isNaN(total)||
-total<=0||
-isNaN(months)||
-months<1||
-isNaN(taeg)||
-taeg<0||
-!startDate
-){
+if(!alias||!totalAmount){
 
 alert(
-"Veuillez remplir les champs obligatoires."
+"Veuillez remplir l'alias et le montant."
 );
 
 return;
 
 }
 
-if(
-manualMonthly &&
-manualMonthlyAmount<=0
-){
-
-alert(
-"Veuillez indiquer le montant de la mensualité."
+let monthly=
+manual
+?manualMonthly
+:(
+months>0
+?totalAmount/months
+:0
 );
-
-return;
-
-}
-
-if(
-lastDifferent &&
-lastInstallment<=0
-){
-
-alert(
-"Veuillez indiquer le montant de la dernière échéance."
-);
-
-return;
-
-}
 
 domiciliations.push({
 
@@ -6310,8 +3159,8 @@ beneficiary,
 
 iban,
 
-total:
-roundMoney(total),
+totalAmount:
+roundMoney(totalAmount),
 
 months,
 
@@ -6319,36 +3168,28 @@ taeg,
 
 startDate,
 
-manualMonthly,
+endDate,
 
-manualMonthlyAmount:
-manualMonthly
-?
-manualMonthlyAmount
-:
-0,
+manualMonthly:manual,
+
+monthlyAmount:
+roundMoney(monthly),
 
 lastDifferent,
 
 lastInstallment:
-lastDifferent
-?
-lastInstallment
-:
-0,
-
-monthsPaid:[],
+roundMoney(lastInstallment),
 
 photos:[
-domPhoto1,
-domPhoto2
+currentDomPhotos[0]||"",
+currentDomPhotos[1]||""
 ]
 
 });
 
-await saveDomiciliations();
+saveDomiciliations();
 
-resetDomiciliationForm();
+resetDomForm();
 
 renderDomiciliations();
 
@@ -6358,2112 +3199,139 @@ alert(
 
 }
 
-function resetDomiciliationForm(){
-
-document.getElementById(
-"domAlias"
-).value="";
-
-document.getElementById(
-"domBeneficiary"
-).value="";
-
-document.getElementById(
-"domIban"
-).value="";
-
-document.getElementById(
-"domTotalAmount"
-).value="";
-
-document.getElementById(
-"domMonths"
-).value="1";
-
-document.getElementById(
-"domTaeg"
-).value="";
-
-document.getElementById(
-"domStartDate"
-).value="";
-
-document.getElementById(
-"domEndDate"
-).value="";
-
-document.getElementById(
-"domManualMonthly"
-).checked=false;
-
-document.getElementById(
-"domManualMonthlyAmount"
-).value="";
-
-document.getElementById(
-"domManualMonthlyBox"
-).classList.add(
-"hidden"
-);
-
-document.getElementById(
-"domLastDifferent"
-).checked=false;
-
-document.getElementById(
-"domLastInstallment"
-).value="";
-
-document.getElementById(
-"domLastInstallmentBox"
-).classList.add(
-"hidden"
-);
-
-domPhoto1="";
-domPhoto2="";
-
-document.getElementById(
-"domAddPhotosPreview"
-).innerHTML="";
-
-document.getElementById(
-"domiciliationForm"
-).classList.add(
-"hidden"
-);
-
-}
-
-async function toggleDomiciliationMonth(
-id,
-monthNumber,
-checked
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(!Array.isArray(dom.monthsPaid))
-dom.monthsPaid=[];
-
-const month=Number(monthNumber);
-
-if(checked){
-
-if(
-!dom.monthsPaid.includes(month)
-)
-dom.monthsPaid.push(month);
-
-}else{
-
-dom.monthsPaid=
-dom.monthsPaid.filter(
-m=>Number(m)!==month
-);
-
-}
-
-dom.monthsPaid=
-dom.monthsPaid
-.map(Number)
-.filter(
-(n,index,array)=>
-Number.isInteger(n)&&
-n>=1&&
-n<=Number(
-dom.months||1
-)&&
-array.indexOf(n)===index
-)
-.sort(
-(a,b)=>a-b
-);
-
-await saveDomiciliations();
-
-renderDomiciliations();
-
-}
-
-/* ==================================================
-   RENDER DOMICILIATIONS
-================================================== */
 
 function renderDomiciliations(){
 
-const list=
+const container=
 document.getElementById(
 "domiciliationList"
 );
 
-if(!list)return;
-
-list.innerHTML="";
-
 if(!domiciliations.length){
 
-list.innerHTML=
-`
-<div class="domiciliationEmpty">
-Aucune domiciliation enregistrée.
-</div>
-`;
+container.innerHTML=
+`<div class="small">
+Aucune domiciliation.
+</div>`;
 
 return;
 
 }
 
-let totalMensuel=0;
-let totalRestant=0;
+container.innerHTML=
+domiciliations.map(
+dom=>`
 
-domiciliations.forEach(
-dom=>{
+<div class="domCard">
 
-const total=
-Number(dom.total||0);
+<div class="domHeader">
 
-const months=
-Math.max(
-1,
-Number(dom.months||1)
-);
+<div>
 
-const paidCount=
-dom.monthsPaid.length;
-
-const remainingMonths=
-months-paidCount;
-
-const monthly=
-dom.manualMonthly &&
-Number(
-dom.manualMonthlyAmount
-)>0
-?
-roundMoney(
-dom.manualMonthlyAmount
-)
-:
-calculateLoanMonthly(
-total,
-months,
-Number(dom.taeg||0)
-);
-
-const paidAmount=
-getDomiciliationPaidAmount(
-dom
-);
-
-const remainingAmount=
-Math.max(
-0,
-roundMoney(
-total-paidAmount
-)
-);
-
-if(remainingMonths>0)
-totalMensuel+=monthly;
-
-totalRestant+=remainingAmount;
-
-}
-);
-
-const summary=
-document.createElement(
-"div"
-);
-
-summary.className=
-"domiciliationSummary";
-
-summary.innerHTML=
-`
-<div class="domiciliationSummaryBox">
-
-<div class="domiciliationSummaryTitle">
-Domiciliations
+<div class="domTitle">
+${escapeHtml(dom.alias)}
 </div>
 
-<div class="domiciliationSummaryValue">
-${domiciliations.length}
+<div class="domDetails">
+${escapeHtml(dom.beneficiary||"")}
 </div>
 
 </div>
 
-<div class="domiciliationSummaryBox">
-
-<div class="domiciliationSummaryTitle">
-Mensuel
-</div>
-
-<div class="domiciliationSummaryValue">
-${euro(totalMensuel)}
+<div class="domAmount">
+${money(dom.monthlyAmount||0)}
 </div>
 
 </div>
 
-<div class="domiciliationSummaryBox">
+<div class="domDetails">
 
-<div class="domiciliationSummaryTitle">
-Reste estimé
+${dom.startDate
+?"Début : "+formatDate(dom.startDate)
+:""}
+
+${dom.endDate
+?" · Fin : "+formatDate(dom.endDate)
+:""}
+
 </div>
 
-<div class="domiciliationSummaryValue">
-${euro(totalRestant)}
-</div>
+<div class="actions"
+style="margin-top:10px">
+
+<button
+class="btn btnBlue"
+onclick="openEditDom('${dom.id}')">
+Modifier
+</button>
+
+<button
+class="btn btnRed"
+onclick="deleteDomiciliation('${dom.id}')">
+Supprimer
+</button>
 
 </div>
-`;
 
-list.appendChild(summary);
-
-domiciliations.forEach(
-dom=>{
-
-const total=
-Number(dom.total||0);
-
-const months=
-Math.max(
-1,
-Number(dom.months||1)
-);
-
-const taeg=
-Number(dom.taeg||0);
-
-const monthly=
-dom.manualMonthly &&
-Number(
-dom.manualMonthlyAmount||0
-)>0
-?
-roundMoney(
-dom.manualMonthlyAmount
-)
-:
-calculateLoanMonthly(
-total,
-months,
-taeg
-);
-
-const endDate=
-calculateDomiciliationEndDate(
-dom.startDate,
-months
-);
-
-const paidCount=
-dom.monthsPaid.length;
-
-const remainingMonths=
-months-paidCount;
-
-const paidAmount=
-getDomiciliationPaidAmount(
-dom
-);
-
-const remainingAmount=
-Math.max(
-0,
-roundMoney(
-total-paidAmount
-)
-);
-
-const progress=
-Math.min(
-100,
-(paidCount/months)*100
-);
-
-const nextMonth=
-getNextDomiciliationMonth(
-dom
-);
-
-const item=
-document.createElement(
-"div"
-);
-
-item.className=
-"domiciliationItem";
-
-if(remainingMonths===0)
-item.classList.add("paid");
-
-item.innerHTML=
-`
-<div class="domiciliationAlias">
-${escapeHtml(
-dom.alias||"Sans alias"
-)}
-</div>
-
-<div class="domiciliationBeneficiary">
-${escapeHtml(
-dom.beneficiary||"-"
-)}
-</div>
-
-<div class="domiciliationDetails">
-
-IBAN :
-${escapeHtml(
-dom.iban||"-"
-)}
-
-<br>
-
-Montant total :
-<strong>${euro(total)}</strong>
-
-<br>
-
-TAEG :
-<strong>
-${Number(taeg).toLocaleString(
-"fr-BE",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-)} %
-</strong>
-
-<br>
-
-Durée :
-<strong>${months} mois</strong>
-
-<br>
-
-Date de début :
-<strong>
-${formatDate(
-dom.startDate
-)||"-"}
-</strong>
-
-<br>
-
-Date de fin :
-<strong>
-${formatDate(
-endDate
-)||"-"}
-</strong>
-
-<br>
-
-Mensualité ${dom.manualMonthly?"fixée":"estimée"} :
-<strong>${euro(monthly)}</strong>
-
-${
-dom.manualMonthly
-?
-`
-<br>
-<span class="small">
-Mensualité du contrat
-</span>
-`
-:
-""
-}
-
-<br>
+<div class="domSchedule hidden"
+id="domSchedule_${dom.id}">
 
 Échéances :
-<strong>${paidCount} / ${months}</strong>
+${dom.months||0}
 
-<br>
+</div>
 
-Déjà payé :
-<strong>${euro(paidAmount)}</strong>
+</div>
 
-<br>
-
-Reste :
-<strong>${euro(remainingAmount)}</strong>
-
-${
-dom.lastDifferent
-?
 `
-<br>
-Dernière échéance :
-<strong>${euro(
-dom.lastInstallment
-)}</strong>
-`
-:
-""
-}
-
-</div>
-
-<div class="domiciliationProgress">
-
-<div
-class="domiciliationProgressBar"
-style="width:${progress}%">
-</div>
-
-</div>
-`;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-const photosBox=
-document.createElement(
-"div"
-);
-
-photosBox.className=
-"domiciliationPhotos";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const photoBox=
-document.createElement(
-"div"
-);
-
-photoBox.className=
-"domiciliationPhotoBox";
-
-if(photo){
-
-photoBox.innerHTML=
-`
-<img
-src="${photo}"
-class="domiciliationPhoto"
-onclick="openDomiciliationPhoto('${dom.id}',${index})">
-
-<div class="domiciliationPhotoActions">
-
-<button
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-class="danger"
-onclick="deleteDomiciliationPhoto('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-photoBox.innerHTML=
-`
-<div class="domiciliationPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="domiciliationPhotoActions">
-
-<button
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
+).join("");
 
 }
 
-photosBox.appendChild(
-photoBox
-);
 
-}
-);
+function deleteDomiciliation(id){
 
-item.appendChild(
-photosBox
-);
-
-const nextBox=
-document.createElement(
-"div"
-);
-
-nextBox.className=
-"domiciliationNext";
-
-if(nextMonth!==null){
-
-const nextDate=
-addMonthsSafe(
-dom.startDate,
-nextMonth-1
-);
-
-const nextAmount=
-getDomiciliationInstallmentAmount(
-dom,
-nextMonth
-);
-
-nextBox.innerHTML=
-`
-<div class="domiciliationNextTop">
-
-<input
-type="checkbox"
-class="domiciliationCheckbox">
-
-<div class="domiciliationNextInfo">
-
-<div class="domiciliationNextTitle">
-Prochaine échéance •
-${nextMonth}/${months}
-</div>
-
-<div class="domiciliationNextDate">
-${formatDate(nextDate)||"-"}
-</div>
-
-<div class="domiciliationNextAmount">
-${euro(nextAmount)}
-</div>
-
-</div>
-
-</div>
-`;
-
-const checkbox=
-nextBox.querySelector(
-"input"
-);
-
-checkbox.addEventListener(
-"change",
-function(){
-
-if(this.checked){
-
-toggleDomiciliationMonth(
-dom.id,
-nextMonth,
-true
-);
-
-}
-
-}
-);
-
-}else{
-
-nextBox.innerHTML=
-`
-<div style="
-text-align:center;
-font-weight:700;
-color:#167c2e;
-">
-✓ Toutes les échéances sont payées
-</div>
-`;
-
-}
-
-item.appendChild(
-nextBox
-);
-
-const scheduleButton=
-document.createElement(
-"button"
-);
-
-scheduleButton.className=
-"secondary domiciliationScheduleButton";
-
-const scheduleOpen=
-openedDomiciliationSchedules.has(
-String(dom.id)
-);
-
-scheduleButton.textContent=
-scheduleOpen
-?
-"▲ Masquer les échéances"
-:
-"📋 Voir les échéances";
-
-scheduleButton.onclick=function(){
-
-toggleDomiciliationSchedule(
-dom.id
-);
-
-};
-
-item.appendChild(
-scheduleButton
-);
-
-const schedule=
-document.createElement(
-"div"
-);
-
-schedule.className=
-"domiciliationSchedule";
-
-if(!scheduleOpen)
-schedule.classList.add(
-"hidden"
-);
-
-for(
-let month=1;
-month<=months;
-month++
-){
-
-const paid=
-dom.monthsPaid.includes(
-month
-);
-
-const date=
-addMonthsSafe(
-dom.startDate,
-month-1
-);
-
-const amount=
-getDomiciliationInstallmentAmount(
-dom,
-month
-);
-
-const row=
-document.createElement(
-"div"
-);
-
-row.className=
-"domiciliationMonth";
-
-if(paid)
-row.classList.add(
-"paid"
-);
-
-const checkbox=
-document.createElement(
-"input"
-);
-
-checkbox.type="checkbox";
-checkbox.checked=paid;
-
-checkbox.addEventListener(
-"change",
-function(){
-
-toggleDomiciliationMonth(
-dom.id,
-month,
-this.checked
-);
-
-}
-);
-
-const info=
-document.createElement(
-"div"
-);
-
-info.className=
-"domiciliationMonthInfo";
-
-info.innerHTML=
-`
-<div class="domiciliationMonthLabel">
-
-Échéance ${month}/${months}
-
-${
-paid
-?
-`<span class="badge badgePaid">PAYÉE</span>`
-:
-`<span class="badge badgeUnpaid">À PAYER</span>`
-}
-
-${
-month===months
-?
-`<span class="domiciliationLast">DERNIÈRE</span>`
-:
-""
-}
-
-</div>
-
-<div class="domiciliationMonthDate">
-${formatDate(date)||"-"}
-</div>
-
-<div class="domiciliationMonthAmount">
-${euro(amount)}
-</div>
-`;
-
-row.appendChild(
-checkbox
-);
-
-row.appendChild(
-info
-);
-
-schedule.appendChild(
-row
-);
-
-}
-
-item.appendChild(
-schedule
-);
-
-const actions=
-document.createElement(
-"div"
-);
-
-actions.className=
-"domiciliationActions";
-
-const undoBtn=
-document.createElement(
-"button"
-);
-
-undoBtn.className=
-"secondary";
-
-undoBtn.textContent=
-"↩️ Annuler dernier";
-
-undoBtn.onclick=function(){
-
-undoDomiciliationMonth(
-dom.id
-);
-
-};
-
-const editBtn=
-document.createElement(
-"button"
-);
-
-editBtn.className=
-"secondary";
-
-editBtn.textContent=
-"✏️ Modifier";
-
-editBtn.onclick=function(){
-
-openDomiciliationEdit(
-dom.id
-);
-
-};
-
-const deleteBtn=
-document.createElement(
-"button"
-);
-
-deleteBtn.className=
-"danger";
-
-deleteBtn.textContent=
-"🗑️ Supprimer";
-
-deleteBtn.onclick=function(){
-
-deleteDomiciliation(
-dom.id
-);
-
-};
-
-actions.appendChild(
-undoBtn
-);
-
-actions.appendChild(
-editBtn
-);
-
-actions.appendChild(
-deleteBtn
-);
-
-item.appendChild(
-actions
-);
-
-list.appendChild(
-item
-);
-
-}
-);
-
-}
-
-function toggleDomiciliationSchedule(
-id
-){
-
-const key=String(id);
-
-if(
-openedDomiciliationSchedules.has(
-key
-)
-){
-
-openedDomiciliationSchedules.delete(
-key
-);
-
-}else{
-
-openedDomiciliationSchedules.add(
-key
-);
-
-}
-
-renderDomiciliations();
-
-}
-
-async function undoDomiciliationMonth(
-id
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(
-!dom||
-!dom.monthsPaid.length
-)
-return;
-
-if(
-!confirm(
-"Annuler le dernier mois payé ?"
-)
-)
-return;
-
-dom.monthsPaid.sort(
-(a,b)=>a-b
-);
-
-dom.monthsPaid.pop();
-
-await saveDomiciliations();
-
-renderDomiciliations();
-
-}
-
-/* ==================================================
-   PHOTOS DOMICILIATION
-================================================== */
-
-function chooseDomiciliationPhoto(
-id,
-index,
-source
-){
-
-const input=
-document.createElement(
-"input"
-);
-
-input.type="file";
-input.accept="image/*";
-
-if(source==="camera")
-input.capture="environment";
-
-input.onchange=function(){
-
-const file=
-input.files?.[0];
-
-if(!file)return;
-
-compressDomiciliationPhoto(
-file,
-async function(photo){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-dom.photos[index]=photo;
-
-await saveDomiciliations();
-
-renderDomiciliations();
-
-if(
-domEditId &&
-String(domEditId)===
-String(id)
-){
-
-renderEditDomiciliationPhotos(
-dom
-);
-
-}
-
-}
-);
-
-};
-
-input.click();
-
-}
-
-function replaceDomiciliationPhoto(
-id,
-index
-){
-
-chooseDomiciliationPhoto(
-id,
-index,
-"camera"
-);
-
-}
-
-async function deleteDomiciliationPhoto(
-id,
-index
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(
-!confirm(
-"Supprimer cette photo ?"
-)
-)
-return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-dom.photos[index]="";
-
-try{
-
-await deletePhotoDB(
-domiciliationPhotoKey(
-id,
-index
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-await saveDomiciliations();
-
-renderDomiciliations();
-
-}
-
-function openDomiciliationPhoto(
-id,
-index
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(
-!dom||
-!dom.photos||
-!dom.photos[index]
-)
-return;
-
-const modal=
-document.createElement(
-"div"
-);
-
-modal.style.position="fixed";
-modal.style.inset="0";
-modal.style.background=
-"rgba(0,0,0,.9)";
-modal.style.zIndex="3000";
-modal.style.display="flex";
-modal.style.alignItems="center";
-modal.style.justifyContent=
-"center";
-modal.style.padding="15px";
-
-const img=
-document.createElement(
-"img"
-);
-
-img.src=
-dom.photos[index];
-
-img.style.maxWidth="100%";
-img.style.maxHeight="90vh";
-img.style.objectFit="contain";
-img.style.borderRadius="12px";
-
-modal.appendChild(img);
-
-modal.onclick=function(){
-
-modal.remove();
-
-};
-
-document.body.appendChild(
-modal
-);
-
-}
-
-/* ==================================================
-   MODIFICATION DOMICILIATION
-================================================== */
-
-function openDomiciliationEdit(
-id
-){
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-domEditId=id;
-
-document.getElementById(
-"domEditAlias"
-).value=
-dom.alias||"";
-
-document.getElementById(
-"domEditBeneficiary"
-).value=
-dom.beneficiary||"";
-
-document.getElementById(
-"domEditIban"
-).value=
-dom.iban||"";
-
-document.getElementById(
-"domEditTotal"
-).value=
-dom.total??"";
-
-document.getElementById(
-"domEditMonths"
-).value=
-dom.months??1;
-
-document.getElementById(
-"domEditTaeg"
-).value=
-dom.taeg??0;
-
-document.getElementById(
-"domEditStartDate"
-).value=
-dom.startDate||"";
-
-document.getElementById(
-"domEditManualMonthly"
-).checked=
-!!dom.manualMonthly;
-
-document.getElementById(
-"domEditManualMonthlyAmount"
-).value=
-dom.manualMonthlyAmount??"";
-
-document.getElementById(
-"domEditManualMonthlyBox"
-).classList.toggle(
-"hidden",
-!dom.manualMonthly
-);
-
-document.getElementById(
-"domEditLastDifferent"
-).checked=
-!!dom.lastDifferent;
-
-document.getElementById(
-"domEditLastInstallment"
-).value=
-dom.lastInstallment??"";
-
-document.getElementById(
-"domEditLastInstallmentBox"
-).classList.toggle(
-"hidden",
-!dom.lastDifferent
-);
-
-calculateEditDomiciliation();
-
-renderEditDomiciliationPhotos(
-dom
-);
-
-document.getElementById(
-"domEditModal"
-).classList.add(
-"show"
-);
-
-}
-
-function renderEditDomiciliationPhotos(
-dom
-){
-
-const box=
-document.getElementById(
-"domEditPhotos"
-);
-
-if(!box)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-box.innerHTML="";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"domiciliationPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="domiciliationPhoto"
-onclick="openDomiciliationPhoto('${dom.id}',${index})">
-
-<div class="domiciliationPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-type="button"
-class="danger"
-onclick="deleteDomiciliationPhotoFromEdit('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="domiciliationPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="domiciliationPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="chooseDomiciliationPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
-
-}
-
-box.appendChild(
-div
-);
-
-}
-);
-
-}
-
-async function deleteDomiciliationPhotoFromEdit(
-id,
-index
-){
-
-await deleteDomiciliationPhoto(
-id,
-index
-);
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(dom)
-renderEditDomiciliationPhotos(
-dom
-);
-
-}
-
-function calculateEditDomiciliation(){
-
-const total=
-parseFloat(
-document.getElementById(
-"domEditTotal"
-).value
-);
-
-const months=
-parseInt(
-document.getElementById(
-"domEditMonths"
-).value
-);
-
-const taeg=
-parseFloat(
-document.getElementById(
-"domEditTaeg"
-).value
-);
-
-const startDate=
-document.getElementById(
-"domEditStartDate"
-).value;
-
-const manual=
-document.getElementById(
-"domEditManualMonthly"
-).checked;
-
-const manualAmount=
-parseFloat(
-document.getElementById(
-"domEditManualMonthlyAmount"
-).value
-);
-
-let monthly;
-
-if(
-manual &&
-!isNaN(manualAmount)&&
-manualAmount>0
-){
-
-monthly=
-roundMoney(
-manualAmount
-);
-
-}else{
-
-monthly=
-calculateLoanMonthly(
-total,
-months,
-taeg
-);
-
-}
-
-document.getElementById(
-"domEditEndDate"
-).value=
-calculateDomiciliationEndDate(
-startDate,
-months
-);
-
-let lastAmount=0;
-
-if(
-months>0&&
-!isNaN(total)
-){
-
-lastAmount=
-roundMoney(
-total-monthly*(months-1)
-);
-
-}
-
-if(
-document.getElementById(
-"domEditLastDifferent"
-).checked
-){
-
-const entered=
-parseFloat(
-document.getElementById(
-"domEditLastInstallment"
-).value
-);
-
-if(
-!isNaN(entered)&&
-entered>0
-)
-lastAmount=
-roundMoney(entered);
-
-}
-
-document.getElementById(
-"domEditMonthlyResult"
-).innerHTML=
-`
-Mensualité ${manual?"fixée":"estimée"} :
-<strong>${euro(monthly)}</strong>
-`;
-
-document.getElementById(
-"domEditLastInstallmentInfo"
-).innerHTML=
-`
-Dernière échéance :
-<strong>${euro(lastAmount)}</strong>
-`;
-
-}
-
-async function saveDomiciliationEdit(){
-
-if(!domEditId)
-return;
-
-const dom=
-domiciliations.find(
-d=>String(d.id)===
-String(domEditId)
-);
-
-if(!dom)return;
-
-const total=
-parseFloat(
-document.getElementById(
-"domEditTotal"
-).value
-);
-
-const months=
-parseInt(
-document.getElementById(
-"domEditMonths"
-).value
-);
-
-const taeg=
-parseFloat(
-document.getElementById(
-"domEditTaeg"
-).value
-);
-
-const startDate=
-document.getElementById(
-"domEditStartDate"
-).value;
-
-const manualMonthly=
-document.getElementById(
-"domEditManualMonthly"
-).checked;
-
-const manualAmount=
-roundMoney(
-parseFloat(
-document.getElementById(
-"domEditManualMonthlyAmount"
-).value
-)||0
-);
-
-const lastDifferent=
-document.getElementById(
-"domEditLastDifferent"
-).checked;
-
-const lastAmount=
-roundMoney(
-parseFloat(
-document.getElementById(
-"domEditLastInstallment"
-).value
-)||0
-);
-
-if(
-isNaN(total)||
-total<=0||
-isNaN(months)||
-months<1||
-isNaN(taeg)||
-taeg<0||
-!startDate
-){
-
-alert(
-"Veuillez remplir correctement les champs obligatoires."
-);
-
-return;
-
-}
-
-if(
-manualMonthly&&
-manualAmount<=0
-){
-
-alert(
-"Veuillez indiquer le montant de la mensualité."
-);
-
-return;
-
-}
-
-if(
-lastDifferent&&
-lastAmount<=0
-){
-
-alert(
-"Veuillez indiquer le montant de la dernière échéance."
-);
-
-return;
-
-}
-
-dom.alias=
-document.getElementById(
-"domEditAlias"
-).value.trim();
-
-dom.beneficiary=
-document.getElementById(
-"domEditBeneficiary"
-).value.trim();
-
-dom.iban=
-document.getElementById(
-"domEditIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
-
-dom.total=
-roundMoney(total);
-
-dom.months=months;
-dom.taeg=taeg;
-dom.startDate=startDate;
-
-dom.manualMonthly=
-manualMonthly;
-
-dom.manualMonthlyAmount=
-manualMonthly
-?
-manualAmount
-:
-0;
-
-dom.lastDifferent=
-lastDifferent;
-
-dom.lastInstallment=
-lastDifferent
-?
-lastAmount
-:
-0;
-
-dom.monthsPaid=
-dom.monthsPaid
-.map(Number)
-.filter(
-n=>
-Number.isInteger(n)&&
-n>=1&&
-n<=months
-)
-.filter(
-(n,index,array)=>
-array.indexOf(n)===index
-)
-.sort(
-(a,b)=>a-b
-);
-
-await saveDomiciliations();
-
-closeDomiciliationEdit();
-
-renderDomiciliations();
-
-alert(
-"Modification enregistrée."
-);
-
-}
-
-function closeDomiciliationEdit(){
-
-document.getElementById(
-"domEditModal"
-).classList.remove(
-"show"
-);
-
-domEditId=null;
-
-}
-
-async function deleteDomiciliation(
-id
-){
-
-if(
-!confirm(
+if(!confirm(
 "Supprimer cette domiciliation ?"
-)
-)
+)){
 return;
+}
 
-openedDomiciliationSchedules.delete(
-String(id)
+const dom=
+domiciliations.find(
+x=>x.id===id
 );
 
-domiciliations=
-domiciliations.filter(
-d=>String(d.id)!==
-String(id)
-);
+if(dom){
 
 for(let i=0;i<2;i++){
 
-try{
-
-await deletePhotoDB(
+deletePhotoDB(
 domiciliationPhotoKey(
 id,
 i
 )
 );
 
-}catch(e){
-
-console.error(e);
-
 }
 
 }
 
-await saveDomiciliations();
+domiciliations=
+domiciliations.filter(
+x=>x.id!==id
+);
+
+saveDomiciliations();
 
 renderDomiciliations();
 
 }
 
+
 /* ==================================================
    DOMICILIATIONS PERMANENTES
 ================================================== */
-
-function loadPermanentDomiciliations(){
-
-try{
-
-const saved=
-localStorage.getItem(
-"mesDomiciliationsPermanentes"
-);
-
-if(saved)
-permanentDomiciliations=
-JSON.parse(saved);
-else
-permanentDomiciliations=[];
-
-normalizePermanentDomiciliations();
-
-}catch(e){
-
-console.error(e);
-
-permanentDomiciliations=[];
-
-}
-
-}
-
-function normalizePermanentDomiciliations(){
-
-if(!Array.isArray(
-permanentDomiciliations
-))
-permanentDomiciliations=[];
-
-permanentDomiciliations.forEach(
-dom=>{
-
-if(!dom.id)
-dom.id=generateId();
-
-if(dom.alias===undefined)
-dom.alias="";
-
-if(dom.beneficiary===undefined)
-dom.beneficiary="";
-
-if(dom.iban===undefined)
-dom.iban="";
-
-if(dom.amount===undefined)
-dom.amount=0;
-
-if(dom.startDate===undefined)
-dom.startDate="";
-
-if(dom.communication===undefined)
-dom.communication="";
-
-if(!Array.isArray(dom.photos))
-dom.photos=[];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-if(dom.photos.length>2)
-dom.photos=
-dom.photos.slice(0,2);
-
-}
-);
-
-}
-
-/* ==================================================
-   CALCULS DOMICILIATIONS PERMANENTES
-================================================== */
-
-function getCurrentYear(){
-
-return new Date().getFullYear();
-
-}
-
-function getPermanentStartDateObject(
-dom
-){
-
-if(!dom.startDate)
-return null;
-
-const d=
-new Date(
-dom.startDate+"T00:00:00"
-);
-
-if(isNaN(d.getTime()))
-return null;
-
-return d;
-
-}
-
-function getPermanentPaidMonthsForYear(
-dom,
-year
-){
-
-const start=
-getPermanentStartDateObject(
-dom
-);
-
-if(!start)return 0;
-
-const startYear=
-start.getFullYear();
-
-const startMonth=
-start.getMonth();
-
-const now=
-new Date();
-
-const currentYear=
-now.getFullYear();
-
-let firstMonth=0;
-let lastMonth=11;
-
-if(year<startYear)
-return 0;
-
-if(year===startYear)
-firstMonth=startMonth;
-
-if(year>currentYear)
-return 0;
-
-if(year===currentYear){
-
-lastMonth=
-Math.min(
-11,
-now.getMonth()
-);
-
-}
-
-if(
-year===startYear&&
-year===currentYear
-){
-
-lastMonth=
-Math.min(
-11,
-now.getMonth()
-);
-
-}
-
-if(lastMonth<firstMonth)
-return 0;
-
-return lastMonth-firstMonth+1;
-
-}
-
-function getPermanentTotalMonthsForYear(
-dom,
-year
-){
-
-const start=
-getPermanentStartDateObject(
-dom
-);
-
-if(!start)return 0;
-
-const startYear=
-start.getFullYear();
-
-const startMonth=
-start.getMonth();
-
-if(year<startYear)
-return 0;
-
-if(year===startYear)
-return 12-startMonth;
-
-return 12;
-
-}
-
-function getPermanentPaidAmountForYear(
-dom,
-year
-){
-
-const months=
-getPermanentPaidMonthsForYear(
-dom,
-year
-);
-
-return roundMoney(
-months*
-Number(dom.amount||0)
-);
-
-}
-
-function getPermanentPlannedAmountForYear(
-dom,
-year
-){
-
-const months=
-getPermanentTotalMonthsForYear(
-dom,
-year
-);
-
-return roundMoney(
-months*
-Number(dom.amount||0)
-);
-
-}
-
-function getPermanentRemainingAmountForYear(
-dom,
-year
-){
-
-const planned=
-getPermanentPlannedAmountForYear(
-dom,
-year
-);
-
-const paid=
-getPermanentPaidAmountForYear(
-dom,
-year
-);
-
-return Math.max(
-0,
-roundMoney(
-planned-paid
-)
-);
-
-}
-
-function getPermanentNextDate(
-dom
-){
-
-const start=
-getPermanentStartDateObject(
-dom
-);
-
-if(!start)return null;
-
-const now=
-new Date();
-
-const currentYear=
-now.getFullYear();
-
-const currentMonth=
-now.getMonth();
-
-const startYear=
-start.getFullYear();
-
-const startMonth=
-start.getMonth();
-
-if(
-startYear>currentYear||
-(
-startYear===currentYear&&
-startMonth>currentMonth
-)
-){
-
-return new Date(start);
-
-}
-
-let nextYear=
-currentYear;
-
-let nextMonth=
-currentMonth+1;
-
-if(nextMonth>11){
-
-nextMonth=0;
-nextYear++;
-
-}
-
-const day=
-start.getDate();
-
-const lastDay=
-new Date(
-nextYear,
-nextMonth+1,
-0
-).getDate();
-
-return new Date(
-nextYear,
-nextMonth,
-Math.min(
-day,
-lastDay
-)
-);
-
-}
-
-/* ==================================================
-   FORM PERMANENTE
-================================================== */
-
-function togglePermanentForm(){
-
-document.getElementById(
-"permanentForm"
-).classList.toggle(
-"hidden"
-);
-
-}
 
 async function addPermanentDomiciliation(){
 
@@ -8480,17 +3348,14 @@ document.getElementById(
 const iban=
 document.getElementById(
 "permanentIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
+).value.trim();
 
 const amount=
-parseFloat(
+Number(
 document.getElementById(
 "permanentAmount"
 ).value
-);
+)||0;
 
 const startDate=
 document.getElementById(
@@ -8502,15 +3367,10 @@ document.getElementById(
 "permanentCommunication"
 ).value.trim();
 
-if(
-!beneficiary||
-isNaN(amount)||
-amount<=0||
-!startDate
-){
+if(!alias||!amount){
 
 alert(
-"Veuillez remplir les champs obligatoires."
+"Veuillez remplir l'alias et le montant."
 );
 
 return;
@@ -8535,8 +3395,8 @@ startDate,
 communication,
 
 photos:[
-permanentPhoto1,
-permanentPhoto2
+currentPermanentPhotos[0]||"",
+currentPermanentPhotos[1]||""
 ]
 
 });
@@ -8553,1268 +3413,425 @@ alert(
 
 }
 
-function resetPermanentForm(){
+
+function getPermanentPaidMonthsForYear(
+dom,
+year
+){
+
+const start=
+new Date(
+dom.startDate+
+"T00:00:00"
+);
+
+const now=
+new Date();
+
+const currentYear=
+now.getFullYear();
+
+let endMonth=
+11;
+
+if(year===currentYear){
+
+endMonth=
+now.getMonth();
+
+}
+
+if(year<start.getFullYear()){
+
+return 0;
+
+}
+
+if(year===start.getFullYear()){
+
+return Math.max(
+0,
+endMonth-start.getMonth()+1
+);
+
+}
+
+return endMonth+1;
+
+}
+
+
+function getPermanentTotalMonthsForYear(
+dom,
+year
+){
+
+const start=
+new Date(
+dom.startDate+
+"T00:00:00"
+);
+
+if(year<start.getFullYear()){
+
+return 0;
+
+}
+
+if(year===start.getFullYear()){
+
+return 12-start.getMonth();
+
+}
+
+return 12;
+
+}
+
+
+function getPermanentPaidAmountForYear(
+dom,
+year
+){
+
+return roundMoney(
+getPermanentPaidMonthsForYear(
+dom,
+year
+)*
+Number(dom.amount||0)
+);
+
+}
+
+
+function getPermanentPlannedAmountForYear(
+dom,
+year
+){
+
+return roundMoney(
+getPermanentTotalMonthsForYear(
+dom,
+year
+)*
+Number(dom.amount||0)
+);
+
+}
+
+
+function getPermanentRemainingAmountForYear(
+dom,
+year
+){
+
+return Math.max(
+0,
+getPermanentPlannedAmountForYear(
+dom,
+year
+)-
+getPermanentPaidAmountForYear(
+dom,
+year
+)
+);
+
+}
+
+
+function getPermanentNextDate(dom){
+
+if(!dom.startDate){
+return null;
+}
+
+const start=
+new Date(
+dom.startDate+
+"T00:00:00"
+);
+
+const now=
+new Date();
+
+const date=
+new Date(
+start.getFullYear(),
+start.getMonth(),
+1
+);
+
+while(date<now){
+
+date.setMonth(
+date.getMonth()+1
+);
+
+}
+
+return date;
+
+}
+
+
+function renderPermanentDomiciliations(){
+
+const container=
+document.getElementById(
+"permanentList"
+);
+
+if(!permanentDomiciliations.length){
+
+container.innerHTML=
+`<div class="small">
+Aucune domiciliation permanente.
+</div>`;
+
+return;
+
+}
+
+const year=
+new Date().getFullYear();
+
+container.innerHTML=
+permanentDomiciliations.map(
+dom=>{
+
+const paid=
+getPermanentPaidAmountForYear(
+dom,
+year
+);
+
+const planned=
+getPermanentPlannedAmountForYear(
+dom,
+year
+);
+
+const remaining=
+getPermanentRemainingAmountForYear(
+dom,
+year
+);
+
+return `
+
+<div class="permanentCard">
+
+<div class="permanentHeader">
+
+<div>
+
+<div class="permanentTitle">
+${escapeHtml(dom.alias)}
+</div>
+
+<div class="permanentInfo">
+${escapeHtml(dom.beneficiary||"")}
+</div>
+
+</div>
+
+<div class="permanentAmount">
+${money(dom.amount||0)}
+</div>
+
+</div>
+
+<div class="permanentInfo">
+
+Depuis :
+${dom.startDate
+?formatDate(dom.startDate)
+:""}
+
+<br>
+
+Cette année :
+${money(paid)}
+payé sur
+${money(planned)}
+
+<br>
+
+Reste :
+${money(remaining)}
+
+</div>
+
+<div class="permanentPhotos">
+
+${
+(dom.photos||[])
+.filter(Boolean)
+.map(
+photo=>
+`<img src="${photo}">`
+)
+.join("")
+}
+
+</div>
+
+<div class="actions"
+style="margin-top:10px">
+
+<button
+class="btn btnBlue"
+onclick="openEditPermanent('${dom.id}')">
+Modifier
+</button>
+
+<button
+class="btn btnRed"
+onclick="deletePermanentDomiciliation('${dom.id}')">
+Supprimer
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* ==================================================
+   CALCULATRICE
+================================================== */
+
+function calculate(){
+
+const amount=
+Number(
+document.getElementById(
+"calcAmount"
+).value
+)||0;
+
+const months=
+Number(
+document.getElementById(
+"calcMonths"
+).value
+)||0;
+
+const result=
+months>0
+?amount/months
+:0;
 
 document.getElementById(
-"permanentAlias"
-).value="";
+"calcResult"
+).textContent=
+money(result);
+
+}
+
+
+/* ==================================================
+   MODALS
+================================================== */
+
+function closeModal(id){
 
 document.getElementById(
-"permanentBeneficiary"
-).value="";
-
-document.getElementById(
-"permanentIban"
-).value="";
-
-document.getElementById(
-"permanentAmount"
-).value="";
-
-document.getElementById(
-"permanentStartDate"
-).value="";
-
-document.getElementById(
-"permanentCommunication"
-).value="";
-
-permanentPhoto1="";
-permanentPhoto2="";
-
-document.getElementById(
-"permanentAddPhotosPreview"
-).innerHTML="";
-
-document.getElementById(
-"permanentForm"
+id
 ).classList.add(
 "hidden"
 );
 
 }
 
-/* ==================================================
-   PHOTOS PERMANENTES
-================================================== */
 
-function compressPermanentPhoto(
-file,
-callback
-){
+function showPaymentPhoto(id){
 
-if(!file){
-
-callback("");
-
-return;
-
-}
-
-const reader=
-new FileReader();
-
-reader.onload=function(e){
-
-const img=new Image();
-
-img.onload=function(){
-
-const canvas=
-document.createElement(
-"canvas"
+const p=
+data.find(
+x=>x.id===id
 );
 
-const maxWidth=1400;
-
-let width=img.width;
-let height=img.height;
-
-if(width>maxWidth){
-
-height=
-height*(maxWidth/width);
-
-width=maxWidth;
-
-}
-
-canvas.width=width;
-canvas.height=height;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.drawImage(
-img,
-0,
-0,
-width,
-height
-);
-
-callback(
-canvas.toDataURL(
-"image/jpeg",
-0.75
-)
-);
-
-};
-
-img.src=e.target.result;
-
-};
-
-reader.readAsDataURL(file);
-
-}
-
-function handlePermanentAddPhoto(
-file,
-number
-){
-
-if(!file)return;
-
-compressPermanentPhoto(
-file,
-function(photo){
-
-if(number===1)
-permanentPhoto1=photo;
-
-if(number===2)
-permanentPhoto2=photo;
-
-renderPermanentAddPhotos();
-
-}
-);
-
-}
-
-function renderPermanentAddPhotos(){
-
-const box=
-document.getElementById(
-"permanentAddPhotosPreview"
-);
-
-if(!box)return;
-
-box.innerHTML="";
-
-[
-permanentPhoto1,
-permanentPhoto2
-].forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"permanentPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="permanentPhoto">
-
-<div class="permanentPhotoActions">
-
-<button
-type="button"
-class="danger"
-onclick="removePermanentAddPhoto(${index+1})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="permanentPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-`;
-
-}
-
-box.appendChild(div);
-
-}
-);
-
-}
-
-function removePermanentAddPhoto(
-number
-){
-
-if(number===1)
-permanentPhoto1="";
-
-if(number===2)
-permanentPhoto2="";
-
-renderPermanentAddPhotos();
-
-}
-
-function choosePermanentPhoto(
-id,
-index,
-source
-){
-
-const input=
-document.createElement(
-"input"
-);
-
-input.type="file";
-input.accept="image/*";
-
-if(source==="camera")
-input.capture="environment";
-
-input.onchange=function(){
-
-const file=
-input.files?.[0];
-
-if(!file)return;
-
-compressPermanentPhoto(
-file,
-async function(photo){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-dom.photos[index]=photo;
-
-await savePermanentDomiciliations();
-
-renderPermanentDomiciliations();
-
-if(
-permanentEditId &&
-String(permanentEditId)===
-String(id)
-){
-
-renderPermanentEditPhotos(
-dom
-);
-
-}
-
-}
-);
-
-};
-
-input.click();
-
-}
-
-async function deletePermanentPhoto(
-id,
-index
-){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-if(
-!confirm(
-"Supprimer cette photo ?"
-)
-)
-return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-dom.photos[index]="";
-
-try{
-
-await deletePhotoDB(
-permanentPhotoKey(
-id,
-index
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-await savePermanentDomiciliations();
-
-renderPermanentDomiciliations();
-
-if(
-permanentEditId &&
-String(permanentEditId)===
-String(id)
-){
-
-renderPermanentEditPhotos(
-dom
-);
-
-}
-
-}
-
-function openPermanentPhoto(
-id,
-index
-){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(
-!dom||
-!dom.photos||
-!dom.photos[index]
-)
-return;
-
-const modal=
-document.createElement(
-"div"
-);
-
-modal.style.position="fixed";
-modal.style.inset="0";
-modal.style.background=
-"rgba(0,0,0,.9)";
-modal.style.zIndex="3000";
-modal.style.display="flex";
-modal.style.alignItems="center";
-modal.style.justifyContent=
-"center";
-modal.style.padding="15px";
-
-const img=
-document.createElement(
-"img"
-);
-
-img.src=
-dom.photos[index];
-
-img.style.maxWidth="100%";
-img.style.maxHeight="90vh";
-img.style.objectFit="contain";
-img.style.borderRadius="12px";
-
-modal.appendChild(img);
-
-modal.onclick=function(){
-
-modal.remove();
-
-};
-
-document.body.appendChild(
-modal
-);
-
-}
-
-/* ==================================================
-   RENDER PERMANENTES
-================================================== */
-
-function renderPermanentDomiciliations(){
-
-const list=
-document.getElementById(
-"permanentList"
-);
-
-if(!list)return;
-
-list.innerHTML="";
-
-const year=
-getCurrentYear();
-
-if(
-!permanentDomiciliations.length
-){
-
-list.innerHTML=
-`
-<div class="permanentEmpty">
-Aucune domiciliation permanente enregistrée.
-</div>
-`;
-
-return;
-
-}
-
-let totalMonthly=0;
-let totalYearPaid=0;
-let totalYearPlanned=0;
-
-permanentDomiciliations.forEach(
-dom=>{
-
-const amount=
-Number(dom.amount||0);
-
-totalMonthly+=amount;
-
-totalYearPaid+=
-getPermanentPaidAmountForYear(
-dom,
-year
-);
-
-totalYearPlanned+=
-getPermanentPlannedAmountForYear(
-dom,
-year
-);
-
-}
-);
-
-const summary=
-document.createElement(
-"div"
-);
-
-summary.className=
-"permanentSummary";
-
-summary.innerHTML=
-`
-<div class="permanentSummaryBox">
-
-<div class="permanentSummaryTitle">
-Domiciliations
-</div>
-
-<div class="permanentSummaryValue">
-${permanentDomiciliations.length}
-</div>
-
-</div>
-
-<div class="permanentSummaryBox">
-
-<div class="permanentSummaryTitle">
-Mensuel
-</div>
-
-<div class="permanentSummaryValue">
-${euro(totalMonthly)}
-</div>
-
-</div>
-
-<div class="permanentSummaryBox">
-
-<div class="permanentSummaryTitle">
-Payé ${year}
-</div>
-
-<div class="permanentSummaryValue">
-${euro(totalYearPaid)}
-</div>
-
-</div>
-`;
-
-list.appendChild(summary);
-
-const yearInfo=
-document.createElement(
-"div"
-);
-
-yearInfo.className=
-"permanentInfoBox";
-
-yearInfo.innerHTML=
-`
-<strong>
-📊 Année ${year}
-</strong>
-<br><br>
-Total déjà prélevé automatiquement :
-<strong>${euro(
-totalYearPaid
-)}</strong>
-<br>
-Total prévu sur l'année :
-<strong>${euro(
-totalYearPlanned
-)}</strong>
-<br>
-Reste à prélever cette année :
-<strong>${euro(
-Math.max(
-0,
-roundMoney(
-totalYearPlanned-
-totalYearPaid
-)
-)
-)}</strong>
-`;
-
-list.appendChild(
-yearInfo
-);
-
-permanentDomiciliations.forEach(
-dom=>{
-
-const amount=
-Number(dom.amount||0);
-
-const paidMonths=
-getPermanentPaidMonthsForYear(
-dom,
-year
-);
-
-const plannedMonths=
-getPermanentTotalMonthsForYear(
-dom,
-year
-);
-
-const paidAmount=
-getPermanentPaidAmountForYear(
-dom,
-year
-);
-
-const plannedAmount=
-getPermanentPlannedAmountForYear(
-dom,
-year
-);
-
-const remainingAmount=
-getPermanentRemainingAmountForYear(
-dom,
-year
-);
-
-const progress=
-plannedAmount>0
-?
-Math.min(
-100,
-(paidAmount/plannedAmount)*100
-)
-:
-0;
-
-const nextDate=
-getPermanentNextDate(
-dom
-);
-
-const item=
-document.createElement(
-"div"
-);
-
-item.className=
-"permanentItem";
-
-item.innerHTML=
-`
-<div class="permanentAlias">
-${escapeHtml(
-dom.alias||"Sans alias"
-)}
-</div>
-
-<div class="permanentBeneficiary">
-${escapeHtml(
-dom.beneficiary||"-"
-)}
-</div>
-
-<div class="permanentDetails">
-
-IBAN :
-${escapeHtml(
-dom.iban||"-"
-)}
-
-<br>
-
-Date de début :
-<strong>
-${formatDate(
-dom.startDate
-)||"-"}
-</strong>
-
-${
-dom.communication
-?
-`
-<br>
-Communication :
-<strong>
-${escapeHtml(
-dom.communication
-)}
-</strong>
-`
-:
-""
-}
-
-</div>
-
-<div class="permanentMonthly">
-
-<div class="permanentMonthlyLabel">
-Prélèvement automatique chaque mois
-</div>
-
-<div class="permanentMonthlyAmount">
-${euro(amount)} / mois
-</div>
-
-</div>
-
-<div class="permanentYearBox">
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Déjà prélevé en ${year}
-</div>
-
-<div class="permanentYearValue">
-${euro(paidAmount)}
-</div>
-
-</div>
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Prévu en ${year}
-</div>
-
-<div class="permanentYearValue">
-${euro(plannedAmount)}
-</div>
-
-</div>
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Mois prélevés
-</div>
-
-<div class="permanentYearValue">
-${paidMonths} / ${plannedMonths}
-</div>
-
-</div>
-
-<div class="permanentYearCell">
-
-<div class="permanentYearLabel">
-Reste cette année
-</div>
-
-<div class="permanentYearValue">
-${euro(remainingAmount)}
-</div>
-
-</div>
-
-</div>
-
-<div class="permanentProgress">
-
-<div
-class="permanentProgressBar"
-style="width:${progress}%">
-</div>
-
-</div>
-`;
-
-if(nextDate){
-
-const nextBox=
-document.createElement(
-"div"
-);
-
-nextBox.className=
-"permanentNext";
-
-nextBox.innerHTML=
-`
-<div class="permanentNextTitle">
-Prochain prélèvement prévu
-</div>
-
-<div class="permanentNextDate">
-${formatDate(
-nextDate
-.toISOString()
-.substring(0,10)
-)}
-</div>
-
-<div class="permanentNextAmount">
-${euro(amount)}
-</div>
-`;
-
-item.appendChild(
-nextBox
-);
-
-}
-
-/* PHOTOS */
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-const photosBox=
-document.createElement(
-"div"
-);
-
-photosBox.className=
-"permanentPhotos";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const photoBox=
-document.createElement(
-"div"
-);
-
-photoBox.className=
-"permanentPhotoBox";
-
-if(photo){
-
-photoBox.innerHTML=
-`
-<img
-src="${photo}"
-class="permanentPhoto"
-onclick="openPermanentPhoto('${dom.id}',${index})">
-
-<div class="permanentPhotoActions">
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-class="danger"
-onclick="deletePermanentPhoto('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-photoBox.innerHTML=
-`
-<div class="permanentPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="permanentPhotoActions">
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
-
-}
-
-photosBox.appendChild(
-photoBox
-);
-
-}
-);
-
-item.appendChild(
-photosBox
-);
-
-/* ACTIONS */
-
-const actions=
-document.createElement(
-"div"
-);
-
-actions.className=
-"permanentActions";
-
-const editBtn=
-document.createElement(
-"button"
-);
-
-editBtn.className=
-"secondary";
-
-editBtn.textContent=
-"✏️ Modifier";
-
-editBtn.onclick=function(){
-
-openPermanentEdit(
-dom.id
-);
-
-};
-
-const deleteBtn=
-document.createElement(
-"button"
-);
-
-deleteBtn.className=
-"danger";
-
-deleteBtn.textContent=
-"🗑️ Supprimer";
-
-deleteBtn.onclick=function(){
-
-deletePermanentDomiciliation(
-dom.id
-);
-
-};
-
-actions.appendChild(
-editBtn
-);
-
-actions.appendChild(
-deleteBtn
-);
-
-item.appendChild(
-actions
-);
-
-list.appendChild(
-item
-);
-
-}
-);
-
-}
-
-/* ==================================================
-   MODIFICATION PERMANENTE
-================================================== */
-
-function openPermanentEdit(
-id
-){
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(id)
-);
-
-if(!dom)return;
-
-permanentEditId=id;
-
-document.getElementById(
-"permanentEditAlias"
-).value=
-dom.alias||"";
-
-document.getElementById(
-"permanentEditBeneficiary"
-).value=
-dom.beneficiary||"";
-
-document.getElementById(
-"permanentEditIban"
-).value=
-dom.iban||"";
-
-document.getElementById(
-"permanentEditAmount"
-).value=
-dom.amount??"";
-
-document.getElementById(
-"permanentEditStartDate"
-).value=
-dom.startDate||"";
-
-document.getElementById(
-"permanentEditCommunication"
-).value=
-dom.communication||"";
-
-renderPermanentEditPhotos(
-dom
-);
-
-document.getElementById(
-"permanentEditModal"
-).classList.add(
-"show"
-);
-
-}
-
-function renderPermanentEditPhotos(
-dom
-){
-
-const box=
-document.getElementById(
-"permanentEditPhotos"
-);
-
-if(!box)return;
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-box.innerHTML="";
-
-dom.photos.slice(0,2).forEach(
-(photo,index)=>{
-
-const div=
-document.createElement(
-"div"
-);
-
-div.className=
-"permanentPhotoBox";
-
-if(photo){
-
-div.innerHTML=
-`
-<img
-src="${photo}"
-class="permanentPhoto"
-onclick="openPermanentPhoto('${dom.id}',${index})">
-
-<div class="permanentPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-<button
-type="button"
-class="danger"
-onclick="deletePermanentPhoto('${dom.id}',${index})">
-🗑️
-</button>
-
-</div>
-`;
-
-}else{
-
-div.innerHTML=
-`
-<div class="permanentPhotoEmpty">
-📷 Photo ${index+1}<br>
-Non ajoutée
-</div>
-
-<div class="permanentPhotoActions">
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'camera')">
-📷 Caméra
-</button>
-
-<button
-type="button"
-class="secondary"
-onclick="choosePermanentPhoto('${dom.id}',${index},'gallery')">
-🖼️ Photos
-</button>
-
-</div>
-`;
-
-}
-
-box.appendChild(
-div
-);
-
-}
-);
-
-}
-
-async function savePermanentEdit(){
-
-if(!permanentEditId)
-return;
-
-const dom=
-permanentDomiciliations.find(
-d=>String(d.id)===
-String(permanentEditId)
-);
-
-if(!dom)return;
-
-const amount=
-parseFloat(
-document.getElementById(
-"permanentEditAmount"
-).value
-);
-
-const startDate=
-document.getElementById(
-"permanentEditStartDate"
-).value;
-
-if(
-isNaN(amount)||
-amount<=0||
-!startDate
-){
+if(!p||!p.photo){
 
 alert(
-"Veuillez remplir correctement les champs obligatoires."
+"Aucune photo."
 );
 
 return;
 
 }
 
-dom.alias=
 document.getElementById(
-"permanentEditAlias"
-).value.trim();
-
-dom.beneficiary=
-document.getElementById(
-"permanentEditBeneficiary"
-).value.trim();
-
-dom.iban=
-document.getElementById(
-"permanentEditIban"
-).value
-.trim()
-.toUpperCase()
-.replace(/\s/g,"");
-
-dom.amount=
-roundMoney(amount);
-
-dom.startDate=
-startDate;
-
-dom.communication=
-document.getElementById(
-"permanentEditCommunication"
-).value.trim();
-
-await savePermanentDomiciliations();
-
-closePermanentEdit();
-
-renderPermanentDomiciliations();
-
-alert(
-"Modification enregistrée."
-);
-
-}
-
-function closePermanentEdit(){
+"photoModalContent"
+).innerHTML=
+`<img
+src="${p.photo}"
+style="width:100%;border-radius:10px;">`;
 
 document.getElementById(
-"permanentEditModal"
+"photoModal"
 ).classList.remove(
-"show"
+"hidden"
 );
 
-permanentEditId=null;
-
 }
 
-async function deletePermanentDomiciliation(
-id
-){
-
-if(
-!confirm(
-"Supprimer cette domiciliation permanente ?"
-)
-)
-return;
-
-permanentDomiciliations=
-permanentDomiciliations.filter(
-d=>String(d.id)!==
-String(id)
-);
-
-for(let i=0;i<2;i++){
-
-try{
-
-await deletePhotoDB(
-permanentPhotoKey(
-id,
-i
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-await savePermanentDomiciliations();
-
-renderPermanentDomiciliations();
-
-}
 
 /* ==================================================
-   EXPORT
+   EXPORT / IMPORT
 ================================================== */
 
-function exportData(){
+async function exportData(){
 
-const backup={
-
-version:10,
-
-date:new Date().toISOString(),
-
-data,
-
-domiciliations,
-
-permanentDomiciliations
-
+const exportObject={
+payments:[],
+domiciliations:[],
+permanentDomiciliations:[]
 };
+
+for(const p of data){
+
+exportObject.payments.push({
+...p
+});
+
+}
+
+for(
+const dom
+of domiciliations
+){
+
+exportObject.domiciliations.push({
+...dom
+});
+
+}
+
+for(
+const dom
+of permanentDomiciliations
+){
+
+exportObject.permanentDomiciliations.push({
+...dom
+});
+
+}
 
 const blob=
 new Blob(
 [
 JSON.stringify(
-backup,
+exportObject,
 null,
 2
 )
@@ -9825,110 +3842,90 @@ type:"application/json"
 );
 
 const url=
-URL.createObjectURL(
-blob
-);
+URL.createObjectURL(blob);
 
 const a=
-document.createElement(
-"a"
-);
+document.createElement("a");
 
 a.href=url;
 
 a.download=
-"mes-paiements-backup.json";
-
-document.body.appendChild(a);
+"mes-paiements.json";
 
 a.click();
 
-a.remove();
-
-setTimeout(
-()=>{
-URL.revokeObjectURL(
-url
-);
-},
-1000
-);
+URL.revokeObjectURL(url);
 
 }
-
 /* ==================================================
    IMPORT
 ================================================== */
 
-document.getElementById(
-"importInput"
-).addEventListener(
-"change",
-function(){
+async function importData(input){
 
-const file=
-this.files[0];
-
-if(!file)return;
-
-const reader=
-new FileReader();
-
-reader.onload=async function(e){
+if(!input.files||!input.files[0]){
+return;
+}
 
 try{
 
-const backup=
-JSON.parse(
-e.target.result
-);
+const text=
+await input.files[0].text();
+
+const imported=
+JSON.parse(text);
 
 if(
-backup.data&&
-Array.isArray(backup.data)
+Array.isArray(imported)
 ){
 
-data=backup.data;
+data=imported;
 
-normalizeData();
+}else{
 
 if(
-Array.isArray(
-backup.domiciliations
-)
+Array.isArray(imported.payments)
+){
+
+data=imported.payments;
+
+}
+
+if(
+Array.isArray(imported.domiciliations)
 ){
 
 domiciliations=
-backup.domiciliations;
-
-normalizeDomiciliations();
+imported.domiciliations;
 
 }
 
 if(
 Array.isArray(
-backup.permanentDomiciliations
+imported.permanentDomiciliations
 )
 ){
 
 permanentDomiciliations=
-backup.permanentDomiciliations;
-
-normalizePermanentDomiciliations();
+imported.permanentDomiciliations;
 
 }
 
-selectedIds.clear();
+}
 
-openedPaymentSchedules.clear();
+normalizeData();
 
-openedDomiciliationSchedules.clear();
+normalizeDomiciliations();
+
+normalizePermanentDomiciliations();
 
 await saveData();
 
 await saveDomiciliations();
 
 await savePermanentDomiciliations();
+
+await migratePhotosToIndexedDB();
 
 await loadAllPhotos();
 
@@ -9939,351 +3936,656 @@ renderDomiciliations();
 renderPermanentDomiciliations();
 
 alert(
-"Importation réussie."
+"Import terminé."
 );
-
-}else{
-
-alert(
-"Fichier de sauvegarde invalide."
-);
-
-}
-
-}catch(err){
-
-console.error(err);
-
-alert(
-"Impossible de lire la sauvegarde."
-);
-
-}
-
-};
-
-reader.readAsText(file);
-
-this.value="";
-
-}
-);
-
-/* ==================================================
-   CALCULETTE
-================================================== */
-
-let calculatorValue="";
-
-function calcInput(value){
-
-calculatorValue+=value;
-
-document.getElementById(
-"calcDisplay"
-).value=
-calculatorValue;
-
-}
-
-function calcClear(){
-
-calculatorValue="";
-
-document.getElementById(
-"calcDisplay"
-).value="";
-
-}
-
-function calcResult(){
-
-try{
-
-if(!calculatorValue)return;
-
-const safe=
-calculatorValue.replace(
-/[^0-9+\-*/().]/g,
-""
-);
-
-if(!safe)
-throw new Error();
-
-const result=
-Function(
-'"use strict";return ('+
-safe+
-')'
-)();
-
-if(
-typeof result!=="number"||
-!isFinite(result)
-)
-throw new Error();
-
-calculatorValue=
-String(
-Math.round(
-(result+Number.EPSILON)*100
-)/100
-);
-
-document.getElementById(
-"calcDisplay"
-).value=
-calculatorValue;
 
 }catch(e){
 
-document.getElementById(
-"calcDisplay"
-).value=
-"Erreur";
+console.error(e);
 
-calculatorValue="";
+alert(
+"Impossible d'importer les données.\n\n"+
+(e?.message||e)
+);
+
+}
+
+input.value="";
 
 }
 
-}
 
 /* ==================================================
-   MODALES
+   EDITION PAIEMENT
 ================================================== */
 
-document.getElementById(
-"editModal"
-).addEventListener(
-"click",
-function(e){
+function openEditPayment(id){
 
-if(e.target===this)
-closeEdit();
-
-}
+const p=
+data.find(
+x=>x.id===id
 );
 
-document.getElementById(
-"domEditModal"
-).addEventListener(
-"click",
-function(e){
-
-if(e.target===this)
-closeDomiciliationEdit();
-
+if(!p){
+return;
 }
+
+editingPaymentId=id;
+
+document.getElementById(
+"editPaymentContent"
+).innerHTML=`
+
+<label>Alias</label>
+
+<input
+id="editAlias"
+value="${escapeHtml(p.alias||"")}">
+
+<label>Bénéficiaire</label>
+
+<input
+id="editBeneficiary"
+value="${escapeHtml(p.beneficiary||"")}">
+
+<label>IBAN</label>
+
+<input
+id="editIban"
+value="${escapeHtml(p.iban||"")}">
+
+<label>Montant</label>
+
+<input
+id="editAmount"
+type="number"
+step="0.01"
+value="${p.amount||p.monthlyAmount||0}">
+
+<label>Communication</label>
+
+<input
+id="editCommunication"
+value="${escapeHtml(p.communication||"")}">
+
+<div class="actions">
+
+<button
+class="btn btnGreen"
+onclick="savePaymentEdit()">
+Enregistrer
+</button>
+
+<button
+class="btn btnGray"
+onclick="closeModal('editPaymentModal')">
+Annuler
+</button>
+
+</div>
+
+`;
+
+document.getElementById(
+"editPaymentModal"
+).classList.remove(
+"hidden"
 );
 
-document.getElementById(
-"permanentEditModal"
-).addEventListener(
-"click",
-function(e){
-
-if(e.target===this)
-closePermanentEdit();
-
 }
+
+
+async function savePaymentEdit(){
+
+const p=
+data.find(
+x=>x.id===editingPaymentId
 );
 
+if(!p){
+return;
+}
+
+p.alias=
 document.getElementById(
-"manualModal"
-).addEventListener(
-"click",
-function(e){
+"editAlias"
+).value.trim();
 
-if(e.target===this)
-closeManual();
+p.beneficiary=
+document.getElementById(
+"editBeneficiary"
+).value.trim();
 
+p.iban=
+document.getElementById(
+"editIban"
+).value.trim();
+
+p.amount=
+roundMoney(
+document.getElementById(
+"editAmount"
+).value
+);
+
+p.monthlyAmount=p.amount;
+
+p.communication=
+document.getElementById(
+"editCommunication"
+).value.trim();
+
+await saveData();
+
+closeModal(
+"editPaymentModal"
+);
+
+render();
+
+}
+
+
+/* ==================================================
+   EDITION DOMICILIATION
+================================================== */
+
+function openEditDom(id){
+
+const dom=
+domiciliations.find(
+x=>x.id===id
+);
+
+if(!dom){
+return;
+}
+
+editingDomId=id;
+
+document.getElementById(
+"editDomContent"
+).innerHTML=`
+
+<label>Alias</label>
+
+<input
+id="editDomAlias"
+value="${escapeHtml(dom.alias||"")}">
+
+<label>Bénéficiaire</label>
+
+<input
+id="editDomBeneficiary"
+value="${escapeHtml(dom.beneficiary||"")}">
+
+<label>IBAN</label>
+
+<input
+id="editDomIban"
+value="${escapeHtml(dom.iban||"")}">
+
+<label>Montant total</label>
+
+<input
+id="editDomTotal"
+type="number"
+step="0.01"
+value="${dom.totalAmount||0}">
+
+<label>Nombre de mois</label>
+
+<input
+id="editDomMonths"
+type="number"
+value="${dom.months||0}">
+
+<label>TAEG (%)</label>
+
+<input
+id="editDomTaeg"
+type="number"
+step="0.01"
+value="${dom.taeg||0}">
+
+<label>Mensualité</label>
+
+<input
+id="editDomMonthly"
+type="number"
+step="0.01"
+value="${dom.monthlyAmount||0}">
+
+<div class="actions">
+
+<button
+class="btn btnGreen"
+onclick="saveDomEdit()">
+Enregistrer
+</button>
+
+<button
+class="btn btnGray"
+onclick="closeModal('editDomModal')">
+Annuler
+</button>
+
+</div>
+
+`;
+
+document.getElementById(
+"editDomModal"
+).classList.remove(
+"hidden"
+);
+
+}
+
+
+async function saveDomEdit(){
+
+const dom=
+domiciliations.find(
+x=>x.id===editingDomId
+);
+
+if(!dom){
+return;
+}
+
+dom.alias=
+document.getElementById(
+"editDomAlias"
+).value.trim();
+
+dom.beneficiary=
+document.getElementById(
+"editDomBeneficiary"
+).value.trim();
+
+dom.iban=
+document.getElementById(
+"editDomIban"
+).value.trim();
+
+dom.totalAmount=
+roundMoney(
+document.getElementById(
+"editDomTotal"
+).value
+);
+
+dom.months=
+Number(
+document.getElementById(
+"editDomMonths"
+).value
+)||0;
+
+dom.taeg=
+Number(
+document.getElementById(
+"editDomTaeg"
+).value
+)||0;
+
+dom.monthlyAmount=
+roundMoney(
+document.getElementById(
+"editDomMonthly"
+).value
+);
+
+await saveDomiciliations();
+
+closeModal(
+"editDomModal"
+);
+
+renderDomiciliations();
+
+}
+
+
+/* ==================================================
+   EDITION DOMICILIATION PERMANENTE
+================================================== */
+
+function openEditPermanent(id){
+
+const dom=
+permanentDomiciliations.find(
+x=>x.id===id
+);
+
+if(!dom){
+return;
+}
+
+editingPermanentId=id;
+
+document.getElementById(
+"editPermanentContent"
+).innerHTML=`
+
+<label>Alias</label>
+
+<input
+id="editPermanentAlias"
+value="${escapeHtml(dom.alias||"")}">
+
+<label>Bénéficiaire</label>
+
+<input
+id="editPermanentBeneficiary"
+value="${escapeHtml(dom.beneficiary||"")}">
+
+<label>IBAN</label>
+
+<input
+id="editPermanentIban"
+value="${escapeHtml(dom.iban||"")}">
+
+<label>Montant</label>
+
+<input
+id="editPermanentAmount"
+type="number"
+step="0.01"
+value="${dom.amount||0}">
+
+<label>Date de début</label>
+
+<input
+id="editPermanentStartDate"
+type="date"
+value="${dom.startDate||""}">
+
+<label>Communication</label>
+
+<input
+id="editPermanentCommunication"
+value="${escapeHtml(dom.communication||"")}">
+
+<div class="actions">
+
+<button
+class="btn btnGreen"
+onclick="savePermanentEdit()">
+Enregistrer
+</button>
+
+<button
+class="btn btnGray"
+onclick="closeModal('editPermanentModal')">
+Annuler
+</button>
+
+</div>
+
+`;
+
+document.getElementById(
+"editPermanentModal"
+).classList.remove(
+"hidden"
+);
+
+}
+
+
+async function savePermanentEdit(){
+
+const dom=
+permanentDomiciliations.find(
+x=>x.id===editingPermanentId
+);
+
+if(!dom){
+return;
+}
+
+dom.alias=
+document.getElementById(
+"editPermanentAlias"
+).value.trim();
+
+dom.beneficiary=
+document.getElementById(
+"editPermanentBeneficiary"
+).value.trim();
+
+dom.iban=
+document.getElementById(
+"editPermanentIban"
+).value.trim();
+
+dom.amount=
+roundMoney(
+document.getElementById(
+"editPermanentAmount"
+).value
+);
+
+dom.startDate=
+document.getElementById(
+"editPermanentStartDate"
+).value;
+
+dom.communication=
+document.getElementById(
+"editPermanentCommunication"
+).value.trim();
+
+await savePermanentDomiciliations();
+
+closeModal(
+"editPermanentModal"
+);
+
+renderPermanentDomiciliations();
+
+}
+
+
+/* ==================================================
+   SUPPRESSION DOMICILIATION PERMANENTE
+================================================== */
+
+async function deletePermanentDomiciliation(id){
+
+if(!confirm(
+"Supprimer cette domiciliation permanente ?"
+)){
+return;
+}
+
+for(let i=0;i<2;i++){
+
+await deletePhotoDB(
+permanentPhotoKey(
+id,
+i
+)
+);
+
+}
+
+permanentDomiciliations=
+permanentDomiciliations.filter(
+dom=>dom.id!==id
+);
+
+await savePermanentDomiciliations();
+
+renderPermanentDomiciliations();
+
+}
+
+
+/* ==================================================
+   PAIEMENT MANUEL
+================================================== */
+
+function openManualPayment(id){
+
+const p=
+data.find(
+x=>x.id===id
+);
+
+if(!p){
+return;
+}
+
+document.getElementById(
+"manualPaymentContent"
+).innerHTML=`
+
+<p>
+Paiement :
+<strong>
+${escapeHtml(p.alias||"")}
+</strong>
+</p>
+
+<label>Montant payé</label>
+
+<input
+id="manualPaymentAmount"
+type="number"
+step="0.01"
+value="${p.amount||p.monthlyAmount||0}">
+
+<div class="actions">
+
+<button
+class="btn btnGreen"
+onclick="confirmManualPayment('${id}')">
+Valider
+</button>
+
+<button
+class="btn btnGray"
+onclick="closeModal('manualPaymentModal')">
+Annuler
+</button>
+
+</div>
+
+`;
+
+document.getElementById(
+"manualPaymentModal"
+).classList.remove(
+"hidden"
+);
+
+}
+
+
+async function confirmManualPayment(id){
+
+const p=
+data.find(
+x=>x.id===id
+);
+
+if(!p){
+return;
+}
+
+const amount=
+roundMoney(
+document.getElementById(
+"manualPaymentAmount"
+).value
+);
+
+p.amount=amount;
+
+p.paid=true;
+
+await saveData();
+
+closeModal(
+"manualPaymentModal"
+);
+
+render();
+
+}
+
+
+/* ==================================================
+   QR CODE
+================================================== */
+
+function showQR(text){
+
+document.getElementById(
+"qrCode"
+).innerHTML="";
+
+new QRCode(
+document.getElementById(
+"qrCode"
+),
+{
+text:String(text||""),
+width:220,
+height:220
 }
 );
 
 document.getElementById(
 "qrModal"
-).addEventListener(
+).classList.remove(
+"hidden"
+);
+
+}
+
+
+/* ==================================================
+   FERMETURE MODALS EN CLIQUANT DEHORS
+================================================== */
+
+document.querySelectorAll(
+".modal"
+).forEach(
+modal=>{
+
+modal.addEventListener(
 "click",
 function(e){
 
-if(e.target===this)
-closeQR();
+if(e.target===modal){
+
+modal.classList.add(
+"hidden"
+);
 
 }
-);
 
-document.getElementById(
-"photoModal"
-).addEventListener(
-"click",
-function(e){
+});
 
-if(e.target===this)
-closePhoto();
+});
 
-}
-);
-
-/* ==================================================
-   PHOTOS DOMICILIATION
-================================================== */
-
-document.getElementById(
-"domPhoto1Camera"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto2Camera"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files[0],
-2
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto1Gallery"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"domPhoto2Gallery"
-).addEventListener(
-"change",
-function(){
-
-handleDomiciliationAddPhoto(
-this.files[0],
-2
-);
-
-this.value="";
-
-}
-);
-
-/* ==================================================
-   PHOTOS DOMICILIATIONS PERMANENTES
-================================================== */
-
-document.getElementById(
-"permanentPhoto1Camera"
-).addEventListener(
-"change",
-function(){
-
-handlePermanentAddPhoto(
-this.files[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"permanentPhoto2Camera"
-).addEventListener(
-"change",
-function(){
-
-handlePermanentAddPhoto(
-this.files[0],
-2
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"permanentPhoto1Gallery"
-).addEventListener(
-"change",
-function(){
-
-handlePermanentAddPhoto(
-this.files[0],
-1
-);
-
-this.value="";
-
-}
-);
-
-document.getElementById(
-"permanentPhoto2Gallery"
-).addEventListener(
-"change",
-function(){
-
-handlePermanentAddPhoto(
-this.files[0],
-2
-);
-
-this.value="";
-
-}
-);
-
-/* ==================================================
-   PIN ENTER
-================================================== */
-
-document.getElementById(
-"pinInput"
-).addEventListener(
-"keydown",
-function(e){
-
-if(e.key==="Enter")
-checkPin();
-
-}
-);
 
 /* ==================================================
    INITIALISATION
 ================================================== */
 
-renderAddDomiciliationPhotos();
+document.addEventListener(
+"DOMContentLoaded",
+function(){
 
-renderPermanentAddPhotos();
+updatePinDisplay();
+
+}
+);
 
 </script>
 
