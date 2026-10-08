@@ -3298,62 +3298,9 @@ alert(
 
 }
 
-async function saveDomiciliations(){
-
-try{
-
-for(const dom of domiciliations){
-
-if(!Array.isArray(dom.photos))
-dom.photos=["",""];
-
-while(dom.photos.length<2)
-dom.photos.push("");
-
-for(let i=0;i<2;i++){
-
-const key=
-domiciliationPhotoKey(
-dom.id,
-i
-);
-
-if(dom.photos[i]){
-
-await savePhotoDB(
-key,
-dom.photos[i]
-);
-
-}else{
-
-await deletePhotoDB(key);
+async function saveDomiciliations()
 
 }
-
-}
-
-}
-
-localStorage.setItem(
-"mesDomiciliations",
-JSON.stringify(
-getCleanDomiciliationsForStorage()
-)
-);
-
-}catch(e){
-
-console.error(e);
-
-alert(
-"Impossible de sauvegarder les domiciliations."
-);
-
-}
-
-}
-
 async function savePermanentDomiciliations(){
 
 try{
