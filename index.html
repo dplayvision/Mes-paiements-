@@ -4076,7 +4076,7 @@ button.classList.remove("copied");
 
 }
 );
-}
+
 /* ==================================================
    QR
 ================================================== */
@@ -6683,6 +6683,8 @@ startDate,
 
 communication,
 
+monthsPaid:[],
+
 photos:[
 permanentPhoto1,
 permanentPhoto2
@@ -6754,6 +6756,329 @@ document.getElementById(
 ).value="";
 
 renderPermanentAddPhotos();
+
+}
+
+/* ==================================================
+   ÉCHÉANCES DOMICILIATION PERMANENTE
+================================================== */
+
+function getPermanentMonthKey(
+year,
+month
+){
+
+return String(year)+
+"-"+
+String(month+1).padStart(2,"0");
+
+}
+
+function getPermanentMonthDate(
+year,
+month,
+startDate
+){
+
+const start=
+new Date(
+startDate+"T00:00:00"
+);
+
+return new Date(
+year,
+month,
+start.getDate()
+);
+
+}
+
+function isPermanentMonthAvailable(
+dom,
+year,
+month
+){
+
+if(!dom.startDate)
+return false;
+
+const start=
+new Date(
+dom.startDate+"T00:00:00"
+);
+
+const monthDate=
+getPermanentMonthDate(
+year,
+month,
+dom.startDate
+);
+
+const now=
+new Date();
+
+const currentMonth=
+new Date(
+now.getFullYear(),
+now.getMonth(),
+1
+);
+
+const targetMonth=
+new Date(
+year,
+month,
+1
+);
+
+if(targetMonth<new Date(
+start.getFullYear(),
+start.getMonth(),
+1
+))
+return false;
+
+if(targetMonth>currentMonth)
+return false;
+
+return true;
+
+}
+
+function isPermanentMonthPaid(
+dom,
+year,
+month
+){
+
+const key=
+getPermanentMonthKey(
+year,
+month
+);
+
+if(
+Array.isArray(dom.monthsPaid)&&
+dom.monthsPaid.includes(key)
+){
+
+return true;
+
+}
+
+/*
+   Pour les anciennes domiciliations qui
+   n'avaient pas encore monthsPaid :
+   les mois terminés avant le mois actuel
+   sont considérés comme déjà prélevés.
+*/
+
+if(isPermanentMonthAvailable(
+dom,
+year,
+month
+)){
+
+const now=
+new Date();
+
+const target=
+new Date(
+year,
+month,
+1
+);
+
+const current=
+new Date(
+now.getFullYear(),
+now.getMonth(),
+1
+);
+
+if(target<current)
+return true;
+
+}
+
+return false;
+
+}
+
+function getPermanentYearDetails(dom){
+
+const amount=
+Number(dom.amount)||0;
+
+if(!dom.startDate)
+return [];
+
+const start=
+new Date(
+dom.startDate+"T00:00:00"
+);
+
+const now=
+new Date();
+
+const firstYear=
+start.getFullYear();
+
+const lastYear=
+now.getFullYear();
+
+const rows=[];
+
+for(
+let year=firstYear;
+year<=lastYear;
+year++
+){
+
+let paid=0;
+let remaining=0;
+let total=0;
+let paidCount=0;
+let remainingCount=0;
+
+for(
+let month=0;
+month<12;
+month++
+){
+
+if(
+year===firstYear&&
+month<start.getMonth()
+){
+
+continue;
+
+}
+
+const available=
+isPermanentMonthAvailable(
+dom,
+year,
+month
+);
+
+if(!available){
+
+if(
+year>now.getFullYear()||
+(
+year===now.getFullYear()&&
+month>now.getMonth()
+)
+){
+
+remaining+=amount;
+remainingCount++;
+
+}
+
+continue;
+
+}
+
+total+=amount;
+
+if(
+isPermanentMonthPaid(
+dom,
+year,
+month
+)
+){
+
+paid+=amount;
+paidCount++;
+
+}else{
+
+remaining+=amount;
+remainingCount++;
+
+}
+
+}
+
+if(
+total>0||
+remaining>0
+){
+
+rows.push({
+
+year,
+paid:roundMoney(paid),
+remaining:roundMoney(remaining),
+total:roundMoney(
+total+(
+year>now.getFullYear()
+?
+remaining
+:
+0
+)
+),
+paidCount,
+remainingCount
+
+});
+
+}
+
+}
+
+return rows;
+
+}
+
+async function togglePermanentMonth(
+domId,
+year,
+month
+){
+
+const dom=
+permanentDomiciliations.find(
+d=>String(d.id)===String(domId)
+);
+
+if(!dom)return;
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+const key=
+getPermanentMonthKey(
+year,
+month
+);
+
+const index=
+dom.monthsPaid.indexOf(key);
+
+if(index>=0){
+
+dom.monthsPaid.splice(
+index,
+1
+);
+
+}else{
+
+dom.monthsPaid.push(key);
+
+dom.monthsPaid.sort();
+
+}
+
+await savePermanentDomiciliations();
+
+renderPermanentDomiciliations();
 
 }
 
@@ -6922,8 +7247,14 @@ return;
 permanentDomiciliations.forEach(
 dom=>{
 
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
 const stats=
 getPermanentStats(dom);
+
+const yearDetails=
+getPermanentYearDetails(dom);
 
 const card=
 document.createElement("div");
@@ -7034,6 +7365,326 @@ ${euro(stats.annual)}
 
 </div>
 
+<div
+style="
+margin-top:14px;
+overflow-x:auto;
+"
+>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+"
+>
+
+<thead>
+
+<tr>
+
+<th
+style="
+text-align:left;
+padding:8px 4px;
+border-bottom:1px solid #ddd;
+"
+>
+Année
+</th>
+
+<th
+style="
+text-align:right;
+padding:8px 4px;
+border-bottom:1px solid #ddd;
+"
+>
+Déjà payé
+</th>
+
+<th
+style="
+text-align:right;
+padding:8px 4px;
+border-bottom:1px solid #ddd;
+"
+>
+Reste à payer
+</th>
+
+<th
+style="
+text-align:right;
+padding:8px 4px;
+border-bottom:1px solid #ddd;
+"
+>
+Total
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+yearDetails.map(
+item=>`
+
+<tr>
+
+<td
+style="
+padding:8px 4px;
+border-bottom:1px solid #eee;
+font-weight:700;
+"
+>
+${item.year}
+</td>
+
+<td
+style="
+padding:8px 4px;
+border-bottom:1px solid #eee;
+text-align:right;
+"
+>
+${euro(item.paid)}
+</td>
+
+<td
+style="
+padding:8px 4px;
+border-bottom:1px solid #eee;
+text-align:right;
+"
+>
+${euro(item.remaining)}
+</td>
+
+<td
+style="
+padding:8px 4px;
+border-bottom:1px solid #eee;
+text-align:right;
+"
+>
+${euro(item.total)}
+</td>
+
+</tr>
+
+`
+).join("")
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+<div
+style="
+margin-top:10px;
+"
+>
+
+<button
+class="secondary permanentScheduleButton"
+data-permanent-id="${escapeHtml(String(dom.id))}"
+>
+📋 Voir les mois
+</button>
+
+</div>
+
+<div
+class="permanentSchedule hidden"
+data-permanent-schedule="${escapeHtml(String(dom.id))}"
+style="
+margin-top:10px;
+"
+>
+
+${
+yearDetails.map(
+item=>{
+
+let rows="";
+
+for(
+let month=0;
+month<12;
+month++
+){
+
+if(
+item.year===
+new Date(
+dom.startDate+"T00:00:00"
+).getFullYear()&&
+month<
+new Date(
+dom.startDate+"T00:00:00"
+).getMonth()
+){
+
+continue;
+
+}
+
+const date=
+getPermanentMonthDate(
+item.year,
+month,
+dom.startDate
+);
+
+const now=
+new Date();
+
+const target=
+new Date(
+item.year,
+month,
+1
+);
+
+const start=
+new Date(
+dom.startDate+"T00:00:00"
+);
+
+const startMonth=
+new Date(
+start.getFullYear(),
+start.getMonth(),
+1
+);
+
+if(target<startMonth)
+continue;
+
+const currentMonth=
+new Date(
+now.getFullYear(),
+now.getMonth(),
+1
+);
+
+if(target>currentMonth)
+continue;
+
+const paid=
+isPermanentMonthPaid(
+dom,
+item.year,
+month
+);
+
+const key=
+getPermanentMonthKey(
+item.year,
+month
+);
+
+rows+=
+`
+<div
+style="
+display:flex;
+align-items:center;
+gap:8px;
+padding:8px 4px;
+border-bottom:1px solid #eee;
+"
+>
+
+<input
+type="checkbox"
+class="permanentMonthCheckbox"
+data-id="${escapeHtml(String(dom.id))}"
+data-year="${item.year}"
+data-month="${month}"
+data-key="${key}"
+${paid?"checked":""}
+>
+
+<div
+style="
+flex:1;
+"
+>
+
+<div
+style="
+font-weight:600;
+"
+>
+${date.toLocaleDateString(
+"fr-BE",
+{
+month:"long",
+year:"numeric"
+}
+)}
+</div>
+
+<div
+style="
+font-size:13px;
+"
+>
+${euro(stats.amount)}
+&nbsp; • &nbsp;
+${
+paid
+?
+"PAYÉ"
+:
+"À PAYER"
+}
+</div>
+
+</div>
+
+</div>
+`;
+
+}
+
+return`
+<div
+style="
+margin-bottom:12px;
+"
+>
+
+<div
+style="
+font-weight:700;
+margin-bottom:5px;
+"
+>
+${item.year}
+</div>
+
+${rows}
+
+</div>
+`;
+
+}
+).join("")
+}
+
+</div>
+
 <div class="permanentNext">
 
 <div class="permanentNextTitle">
@@ -7050,6 +7701,58 @@ ${euro(stats.amount)}
 
 </div>
 `;
+
+const scheduleButton=
+card.querySelector(
+".permanentScheduleButton"
+);
+
+const schedule=
+card.querySelector(
+".permanentSchedule"
+);
+
+scheduleButton.onclick=function(){
+
+const isHidden=
+schedule.classList.contains(
+"hidden"
+);
+
+schedule.classList.toggle(
+"hidden",
+!isHidden
+);
+
+scheduleButton.textContent=
+isHidden
+?
+"▲ Masquer les mois"
+:
+"📋 Voir les mois";
+
+};
+
+card.querySelectorAll(
+".permanentMonthCheckbox"
+).forEach(
+checkbox=>{
+
+checkbox.addEventListener(
+"change",
+function(){
+
+togglePermanentMonth(
+this.dataset.id,
+Number(this.dataset.year),
+Number(this.dataset.month)
+);
+
+}
+);
+
+}
+);
 
 if(
 Array.isArray(dom.photos)&&
@@ -7484,6 +8187,9 @@ document.getElementById(
 "permanentEditCommunication"
 ).value.trim();
 
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
 await savePermanentDomiciliations();
 
 closePermanentEdit();
@@ -7857,6 +8563,15 @@ backup.permanentDomiciliations
 normalizeData();
 normalizeDomiciliations();
 normalizePermanentDomiciliations();
+
+permanentDomiciliations.forEach(
+dom=>{
+
+if(!Array.isArray(dom.monthsPaid))
+dom.monthsPaid=[];
+
+}
+);
 
 localStorage.setItem(
 "mesPaiements",
