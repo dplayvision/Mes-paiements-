@@ -2962,7 +2962,13 @@ document.getElementById(
 ).addEventListener(
 "change",
 function(){
+
+if(this.files && this.files[0]){
 handlePhoto(this.files[0]);
+}
+
+this.value="";
+
 }
 );
 
@@ -2971,7 +2977,13 @@ document.getElementById(
 ).addEventListener(
 "change",
 function(){
+
+if(this.files && this.files[0]){
 handlePhoto(this.files[0]);
+}
+
+this.value="";
+
 }
 );
 
@@ -4065,8 +4077,6 @@ button.classList.remove("copied");
 }
 );
 
-}
-
 /* ==================================================
    QR
 ================================================== */
@@ -4832,10 +4842,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handleDomiciliationAddPhoto(
 this.files[0],
 0
 );
+}
+
+this.value="";
 
 }
 );
@@ -4846,10 +4860,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handleDomiciliationAddPhoto(
 this.files[0],
 0
 );
+}
+
+this.value="";
 
 }
 );
@@ -4860,10 +4878,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handleDomiciliationAddPhoto(
 this.files[0],
 1
 );
+}
+
+this.value="";
 
 }
 );
@@ -4874,10 +4896,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handleDomiciliationAddPhoto(
 this.files[0],
 1
 );
+}
+
+this.value="";
 
 }
 );
@@ -6048,6 +6074,8 @@ renderDomiciliations();
 }
 );
 
+this.value="";
+
 };
 
 input.click();
@@ -6521,10 +6549,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handlePermanentAddPhoto(
 this.files[0],
 0
 );
+}
+
+this.value="";
 
 }
 );
@@ -6535,10 +6567,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handlePermanentAddPhoto(
 this.files[0],
 0
 );
+}
+
+this.value="";
 
 }
 );
@@ -6549,10 +6585,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handlePermanentAddPhoto(
 this.files[0],
 1
 );
+}
+
+this.value="";
 
 }
 );
@@ -6563,10 +6603,14 @@ document.getElementById(
 "change",
 function(){
 
+if(this.files && this.files[0]){
 handlePermanentAddPhoto(
 this.files[0],
 1
 );
+}
+
+this.value="";
 
 }
 );
@@ -7341,6 +7385,8 @@ img.src=e.target.result;
 reader.readAsDataURL(
 this.files[0]
 );
+
+this.value="";
 
 };
 
