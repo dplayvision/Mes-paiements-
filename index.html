@@ -3516,33 +3516,67 @@ renderPermanentDomiciliations();
 /* ==================================================
    PIN
 ================================================== */
-
 async function checkPin(){
 
 const value=
+
 document.getElementById(
+
 "pinInput"
+
 ).value;
 
-if(value===PIN){
-
-document.getElementById(
-"loginScreen"
-).classList.add("hidden");
-
-document.getElementById(
-"app"
-).classList.remove("hidden");
-
-await loadData();
-
-}else{
+if(value!==PIN){
 
 alert("Code PIN incorrect");
 
 document.getElementById(
+
 "pinInput"
+
 ).value="";
+
+return;
+
+}
+
+try{
+
+document.getElementById(
+
+"app"
+
+).classList.remove("hidden");
+
+await loadData();
+
+document.getElementById(
+
+"loginScreen"
+
+).classList.add("hidden");
+
+}catch(e){
+
+console.error(
+
+"ERREUR OUVERTURE :",
+
+e
+
+);
+
+alert(
+
+"Impossible d'ouvrir l'application.\n\n"+
+
+(e?.name||"Erreur")+
+
+"\n"+
+
+(e?.message||e)
+
+);
 
 }
 
