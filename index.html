@@ -8503,7 +8503,15 @@ document.getElementById(
 
 }
 
-async function addPermanentDomiciliation(){
+await savePermanentDomiciliations();
+
+resetPermanentForm();
+
+renderPermanentDomiciliations();
+
+alert(
+"Domiciliation permanente ajoutée."
+);
 
 const alias=
 document.getElementById(
