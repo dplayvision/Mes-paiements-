@@ -1368,17 +1368,31 @@ function isPermanentMonthAvailable(dom,year,month){
  const today=new Date();today.setHours(0,0,0,0);
  return new Date(date.date+"T00:00:00")<=today;
 }
+
 function isPermanentMonthPaid(dom,year,month){
  const key=getPermanentMonthKey(year,month);
- if(Array.isArray(dom.monthsPaid)&&dom.monthsPaid.includes(key))return true;
- /* Compatibilité avec les anciennes entrées mensuelles : les mois passés
-    sont considérés comme prélevés automatiquement. */
- const due=getPermanentDueDatesForYear(dom,year).find(d=>d.month===month);
+
+ // Un prélèvement coché comme effectué est payé
+ if(Array.isArray(dom.monthsPaid)&&dom.monthsPaid.includes(key)){
+  return true;
+ }
+
+ // Vérifier si un prélèvement était prévu ce mois-là
+ const due=getPermanentDueDatesForYear(dom,year)
+  .find(d=>d.month===month);
+
  if(!due)return false;
- const today=new Date();today.setHours(0,0,0,0);
+
+ // Les prélèvements dont la date est passée
+ // sont comptés automatiquement comme prélevés
+ const today=new Date();
+ today.setHours(0,0,0,0);
+
  const dueDate=new Date(due.date+"T00:00:00");
- return dueDate<today&&!Array.isArray(dom.monthsPaid);
+
+ return dueDate<today;
 }
+
 function getPermanentYearDetails(dom){
  if(!dom.startDate)return [];
  const start=getPermanentStartParts(dom);if(!start)return [];
