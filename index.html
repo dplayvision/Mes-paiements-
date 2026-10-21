@@ -138,6 +138,21 @@ input[type="file"]{display:none}
 .calculatorGrid button{font-size:18px;padding:14px 5px}
 .calculatorEquals{margin-top:8px;width:100%;font-size:18px}
 .empty{background:white;border-radius:15px;padding:20px;text-align:center;color:#777;margin-bottom:15px}
+
+/* Ajouts ciblés : cartes repliables et tableau global des domiciliations */
+.domCompactHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#f2f2f7;border-radius:12px;cursor:pointer}
+.domCompactMain{min-width:0;flex:1}
+.domCompactName{font-size:15px;font-weight:750;color:#007aff;overflow-wrap:anywhere}
+.domCompactMeta{font-size:12px;color:#666;margin-top:3px}
+.domCompactBalance{text-align:right;font-size:13px;font-weight:750;white-space:nowrap}
+.domCompactChevron{font-size:20px;color:#666;flex-shrink:0}
+.domCompactBody{padding-top:8px}
+.domCompactBody.hidden{display:none!important}
+.allDomTableWrap{overflow-x:auto;margin-top:10px}
+.allDomTable{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
+.allDomTable th,.allDomTable td{padding:9px 7px;border-bottom:1px solid #e1e1e6;text-align:left;vertical-align:top}
+.allDomTable th{background:#f2f2f7;font-weight:750}
+
 </style>
 </head>
 <body>
@@ -170,12 +185,17 @@ input[type="file"]{display:none}
   <div class="manualInfo">
     <strong>💳 Synthèse des paiements</strong>
     <div id="paymentSynthesisText" class="paymentDetails">Chargement…</div>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('payments')">📸 Télécharger en image</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('payments')">📸 Enregistrer la synthèse en photo</button>
   </div>
   <div class="manualInfo">
     <strong>🏦 Synthèse des domiciliations</strong>
     <div id="domiciliationSynthesisText" class="paymentDetails">Chargement…</div>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('domiciliations')">📸 Télécharger en image</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('domiciliations')">📸 Enregistrer la synthèse en photo</button>
+  </div>
+  <div class="manualInfo">
+    <strong>📋 Tableau de toutes les domiciliations</strong>
+    <div id="allDomiciliationsSynthesis" class="allDomTableWrap">Chargement…</div>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('all')">📸 Enregistrer le tableau en photo</button>
   </div>
 </div>
 
@@ -728,35 +748,61 @@ function getDomiciliationSynthesis(){
  });
  return {loanCount:domiciliations.length,loanMonthly:roundMoney(loanMonthly),loanTotal:roundMoney(loanTotal),loanPaid:roundMoney(loanPaid),loanRemaining:roundMoney(loanRemaining),permanentCount:permanentDomiciliations.length,permanentMonthly:roundMoney(permanentMonthly),permanentYearly:roundMoney(permanentYearly),monthlyTotal:roundMoney(loanMonthly+permanentMonthly)};
 }
+function getAllDomiciliationRows(){
+ const rows=[];
+ domiciliations.forEach(dom=>{
+  const months=Number(dom.months)||0;let total=0;
+  for(let i=0;i<months;i++)total+=getDomiciliationInstallmentAmount(dom,i);
+  const paid=roundMoney(getDomiciliationPaidAmount(dom)),remaining=roundMoney(Math.max(0,total-paid));
+  const nextMonth=getNextDomiciliationMonth(dom);
+  const nextDate=nextMonth!==null?addMonthsSafe(dom.startDate,nextMonth-1):"";
+  const nextAmount=nextMonth!==null?getDomiciliationInstallmentAmount(dom,nextMonth-1):0;
+  rows.push({name:dom.alias||dom.beneficiary||"Sans nom",type:"Avec échéances",paid,remaining,nextDate,nextAmount:nextMonth!==null?euro(nextAmount):"Terminé"});
+ });
+ permanentDomiciliations.forEach(dom=>{
+  const stats=getPermanentStats(dom);
+  rows.push({name:dom.alias||dom.beneficiary||"Sans nom",type:"Permanente",paid:stats.paid,remaining:stats.planned,nextDate:stats.nextDate?formatDateObject(stats.nextDate):"",nextAmount:stats.nextDate?euro(stats.amount):"—"});
+ });
+ return rows;
+}
+function renderAllDomiciliationsSynthesis(){
+ const node=document.getElementById("allDomiciliationsSynthesis");if(!node)return;
+ const rows=getAllDomiciliationRows();
+ if(!rows.length){node.innerHTML='<div class="small">Aucune domiciliation enregistrée.</div>';return;}
+ node.innerHTML=`<table class="allDomTable"><thead><tr><th>Nom du contrat</th><th>Type</th><th>Déjà payé</th><th>Reste à payer</th><th>Prochaine échéance</th><th>Montant</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.type)}</td><td>${euro(r.paid)}</td><td>${euro(r.remaining)}</td><td>${escapeHtml(r.nextDate||"—")}</td><td>${escapeHtml(r.nextAmount)}</td></tr>`).join("")}</tbody></table>`;
+}
 function renderSyntheses(){
  const p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
  const paymentNode=document.getElementById("paymentSynthesisText"),domNode=document.getElementById("domiciliationSynthesisText");
  if(paymentNode)paymentNode.innerHTML=`Nombre d’échéances : <strong>${p.installments}</strong><br>Échéances payées : <strong>${p.paidCount}</strong><br>Échéances à payer : <strong>${p.unpaidCount}</strong><br>Déjà payé : <strong>${euro(p.paid)}</strong><br>À payer : <strong>${euro(p.remaining)}</strong><br>Montant total prévu : <strong>${euro(p.total)}</strong>`;
  if(domNode)domNode.innerHTML=`<strong>Domiciliations avec échéances</strong><br>Contrats : ${d.loanCount}<br>Mensualités prévues : ${euro(d.loanMonthly)}<br>Déjà payé : ${euro(d.loanPaid)}<br>Reste prévu : ${euro(d.loanRemaining)}<br><br><strong>Domiciliations permanentes</strong><br>Prélèvements : ${d.permanentCount}<br>Équivalent mensuel : ${euro(d.permanentMonthly)}<br>Équivalent annuel : ${euro(d.permanentYearly)}<br><br><strong>Total mensuel estimé des domiciliations : ${euro(d.monthlyTotal)}</strong>`;
+ renderAllDomiciliationsSynthesis();
 }
 async function downloadSummaryImage(type){
  renderSyntheses();
  const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
- const isPayments=type==="payments",p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
- const title=isPayments?"Synthèse des paiements":"Synthèse des domiciliations";
- const lines=isPayments?[
-  "Date : "+new Date().toLocaleDateString("fr-BE"),"Nombre d’échéances : "+p.installments,
-  "Échéances payées : "+p.paidCount,"Échéances à payer : "+p.unpaidCount,
-  "Déjà payé : "+euro(p.paid),"À payer : "+euro(p.remaining),"Montant total prévu : "+euro(p.total)
- ]:[
-  "Date : "+new Date().toLocaleDateString("fr-BE"),"Domiciliations avec échéances : "+d.loanCount,
-  "Mensualités prévues : "+euro(d.loanMonthly),"Déjà payé : "+euro(d.loanPaid),"Reste prévu : "+euro(d.loanRemaining),
-  "Domiciliations permanentes : "+d.permanentCount,"Équivalent mensuel permanent : "+euro(d.permanentMonthly),
-  "Équivalent annuel permanent : "+euro(d.permanentYearly),"Total mensuel estimé : "+euro(d.monthlyTotal)
- ];
- const width=900,lineHeight=54,pad=50,height=190+lines.length*lineHeight;
+ const isPayments=type==="payments",isAll=type==="all",p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
+ const title=isAll?"Tableau des domiciliations":isPayments?"Synthèse des paiements":"Synthèse des domiciliations";
+ let lines=[];
+ if(isAll){
+  const rows=getAllDomiciliationRows();
+  lines=["Date : "+new Date().toLocaleDateString("fr-BE"),"Nom du contrat | Type | Déjà payé | Reste à payer | Prochaine échéance | Montant"];
+  rows.forEach(r=>lines.push(`${r.name} | ${r.type} | ${euro(r.paid)} | ${euro(r.remaining)} | ${r.nextDate||"—"} | ${r.nextAmount}`));
+  if(!rows.length)lines.push("Aucune domiciliation enregistrée.");
+ }else if(isPayments){
+  lines=["Date : "+new Date().toLocaleDateString("fr-BE"),"Nombre d’échéances : "+p.installments,"Échéances payées : "+p.paidCount,"Échéances à payer : "+p.unpaidCount,"Déjà payé : "+euro(p.paid),"À payer : "+euro(p.remaining),"Montant total prévu : "+euro(p.total)];
+ }else{
+  lines=["Date : "+new Date().toLocaleDateString("fr-BE"),"Domiciliations avec échéances : "+d.loanCount,"Mensualités prévues : "+euro(d.loanMonthly),"Déjà payé : "+euro(d.loanPaid),"Reste prévu : "+euro(d.loanRemaining),"Domiciliations permanentes : "+d.permanentCount,"Équivalent mensuel permanent : "+euro(d.permanentMonthly),"Équivalent annuel permanent : "+euro(d.permanentYearly),"Total mensuel estimé : "+euro(d.monthlyTotal)];
+ }
+ const width=1200,lineHeight=isAll?42:54,pad=45,height=190+lines.length*lineHeight;
  canvas.width=width;canvas.height=height;ctx.fillStyle="#f2f2f7";ctx.fillRect(0,0,width,height);
  ctx.fillStyle="#007aff";ctx.fillRect(0,0,width,125);ctx.fillStyle="#fff";ctx.font="bold 34px Arial";ctx.fillText(title,pad,76);
- ctx.fillStyle="#111";ctx.font="26px Arial";lines.forEach((line,i)=>ctx.fillText(line,pad,180+i*lineHeight,width-pad*2));
+ ctx.fillStyle="#111";ctx.font=isAll?"18px Arial":"26px Arial";
+ lines.forEach((line,i)=>{let text=line;if(text.length>115)text=text.slice(0,112)+"…";ctx.fillText(text,pad,180+i*lineHeight,width-pad*2);});
  ctx.fillStyle="#666";ctx.font="18px Arial";ctx.fillText("Mes paiements • Synthèse calculée à partir des données enregistrées",pad,height-25);
  canvas.toBlob(async blob=>{
   if(!blob){alert("Impossible de créer l’image.");return;}
-  const fileName=(isPayments?"synthese-paiements":"synthese-domiciliations")+".png",file=new File([blob],fileName,{type:"image/png"});
+  const fileName=(isAll?"tableau-domiciliations":isPayments?"synthese-paiements":"synthese-domiciliations")+".png",file=new File([blob],fileName,{type:"image/png"});
   try{if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title});return;}}
   catch(e){if(e&&e.name==="AbortError")return;}
   const url=URL.createObjectURL(blob),opened=window.open(url,"_blank");
@@ -765,10 +811,6 @@ async function downloadSummaryImage(type){
   setTimeout(()=>URL.revokeObjectURL(url),120000);
  },"image/png");
 }
-
-/* ==================================================
-   CHARGEMENT ET PIN
-================================================== */
 async function loadData(){
  try{
   const saved=localStorage.getItem("mesPaiements");
@@ -1259,7 +1301,16 @@ function renderDomiciliations(){
   const actions=document.createElement("div");actions.className="domiciliationActions";
   const edit=document.createElement("button");edit.className="secondary";edit.textContent="✏️ Modifier";edit.onclick=()=>openDomiciliationEdit(dom.id);
   const del=document.createElement("button");del.className="danger";del.textContent="🗑️ Supprimer";del.onclick=()=>deleteDomiciliation(dom.id);
-  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
+  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);
+  const compactBody=document.createElement("div");compactBody.className="domCompactBody hidden";
+  while(card.firstChild)compactBody.appendChild(card.firstChild);
+  const compactHead=document.createElement("div");compactHead.className="domCompactHeader";
+  const nextText=nextMonth!==null?(formatDate(nextDate)+" · "+euro(nextAmount)):"Toutes payées";
+  compactHead.innerHTML=`<div class="domCompactMain"><div class="domCompactName">${escapeHtml(dom.alias||"Sans alias")}</div><div class="domCompactMeta">${escapeHtml(dom.beneficiary||"-")} · ${paidCount}/${months} payées</div></div><div class="domCompactBalance">Reste<br>${euro(remaining)}</div><div class="domCompactChevron">＋</div>`;
+  compactHead.setAttribute("role","button");compactHead.tabIndex=0;
+  const toggleCompact=()=>{const open=!compactBody.classList.contains("hidden");compactBody.classList.toggle("hidden",open);compactHead.querySelector(".domCompactChevron").textContent=open?"＋":"−";};
+  compactHead.addEventListener("click",toggleCompact);compactHead.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleCompact();}});
+  card.append(compactHead,compactBody);container.appendChild(card);
  });
  renderSyntheses();
 }
@@ -1607,7 +1658,15 @@ function renderPermanentDomiciliations(){
   const actions=document.createElement("div");actions.className="permanentActions";
   const edit=document.createElement("button");edit.className="secondary";edit.textContent="✏️ Modifier";edit.onclick=()=>openPermanentEdit(dom.id);
   const del=document.createElement("button");del.className="danger";del.textContent="🗑️ Supprimer";del.onclick=()=>deletePermanentDomiciliation(dom.id);
-  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
+  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);
+  const compactBody=document.createElement("div");compactBody.className="domCompactBody hidden";
+  while(card.firstChild)compactBody.appendChild(card.firstChild);
+  const compactHead=document.createElement("div");compactHead.className="domCompactHeader";
+  compactHead.innerHTML=`<div class="domCompactMain"><div class="domCompactName">${escapeHtml(dom.alias||"Sans alias")}</div><div class="domCompactMeta">${escapeHtml(dom.beneficiary||"-")} · Permanent</div></div><div class="domCompactBalance">Reste année<br>${euro(stats.planned)}</div><div class="domCompactChevron">＋</div>`;
+  compactHead.setAttribute("role","button");compactHead.tabIndex=0;
+  const toggleCompact=()=>{const open=!compactBody.classList.contains("hidden");compactBody.classList.toggle("hidden",open);compactHead.querySelector(".domCompactChevron").textContent=open?"＋":"−";};
+  compactHead.addEventListener("click",toggleCompact);compactHead.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleCompact();}});
+  card.append(compactHead,compactBody);container.appendChild(card);
  });
  renderSyntheses();
 }
