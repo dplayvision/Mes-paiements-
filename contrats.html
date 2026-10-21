@@ -20,7 +20,14 @@ button{border:0;border-radius:10px;padding:11px 13px;font-size:14px;font-weight:
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row button{flex:1}
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}
 .details{font-size:13px;color:#666;line-height:1.6;margin-top:9px;overflow-wrap:anywhere}
-.contractTitle{font-size:18px;font-weight:750;color:#007aff}
+.contractSummary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;min-height:38px}
+.contractSummaryText{min-width:0;flex:1}
+.contractTitle{font-size:16px;font-weight:750;color:#007aff;overflow-wrap:anywhere}
+.contractSubtitle{font-size:12px;color:#777;margin-top:3px}
+.contractAmount{font-size:14px;font-weight:750;white-space:nowrap}
+.contractChevron{font-size:17px;color:#777;flex-shrink:0}
+.contractExpanded{margin-top:10px;padding-top:10px;border-top:1px solid #eee}
+.contractExpanded.hidden{display:none!important}
 .empty{text-align:center;padding:22px;color:#777;background:#f2f2f7;border-radius:12px}
 .doc{padding:9px;background:#f2f2f7;border-radius:12px;margin-top:8px;overflow-wrap:anywhere}
 .doc img{width:100%;max-height:220px;object-fit:contain;display:block;margin-top:8px;border-radius:8px;background:#fff}
@@ -100,31 +107,6 @@ async function saveContract(){
 function resetForm(){editingId=null;pendingDocs=[];document.getElementById("formTitle").textContent="Ajouter un contrat";["name","provider","number","amount","startDate","endDate","notes"].forEach(id=>document.getElementById(id).value="");document.getElementById("category").selectedIndex=0;document.getElementById("frequency").selectedIndex=0;renderPending();}
 function editContract(id){const c=contracts.find(x=>String(x.id)===String(id));if(!c)return;editingId=c.id;for(const key of ["name","provider","number","amount","startDate","endDate","notes"])document.getElementById(key).value=c[key]||"";document.getElementById("category").value=c.category||"Autre";document.getElementById("frequency").value=c.frequency||"Mensuel";pendingDocs=[];renderPending();document.getElementById("formTitle").textContent="Modifier le contrat";window.scrollTo({top:0,behavior:"smooth"});}
 async function deleteContract(id){const c=contracts.find(x=>String(x.id)===String(id));if(!c||!confirm("Supprimer ce contrat et ses documents ?"))return;for(const d of c.documents||[])await deleteDoc(d.key);contracts=contracts.filter(x=>String(x.id)!==String(id));saveList();renderContracts();}
-function openDocument(data, doc){
- if(!data){alert("Document introuvable.");return;}
- try{
-  // Convertir le data URL en Blob pour éviter les pages blanches fréquentes sur iPhone.
-  const parts=String(data).split(",");
-  const meta=parts[0]||"";
-  const mime=(meta.match(/data:([^;]+)/)||[])[1]||doc.type||"application/octet-stream";
-  const binary=atob(parts.slice(1).join(","));
-  const bytes=new Uint8Array(binary.length);
-  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-  const blob=new Blob([bytes],{type:mime});
-  const url=URL.createObjectURL(blob);
-  const opened=window.open(url,"_blank");
-  if(!opened){
-   const link=document.createElement("a");
-   link.href=url;link.target="_blank";link.rel="noopener";link.download=doc.name||"document";
-   document.body.appendChild(link);link.click();link.remove();
-  }
-  // Laisser à Safari le temps de charger le fichier.
-  setTimeout(()=>URL.revokeObjectURL(url),60000);
- }catch(err){
-  console.error(err);
-  alert("Impossible d’ouvrir ce document. Essaie de le télécharger puis de l’ouvrir dans Fichiers.");
- }
-}
 async function renderContracts(){
  const root=document.getElementById("contractList");if(!root)return;const q=(document.getElementById("search").value||"").toLowerCase();
  const list=contracts.filter(c=>[c.name,c.provider,c.category,c.number,c.notes].some(v=>String(v||"").toLowerCase().includes(q)));
@@ -132,19 +114,18 @@ async function renderContracts(){
  root.innerHTML="";
  for(const c of list){
   const card=document.createElement("div");card.className="contract";
-  card.innerHTML=`<div class="contractTitle">${esc(c.name||"Contrat sans nom")}</div><div class="details">${esc(c.provider||"Organisme non précisé")}<br>Catégorie : ${esc(c.category||"Autre")}<br>Numéro : ${esc(c.number||"—")}<br>Montant : ${c.amount!==""&&c.amount!=null?money(c.amount):"Non précisé"}${c.frequency?" • "+esc(c.frequency):""}<br>Début : ${esc(c.startDate||"—")} • Fin/échéance : ${esc(c.endDate||"—")}${c.notes?`<br>Notes : ${esc(c.notes)}`:""}</div><div class="docList"></div><div class="actions"><button class="secondary" data-edit>✏️ Modifier</button><button class="danger" data-delete>🗑️ Supprimer</button></div>`;
+  card.innerHTML=`<div class="contractSummary" role="button" tabindex="0" aria-expanded="false"><div class="contractSummaryText"><div class="contractTitle">${esc(c.name||"Contrat sans nom")}</div><div class="contractSubtitle">${esc(c.provider||"Organisme non précisé")}</div></div><div class="contractAmount">${c.amount!==""&&c.amount!=null?money(c.amount):""}</div><div class="contractChevron">＋</div></div><div class="contractExpanded hidden"><div class="details">${esc(c.provider||"Organisme non précisé")}<br>Catégorie : ${esc(c.category||"Autre")}<br>Numéro : ${esc(c.number||"—")}<br>Montant : ${c.amount!==""&&c.amount!=null?money(c.amount):"Non précisé"}${c.frequency?" • "+esc(c.frequency):""}<br>Début : ${esc(c.startDate||"—")} • Fin/échéance : ${esc(c.endDate||"—")}${c.notes?`<br>Notes : ${esc(c.notes)}`:""}</div><div class="docList"></div><div class="actions"><button class="secondary" data-edit>✏️ Modifier</button><button class="danger" data-delete>🗑️ Supprimer</button></div></div>`;
+  const summary=card.querySelector(".contractSummary"),expanded=card.querySelector(".contractExpanded"),chevron=card.querySelector(".contractChevron");
+  const toggleContractDetails=()=>{const opening=expanded.classList.contains("hidden");expanded.classList.toggle("hidden",!opening);summary.setAttribute("aria-expanded",String(opening));chevron.textContent=opening?"−":"＋";};
+  summary.onclick=toggleContractDetails;summary.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleContractDetails();}};
   card.querySelector("[data-edit]").onclick=()=>editContract(c.id);card.querySelector("[data-delete]").onclick=()=>deleteContract(c.id);
   const docsRoot=card.querySelector(".docList");
   for(const d of (c.documents||[])){
    const box=document.createElement("div");box.className="doc";box.textContent="📎 "+(d.name||"Document");
    const data=await getDoc(d.key);
-   if(data&&String(d.type||"").startsWith("image/")){
-     const img=document.createElement("img");img.src=data;img.alt=d.name||"Document";
-     img.style.cursor="pointer";img.onclick=()=>openDocument(data,d);box.appendChild(img);
-    }
-    const open=document.createElement("button");open.className="secondary";open.style.marginTop="8px";open.textContent="Ouvrir";
-    open.onclick=()=>openDocument(data,d);
-    box.appendChild(open);docsRoot.appendChild(box);
+   if(data&&String(d.type||"").startsWith("image/")){const img=document.createElement("img");img.src=data;img.alt=d.name||"Document";img.onclick=()=>window.open(data,"_blank");box.appendChild(img);}
+   const open=document.createElement("button");open.className="secondary";open.style.marginTop="8px";open.textContent="Ouvrir";open.onclick=()=>{if(!data){alert("Document introuvable.");return;}const w=window.open();if(w){if(String(d.type||"").startsWith("image/"))w.document.write(`<img src="${data}" style="max-width:100%;height:auto">`);else{const a=w.document.createElement("a");a.href=data;a.download=d.name||"document";a.textContent="Ouvrir / télécharger le document";w.document.body.appendChild(a);a.click();}}else location.href=data;};
+   box.appendChild(open);docsRoot.appendChild(box);
   }
   root.appendChild(card);
  }
