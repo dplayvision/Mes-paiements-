@@ -39,7 +39,7 @@ button{border:0;border-radius:11px;padding:11px 14px;font-size:15px;font-weight:
 .paymentSummaryBox,.domiciliationSummaryBox,.permanentSummaryBox{background:#f2f2f7;border-radius:12px;padding:9px 5px;text-align:center}
 .paymentSummaryTitle,.domiciliationSummaryTitle,.permanentSummaryTitle{font-size:11px;color:#777}
 .paymentSummaryValue,.domiciliationSummaryValue,.permanentSummaryValue{font-size:15px;font-weight:700;margin-top:3px}
-.paymentItem,.domiciliationItem,.permanentItem{border:1px solid #e1e1e6;border-radius:15px;padding:14px;margin-top:10px;background:#fff}
+.paymentExpanded{margin-top:10px}.paymentExpanded.hidden{display:none!important}.paymentItem,.domiciliationItem,.permanentItem{border:1px solid #e1e1e6;border-radius:15px;padding:14px;margin-top:10px;background:#fff}
 .paymentItem.paid,.domiciliationItem.paid{background:#f3fff5;border-color:#b7e5c0}
 .paymentAlias,.domiciliationAlias,.permanentAlias{font-size:17px;font-weight:750;color:#007aff}
 .paymentBeneficiary,.domiciliationBeneficiary,.permanentBeneficiary{font-size:14px;font-weight:600;margin-top:3px}
@@ -163,6 +163,20 @@ input[type="file"]{display:none}
 <div class="summaryBox"><div class="summaryTitle">Total</div><div id="totalValue" class="summaryValue">0,00 €</div></div>
 <div class="summaryBox"><div class="summaryTitle">Payé</div><div id="paidValue" class="summaryValue">0,00 €</div></div>
 <div class="summaryBox"><div class="summaryTitle">Reste</div><div id="remainingValue" class="summaryValue">0,00 €</div></div>
+</div>
+
+<div class="card" id="synthesisCard">
+  <h2>📊 Synthèses séparées</h2>
+  <div class="manualInfo">
+    <strong>💳 Synthèse des paiements</strong>
+    <div id="paymentSynthesisText" class="paymentDetails">Chargement…</div>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('payments')">📸 Télécharger en image</button>
+  </div>
+  <div class="manualInfo">
+    <strong>🏦 Synthèse des domiciliations</strong>
+    <div id="domiciliationSynthesisText" class="paymentDetails">Chargement…</div>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('domiciliations')">📸 Télécharger en image</button>
+  </div>
 </div>
 
 <div class="tabs">
@@ -686,6 +700,72 @@ async function savePermanentDomiciliations(){
  }
 }
 
+
+/* ==================================================
+   SYNTHÈSES SÉPARÉES + EXPORT IMAGE
+================================================== */
+function getPaymentSynthesis(){
+ let total=0,paid=0,remaining=0,installments=0,paidCount=0;
+ data.forEach(p=>(p.installments||[]).forEach(i=>{
+  const amount=Number(i.amount)||0;total+=amount;installments++;
+  if(i.paid){paid+=amount;paidCount++;}else remaining+=amount;
+ }));
+ return {total:roundMoney(total),paid:roundMoney(paid),remaining:roundMoney(remaining),installments,paidCount,unpaidCount:installments-paidCount};
+}
+function getDomiciliationSynthesis(){
+ let loanMonthly=0,loanTotal=0,loanPaid=0;
+ domiciliations.forEach(d=>{
+  const months=Number(d.months)||0;
+  for(let i=0;i<months;i++)loanTotal+=getDomiciliationInstallmentAmount(d,i);
+  loanPaid+=getDomiciliationPaidAmount(d);
+  loanMonthly+=months?getDomiciliationInstallmentAmount(d,0):0;
+ });
+ const loanRemaining=Math.max(0,loanTotal-loanPaid);
+ let permanentMonthly=0,permanentYearly=0;
+ permanentDomiciliations.forEach(d=>{
+  const amount=Number(d.amount)||0,frequency=[1,3,6,12].includes(Number(d.frequency))?Number(d.frequency):1;
+  permanentMonthly+=amount/frequency;permanentYearly+=amount*12/frequency;
+ });
+ return {loanCount:domiciliations.length,loanMonthly:roundMoney(loanMonthly),loanTotal:roundMoney(loanTotal),loanPaid:roundMoney(loanPaid),loanRemaining:roundMoney(loanRemaining),permanentCount:permanentDomiciliations.length,permanentMonthly:roundMoney(permanentMonthly),permanentYearly:roundMoney(permanentYearly),monthlyTotal:roundMoney(loanMonthly+permanentMonthly)};
+}
+function renderSyntheses(){
+ const p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
+ const paymentNode=document.getElementById("paymentSynthesisText"),domNode=document.getElementById("domiciliationSynthesisText");
+ if(paymentNode)paymentNode.innerHTML=`Nombre d’échéances : <strong>${p.installments}</strong><br>Échéances payées : <strong>${p.paidCount}</strong><br>Échéances à payer : <strong>${p.unpaidCount}</strong><br>Déjà payé : <strong>${euro(p.paid)}</strong><br>À payer : <strong>${euro(p.remaining)}</strong><br>Montant total prévu : <strong>${euro(p.total)}</strong>`;
+ if(domNode)domNode.innerHTML=`<strong>Domiciliations avec échéances</strong><br>Contrats : ${d.loanCount}<br>Mensualités prévues : ${euro(d.loanMonthly)}<br>Déjà payé : ${euro(d.loanPaid)}<br>Reste prévu : ${euro(d.loanRemaining)}<br><br><strong>Domiciliations permanentes</strong><br>Prélèvements : ${d.permanentCount}<br>Équivalent mensuel : ${euro(d.permanentMonthly)}<br>Équivalent annuel : ${euro(d.permanentYearly)}<br><br><strong>Total mensuel estimé des domiciliations : ${euro(d.monthlyTotal)}</strong>`;
+}
+async function downloadSummaryImage(type){
+ renderSyntheses();
+ const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
+ const isPayments=type==="payments",p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
+ const title=isPayments?"Synthèse des paiements":"Synthèse des domiciliations";
+ const lines=isPayments?[
+  "Date : "+new Date().toLocaleDateString("fr-BE"),"Nombre d’échéances : "+p.installments,
+  "Échéances payées : "+p.paidCount,"Échéances à payer : "+p.unpaidCount,
+  "Déjà payé : "+euro(p.paid),"À payer : "+euro(p.remaining),"Montant total prévu : "+euro(p.total)
+ ]:[
+  "Date : "+new Date().toLocaleDateString("fr-BE"),"Domiciliations avec échéances : "+d.loanCount,
+  "Mensualités prévues : "+euro(d.loanMonthly),"Déjà payé : "+euro(d.loanPaid),"Reste prévu : "+euro(d.loanRemaining),
+  "Domiciliations permanentes : "+d.permanentCount,"Équivalent mensuel permanent : "+euro(d.permanentMonthly),
+  "Équivalent annuel permanent : "+euro(d.permanentYearly),"Total mensuel estimé : "+euro(d.monthlyTotal)
+ ];
+ const width=900,lineHeight=54,pad=50,height=190+lines.length*lineHeight;
+ canvas.width=width;canvas.height=height;ctx.fillStyle="#f2f2f7";ctx.fillRect(0,0,width,height);
+ ctx.fillStyle="#007aff";ctx.fillRect(0,0,width,125);ctx.fillStyle="#fff";ctx.font="bold 34px Arial";ctx.fillText(title,pad,76);
+ ctx.fillStyle="#111";ctx.font="26px Arial";lines.forEach((line,i)=>ctx.fillText(line,pad,180+i*lineHeight,width-pad*2));
+ ctx.fillStyle="#666";ctx.font="18px Arial";ctx.fillText("Mes paiements • Synthèse calculée à partir des données enregistrées",pad,height-25);
+ canvas.toBlob(async blob=>{
+  if(!blob){alert("Impossible de créer l’image.");return;}
+  const fileName=(isPayments?"synthese-paiements":"synthese-domiciliations")+".png",file=new File([blob],fileName,{type:"image/png"});
+  try{if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title});return;}}
+  catch(e){if(e&&e.name==="AbortError")return;}
+  const url=URL.createObjectURL(blob),opened=window.open(url,"_blank");
+  if(!opened){const a=document.createElement("a");a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();}
+  alert("Image créée. Sur iPhone, ouvre l’image puis utilise Partager > Enregistrer l’image dans Photos.");
+  setTimeout(()=>URL.revokeObjectURL(url),120000);
+ },"image/png");
+}
+
 /* ==================================================
    CHARGEMENT ET PIN
 ================================================== */
@@ -800,6 +880,7 @@ function render(){
   (currentTab==="unpaid"?unpaidList:paidList).appendChild(card);
  });
  updateSelectionBar();
+  renderSyntheses();
 }
 function createPaymentCard(payment){
  const card=document.createElement("div");card.className="paymentCard";
@@ -812,31 +893,39 @@ function createPaymentCard(payment){
  const header=document.createElement("div");header.className="paymentHeader";
  header.innerHTML=`<div class="paymentTitle">${escapeHtml(payment.alias||"Sans alias")}</div>`;
  card.appendChild(header);
+  header.style.cursor="pointer";header.setAttribute("role","button");header.setAttribute("aria-label","Ouvrir ou fermer les détails du paiement");
+  const preview=document.createElement("div");preview.className="paymentDetails";
+  const previewNext=payment.installments.find(i=>!i.paid);
+  preview.innerHTML=`<strong>Reste : ${euro(remainingAmount)}</strong>${previewNext?` • Prochaine échéance : ${formatDate(previewNext.date)||"-"} (${euro(previewNext.amount)})`:" • Tout est payé"}<div class="small" style="margin-top:5px">Toucher pour afficher les détails</div>`;
+  card.appendChild(preview);
+  const expanded=document.createElement("div");expanded.className="paymentExpanded hidden";
+  header.onclick=()=>{expanded.classList.toggle("hidden");preview.querySelector(".small").textContent=expanded.classList.contains("hidden")?"Toucher pour afficher les détails":"Toucher pour masquer les détails";};
+  preview.onclick=header.onclick;
  const summary=document.createElement("div");summary.className="paymentSummary";
  summary.innerHTML=`<div class="paymentSummaryBox"><div class="paymentSummaryTitle">Échéances</div><div class="paymentSummaryValue">${months}</div></div><div class="paymentSummaryBox"><div class="paymentSummaryTitle">Déjà payé</div><div class="paymentSummaryValue">${euro(paidAmount)}</div></div><div class="paymentSummaryBox"><div class="paymentSummaryTitle">Reste</div><div class="paymentSummaryValue">${euro(remainingAmount)}</div></div>`;
- card.appendChild(summary);
+ expanded.appendChild(summary);
  const item=document.createElement("div");item.className="paymentItem";if(remainingMonths===0)item.classList.add("paid");
  item.innerHTML=`<div class="paymentAlias">${escapeHtml(payment.alias||"Sans alias")}</div><div class="paymentBeneficiary">${escapeHtml(payment.beneficiary||"-")}</div><div class="paymentDetails">IBAN : ${escapeHtml(payment.iban||"-")}<br>Montant total : <strong>${euro(total)}</strong><br>Échéances : <strong>${paidCount} / ${months}</strong><br>Déjà payé : <strong>${euro(paidAmount)}</strong><br>Reste : <strong>${euro(remainingAmount)}</strong>${payment.communication?`<br>Communication : <strong>${escapeHtml(payment.communication)}</strong>`:""}</div><div class="paymentProgress"><div class="paymentProgressBar" style="width:${progress}%"></div></div>`;
- card.appendChild(item);
+ expanded.appendChild(item);
  const nextIndex=payment.installments.findIndex(i=>!i.paid);
  if(nextIndex!==-1){
   const next=payment.installments[nextIndex],nextBox=document.createElement("div");nextBox.className="paymentNext";
   nextBox.innerHTML=`<div class="paymentNextTop"><input type="checkbox" class="paymentCheckbox"><div class="paymentNextInfo"><div class="paymentNextTitle">Prochaine échéance • ${nextIndex+1}/${months}</div><div class="paymentNextDate">${formatDate(next.date)||"-"}</div><div class="paymentNextAmount">${euro(next.amount)}</div></div></div>`;
   nextBox.querySelector("input").addEventListener("change",function(){if(this.checked)togglePaid(payment.id,next.id);});
-  card.appendChild(nextBox);
+  expanded.appendChild(nextBox);
  }else{
-  const done=document.createElement("div");done.className="paymentNext";done.innerHTML=`<div style="text-align:center;font-weight:700;color:#167c2e">✓ Toutes les échéances sont payées</div>`;card.appendChild(done);
+  const done=document.createElement("div");done.className="paymentNext";done.innerHTML=`<div style="text-align:center;font-weight:700;color:#167c2e">✓ Toutes les échéances sont payées</div>`;expanded.appendChild(done);
  }
  if(payment.photo){
   const photos=document.createElement("div");photos.className="paymentPhotos";
   const box=document.createElement("div");box.className="paymentPhotoBox";
   box.innerHTML=`<img src="${payment.photo}" class="paymentPhoto" onclick="openPhoto('${escapeJs(payment.id)}')"><div class="paymentPhotoActions"><button class="secondary" onclick="openPhoto('${escapeJs(payment.id)}')">📄 Document</button><button class="danger" onclick="deletePhotoFromPayment('${escapeJs(payment.id)}')">🗑️</button></div>`;
-  photos.appendChild(box);card.appendChild(photos);
+  photos.appendChild(box);expanded.appendChild(photos);
  }
  const scheduleButton=document.createElement("button");scheduleButton.className="secondary paymentScheduleButton";
  const scheduleOpen=openedPaymentSchedules.has(String(payment.id));
  scheduleButton.textContent=scheduleOpen?"▲ Masquer les échéances":"📋 Voir les échéances";
- scheduleButton.onclick=()=>togglePaymentSchedule(payment.id);card.appendChild(scheduleButton);
+ scheduleButton.onclick=()=>togglePaymentSchedule(payment.id);expanded.appendChild(scheduleButton);
  const schedule=document.createElement("div");schedule.className="paymentSchedule";if(!scheduleOpen)schedule.classList.add("hidden");
  payment.installments.forEach((inst,index)=>{
   const row=document.createElement("div");row.className="paymentMonth";if(inst.paid)row.classList.add("paid");
@@ -847,7 +936,7 @@ function createPaymentCard(payment){
   info.innerHTML=`<div class="paymentMonthLabel">Échéance ${index+1}/${months} ${status} ${last}</div><div class="paymentMonthDate">${formatDate(inst.date)||"-"}</div><div class="paymentMonthAmount">${euro(inst.amount)}</div>`;
   row.appendChild(checkbox);row.appendChild(info);schedule.appendChild(row);
  });
- card.appendChild(schedule);
+ expanded.appendChild(schedule);
  const actions=document.createElement("div");actions.className="paymentActions";
  const editBtn=document.createElement("button");editBtn.className="secondary";editBtn.textContent="✏️ Modifier";
  editBtn.onclick=()=>{const next=payment.installments.find(i=>!i.paid)||payment.installments[0];if(next)openEdit(payment.id,next.id);};
@@ -861,7 +950,7 @@ function createPaymentCard(payment){
  calendarBtn.onclick=()=>{const target=payment.installments.find(i=>!i.paid)||payment.installments[0];if(target)addCalendar(payment,target);};
  const deleteBtn=document.createElement("button");deleteBtn.className="danger";deleteBtn.textContent="🗑️ Supprimer";deleteBtn.onclick=()=>deletePayment(payment.id);
  [editBtn,paidBtn,manualBtn,qrBtn,calendarBtn,deleteBtn].forEach(b=>actions.appendChild(b));
- card.appendChild(actions);return card;
+ expanded.appendChild(actions);card.appendChild(expanded);return card;
 }
 function togglePaymentSchedule(id){
  const key=String(id);
@@ -1130,7 +1219,7 @@ async function undoDomiciliationMonth(domId,monthNumber){
 function renderDomiciliations(){
  normalizeDomiciliations();
  const container=document.getElementById("domiciliationList");container.innerHTML="";
- if(!domiciliations.length){container.innerHTML='<div class="domiciliationEmpty">Aucune domiciliation enregistrée.</div>';return;}
+ if(!domiciliations.length){container.innerHTML='<div class="domiciliationEmpty">Aucune domiciliation enregistrée.</div>';renderSyntheses();return;}
  domiciliations.forEach(dom=>{
   const card=document.createElement("div");card.className="domiciliationItem";
   const months=Number(dom.months)||0;
@@ -1172,6 +1261,7 @@ function renderDomiciliations(){
   const del=document.createElement("button");del.className="danger";del.textContent="🗑️ Supprimer";del.onclick=()=>deleteDomiciliation(dom.id);
   actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
  });
+ renderSyntheses();
 }
 function toggleDomiciliationSchedule(id){
  const key=String(id);if(openedDomiciliationSchedules.has(key))openedDomiciliationSchedules.delete(key);else openedDomiciliationSchedules.add(key);renderDomiciliations();
@@ -1459,7 +1549,7 @@ function getPermanentStats(dom){
 function renderPermanentDomiciliations(){
  normalizePermanentDomiciliations();
  const container=document.getElementById("permanentList");container.innerHTML="";
- if(!permanentDomiciliations.length){container.innerHTML='<div class="permanentEmpty">Aucune domiciliation permanente enregistrée.</div>';return;}
+ if(!permanentDomiciliations.length){container.innerHTML='<div class="permanentEmpty">Aucune domiciliation permanente enregistrée.</div>';renderSyntheses();return;}
  permanentDomiciliations.forEach(dom=>{
   const stats=getPermanentStats(dom),yearDetails=getPermanentYearDetails(dom),card=document.createElement("div");card.className="permanentItem";
   const frequencyLabel={1:"Tous les mois",3:"Tous les 3 mois",6:"Tous les 6 mois",12:"Tous les 12 mois"}[stats.frequency];
@@ -1519,6 +1609,7 @@ function renderPermanentDomiciliations(){
   const del=document.createElement("button");del.className="danger";del.textContent="🗑️ Supprimer";del.onclick=()=>deletePermanentDomiciliation(dom.id);
   actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
  });
+ renderSyntheses();
 }
 
 /* ==================================================
