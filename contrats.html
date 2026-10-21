@@ -25,21 +25,12 @@ button{border:0;border-radius:10px;padding:11px 13px;font-size:14px;font-weight:
 .doc{padding:9px;background:#f2f2f7;border-radius:12px;margin-top:8px;overflow-wrap:anywhere}
 .doc img{width:100%;max-height:220px;object-fit:contain;display:block;margin-top:8px;border-radius:8px;background:#fff}
 .hidden{display:none!important}
-.login{position:fixed;inset:0;background:#f2f2f7;display:flex;align-items:center;justify-content:center;padding:24px;z-index:10}
-.loginBox{background:white;border-radius:22px;padding:24px;width:100%;max-width:360px;text-align:center;box-shadow:0 5px 25px #0002}
-.loginTitle{font-size:25px;font-weight:800;margin-bottom:8px}.loginText{color:#777;font-size:14px;margin-bottom:16px}
-#pinInput{text-align:center;font-size:25px;letter-spacing:8px}
 input[type=file]{display:none}
 .small{font-size:12px;color:#777;margin-top:8px}
 </style>
 </head>
 <body>
-<div id="loginScreen" class="login"><div class="loginBox">
- <div class="loginTitle">📁 Contrats</div><div class="loginText">Entrez votre code PIN</div>
- <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
- <br><br><button class="primary" onclick="checkPin()">Ouvrir</button>
-</div></div>
-<div id="app" class="hidden">
+<div id="app">
  <div class="header">📁 Mes contrats</div>
  <div class="container">
   <button class="secondary" onclick="location.href='index.html'">← Retour à Mes paiements</button>
@@ -71,7 +62,6 @@ input[type=file]{display:none}
 </div>
 <script>
 "use strict";
-const PIN="1157";
 const DB_NAME="MesPaiementsPhotosDB", DB_VERSION=1, STORE="photos";
 let dbPromise=null, contracts=[], editingId=null, pendingDocs=[];
 function openDB(){
@@ -89,8 +79,8 @@ async function deleteDoc(key){const db=await openDB();return new Promise((resolv
 function id(){return Date.now().toString()+Math.random().toString(36).slice(2,8)}
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function money(v){return Number(v||0).toLocaleString("fr-BE",{style:"currency",currency:"EUR"})}
-function checkPin(){if(document.getElementById("pinInput").value!==PIN){alert("Code PIN incorrect");document.getElementById("pinInput").value="";return;}document.getElementById("app").classList.remove("hidden");document.getElementById("loginScreen").classList.add("hidden");loadContracts();}
 function loadContracts(){try{contracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");if(!Array.isArray(contracts))contracts=[];}catch(e){contracts=[];}renderContracts();}
+document.addEventListener("DOMContentLoaded",loadContracts);
 function saveList(){localStorage.setItem("mesContrats",JSON.stringify(contracts));}
 function addPendingFiles(files){for(const file of files){if(!file)continue;const reader=new FileReader();reader.onload=()=>{pendingDocs.push({name:file.name||"Document",type:file.type||"",data:reader.result});renderPending();};reader.readAsDataURL(file);}}
 ["cameraInput","galleryInput","fileInput"].forEach(id=>document.getElementById(id).addEventListener("change",function(){addPendingFiles(this.files);this.value="";}));
@@ -132,4 +122,4 @@ async function renderContracts(){
 }
 </script>
 </body>
-</html> 
+</html>
