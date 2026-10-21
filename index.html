@@ -1620,4 +1620,80 @@ function calcResult(){
   const result=Function('"use strict";return ('+calcExpression+')')();
   if(typeof result!=="number"||!isFinite(result))throw new Error();
   calcExpression=String(roundMoney(result));document.getElementById("calcDisplay").value=calcExpression;
- }catch(e
+ }catch(e){alert("Calcul impossible.");}
+}
+
+/* ==================================================
+   EXPORT
+================================================== */
+async function getContractsForBackup(){
+ let contracts=[];
+ try{contracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");if(!Array.isArray(contracts))contracts=[];}catch(e){contracts=[];}
+ for(const contract of contracts){
+  const docs=Array.isArray(contract.documents)?contract.documents:[];
+  for(const doc of docs){doc.data=await getPhotoDB(doc.key);}
+ }
+ return contracts;
+}
+async function restoreContractsFromBackup(contracts){
+ contracts=Array.isArray(contracts)?contracts:[];
+ const clean=[];
+ for(const contract of contracts){
+  const copy={...contract,documents:[]};
+  for(const doc of (Array.isArray(contract.documents)?contract.documents:[])){
+   const key=String(doc.key||("contract_"+String(contract.id)+"_"+generateId()));
+   if(doc.data)await savePhotoDB(key,doc.data);
+   copy.documents.push({key,name:doc.name||"Document",type:doc.type||""});
+  }
+  clean.push(copy);
+ }
+ localStorage.setItem("mesContrats",JSON.stringify(clean));
+}
+async function exportData(){
+ try{
+  await saveData();await saveDomiciliations();await savePermanentDomiciliations();
+  const backup={version:3,date:new Date().toISOString(),data:getCleanDataForStorage(),domiciliations:getCleanDomiciliationsForStorage(),permanentDomiciliations:getCleanPermanentDomiciliationsForStorage(),contracts:await getContractsForBackup()};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="mes-paiements-sauvegarde-"+new Date().toISOString().substring(0,10)+".json";
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ }catch(e){console.error(e);alert("Impossible d'exporter la sauvegarde.");}
+}
+
+/* ==================================================
+   IMPORT
+================================================== */
+document.getElementById("importInput").addEventListener("change",function(){
+ const file=this.files[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=async function(){
+  try{
+   const backup=JSON.parse(reader.result);
+   if(!backup||typeof backup!=="object")throw new Error("Fichier invalide.");
+   if(!confirm("Importer cette sauvegarde ?\n\nLes données actuelles seront remplacées."))return;
+   data=Array.isArray(backup.data)?backup.data:[];
+   domiciliations=Array.isArray(backup.domiciliations)?backup.domiciliations:[];
+   permanentDomiciliations=Array.isArray(backup.permanentDomiciliations)?backup.permanentDomiciliations:[];
+   normalizeData();normalizeDomiciliations();normalizePermanentDomiciliations();
+   localStorage.setItem("mesPaiements",JSON.stringify(getCleanDataForStorage()));
+   localStorage.setItem("mesDomiciliations",JSON.stringify(getCleanDomiciliationsForStorage()));
+   localStorage.setItem("mesDomiciliationsPermanentes",JSON.stringify(getCleanPermanentDomiciliationsForStorage()));
+   await migratePhotosToIndexedDB();
+   await restoreContractsFromBackup(backup.contracts);
+   await loadAllPhotos();
+   render();renderDomiciliations();renderPermanentDomiciliations();alert("Importation terminée.");
+  }catch(e){console.error(e);alert("Impossible d'importer la sauvegarde.\n\n"+(e?.message||e));}
+ };
+ reader.readAsText(file);this.value="";
+});
+
+/* ==================================================
+   INITIALISATION
+================================================== */
+document.addEventListener("DOMContentLoaded",function(){
+ renderAddDomiciliationPhotos();renderPermanentAddPhotos();
+ const today=new Date().toISOString().substring(0,10);
+ if(!document.getElementById("firstDate").value)document.getElementById("firstDate").value=today;
+});
+</script>
+</body>
+</html>
