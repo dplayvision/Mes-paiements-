@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Mes contrats</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#f2f2f7;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+.header{background:#007aff;color:#fff;padding:calc(env(safe-area-inset-top) + 15px) 18px 16px;font-size:22px;font-weight:750}
+.container{max-width:700px;margin:auto;padding:15px;padding-bottom:45px}
+.card,.contract{background:#fff;border-radius:17px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #0000000b}
+h2{font-size:19px;margin:0 0 12px}
+label{display:block;font-size:14px;font-weight:650;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d1d1d6;border-radius:10px;background:#fff;font-size:16px}
+textarea{min-height:75px;resize:vertical}
+button{border:0;border-radius:10px;padding:11px 13px;font-size:14px;font-weight:650;cursor:pointer}
+.primary{background:#007aff;color:#fff;width:100%}.secondary{background:#e9e9ee;color:#111}.danger{background:#ff3b30;color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row button{flex:1}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}
+.details{font-size:13px;color:#666;line-height:1.6;margin-top:9px;overflow-wrap:anywhere}
+.contractTitle{font-size:18px;font-weight:750;color:#007aff}
+.empty{text-align:center;padding:22px;color:#777;background:#f2f2f7;border-radius:12px}
+.doc{padding:9px;background:#f2f2f7;border-radius:12px;margin-top:8px;overflow-wrap:anywhere}
+.doc img{width:100%;max-height:220px;object-fit:contain;display:block;margin-top:8px;border-radius:8px;background:#fff}
+.hidden{display:none!important}
+.login{position:fixed;inset:0;background:#f2f2f7;display:flex;align-items:center;justify-content:center;padding:24px;z-index:10}
+.loginBox{background:white;border-radius:22px;padding:24px;width:100%;max-width:360px;text-align:center;box-shadow:0 5px 25px #0002}
+.loginTitle{font-size:25px;font-weight:800;margin-bottom:8px}.loginText{color:#777;font-size:14px;margin-bottom:16px}
+#pinInput{text-align:center;font-size:25px;letter-spacing:8px}
+input[type=file]{display:none}
+.small{font-size:12px;color:#777;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login"><div class="loginBox">
+ <div class="loginTitle">📁 Contrats</div><div class="loginText">Entrez votre code PIN</div>
+ <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+ <br><br><button class="primary" onclick="checkPin()">Ouvrir</button>
+</div></div>
+<div id="app" class="hidden">
+ <div class="header">📁 Mes contrats</div>
+ <div class="container">
+  <button class="secondary" onclick="location.href='index.html'">← Retour à Mes paiements</button>
+  <div class="card" style="margin-top:14px">
+   <h2 id="formTitle">Ajouter un contrat</h2>
+   <label>Nom du contrat *</label><input id="name" placeholder="Ex. Proximus, assurance auto">
+   <label>Fournisseur / organisme</label><input id="provider" placeholder="Nom de la société">
+   <label>Catégorie</label><select id="category">
+    <option>Internet / téléphone</option><option>Énergie</option><option>Assurance</option><option>Crédit</option><option>Maison</option><option>Abonnement</option><option>Autre</option>
+   </select>
+   <label>Numéro de contrat</label><input id="number" placeholder="Numéro ou référence">
+   <label>Montant (€)</label><input id="amount" type="number" step="0.01" inputmode="decimal" placeholder="0,00">
+   <label>Fréquence</label><select id="frequency"><option>Mensuel</option><option>Trimestriel</option><option>Annuel</option><option>Unique</option><option>Autre</option></select>
+   <label>Date de début</label><input id="startDate" type="date">
+   <label>Date d'échéance / fin</label><input id="endDate" type="date">
+   <label>Notes</label><textarea id="notes" placeholder="Informations utiles…"></textarea>
+   <label>Documents (photos, PDF)</label>
+   <div class="row"><button class="secondary" onclick="document.getElementById('cameraInput').click()">📷 Appareil photo</button><button class="secondary" onclick="document.getElementById('galleryInput').click()">🖼️ Photos</button></div>
+   <div class="row"><button class="secondary" onclick="document.getElementById('fileInput').click()">📄 Choisir un fichier / PDF</button></div>
+   <input id="cameraInput" type="file" accept="image/*" capture="environment">
+   <input id="galleryInput" type="file" accept="image/*">
+   <input id="fileInput" type="file" accept="image/*,.pdf,application/pdf">
+   <div id="pendingDocs"></div>
+   <div class="small">Les contrats sont enregistrés sur cet appareil. Les documents sont stockés séparément dans IndexedDB.</div>
+   <div class="row"><button class="primary" onclick="saveContract()">Enregistrer le contrat</button><button class="secondary" onclick="resetForm()">Annuler</button></div>
+  </div>
+  <div class="card"><h2>Mes contrats</h2><input id="search" placeholder="🔎 Rechercher un contrat…" oninput="renderContracts()"><div id="contractList" style="margin-top:12px"></div></div>
+ </div>
+</div>
+<script>
+"use strict";
+const PIN="1157";
+const DB_NAME="MesPaiementsPhotosDB", DB_VERSION=1, STORE="photos";
+let dbPromise=null, contracts=[], editingId=null, pendingDocs=[];
+function openDB(){
+ if(dbPromise)return dbPromise;
+ dbPromise=new Promise((resolve,reject)=>{
+  const req=indexedDB.open(DB_NAME,DB_VERSION);
+  req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:"key"});};
+  req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error("IndexedDB indisponible."));
+ });
+ return dbPromise;
+}
+async function putDoc(key,data){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put({key:String(key),data});tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});}
+async function getDoc(key){const db=await openDB();return new Promise((resolve,reject)=>{const req=db.transaction(STORE,"readonly").objectStore(STORE).get(String(key));req.onsuccess=()=>resolve(req.result?.data||"");req.onerror=()=>reject(req.error);});}
+async function deleteDoc(key){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).delete(String(key));tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);});}
+function id(){return Date.now().toString()+Math.random().toString(36).slice(2,8)}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function money(v){return Number(v||0).toLocaleString("fr-BE",{style:"currency",currency:"EUR"})}
+function checkPin(){if(document.getElementById("pinInput").value!==PIN){alert("Code PIN incorrect");document.getElementById("pinInput").value="";return;}document.getElementById("app").classList.remove("hidden");document.getElementById("loginScreen").classList.add("hidden");loadContracts();}
+function loadContracts(){try{contracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");if(!Array.isArray(contracts))contracts=[];}catch(e){contracts=[];}renderContracts();}
+function saveList(){localStorage.setItem("mesContrats",JSON.stringify(contracts));}
+function addPendingFiles(files){for(const file of files){if(!file)continue;const reader=new FileReader();reader.onload=()=>{pendingDocs.push({name:file.name||"Document",type:file.type||"",data:reader.result});renderPending();};reader.readAsDataURL(file);}}
+["cameraInput","galleryInput","fileInput"].forEach(id=>document.getElementById(id).addEventListener("change",function(){addPendingFiles(this.files);this.value="";}));
+function renderPending(){const root=document.getElementById("pendingDocs");root.innerHTML=pendingDocs.map((d,i)=>`<div class="doc">📎 ${esc(d.name)} <button class="danger" onclick="removePending(${i})">Retirer</button>${d.type.startsWith("image/")?`<img src="${d.data}" alt="">`:""}</div>`).join("");}
+function removePending(i){pendingDocs.splice(i,1);renderPending();}
+function formValues(){return {name:document.getElementById("name").value.trim(),provider:document.getElementById("provider").value.trim(),category:document.getElementById("category").value,number:document.getElementById("number").value.trim(),amount:document.getElementById("amount").value,frequency:document.getElementById("frequency").value,startDate:document.getElementById("startDate").value,endDate:document.getElementById("endDate").value,notes:document.getElementById("notes").value.trim()};}
+async function saveContract(){
+ const values=formValues();if(!values.name){alert("Indique le nom du contrat.");return;}
+ try{
+  let c=editingId?contracts.find(x=>String(x.id)===String(editingId)):null;
+  if(!c){c={id:id(),documents:[],createdAt:new Date().toISOString()};contracts.unshift(c);}
+  Object.assign(c,values);if(!Array.isArray(c.documents))c.documents=[];
+  for(const d of pendingDocs){const key="contract_"+c.id+"_"+id();await putDoc(key,d.data);c.documents.push({key,name:d.name,type:d.type});}
+  saveList();resetForm();renderContracts();alert("Contrat enregistré.");
+ }catch(e){console.error(e);alert("Impossible d'enregistrer le contrat. "+(e.message||""));}
+}
+function resetForm(){editingId=null;pendingDocs=[];document.getElementById("formTitle").textContent="Ajouter un contrat";["name","provider","number","amount","startDate","endDate","notes"].forEach(id=>document.getElementById(id).value="");document.getElementById("category").selectedIndex=0;document.getElementById("frequency").selectedIndex=0;renderPending();}
+function editContract(id){const c=contracts.find(x=>String(x.id)===String(id));if(!c)return;editingId=c.id;for(const key of ["name","provider","number","amount","startDate","endDate","notes"])document.getElementById(key).value=c[key]||"";document.getElementById("category").value=c.category||"Autre";document.getElementById("frequency").value=c.frequency||"Mensuel";pendingDocs=[];renderPending();document.getElementById("formTitle").textContent="Modifier le contrat";window.scrollTo({top:0,behavior:"smooth"});}
+async function deleteContract(id){const c=contracts.find(x=>String(x.id)===String(id));if(!c||!confirm("Supprimer ce contrat et ses documents ?"))return;for(const d of c.documents||[])await deleteDoc(d.key);contracts=contracts.filter(x=>String(x.id)!==String(id));saveList();renderContracts();}
+async function renderContracts(){
+ const root=document.getElementById("contractList");if(!root)return;const q=(document.getElementById("search").value||"").toLowerCase();
+ const list=contracts.filter(c=>[c.name,c.provider,c.category,c.number,c.notes].some(v=>String(v||"").toLowerCase().includes(q)));
+ if(!list.length){root.innerHTML='<div class="empty">Aucun contrat trouvé.</div>';return;}
+ root.innerHTML="";
+ for(const c of list){
+  const card=document.createElement("div");card.className="contract";
+  card.innerHTML=`<div class="contractTitle">${esc(c.name||"Contrat sans nom")}</div><div class="details">${esc(c.provider||"Organisme non précisé")}<br>Catégorie : ${esc(c.category||"Autre")}<br>Numéro : ${esc(c.number||"—")}<br>Montant : ${c.amount!==""&&c.amount!=null?money(c.amount):"Non précisé"}${c.frequency?" • "+esc(c.frequency):""}<br>Début : ${esc(c.startDate||"—")} • Fin/échéance : ${esc(c.endDate||"—")}${c.notes?`<br>Notes : ${esc(c.notes)}`:""}</div><div class="docList"></div><div class="actions"><button class="secondary" data-edit>✏️ Modifier</button><button class="danger" data-delete>🗑️ Supprimer</button></div>`;
+  card.querySelector("[data-edit]").onclick=()=>editContract(c.id);card.querySelector("[data-delete]").onclick=()=>deleteContract(c.id);
+  const docsRoot=card.querySelector(".docList");
+  for(const d of (c.documents||[])){
+   const box=document.createElement("div");box.className="doc";box.textContent="📎 "+(d.name||"Document");
+   const data=await getDoc(d.key);
+   if(data&&String(d.type||"").startsWith("image/")){const img=document.createElement("img");img.src=data;img.alt=d.name||"Document";img.onclick=()=>window.open(data,"_blank");box.appendChild(img);}
+   const open=document.createElement("button");open.className="secondary";open.style.marginTop="8px";open.textContent="Ouvrir";open.onclick=()=>{if(!data){alert("Document introuvable.");return;}const w=window.open();if(w){if(String(d.type||"").startsWith("image/"))w.document.write(`<img src="${data}" style="max-width:100%;height:auto">`);else{const a=w.document.createElement("a");a.href=data;a.download=d.name||"document";a.textContent="Ouvrir / télécharger le document";w.document.body.appendChild(a);a.click();}}else location.href=data;};
+   box.appendChild(open);docsRoot.appendChild(box);
+  }
+  root.appendChild(card);
+ }
+}
+</script>
+</body>
+</html>
