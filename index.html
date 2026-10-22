@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Mes paiements</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f2f2f7;color:#111}
@@ -138,21 +142,6 @@ input[type="file"]{display:none}
 .calculatorGrid button{font-size:18px;padding:14px 5px}
 .calculatorEquals{margin-top:8px;width:100%;font-size:18px}
 .empty{background:white;border-radius:15px;padding:20px;text-align:center;color:#777;margin-bottom:15px}
-
-/* Ajouts ciblés : cartes repliables et tableau global des domiciliations */
-.domCompactHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#f2f2f7;border-radius:12px;cursor:pointer}
-.domCompactMain{min-width:0;flex:1}
-.domCompactName{font-size:15px;font-weight:750;color:#007aff;overflow-wrap:anywhere}
-.domCompactMeta{font-size:12px;color:#666;margin-top:3px}
-.domCompactBalance{text-align:right;font-size:13px;font-weight:750;white-space:nowrap}
-.domCompactChevron{font-size:20px;color:#666;flex-shrink:0}
-.domCompactBody{padding-top:8px}
-.domCompactBody.hidden{display:none!important}
-.allDomTableWrap{overflow-x:auto;margin-top:10px}
-.allDomTable{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
-.allDomTable th,.allDomTable td{padding:9px 7px;border-bottom:1px solid #e1e1e6;text-align:left;vertical-align:top}
-.allDomTable th{background:#f2f2f7;font-weight:750}
-
 </style>
 </head>
 <body>
@@ -160,7 +149,9 @@ input[type="file"]{display:none}
 <div id="loginScreen" class="login">
 <div class="loginBox">
 <div class="loginTitle">Mes paiements</div>
-<div class="loginText">Entrez votre code PIN</div>
+<div class="loginText">Connectez-vous avec votre compte Google, puis entrez votre code PIN.</div>
+<button id="googleLoginButton" class="primary" type="button" onclick="signInWithGoogle()">Se connecter avec Google</button>
+<div id="firebaseStatus" style="font-size:12px;color:#666;margin:12px 0">Connexion Google requise pour synchroniser les appareils.</div>
 <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
 <br><br>
 <button class="primary" onclick="checkPin()">Ouvrir</button>
@@ -169,6 +160,11 @@ input[type="file"]{display:none}
 
 <div id="app" class="hidden">
 <div class="header">Mes paiements</div>
+<div style="max-width:700px;margin:10px auto;padding:0 15px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+  <span id="cloudSyncStatus" style="font-size:12px;color:#555;flex:1">Synchronisation cloud non démarrée</span>
+  <button type="button" class="secondary" onclick="syncAllToCloud()">Synchroniser maintenant</button>
+  <button type="button" class="secondary" onclick="signOutGoogle()">Déconnexion Google</button>
+</div>
 <div class="container">
 <div class="card" style="padding:12px;margin-bottom:15px">
   <a href="contrats.html" style="display:block;text-align:center;text-decoration:none;background:#5856d6;color:#fff;font-weight:700;padding:13px 14px;border-radius:11px">📄 Mes contrats</a>
@@ -185,17 +181,12 @@ input[type="file"]{display:none}
   <div class="manualInfo">
     <strong>💳 Synthèse des paiements</strong>
     <div id="paymentSynthesisText" class="paymentDetails">Chargement…</div>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('payments')">📸 Enregistrer la synthèse en photo</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('payments')">📸 Télécharger en image</button>
   </div>
   <div class="manualInfo">
     <strong>🏦 Synthèse des domiciliations</strong>
     <div id="domiciliationSynthesisText" class="paymentDetails">Chargement…</div>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('domiciliations')">📸 Enregistrer la synthèse en photo</button>
-  </div>
-  <div class="manualInfo">
-    <strong>📋 Tableau de toutes les domiciliations</strong>
-    <div id="allDomiciliationsSynthesis" class="allDomTableWrap">Chargement…</div>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('all')">📸 Enregistrer le tableau en photo</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="downloadSummaryImage('domiciliations')">📸 Télécharger en image</button>
   </div>
 </div>
 
@@ -436,6 +427,216 @@ input[type="file"]{display:none}
 </div></div>
 
 <script>
+
+/* ==================================================
+   FIREBASE — CONNEXION GOOGLE ET SYNCHRONISATION
+   Les données locales restent intactes en cas d'erreur réseau.
+================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyD8FfX9uljCWJi1fg3hE5poocXOCAH-H9A",
+  authDomain: "mes-paiements-jeremy.firebaseapp.com",
+  projectId: "mes-paiements-jeremy",
+  storageBucket: "mes-paiements-jeremy.firebasestorage.app",
+  messagingSenderId: "1085958529684",
+  appId: "1:1085958529684:web:99e5514798cf0b8f098a81",
+};
+let firebaseReady = false;
+let cloudSyncBusy = false;
+let cloudUser = null;
+let cloudSaveTimer = null;
+
+function setCloudStatus(message, error=false) {
+  const status = document.getElementById("cloudSyncStatus");
+  const loginStatus = document.getElementById("firebaseStatus");
+  if (status) { status.textContent = message; status.style.color = error ? "#c00" : "#555"; }
+  if (loginStatus) { loginStatus.textContent = message; loginStatus.style.color = error ? "#c00" : "#555"; }
+}
+function initFirebase() {
+  if (firebaseReady) return true;
+  if (!window.firebase || !firebaseConfig.apiKey || firebaseConfig.apiKey.startsWith("REMPLACER_")) {
+    setCloudStatus("Configuration Firebase incomplète : ajoute la clé API du projet.", true);
+    return false;
+  }
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
+    firebase.auth().getRedirectResult().catch(e => {
+      if (e && e.code) setCloudStatus("Connexion Google impossible : " + (e.message || e), true);
+    });
+    firebase.auth().onAuthStateChanged(async user => {
+      cloudUser = user || null;
+      const btn = document.getElementById("googleLoginButton");
+      if (btn) btn.textContent = user ? "Compte Google connecté" : "Se connecter avec Google";
+      if (user) {
+        setCloudStatus("Connecté : " + (user.email || "compte Google") + ". Entre le PIN pour ouvrir l’application.");
+      } else {
+        setCloudStatus("Connexion Google requise pour synchroniser les appareils.");
+      }
+    });
+    firebaseReady = true;
+    return true;
+  } catch (e) {
+    console.error(e);
+    setCloudStatus("Erreur d’initialisation Firebase : " + (e.message || e), true);
+    return false;
+  }
+}
+async function signInWithGoogle() {
+  if (!initFirebase()) return;
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await firebase.auth().signInWithPopup(provider);
+    setCloudStatus("Compte Google connecté. Tu peux maintenant entrer le PIN.");
+  } catch (e) {
+    console.error(e);
+    if (e.code === "auth/popup-blocked" || e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") {
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await firebase.auth().signInWithRedirect(provider);
+      } catch (redirectError) {
+        setCloudStatus("Connexion Google impossible : " + (redirectError.message || redirectError), true);
+      }
+    } else {
+      setCloudStatus("Connexion Google impossible : " + (e.message || e), true);
+    }
+  }
+}
+async function signOutGoogle() {
+  if (!firebaseReady || !firebase.auth().currentUser) return;
+  if (!confirm("Se déconnecter de Google ? Les données locales restent sur cet appareil.")) return;
+  try {
+    await firebase.auth().signOut();
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("loginScreen").classList.remove("hidden");
+  } catch (e) {
+    setCloudStatus("Déconnexion impossible : " + (e.message || e), true);
+  }
+}
+function cleanForCloud(items, photoField) {
+  return (Array.isArray(items) ? items : []).map(item => {
+    const copy = JSON.parse(JSON.stringify(item));
+    if (photoField && photoField in copy) copy[photoField] = "";
+    if (Array.isArray(copy.photos)) copy.photos = ["", ""];
+    return copy;
+  });
+}
+async function syncAllToCloud() {
+  if (cloudSyncBusy) return;
+  if (!initFirebase() || !firebase.auth().currentUser) {
+    setCloudStatus("Connecte-toi à Google avant de synchroniser.", true);
+    return;
+  }
+  cloudUser = firebase.auth().currentUser;
+  cloudSyncBusy = true;
+  setCloudStatus("Synchronisation en cours…");
+  try {
+    await saveDataLocalOnly();
+    await saveDomiciliationsLocalOnly();
+    await savePermanentDomiciliationsLocalOnly();
+
+    const db = firebase.firestore();
+    const userRef = db.collection("users").doc(cloudUser.uid);
+    const snap = await userRef.get();
+    const cloudHasData = snap.exists && snap.data() && snap.data().snapshotVersion === 1;
+
+    // Première synchronisation : ne jamais remplacer le cloud ou le local sans sauvegarde.
+    if (!cloudHasData) {
+      await uploadCurrentLocalState(userRef);
+      setCloudStatus("Données enregistrées dans Firestore. Photos et PDF restent sur cet appareil.");
+      return;
+    }
+
+    // Le cloud est chargé seulement si cet appareil n'a pas encore de données locales.
+    const localHasData =
+      localStorage.getItem("mesPaiements") !== null ||
+      localStorage.getItem("mesDomiciliations") !== null ||
+      localStorage.getItem("mesDomiciliationsPermanentes") !== null ||
+      localStorage.getItem("mesContrats") !== null;
+    if (!localHasData) {
+      await restoreCloudState(snap.data());
+      setCloudStatus("Données récupérées depuis le cloud. Recharge l’application si nécessaire.");
+      return;
+    }
+
+    // Pour éviter d'écraser silencieusement des modifications concurrentes, on signale
+    // qu'un choix de fusion explicite sera nécessaire si les deux appareils ont déjà des données.
+    const localStamp = Number(localStorage.getItem("mesPaiementsCloudUpdatedAt") || 0);
+    const cloudStamp = Number(snap.data().updatedAt || 0);
+    if (localStamp === 0 || cloudStamp > localStamp) {
+      setCloudStatus("Des données existent déjà sur cet appareil et/ou dans le cloud. Rien n’a été écrasé : fais une sauvegarde avant de choisir la fusion.", true);
+      return;
+    }
+    await uploadCurrentLocalState(userRef);
+    localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Date.now()));
+    setCloudStatus("Données synchronisées. Photos et PDF restent locaux.");
+  } catch (e) {
+    console.error(e);
+    setCloudStatus("Échec de synchronisation : " + (e.message || e), true);
+  } finally {
+    cloudSyncBusy = false;
+  }
+}
+async function saveDataLocalOnly() {
+  for (const p of data) {
+    const key = paymentPhotoKey(p.id);
+    if (p.photo) await savePhotoDB(key, p.photo);
+  }
+  localStorage.setItem("mesPaiements", JSON.stringify(getCleanDataForStorage()));
+}
+async function saveDomiciliationsLocalOnly() {
+  for (const d of domiciliations) {
+    if (!d.id) d.id = generateId();
+    if (!Array.isArray(d.photos)) d.photos = ["", ""];
+    for (let i = 0; i < 2; i++) if (d.photos[i]) await savePhotoDB(domiciliationPhotoKey(d.id, i), d.photos[i]);
+  }
+  localStorage.setItem("mesDomiciliations", JSON.stringify(getCleanDomiciliationsForStorage()));
+}
+async function savePermanentDomiciliationsLocalOnly() {
+  for (const d of permanentDomiciliations) {
+    if (!d.id) d.id = generateId();
+    if (!Array.isArray(d.photos)) d.photos = ["", ""];
+    for (let i = 0; i < 2; i++) if (d.photos[i]) await savePhotoDB(permanentPhotoKey(d.id, i), d.photos[i]);
+  }
+  localStorage.setItem("mesDomiciliationsPermanentes", JSON.stringify(getCleanPermanentDomiciliationsForStorage()));
+}
+async function uploadCurrentLocalState(userRef) {
+  const paymentRows = cleanForCloud(data, "photo");
+  const domRows = cleanForCloud(domiciliations);
+  const permanentRows = cleanForCloud(permanentDomiciliations);
+  const contracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
+  const contractRows = contracts.map(c => {
+    const copy = JSON.parse(JSON.stringify(c));
+    if (Array.isArray(copy.documents)) copy.documents = copy.documents.map(d => ({...d, data: ""}));
+    return copy;
+  });
+
+  // Mode sans Storage : les métadonnées sont synchronisées, les photos/PDF restent locaux.
+  await userRef.set({
+    snapshotVersion: 1,
+    payments: paymentRows,
+    domiciliations: domRows,
+    permanentDomiciliations: permanentRows,
+    contracts: contractRows,
+    updatedAt: Date.now()
+  });
+  localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Date.now()));
+}
+async function restoreCloudState(cloud) {
+  data = Array.isArray(cloud.payments) ? cloud.payments : [];
+  domiciliations = Array.isArray(cloud.domiciliations) ? cloud.domiciliations : [];
+  permanentDomiciliations = Array.isArray(cloud.permanentDomiciliations) ? cloud.permanentDomiciliations : [];
+  // Sans Firebase Storage, les photos et PDF ne peuvent pas être récupérés sur un nouvel appareil.
+  for (const p of data) p.photo = "";
+  for (const d of domiciliations) d.photos = ["", ""];
+  for (const d of permanentDomiciliations) d.photos = ["", ""];
+  const contracts = Array.isArray(cloud.contracts) ? cloud.contracts : [];
+  await saveDataLocalOnly();
+  await saveDomiciliationsLocalOnly();
+  await savePermanentDomiciliationsLocalOnly();
+  await restoreContractsFromBackup(contracts);
+  localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Number(cloud.updatedAt) || Date.now()));
+}
+
 /* ==================================================
    VARIABLES
 ================================================== */
@@ -748,61 +949,35 @@ function getDomiciliationSynthesis(){
  });
  return {loanCount:domiciliations.length,loanMonthly:roundMoney(loanMonthly),loanTotal:roundMoney(loanTotal),loanPaid:roundMoney(loanPaid),loanRemaining:roundMoney(loanRemaining),permanentCount:permanentDomiciliations.length,permanentMonthly:roundMoney(permanentMonthly),permanentYearly:roundMoney(permanentYearly),monthlyTotal:roundMoney(loanMonthly+permanentMonthly)};
 }
-function getAllDomiciliationRows(){
- const rows=[];
- domiciliations.forEach(dom=>{
-  const months=Number(dom.months)||0;let total=0;
-  for(let i=0;i<months;i++)total+=getDomiciliationInstallmentAmount(dom,i);
-  const paid=roundMoney(getDomiciliationPaidAmount(dom)),remaining=roundMoney(Math.max(0,total-paid));
-  const nextMonth=getNextDomiciliationMonth(dom);
-  const nextDate=nextMonth!==null?addMonthsSafe(dom.startDate,nextMonth-1):"";
-  const nextAmount=nextMonth!==null?getDomiciliationInstallmentAmount(dom,nextMonth-1):0;
-  rows.push({name:dom.alias||dom.beneficiary||"Sans nom",type:"Avec échéances",paid,remaining,nextDate,nextAmount:nextMonth!==null?euro(nextAmount):"Terminé"});
- });
- permanentDomiciliations.forEach(dom=>{
-  const stats=getPermanentStats(dom);
-  rows.push({name:dom.alias||dom.beneficiary||"Sans nom",type:"Permanente",paid:stats.paid,remaining:stats.planned,nextDate:stats.nextDate?formatDateObject(stats.nextDate):"",nextAmount:stats.nextDate?euro(stats.amount):"—"});
- });
- return rows;
-}
-function renderAllDomiciliationsSynthesis(){
- const node=document.getElementById("allDomiciliationsSynthesis");if(!node)return;
- const rows=getAllDomiciliationRows();
- if(!rows.length){node.innerHTML='<div class="small">Aucune domiciliation enregistrée.</div>';return;}
- node.innerHTML=`<table class="allDomTable"><thead><tr><th>Nom du contrat</th><th>Type</th><th>Déjà payé</th><th>Reste à payer</th><th>Prochaine échéance</th><th>Montant</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.type)}</td><td>${euro(r.paid)}</td><td>${euro(r.remaining)}</td><td>${escapeHtml(r.nextDate||"—")}</td><td>${escapeHtml(r.nextAmount)}</td></tr>`).join("")}</tbody></table>`;
-}
 function renderSyntheses(){
  const p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
  const paymentNode=document.getElementById("paymentSynthesisText"),domNode=document.getElementById("domiciliationSynthesisText");
  if(paymentNode)paymentNode.innerHTML=`Nombre d’échéances : <strong>${p.installments}</strong><br>Échéances payées : <strong>${p.paidCount}</strong><br>Échéances à payer : <strong>${p.unpaidCount}</strong><br>Déjà payé : <strong>${euro(p.paid)}</strong><br>À payer : <strong>${euro(p.remaining)}</strong><br>Montant total prévu : <strong>${euro(p.total)}</strong>`;
  if(domNode)domNode.innerHTML=`<strong>Domiciliations avec échéances</strong><br>Contrats : ${d.loanCount}<br>Mensualités prévues : ${euro(d.loanMonthly)}<br>Déjà payé : ${euro(d.loanPaid)}<br>Reste prévu : ${euro(d.loanRemaining)}<br><br><strong>Domiciliations permanentes</strong><br>Prélèvements : ${d.permanentCount}<br>Équivalent mensuel : ${euro(d.permanentMonthly)}<br>Équivalent annuel : ${euro(d.permanentYearly)}<br><br><strong>Total mensuel estimé des domiciliations : ${euro(d.monthlyTotal)}</strong>`;
- renderAllDomiciliationsSynthesis();
 }
 async function downloadSummaryImage(type){
  renderSyntheses();
  const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d");
- const isPayments=type==="payments",isAll=type==="all",p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
- const title=isAll?"Tableau des domiciliations":isPayments?"Synthèse des paiements":"Synthèse des domiciliations";
- let lines=[];
- if(isAll){
-  const rows=getAllDomiciliationRows();
-  lines=["Date : "+new Date().toLocaleDateString("fr-BE"),"Nom du contrat | Type | Déjà payé | Reste à payer | Prochaine échéance | Montant"];
-  rows.forEach(r=>lines.push(`${r.name} | ${r.type} | ${euro(r.paid)} | ${euro(r.remaining)} | ${r.nextDate||"—"} | ${r.nextAmount}`));
-  if(!rows.length)lines.push("Aucune domiciliation enregistrée.");
- }else if(isPayments){
-  lines=["Date : "+new Date().toLocaleDateString("fr-BE"),"Nombre d’échéances : "+p.installments,"Échéances payées : "+p.paidCount,"Échéances à payer : "+p.unpaidCount,"Déjà payé : "+euro(p.paid),"À payer : "+euro(p.remaining),"Montant total prévu : "+euro(p.total)];
- }else{
-  lines=["Date : "+new Date().toLocaleDateString("fr-BE"),"Domiciliations avec échéances : "+d.loanCount,"Mensualités prévues : "+euro(d.loanMonthly),"Déjà payé : "+euro(d.loanPaid),"Reste prévu : "+euro(d.loanRemaining),"Domiciliations permanentes : "+d.permanentCount,"Équivalent mensuel permanent : "+euro(d.permanentMonthly),"Équivalent annuel permanent : "+euro(d.permanentYearly),"Total mensuel estimé : "+euro(d.monthlyTotal)];
- }
- const width=1200,lineHeight=isAll?42:54,pad=45,height=190+lines.length*lineHeight;
+ const isPayments=type==="payments",p=getPaymentSynthesis(),d=getDomiciliationSynthesis();
+ const title=isPayments?"Synthèse des paiements":"Synthèse des domiciliations";
+ const lines=isPayments?[
+  "Date : "+new Date().toLocaleDateString("fr-BE"),"Nombre d’échéances : "+p.installments,
+  "Échéances payées : "+p.paidCount,"Échéances à payer : "+p.unpaidCount,
+  "Déjà payé : "+euro(p.paid),"À payer : "+euro(p.remaining),"Montant total prévu : "+euro(p.total)
+ ]:[
+  "Date : "+new Date().toLocaleDateString("fr-BE"),"Domiciliations avec échéances : "+d.loanCount,
+  "Mensualités prévues : "+euro(d.loanMonthly),"Déjà payé : "+euro(d.loanPaid),"Reste prévu : "+euro(d.loanRemaining),
+  "Domiciliations permanentes : "+d.permanentCount,"Équivalent mensuel permanent : "+euro(d.permanentMonthly),
+  "Équivalent annuel permanent : "+euro(d.permanentYearly),"Total mensuel estimé : "+euro(d.monthlyTotal)
+ ];
+ const width=900,lineHeight=54,pad=50,height=190+lines.length*lineHeight;
  canvas.width=width;canvas.height=height;ctx.fillStyle="#f2f2f7";ctx.fillRect(0,0,width,height);
  ctx.fillStyle="#007aff";ctx.fillRect(0,0,width,125);ctx.fillStyle="#fff";ctx.font="bold 34px Arial";ctx.fillText(title,pad,76);
- ctx.fillStyle="#111";ctx.font=isAll?"18px Arial":"26px Arial";
- lines.forEach((line,i)=>{let text=line;if(text.length>115)text=text.slice(0,112)+"…";ctx.fillText(text,pad,180+i*lineHeight,width-pad*2);});
+ ctx.fillStyle="#111";ctx.font="26px Arial";lines.forEach((line,i)=>ctx.fillText(line,pad,180+i*lineHeight,width-pad*2));
  ctx.fillStyle="#666";ctx.font="18px Arial";ctx.fillText("Mes paiements • Synthèse calculée à partir des données enregistrées",pad,height-25);
  canvas.toBlob(async blob=>{
   if(!blob){alert("Impossible de créer l’image.");return;}
-  const fileName=(isAll?"tableau-domiciliations":isPayments?"synthese-paiements":"synthese-domiciliations")+".png",file=new File([blob],fileName,{type:"image/png"});
+  const fileName=(isPayments?"synthese-paiements":"synthese-domiciliations")+".png",file=new File([blob],fileName,{type:"image/png"});
   try{if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title});return;}}
   catch(e){if(e&&e.name==="AbortError")return;}
   const url=URL.createObjectURL(blob),opened=window.open(url,"_blank");
@@ -811,6 +986,10 @@ async function downloadSummaryImage(type){
   setTimeout(()=>URL.revokeObjectURL(url),120000);
  },"image/png");
 }
+
+/* ==================================================
+   CHARGEMENT ET PIN
+================================================== */
 async function loadData(){
  try{
   const saved=localStorage.getItem("mesPaiements");
@@ -830,12 +1009,18 @@ function loadPermanentDomiciliations(){
  catch(e){console.error(e);permanentDomiciliations=[];}
 }
 async function checkPin(){
+ if (!initFirebase() || !firebase.auth().currentUser) {
+   alert("Connecte-toi d’abord avec le même compte Google sur tes appareils.");
+   return;
+ }
+ cloudUser = firebase.auth().currentUser;
  const value=document.getElementById("pinInput").value;
  if(value!==PIN){alert("Code PIN incorrect");document.getElementById("pinInput").value="";return;}
  try{
   document.getElementById("app").classList.remove("hidden");
   await loadData();
   document.getElementById("loginScreen").classList.add("hidden");
+  await syncAllToCloud();
  }catch(e){console.error(e);alert("Impossible d'ouvrir l'application.\n\n"+(e?.name||"Erreur")+"\n"+(e?.message||e));}
 }
 
@@ -1301,16 +1486,7 @@ function renderDomiciliations(){
   const actions=document.createElement("div");actions.className="domiciliationActions";
   const edit=document.createElement("button");edit.className="secondary";edit.textContent="✏️ Modifier";edit.onclick=()=>openDomiciliationEdit(dom.id);
   const del=document.createElement("button");del.className="danger";del.textContent="🗑️ Supprimer";del.onclick=()=>deleteDomiciliation(dom.id);
-  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);
-  const compactBody=document.createElement("div");compactBody.className="domCompactBody hidden";
-  while(card.firstChild)compactBody.appendChild(card.firstChild);
-  const compactHead=document.createElement("div");compactHead.className="domCompactHeader";
-  const nextText=nextMonth!==null?(formatDate(nextDate)+" · "+euro(nextAmount)):"Toutes payées";
-  compactHead.innerHTML=`<div class="domCompactMain"><div class="domCompactName">${escapeHtml(dom.alias||"Sans alias")}</div><div class="domCompactMeta">${escapeHtml(dom.beneficiary||"-")} · ${paidCount}/${months} payées</div></div><div class="domCompactBalance">Reste<br>${euro(remaining)}</div><div class="domCompactChevron">＋</div>`;
-  compactHead.setAttribute("role","button");compactHead.tabIndex=0;
-  const toggleCompact=()=>{const open=!compactBody.classList.contains("hidden");compactBody.classList.toggle("hidden",open);compactHead.querySelector(".domCompactChevron").textContent=open?"＋":"−";};
-  compactHead.addEventListener("click",toggleCompact);compactHead.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleCompact();}});
-  card.append(compactHead,compactBody);container.appendChild(card);
+  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
  });
  renderSyntheses();
 }
@@ -1658,15 +1834,7 @@ function renderPermanentDomiciliations(){
   const actions=document.createElement("div");actions.className="permanentActions";
   const edit=document.createElement("button");edit.className="secondary";edit.textContent="✏️ Modifier";edit.onclick=()=>openPermanentEdit(dom.id);
   const del=document.createElement("button");del.className="danger";del.textContent="🗑️ Supprimer";del.onclick=()=>deletePermanentDomiciliation(dom.id);
-  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);
-  const compactBody=document.createElement("div");compactBody.className="domCompactBody hidden";
-  while(card.firstChild)compactBody.appendChild(card.firstChild);
-  const compactHead=document.createElement("div");compactHead.className="domCompactHeader";
-  compactHead.innerHTML=`<div class="domCompactMain"><div class="domCompactName">${escapeHtml(dom.alias||"Sans alias")}</div><div class="domCompactMeta">${escapeHtml(dom.beneficiary||"-")} · Permanent</div></div><div class="domCompactBalance">Reste année<br>${euro(stats.planned)}</div><div class="domCompactChevron">＋</div>`;
-  compactHead.setAttribute("role","button");compactHead.tabIndex=0;
-  const toggleCompact=()=>{const open=!compactBody.classList.contains("hidden");compactBody.classList.toggle("hidden",open);compactHead.querySelector(".domCompactChevron").textContent=open?"＋":"−";};
-  compactHead.addEventListener("click",toggleCompact);compactHead.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleCompact();}});
-  card.append(compactHead,compactBody);container.appendChild(card);
+  actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
  });
  renderSyntheses();
 }
@@ -1843,6 +2011,7 @@ document.getElementById("importInput").addEventListener("change",function(){
    INITIALISATION
 ================================================== */
 document.addEventListener("DOMContentLoaded",function(){
+ initFirebase();
  renderAddDomiciliationPhotos();renderPermanentAddPhotos();
  const today=new Date().toISOString().substring(0,10);
  if(!document.getElementById("firstDate").value)document.getElementById("firstDate").value=today;
