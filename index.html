@@ -2134,3 +2134,101 @@ async function deletePermanentPhoto(id,index){
    CALCULETTE
 ================================================== */
 let calcExpression="";
+function calcInput(value){calcExpression+=value;document.getElementById("calcDisplay").value=calcExpression;}
+function calcClear(){calcExpression="";document.getElementById("calcDisplay").value="";}
+function calcResult(){
+ if(!calcExpression)return;
+ try{
+  if(!/^[0-9+\-*/().\s]+$/.test(calcExpression))throw new Error();
+  const result=Function('"use strict";return ('+calcExpression+')')();
+  if(typeof result!=="number"||!isFinite(result))throw new Error();
+  calcExpression=String(roundMoney(result));document.getElementById("calcDisplay").value=calcExpression;
+ }catch(e){alert("Calcul impossible.");}
+}
+
+/* ==================================================
+   EXPORT
+================================================== */
+async function getContractsForBackup(){
+ let contracts=[];
+ try{contracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");if(!Array.isArray(contracts))contracts=[];}catch(e){contracts=[];}
+ for(const contract of contracts){
+  const docs=Array.isArray(contract.documents)?contract.documents:[];
+  for(const doc of docs){doc.data=await getPhotoDB(doc.key);}
+ }
+ return contracts;
+}
+async function restoreContractsFromBackup(contracts){
+ contracts=Array.isArray(contracts)?contracts:[];
+ const clean=[];
+ for(const contract of contracts){
+  const copy={...contract,documents:[]};
+  for(const doc of (Array.isArray(contract.documents)?contract.documents:[])){
+   const key=String(doc.key||("contract_"+String(contract.id)+"_"+generateId()));
+   if(doc.data)await savePhotoDB(key,doc.data);
+   copy.documents.push({key,name:doc.name||"Document",type:doc.type||""});
+  }
+  clean.push(copy);
+ }
+ localStorage.setItem("mesContrats",JSON.stringify(clean));
+}
+async function exportData(){
+ try{
+  await saveData();await saveDomiciliations();await savePermanentDomiciliations();
+  const backup={version:3,date:new Date().toISOString(),data:getCleanDataForStorage(),domiciliations:getCleanDomiciliationsForStorage(),permanentDomiciliations:getCleanPermanentDomiciliationsForStorage(),contracts:await getContractsForBackup()};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="mes-paiements-sauvegarde-"+new Date().toISOString().substring(0,10)+".json";
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ }catch(e){console.error(e);alert("Impossible d'exporter la sauvegarde.");}
+}
+
+/* ==================================================
+   IMPORT
+================================================== */
+document.getElementById("importInput").addEventListener("change",function(){
+ const file=this.files[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=async function(){
+  try{
+   const backup=JSON.parse(reader.result);
+   if(!backup||typeof backup!=="object")throw new Error("Fichier invalide.");
+   if(!confirm("Fusionner cette sauvegarde avec les données actuelles ?\n\nLes éléments existants seront conservés. Les nouveaux seront ajoutés. Les photos et PDF de la sauvegarde seront restaurés sur cet appareil."))return;
+   const oldData=Array.isArray(data)?data:[];
+   const oldDoms=Array.isArray(domiciliations)?domiciliations:[];
+   const oldPermanent=Array.isArray(permanentDomiciliations)?permanentDomiciliations:[];
+   const oldContracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");
+   const incomingData=Array.isArray(backup.data)?backup.data:[];
+   const incomingDoms=Array.isArray(backup.domiciliations)?backup.domiciliations:[];
+   const incomingPermanent=Array.isArray(backup.permanentDomiciliations)?backup.permanentDomiciliations:[];
+   // Sauvegarder d'abord les photos/PDF embarqués dans le fichier, sans effacer les médias locaux.
+   for(const p of incomingData){ if(p && p.id && p.photo) await savePhotoDB(paymentPhotoKey(p.id),p.photo); }
+   for(const d of incomingDoms){ if(!d || !d.id)continue; const photos=Array.isArray(d.photos)?d.photos:[]; for(let i=0;i<2;i++)if(photos[i])await savePhotoDB(domiciliationPhotoKey(d.id,i),photos[i]); }
+   for(const d of incomingPermanent){ if(!d || !d.id)continue; const photos=Array.isArray(d.photos)?d.photos:[]; for(let i=0;i<2;i++)if(photos[i])await savePhotoDB(permanentPhotoKey(d.id,i),photos[i]); }
+   data=mergeRowsById(oldData,incomingData);
+   domiciliations=mergeRowsById(oldDoms,incomingDoms);
+   permanentDomiciliations=mergeRowsById(oldPermanent,incomingPermanent);
+   normalizeData();normalizeDomiciliations();normalizePermanentDomiciliations();
+   await restoreContractsFromBackup(mergeContracts(oldContracts,Array.isArray(backup.contracts)?backup.contracts:[]));
+   await migratePhotosToIndexedDB();
+   await saveDataLocalOnly();await saveDomiciliationsLocalOnly();await savePermanentDomiciliationsLocalOnly();
+   await loadAllPhotos();
+   render();renderDomiciliations();renderPermanentDomiciliations();
+   setCloudStatus("Sauvegarde fusionnée localement. Lance la synchronisation Google pour envoyer les éléments manquants dans le cloud.");
+   alert("Fusion terminée : les données existantes ont été conservées et les éléments manquants ajoutés. Les photos/PDF sont restaurés sur cet appareil.");
+  }catch(e){console.error(e);alert("Impossible de fusionner la sauvegarde.\n\n"+(e?.message||e));}
+ };
+ reader.readAsText(file);this.value="";
+});
+
+/* ==================================================
+   INITIALISATION
+================================================== */
+document.addEventListener("DOMContentLoaded",function(){
+ initFirebase();
+ renderAddDomiciliationPhotos();renderPermanentAddPhotos();
+ const today=new Date().toISOString().substring(0,10);
+ if(!document.getElementById("firstDate").value)document.getElementById("firstDate").value=today;
+});
+</script>
+</body>
+</html>
