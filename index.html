@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Mes paiements</title>
+<!-- Photos synchronisées dans Firestore en morceaux; aucun Firebase Storage requis. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f2f2f7;color:#111}
@@ -520,106 +520,6 @@ function cleanForCloud(items, photoField) {
     return copy;
   });
 }
-
-// Les fichiers sont stockés dans Firebase Storage, séparément des données Firestore.
-// Cela évite la limite de taille des documents Firestore et permet de les retrouver sur un autre appareil.
-function cloudFilesRoot() {
-  if (!cloudUser) throw new Error("Connecte-toi d’abord avec Google.");
-  return firebase.storage().ref().child("users/" + cloudUser.uid + "/apps/mes-paiements");
-}
-function isDataUrl(value) { return typeof value === "string" && value.startsWith("data:"); }
-async function uploadCloudFile(path, dataUrl) {
-  if (!isDataUrl(dataUrl)) return path;
-  const ref = cloudFilesRoot().child(path);
-  await ref.putString(dataUrl, "data_url");
-  return path;
-}
-async function downloadCloudFileAsDataUrl(path) {
-  if (!path || !cloudUser) return "";
-  try {
-    const url = await cloudFilesRoot().child(path).getDownloadURL();
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Téléchargement du fichier impossible.");
-    const blob = await response.blob();
-    return await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ""));
-      reader.onerror = () => reject(reader.error || new Error("Lecture du fichier impossible."));
-      reader.readAsDataURL(blob);
-    });
-  } catch (e) {
-    console.warn("Fichier cloud indisponible :", path, e);
-    return "";
-  }
-}
-async function syncPhotosAndDocumentsToCloud() {
-  // Photos des paiements
-  for (const p of data) {
-    if (p.photo && isDataUrl(p.photo)) {
-      p.cloudPhotoPath = p.cloudPhotoPath || ("photos/payments/" + String(p.id) + ".bin");
-      await uploadCloudFile(p.cloudPhotoPath, p.photo);
-    }
-  }
-  // Photos des domiciliations classiques
-  for (const d of domiciliations) {
-    if (!Array.isArray(d.cloudPhotoPaths)) d.cloudPhotoPaths = ["", ""];
-    if (!Array.isArray(d.photos)) d.photos = ["", ""];
-    for (let i = 0; i < 2; i++) {
-      if (d.photos[i] && isDataUrl(d.photos[i])) {
-        d.cloudPhotoPaths[i] = d.cloudPhotoPaths[i] || ("photos/domiciliations/" + String(d.id) + "_" + i + ".bin");
-        await uploadCloudFile(d.cloudPhotoPaths[i], d.photos[i]);
-      }
-    }
-  }
-  // Photos des domiciliations permanentes
-  for (const d of permanentDomiciliations) {
-    if (!Array.isArray(d.cloudPhotoPaths)) d.cloudPhotoPaths = ["", ""];
-    if (!Array.isArray(d.photos)) d.photos = ["", ""];
-    for (let i = 0; i < 2; i++) {
-      if (d.photos[i] && isDataUrl(d.photos[i])) {
-        d.cloudPhotoPaths[i] = d.cloudPhotoPaths[i] || ("photos/permanent/" + String(d.id) + "_" + i + ".bin");
-        await uploadCloudFile(d.cloudPhotoPaths[i], d.photos[i]);
-      }
-    }
-  }
-  // Pièces jointes des contrats (photos et PDF)
-  const contracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
-  for (const c of contracts) {
-    for (const docItem of (Array.isArray(c.documents) ? c.documents : [])) {
-      if (!docItem.data && docItem.key) docItem.data = await getPhotoDB(docItem.key);
-      if (docItem.data && isDataUrl(docItem.data)) {
-        docItem.cloudPath = docItem.cloudPath || ("documents/contracts/" + String(c.id) + "/" + encodeURIComponent(String(docItem.key || docItem.name || "document")) + ".bin");
-        await uploadCloudFile(docItem.cloudPath, docItem.data);
-      }
-    }
-  }
-  localStorage.setItem("mesContrats", JSON.stringify(contracts.map(c => ({...c, documents:(c.documents||[]).map(d => ({...d, data:""}))}))));
-  // Conserve aussi les chemins cloud dans les données locales pour les prochaines synchronisations.
-  await saveDataLocalOnly();
-  await saveDomiciliationsLocalOnly();
-  await savePermanentDomiciliationsLocalOnly();
-}
-async function hydrateCloudFiles() {
-  for (const p of data) {
-    if (!p.photo && p.cloudPhotoPath) p.photo = await downloadCloudFileAsDataUrl(p.cloudPhotoPath);
-  }
-  for (const d of domiciliations) {
-    if (!Array.isArray(d.photos)) d.photos = ["", ""];
-    if (!Array.isArray(d.cloudPhotoPaths)) d.cloudPhotoPaths = ["", ""];
-    for (let i = 0; i < 2; i++) if (!d.photos[i] && d.cloudPhotoPaths[i]) d.photos[i] = await downloadCloudFileAsDataUrl(d.cloudPhotoPaths[i]);
-  }
-  for (const d of permanentDomiciliations) {
-    if (!Array.isArray(d.photos)) d.photos = ["", ""];
-    if (!Array.isArray(d.cloudPhotoPaths)) d.cloudPhotoPaths = ["", ""];
-    for (let i = 0; i < 2; i++) if (!d.photos[i] && d.cloudPhotoPaths[i]) d.photos[i] = await downloadCloudFileAsDataUrl(d.cloudPhotoPaths[i]);
-  }
-  const contracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
-  for (const c of contracts) for (const docItem of (Array.isArray(c.documents) ? c.documents : [])) {
-    if (!docItem.data && docItem.cloudPath) docItem.data = await downloadCloudFileAsDataUrl(docItem.cloudPath);
-    if (docItem.data) await savePhotoDB(docItem.key, docItem.data);
-  }
-  localStorage.setItem("mesContrats", JSON.stringify(contracts.map(c => ({...c, documents:(c.documents||[]).map(d => ({...d, data:""}))}))));
-}
 function mergeRowsById(primary, secondary) {
   const result = [];
   const positions = new Map();
@@ -671,6 +571,78 @@ function mergeContracts(primary, secondary) {
   }
   return result;
 }
+// Stockage des photos/PDF dans Firestore, découpés en petits documents (sans Firebase Storage).
+// Chaque morceau reste sous la limite Firestore. Les règles doivent autoriser /apps/{appId}/media/{mediaId} et /chunks/{chunkId}.
+const CLOUD_MEDIA_CHUNK_SIZE = 450000;
+function cloudMediaCollection() {
+  if (!cloudUser) throw new Error("Connecte-toi d’abord à Google.");
+  return firebase.firestore().collection("users").doc(cloudUser.uid)
+    .collection("apps").doc("mes-paiements").collection("media");
+}
+async function cloudUploadMedia(mediaId, dataUrl) {
+  if (!dataUrl || typeof dataUrl !== "string") return;
+  const base = cloudMediaCollection().doc(String(mediaId));
+  const chunksRef = base.collection("chunks");
+  const pieces = [];
+  for (let i = 0; i < dataUrl.length; i += CLOUD_MEDIA_CHUNK_SIZE) pieces.push(dataUrl.slice(i, i + CLOUD_MEDIA_CHUNK_SIZE));
+  // Écrire les morceaux avant les métadonnées : un échec ne marque pas le fichier comme complet.
+  for (let i = 0; i < pieces.length; i++) {
+    await chunksRef.doc(String(i).padStart(5, "0")).set({ index: i, data: pieces[i] });
+  }
+  await base.set({ chunkCount: pieces.length, length: dataUrl.length, updatedAt: Date.now(), complete: true });
+  // Supprimer d'éventuels anciens morceaux excédentaires après une nouvelle version plus petite.
+  const old = await chunksRef.get();
+  const batch = firebase.firestore().batch();
+  let deletes = 0;
+  old.forEach(d => { const n = Number(d.id); if (Number.isFinite(n) && n >= pieces.length) { batch.delete(d.ref); deletes++; } });
+  if (deletes) await batch.commit();
+}
+async function cloudDownloadMedia(mediaId) {
+  const base = cloudMediaCollection().doc(String(mediaId));
+  const meta = await base.get();
+  if (!meta.exists || !meta.data().complete) return "";
+  const count = Number(meta.data().chunkCount) || 0;
+  if (!count || count > 1000) return "";
+  let value = "";
+  for (let i = 0; i < count; i++) {
+    const part = await base.collection("chunks").doc(String(i).padStart(5, "0")).get();
+    if (!part.exists || typeof part.data().data !== "string") throw new Error("Photo cloud incomplète : " + mediaId);
+    value += part.data().data;
+  }
+  if (Number(meta.data().length) && value.length !== Number(meta.data().length)) throw new Error("Photo cloud incomplète : " + mediaId);
+  return value;
+}
+async function syncPhotosToCloud() {
+  await loadAllPhotos();
+  for (const p of data) if (p.photo) await cloudUploadMedia("payment_" + p.id, p.photo);
+  for (const d of domiciliations) for (let i = 0; i < 2; i++) if (d.photos && d.photos[i]) await cloudUploadMedia("dom_" + d.id + "_" + i, d.photos[i]);
+  for (const d of permanentDomiciliations) for (let i = 0; i < 2; i++) if (d.photos && d.photos[i]) await cloudUploadMedia("permanent_" + d.id + "_" + i, d.photos[i]);
+  const contracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
+  for (const c of contracts) for (const doc of (c.documents || [])) {
+    const content = doc.key ? await getPhotoDB(doc.key) : (doc.data || "");
+    if (content) await cloudUploadMedia("contract_" + doc.key, content);
+  }
+}
+async function restorePhotosFromCloud() {
+  for (const p of data) {
+    const value = await cloudDownloadMedia("payment_" + p.id);
+    if (value) await savePhotoDB(paymentPhotoKey(p.id), value);
+  }
+  for (const d of domiciliations) {
+    if (!Array.isArray(d.photos)) d.photos = ["", ""];
+    for (let i = 0; i < 2; i++) { const value = await cloudDownloadMedia("dom_" + d.id + "_" + i); if (value) await savePhotoDB(domiciliationPhotoKey(d.id, i), value); }
+  }
+  for (const d of permanentDomiciliations) {
+    if (!Array.isArray(d.photos)) d.photos = ["", ""];
+    for (let i = 0; i < 2; i++) { const value = await cloudDownloadMedia("permanent_" + d.id + "_" + i); if (value) await savePhotoDB(permanentPhotoKey(d.id, i), value); }
+  }
+  const contracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
+  for (const c of contracts) for (const doc of (c.documents || [])) {
+    if (doc.key) { const value = await cloudDownloadMedia("contract_" + doc.key); if (value) await savePhotoDB(doc.key, value); }
+  }
+  await loadAllPhotos();
+}
+
 async function syncAllToCloud() {
   if (cloudSyncBusy) return;
   if (!initFirebase() || !firebase.auth().currentUser) {
@@ -684,7 +656,6 @@ async function syncAllToCloud() {
     await saveDataLocalOnly();
     await saveDomiciliationsLocalOnly();
     await savePermanentDomiciliationsLocalOnly();
-    await syncPhotosAndDocumentsToCloud();
 
     const db = firebase.firestore();
     const userRef = db.collection("users").doc(cloudUser.uid);
@@ -693,8 +664,9 @@ async function syncAllToCloud() {
 
     // Première synchronisation : ne jamais remplacer le cloud ou le local sans sauvegarde.
     if (!cloudHasData) {
+      await syncPhotosToCloud();
       await uploadCurrentLocalState(userRef);
-      setCloudStatus("Données et pièces jointes enregistrées dans Google.");
+      setCloudStatus("Données et photos enregistrées dans Firestore.");
       return;
     }
 
@@ -706,7 +678,10 @@ async function syncAllToCloud() {
       localStorage.getItem("mesContrats") !== null;
     if (!localHasData) {
       await restoreCloudState(snap.data());
-      setCloudStatus("Données récupérées depuis le cloud. Recharge l’application si nécessaire.");
+      await restorePhotosFromCloud();
+      await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
+      render(); renderDomiciliations(); renderPermanentDomiciliations();
+      setCloudStatus("Données et photos récupérées depuis le cloud.");
       return;
     }
 
@@ -722,14 +697,12 @@ async function syncAllToCloud() {
     await saveDomiciliationsLocalOnly();
     await savePermanentDomiciliationsLocalOnly();
     localStorage.setItem("mesContrats", JSON.stringify(mergedContracts));
+    await syncPhotosToCloud();
     await uploadCurrentLocalState(userRef);
-    await loadAllPhotos();
-    await hydrateCloudFiles();
-    await saveDataLocalOnly();
-    await saveDomiciliationsLocalOnly();
-    await savePermanentDomiciliationsLocalOnly();
+    await restorePhotosFromCloud();
+    await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
     render(); renderDomiciliations(); renderPermanentDomiciliations();
-    setCloudStatus("Fusion terminée : données et pièces jointes synchronisées.");
+    setCloudStatus("Fusion terminée : données et photos synchronisées.");
   } catch (e) {
     console.error(e);
     setCloudStatus("Échec de synchronisation : " + (e.message || e), true);
@@ -771,7 +744,8 @@ async function uploadCurrentLocalState(userRef) {
     return copy;
   });
 
-  // Les chemins des pièces jointes sont synchronisés ici; les fichiers sont dans Firebase Storage.
+  // Les photos/PDF sont synchronisés dans des documents Firestore séparés, en morceaux.
+  await syncPhotosToCloud();
   await userRef.set({
     snapshotVersion: 1,
     payments: paymentRows,
@@ -786,7 +760,7 @@ async function restoreCloudState(cloud) {
   data = Array.isArray(cloud.payments) ? cloud.payments : [];
   domiciliations = Array.isArray(cloud.domiciliations) ? cloud.domiciliations : [];
   permanentDomiciliations = Array.isArray(cloud.permanentDomiciliations) ? cloud.permanentDomiciliations : [];
-  // Les chemins des fichiers sont conservés dans les fiches; les fichiers seront récupérés juste après.
+  // Les photos/PDF seront récupérés ensuite depuis les documents Firestore découpés en morceaux.
   for (const p of data) p.photo = "";
   for (const d of domiciliations) d.photos = ["", ""];
   for (const d of permanentDomiciliations) d.photos = ["", ""];
@@ -795,10 +769,6 @@ async function restoreCloudState(cloud) {
   await saveDomiciliationsLocalOnly();
   await savePermanentDomiciliationsLocalOnly();
   await restoreContractsFromBackup(contracts);
-  await hydrateCloudFiles();
-  await saveDataLocalOnly();
-  await saveDomiciliationsLocalOnly();
-  await savePermanentDomiciliationsLocalOnly();
   localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Number(cloud.updatedAt) || Date.now()));
 }
 
@@ -2129,7 +2099,7 @@ async function restoreContractsFromBackup(contracts){
   for(const doc of (Array.isArray(contract.documents)?contract.documents:[])){
    const key=String(doc.key||("contract_"+String(contract.id)+"_"+generateId()));
    if(doc.data)await savePhotoDB(key,doc.data);
-   copy.documents.push({key,name:doc.name||"Document",type:doc.type||"",cloudPath:doc.cloudPath||""});
+   copy.documents.push({key,name:doc.name||"Document",type:doc.type||""});
   }
   clean.push(copy);
  }
