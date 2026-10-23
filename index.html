@@ -520,6 +520,56 @@ function cleanForCloud(items, photoField) {
     return copy;
   });
 }
+// Marqueurs de suppression conservés localement et dans Firestore pour éviter
+// qu’une ancienne copie d’un autre appareil ne fasse réapparaître un élément.
+const DELETE_KEYS = {
+  payments: "mesPaiementsDeletedIds",
+  installments: "mesPaiementsDeletedInstallmentIds",
+  domiciliations: "mesDomiciliationsDeletedIds",
+  permanent: "mesDomiciliationsPermanentesDeletedIds",
+  contracts: "mesContratsDeletedIds"
+};
+function readDeletedIds(key) {
+  try { const v = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(v) ? v.map(String) : []; }
+  catch { return []; }
+}
+function writeDeletedIds(key, values) {
+  localStorage.setItem(key, JSON.stringify([...new Set((values || []).map(String))]));
+}
+function mergeDeletionTombstones(cloud = {}) {
+  const mapping = [
+    [DELETE_KEYS.payments, "deletedPaymentIds"],
+    [DELETE_KEYS.installments, "deletedInstallmentIds"],
+    [DELETE_KEYS.domiciliations, "deletedDomiciliationIds"],
+    [DELETE_KEYS.permanent, "deletedPermanentDomiciliationIds"],
+    [DELETE_KEYS.contracts, "deletedContractIds"]
+  ];
+  for (const [localKey, cloudKey] of mapping) {
+    writeDeletedIds(localKey, [...readDeletedIds(localKey), ...(Array.isArray(cloud?.[cloudKey]) ? cloud[cloudKey].map(String) : [])]);
+  }
+}
+function applyDeletionTombstones() {
+  const deletedPayments = new Set(readDeletedIds(DELETE_KEYS.payments));
+  const deletedInstallments = new Set(readDeletedIds(DELETE_KEYS.installments));
+  const deletedDoms = new Set(readDeletedIds(DELETE_KEYS.domiciliations));
+  const deletedPermanent = new Set(readDeletedIds(DELETE_KEYS.permanent));
+  data = (Array.isArray(data) ? data : []).filter(p => !deletedPayments.has(String(p.id)));
+  for (const p of data) {
+    p.installments = (Array.isArray(p.installments) ? p.installments : []).filter(i => !deletedInstallments.has(String(p.id) + "::" + String(i.id)));
+  }
+  data = data.filter(p => p.installments.length > 0);
+  domiciliations = (Array.isArray(domiciliations) ? domiciliations : []).filter(d => !deletedDoms.has(String(d.id)));
+  permanentDomiciliations = (Array.isArray(permanentDomiciliations) ? permanentDomiciliations : []).filter(d => !deletedPermanent.has(String(d.id)));
+}
+function deletionTombstonesForCloud() {
+  return {
+    deletedPaymentIds: readDeletedIds(DELETE_KEYS.payments),
+    deletedInstallmentIds: readDeletedIds(DELETE_KEYS.installments),
+    deletedDomiciliationIds: readDeletedIds(DELETE_KEYS.domiciliations),
+    deletedPermanentDomiciliationIds: readDeletedIds(DELETE_KEYS.permanent),
+    deletedContractIds: readDeletedIds(DELETE_KEYS.contracts)
+  };
+}
 function mergeRowsById(primary, secondary) {
   const result = [];
   const positions = new Map();
@@ -661,6 +711,7 @@ async function syncAllToCloud() {
     const userRef = db.collection("users").doc(cloudUser.uid);
     const snap = await userRef.get();
     const cloudHasData = snap.exists && snap.data() && snap.data().snapshotVersion === 1;
+    if (cloudHasData) mergeDeletionTombstones(snap.data());
 
     // Première synchronisation : ne jamais remplacer le cloud ou le local sans sauvegarde.
     if (!cloudHasData) {
@@ -692,7 +743,9 @@ async function syncAllToCloud() {
     domiciliations = mergeRowsById(domiciliations, Array.isArray(cloud.domiciliations) ? cloud.domiciliations : []);
     permanentDomiciliations = mergeRowsById(permanentDomiciliations, Array.isArray(cloud.permanentDomiciliations) ? cloud.permanentDomiciliations : []);
     const localContracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
-    const mergedContracts = mergeContracts(localContracts, Array.isArray(cloud.contracts) ? cloud.contracts : []);
+    const mergedContracts = mergeContracts(localContracts, Array.isArray(cloud.contracts) ? cloud.contracts : [])
+      .filter(c => !new Set(readDeletedIds(DELETE_KEYS.contracts)).has(String(c.id)));
+    applyDeletionTombstones();
     await saveDataLocalOnly();
     await saveDomiciliationsLocalOnly();
     await savePermanentDomiciliationsLocalOnly();
@@ -752,19 +805,23 @@ async function uploadCurrentLocalState(userRef) {
     domiciliations: domRows,
     permanentDomiciliations: permanentRows,
     contracts: contractRows,
+    ...deletionTombstonesForCloud(),
     updatedAt: Date.now()
   });
   localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Date.now()));
 }
 async function restoreCloudState(cloud) {
+  mergeDeletionTombstones(cloud || {});
   data = Array.isArray(cloud.payments) ? cloud.payments : [];
   domiciliations = Array.isArray(cloud.domiciliations) ? cloud.domiciliations : [];
   permanentDomiciliations = Array.isArray(cloud.permanentDomiciliations) ? cloud.permanentDomiciliations : [];
+  applyDeletionTombstones();
   // Les photos/PDF seront récupérés ensuite depuis les documents Firestore découpés en morceaux.
   for (const p of data) p.photo = "";
   for (const d of domiciliations) d.photos = ["", ""];
   for (const d of permanentDomiciliations) d.photos = ["", ""];
-  const contracts = Array.isArray(cloud.contracts) ? cloud.contracts : [];
+  const deletedContracts = new Set(readDeletedIds(DELETE_KEYS.contracts));
+  const contracts = (Array.isArray(cloud.contracts) ? cloud.contracts : []).filter(c => !deletedContracts.has(String(c.id)));
   await saveDataLocalOnly();
   await saveDomiciliationsLocalOnly();
   await savePermanentDomiciliationsLocalOnly();
@@ -1367,17 +1424,25 @@ async function deleteSelected(){
  if(!selectedIds.size)return;
  if(!confirm("Supprimer les échéances sélectionnées ?"))return;
  const paymentsToDelete=[];
+ const deletedInstallments=readDeletedIds(DELETE_KEYS.installments);
  data.forEach(payment=>{
   const had=payment.installments.length;
-  payment.installments=payment.installments.filter(inst=>!selectedIds.has(selectionKey(payment.id,inst.id)));
+  payment.installments=payment.installments.filter(inst=>{
+   const selected=selectedIds.has(selectionKey(payment.id,inst.id));
+   if(selected)deletedInstallments.push(String(payment.id)+"::"+String(inst.id));
+   return !selected;
+  });
   if(had>0&&payment.installments.length===0)paymentsToDelete.push(payment.id);
  });
+ writeDeletedIds(DELETE_KEYS.installments,deletedInstallments);
+ writeDeletedIds(DELETE_KEYS.payments,[...readDeletedIds(DELETE_KEYS.payments),...paymentsToDelete.map(String)]);
  data=data.filter(p=>p.installments.length>0);
  for(const id of paymentsToDelete){await deletePhotoDB(paymentPhotoKey(id));openedPaymentSchedules.delete(String(id));}
  selectedIds.clear();await saveData();render();
 }
 async function deletePayment(id){
  if(!confirm("Supprimer ce paiement ?"))return;
+ writeDeletedIds(DELETE_KEYS.payments,[...readDeletedIds(DELETE_KEYS.payments),String(id)]);
  data=data.filter(p=>String(p.id)!==String(id));
  await deletePhotoDB(paymentPhotoKey(id));await saveData();render();
 }
@@ -1707,6 +1772,7 @@ async function saveDomiciliationEdit(){
 async function deleteDomiciliation(id){
  if(!confirm("Supprimer cette domiciliation ?"))return;
  const dom=domiciliations.find(d=>String(d.id)===String(id));if(!dom)return;
+ writeDeletedIds(DELETE_KEYS.domiciliations,[...readDeletedIds(DELETE_KEYS.domiciliations),String(id)]);
  for(let i=0;i<2;i++)await deletePhotoDB(domiciliationPhotoKey(dom.id,i));
  domiciliations=domiciliations.filter(d=>String(d.id)!==String(id));
  openedDomiciliationSchedules.delete(String(id));await saveDomiciliations();renderDomiciliations();
@@ -2044,6 +2110,7 @@ async function savePermanentEdit(){
 async function deletePermanentDomiciliation(id){
  if(!confirm("Supprimer cette domiciliation permanente ?"))return;
  const dom=permanentDomiciliations.find(d=>String(d.id)===String(id));if(!dom)return;
+ writeDeletedIds(DELETE_KEYS.permanent,[...readDeletedIds(DELETE_KEYS.permanent),String(id)]);
  for(let i=0;i<2;i++)await deletePhotoDB(permanentPhotoKey(dom.id,i));
  permanentDomiciliations=permanentDomiciliations.filter(d=>String(d.id)!==String(id));
  await savePermanentDomiciliations();renderPermanentDomiciliations();
@@ -2067,101 +2134,3 @@ async function deletePermanentPhoto(id,index){
    CALCULETTE
 ================================================== */
 let calcExpression="";
-function calcInput(value){calcExpression+=value;document.getElementById("calcDisplay").value=calcExpression;}
-function calcClear(){calcExpression="";document.getElementById("calcDisplay").value="";}
-function calcResult(){
- if(!calcExpression)return;
- try{
-  if(!/^[0-9+\-*/().\s]+$/.test(calcExpression))throw new Error();
-  const result=Function('"use strict";return ('+calcExpression+')')();
-  if(typeof result!=="number"||!isFinite(result))throw new Error();
-  calcExpression=String(roundMoney(result));document.getElementById("calcDisplay").value=calcExpression;
- }catch(e){alert("Calcul impossible.");}
-}
-
-/* ==================================================
-   EXPORT
-================================================== */
-async function getContractsForBackup(){
- let contracts=[];
- try{contracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");if(!Array.isArray(contracts))contracts=[];}catch(e){contracts=[];}
- for(const contract of contracts){
-  const docs=Array.isArray(contract.documents)?contract.documents:[];
-  for(const doc of docs){doc.data=await getPhotoDB(doc.key);}
- }
- return contracts;
-}
-async function restoreContractsFromBackup(contracts){
- contracts=Array.isArray(contracts)?contracts:[];
- const clean=[];
- for(const contract of contracts){
-  const copy={...contract,documents:[]};
-  for(const doc of (Array.isArray(contract.documents)?contract.documents:[])){
-   const key=String(doc.key||("contract_"+String(contract.id)+"_"+generateId()));
-   if(doc.data)await savePhotoDB(key,doc.data);
-   copy.documents.push({key,name:doc.name||"Document",type:doc.type||""});
-  }
-  clean.push(copy);
- }
- localStorage.setItem("mesContrats",JSON.stringify(clean));
-}
-async function exportData(){
- try{
-  await saveData();await saveDomiciliations();await savePermanentDomiciliations();
-  const backup={version:3,date:new Date().toISOString(),data:getCleanDataForStorage(),domiciliations:getCleanDomiciliationsForStorage(),permanentDomiciliations:getCleanPermanentDomiciliationsForStorage(),contracts:await getContractsForBackup()};
-  const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="mes-paiements-sauvegarde-"+new Date().toISOString().substring(0,10)+".json";
-  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
- }catch(e){console.error(e);alert("Impossible d'exporter la sauvegarde.");}
-}
-
-/* ==================================================
-   IMPORT
-================================================== */
-document.getElementById("importInput").addEventListener("change",function(){
- const file=this.files[0];if(!file)return;
- const reader=new FileReader();
- reader.onload=async function(){
-  try{
-   const backup=JSON.parse(reader.result);
-   if(!backup||typeof backup!=="object")throw new Error("Fichier invalide.");
-   if(!confirm("Fusionner cette sauvegarde avec les données actuelles ?\n\nLes éléments existants seront conservés. Les nouveaux seront ajoutés. Les photos et PDF de la sauvegarde seront restaurés sur cet appareil."))return;
-   const oldData=Array.isArray(data)?data:[];
-   const oldDoms=Array.isArray(domiciliations)?domiciliations:[];
-   const oldPermanent=Array.isArray(permanentDomiciliations)?permanentDomiciliations:[];
-   const oldContracts=JSON.parse(localStorage.getItem("mesContrats")||"[]");
-   const incomingData=Array.isArray(backup.data)?backup.data:[];
-   const incomingDoms=Array.isArray(backup.domiciliations)?backup.domiciliations:[];
-   const incomingPermanent=Array.isArray(backup.permanentDomiciliations)?backup.permanentDomiciliations:[];
-   // Sauvegarder d'abord les photos/PDF embarqués dans le fichier, sans effacer les médias locaux.
-   for(const p of incomingData){ if(p && p.id && p.photo) await savePhotoDB(paymentPhotoKey(p.id),p.photo); }
-   for(const d of incomingDoms){ if(!d || !d.id)continue; const photos=Array.isArray(d.photos)?d.photos:[]; for(let i=0;i<2;i++)if(photos[i])await savePhotoDB(domiciliationPhotoKey(d.id,i),photos[i]); }
-   for(const d of incomingPermanent){ if(!d || !d.id)continue; const photos=Array.isArray(d.photos)?d.photos:[]; for(let i=0;i<2;i++)if(photos[i])await savePhotoDB(permanentPhotoKey(d.id,i),photos[i]); }
-   data=mergeRowsById(oldData,incomingData);
-   domiciliations=mergeRowsById(oldDoms,incomingDoms);
-   permanentDomiciliations=mergeRowsById(oldPermanent,incomingPermanent);
-   normalizeData();normalizeDomiciliations();normalizePermanentDomiciliations();
-   await restoreContractsFromBackup(mergeContracts(oldContracts,Array.isArray(backup.contracts)?backup.contracts:[]));
-   await migratePhotosToIndexedDB();
-   await saveDataLocalOnly();await saveDomiciliationsLocalOnly();await savePermanentDomiciliationsLocalOnly();
-   await loadAllPhotos();
-   render();renderDomiciliations();renderPermanentDomiciliations();
-   setCloudStatus("Sauvegarde fusionnée localement. Lance la synchronisation Google pour envoyer les éléments manquants dans le cloud.");
-   alert("Fusion terminée : les données existantes ont été conservées et les éléments manquants ajoutés. Les photos/PDF sont restaurés sur cet appareil.");
-  }catch(e){console.error(e);alert("Impossible de fusionner la sauvegarde.\n\n"+(e?.message||e));}
- };
- reader.readAsText(file);this.value="";
-});
-
-/* ==================================================
-   INITIALISATION
-================================================== */
-document.addEventListener("DOMContentLoaded",function(){
- initFirebase();
- renderAddDomiciliationPhotos();renderPermanentAddPhotos();
- const today=new Date().toISOString().substring(0,10);
- if(!document.getElementById("firstDate").value)document.getElementById("firstDate").value=today;
-});
-</script>
-</body>
-</html>
