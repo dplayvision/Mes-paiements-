@@ -9,6 +9,33 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:#f2f2f7;color:#111;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button,input,select,textarea{font:inherit}.header{background:#007aff;color:#fff;padding:calc(env(safe-area-inset-top) + 15px) 18px 16px;font-size:22px;font-weight:750}.container{max-width:700px;margin:auto;padding:15px;padding-bottom:45px}.card,.contract{background:#fff;border-radius:17px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #0000000b}h2{font-size:19px;margin:0 0 12px}label{display:block;font-size:14px;font-weight:650;margin:12px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #d1d1d6;border-radius:10px;background:#fff;font-size:16px}textarea{min-height:75px;resize:vertical}button{border:0;border-radius:10px;padding:11px 13px;font-size:14px;font-weight:650;cursor:pointer}.primary{background:#007aff;color:#fff;width:100%}.secondary{background:#e9e9ee;color:#111}.danger{background:#ff3b30;color:#fff}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row button{flex:1}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1}.details{font-size:13px;color:#666;line-height:1.6;margin-top:9px;overflow-wrap:anywhere}.contractSummary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;min-height:38px}.contractSummaryText{min-width:0;flex:1}.contractTitle{font-size:16px;font-weight:750;color:#007aff;overflow-wrap:anywhere}.contractSubtitle{font-size:12px;color:#777;margin-top:3px}.contractAmount{font-size:14px;font-weight:750;white-space:nowrap}.contractChevron{font-size:17px;color:#777;flex-shrink:0}.contractExpanded{margin-top:10px;padding-top:10px;border-top:1px solid #eee}.contractExpanded.hidden{display:none!important}.doc{padding:9px;background:#f2f2f7;border-radius:12px;margin-top:8px;overflow-wrap:anywhere}.doc img{width:100%;max-height:220px;object-fit:contain;display:block;margin-top:8px;border-radius:8px;background:#fff}.hidden{display:none!important}input[type=file]{display:none}.small{font-size:12px;color:#777;margin-top:8px}.status{font-size:12px;color:#555;line-height:1.4;margin-top:8px;overflow-wrap:anywhere;white-space:pre-wrap}.empty{text-align:center;padding:22px;color:#777;background:#f2f2f7;border-radius:12px}button:disabled{opacity:.55;cursor:wait}
+
+/* Navigation rapide entre les applications — ajout indépendant des fonctions existantes */
+body { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important; }
+.app-switcher {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 99999;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 2px; padding: 7px 4px calc(7px + env(safe-area-inset-bottom, 0px));
+  background: rgba(255,255,255,.97); border-top: 1px solid #dfe3eb;
+  box-shadow: 0 -4px 18px rgba(20,30,55,.12);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+.app-switcher a {
+  min-width: 0; min-height: 48px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px; padding: 3px 0;
+  border-radius: 10px; color: #596273; text-decoration: none;
+  font-size: 10px; line-height: 1.1; font-weight: 650;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-switcher a:active { background: #eaf0ff; }
+.app-switcher .nav-icon { font-size: 18px; line-height: 1.1; }
+.app-switcher a[aria-current="page"] { color: #1769e0; background: #eaf2ff; }
+@media (min-width: 700px) {
+  .app-switcher { left: 50%; right: auto; width: min(680px, 100%); transform: translateX(-50%); border: 1px solid #dfe3eb; border-bottom: 0; border-radius: 16px 16px 0 0; padding-left: 10px; padding-right: 10px; }
+  .app-switcher a { font-size: 12px; }
+}
+
 </style></head><body><div id="app">
 <div class="header">📁 Mes contrats</div><div class="container">
 <button class="secondary" onclick="location.href='index.html'">← Retour à Mes paiements</button>
@@ -68,4 +95,26 @@ document.getElementById("importBackupBtn").onclick=()=>document.getElementById("
 document.getElementById("backupInput").addEventListener("change",function(){const f=this.files&&this.files[0];if(f)importBackupFile(f);});
 loadContracts();
 initFirebase();
-</script></body></html>
+</script><nav class="app-switcher" aria-label="Navigation entre les applications">
+  <a href="https://dplayvision.github.io/Mes-paiements-/" data-app="payments" aria-label="Ouvrir Paiements"><span class="nav-icon" aria-hidden="true">💳</span><span>Paiements</span></a>
+  <a href="https://dplayvision.github.io/Mes-paiements-/contrats.html" data-app="contracts" aria-label="Ouvrir Contrats"><span class="nav-icon" aria-hidden="true">📄</span><span>Contrats</span></a>
+  <a href="https://dplayvision.github.io/Mes-conges-et-horaires-/" data-app="leave" aria-label="Ouvrir Congés"><span class="nav-icon" aria-hidden="true">🗓️</span><span>Congés</span></a>
+  <a href="https://dplayvision.github.io/Mes-utilisateurs/" data-app="access" aria-label="Ouvrir Accès"><span class="nav-icon" aria-hidden="true">🔐</span><span>Accès</span></a>
+  <a href="https://dplayvision.github.io/Mon-arlarm/" data-app="alarm" aria-label="Ouvrir Alarme"><span class="nav-icon" aria-hidden="true">🚨</span><span>Alarme</span></a>
+  <a href="https://dplayvision.github.io/test/" data-app="scan" aria-label="Ouvrir Scan"><span class="nav-icon" aria-hidden="true">🔎</span><span>Scan</span></a>
+</nav>
+<script>
+(function(){
+  var path = (location.pathname || "/").toLowerCase();
+  var current = "";
+  if (path.indexOf("/contrats.html") !== -1) current = "contracts";
+  else if (path.indexOf("/mes-paiements-/") !== -1) current = "payments";
+  else if (path.indexOf("/mes-conges-et-horaires-/") !== -1) current = "leave";
+  else if (path.indexOf("/mes-utilisateurs/") !== -1) current = "access";
+  else if (path.indexOf("/mon-arlarm/") !== -1) current = "alarm";
+  else if (path.indexOf("/test/") !== -1) current = "scan";
+  var active = document.querySelector(".app-switcher a[data-app=\"" + current + "\"]");
+  if (active) active.setAttribute("aria-current", "page");
+})();
+</script>
+</body></html>
