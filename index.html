@@ -1240,6 +1240,7 @@ async function checkPin(){
  // ne doit pas faire croire que le PIN est refusé.
  document.getElementById("app").classList.remove("hidden");
  document.getElementById("loginScreen").classList.add("hidden");
+ scheduleAutoLock();
  if(input) input.value = "";
 
  try {
@@ -1265,6 +1266,43 @@ async function checkPin(){
   setCloudStatus("Application ouverte en mode local. Synchronisation indisponible : " + (e?.message || e), true);
  }
 }
+
+/* ==================================================
+   VERROUILLAGE AUTOMATIQUE APRÈS 30 MINUTES D’INACTIVITÉ
+================================================== */
+const AUTO_LOCK_DELAY = 30 * 60 * 1000;
+let autoLockTimer = null;
+let lastUserActivity = 0;
+function lockPaymentsApp(){
+  clearTimeout(autoLockTimer);
+  autoLockTimer = null;
+  const app = document.getElementById("app");
+  const login = document.getElementById("loginScreen");
+  if (app && !app.classList.contains("hidden")) {
+    app.classList.add("hidden");
+    if (login) login.classList.remove("hidden");
+    const pin = document.getElementById("pinInput");
+    if (pin) { pin.value = ""; pin.focus(); }
+    setCloudStatus("Application verrouillée après 30 minutes d’inactivité. Entre le PIN pour continuer.");
+  }
+}
+function scheduleAutoLock(){
+  clearTimeout(autoLockTimer);
+  lastUserActivity = Date.now();
+  if (!document.getElementById("app") || document.getElementById("app").classList.contains("hidden")) return;
+  autoLockTimer = setTimeout(lockPaymentsApp, AUTO_LOCK_DELAY);
+}
+function checkAutoLockAfterReturn(){
+  if (lastUserActivity && Date.now() - lastUserActivity >= AUTO_LOCK_DELAY) lockPaymentsApp();
+}
+["pointerdown","keydown","touchstart","scroll","click"].forEach(function(eventName){
+  document.addEventListener(eventName, function(){
+    if (document.getElementById("app") && !document.getElementById("app").classList.contains("hidden")) scheduleAutoLock();
+  }, {passive:true});
+});
+document.addEventListener("visibilitychange", function(){
+  if (document.visibilityState === "visible") checkAutoLockAfterReturn();
+});
 
 /* ==================================================
    PHOTOS PAIEMENT
