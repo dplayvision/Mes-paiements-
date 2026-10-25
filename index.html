@@ -1227,12 +1227,27 @@ function loadPermanentDomiciliations(){
  try{const saved=localStorage.getItem("mesDomiciliationsPermanentes");permanentDomiciliations=saved?JSON.parse(saved):[];normalizePermanentDomiciliations();}
  catch(e){console.error(e);permanentDomiciliations=[];}
 }
-async function checkPin(){
- const value=document.getElementById("pinInput").value;
- if(value!==PIN){alert("Code PIN incorrect");document.getElementById("pinInput").value="";return;}
+const ACCESS_SESSION_KEY = "dplayvision_app_access_until_v1";
+const ACCESS_SESSION_MS = 30 * 60 * 1000;
+let appUnlockInProgress = false;
+function hasRecentUnlock(){
+  const until = Number(localStorage.getItem(ACCESS_SESSION_KEY) || 0);
+  if (!until || Date.now() >= until) {
+    localStorage.removeItem(ACCESS_SESSION_KEY);
+    return false;
+  }
+  return true;
+}
+function renewRecentUnlock(){
+  localStorage.setItem(ACCESS_SESSION_KEY, String(Date.now() + ACCESS_SESSION_MS));
+}
+async function openAppAfterPin(){
+ if(appUnlockInProgress)return;
+ appUnlockInProgress=true;
  try{
-  // L'accès local par PIN ne doit pas dépendre de la connexion Google.
-  // Les données locales restent accessibles même si Google ne répond pas.
+  // Conserve le déverrouillage pendant 30 minutes, y compris lors du passage
+  // vers une autre page de l'application dans le même navigateur.
+  renewRecentUnlock();
   document.getElementById("app").classList.remove("hidden");
   await loadData();
   document.getElementById("loginScreen").classList.add("hidden");
@@ -1243,6 +1258,12 @@ async function checkPin(){
     setCloudStatus("Application ouverte en mode local. Connecte-toi à Google pour synchroniser les appareils.");
   }
  }catch(e){console.error(e);document.getElementById("app").classList.add("hidden");document.getElementById("loginScreen").classList.remove("hidden");alert("Impossible d'ouvrir l'application.\n\n"+(e?.name||"Erreur")+"\n"+(e?.message||e));}
+ finally{appUnlockInProgress=false;}
+}
+async function checkPin(){
+ const value=document.getElementById("pinInput").value;
+ if(value!==PIN){alert("Code PIN incorrect");document.getElementById("pinInput").value="";return;}
+ await openAppAfterPin();
 }
 
 /* ==================================================
@@ -2257,30 +2278,4 @@ document.addEventListener("DOMContentLoaded",function(){
  renderAddDomiciliationPhotos();renderPermanentAddPhotos();
  const today=new Date().toISOString().substring(0,10);
  if(!document.getElementById("firstDate").value)document.getElementById("firstDate").value=today;
-});
-</script>
-<nav class="app-switcher" aria-label="Navigation entre les applications">
-  <a href="https://dplayvision.github.io/Mes-paiements-/" data-app="payments" aria-label="Ouvrir Paiements"><span class="nav-icon" aria-hidden="true">💳</span><span>Paiements</span></a>
-  <a href="https://dplayvision.github.io/Mes-paiements-/contrats.html" data-app="contracts" aria-label="Ouvrir Contrats"><span class="nav-icon" aria-hidden="true">📄</span><span>Contrats</span></a>
-  <a href="https://dplayvision.github.io/Mes-conges-et-horaires-/" data-app="leave" aria-label="Ouvrir Congés"><span class="nav-icon" aria-hidden="true">🗓️</span><span>Congés</span></a>
-  <a href="https://dplayvision.github.io/Mes-utilisateurs/" data-app="access" aria-label="Ouvrir Accès"><span class="nav-icon" aria-hidden="true">🔐</span><span>Accès</span></a>
-  <a href="https://dplayvision.github.io/Mon-arlarm/" data-app="alarm" aria-label="Ouvrir Alarme"><span class="nav-icon" aria-hidden="true">🚨</span><span>Alarme</span></a>
-  <a href="https://dplayvision.github.io/test/" data-app="scan" aria-label="Ouvrir Scan"><span class="nav-icon" aria-hidden="true">🔎</span><span>Scan</span></a>
-</nav>
-<script>
-(function(){
-  var path = (location.pathname || "/").toLowerCase();
-  var current = "";
-  if (path.indexOf("/contrats.html") !== -1) current = "contracts";
-  else if (path.indexOf("/mes-paiements-/") !== -1) current = "payments";
-  else if (path.indexOf("/mes-conges-et-horaires-/") !== -1) current = "leave";
-  else if (path.indexOf("/mes-utilisateurs/") !== -1) current = "access";
-  else if (path.indexOf("/mon-arlarm/") !== -1) current = "alarm";
-  else if (path.indexOf("/test/") !== -1) current = "scan";
-  var active = document.querySelector(".app-switcher a[data-app=\"" + current + "\"]");
-  if (active) active.setAttribute("aria-current", "page");
-})();
-</script>
-
-</body>
-</html>
+ // Si le PIN a été validé il y a moins de 
