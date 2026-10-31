@@ -85,7 +85,10 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))!important}
     </div>
     <button class="primary" type="button" onclick="startWarranty()">＋ Ajouter une garantie d’appareil</button>
     <div class="foldHead" style="margin-top:16px" onclick="toggleFold('warrantyListBody',this)"><h2>📋 Mes garanties enregistrées</h2><span class="foldIcon">−</span></div>
-    <div id="warrantyListBody" class="foldBody"><div id="warrantyList" class="details" style="margin-top:10px"></div></div>
+    <div id="warrantyListBody" class="foldBody">
+      <input id="warrantySearch" type="search" placeholder="🔎 Rechercher une garantie ou un appareil…" autocomplete="off">
+      <div id="warrantyList" class="details" style="margin-top:10px"></div>
+    </div>
   </div>
 </div>
 
@@ -303,8 +306,24 @@ function saveWarrantyFoldState(warrantyId,folded){
 
 async function renderWarrantyList(){
   const root=document.getElementById("warrantyList");if(!root)return;
-  const list=contracts.filter(c=>c.category==="Garantie appareil").sort((a,b)=>String(a.warrantyEnd||a.warrantyCustomEnd||"").localeCompare(String(b.warrantyEnd||b.warrantyCustomEnd||"")));
-  if(!list.length){root.textContent="Aucune garantie enregistrée pour le moment.";return;}
+  const query=(document.getElementById("warrantySearch")?.value||"").trim().toLocaleLowerCase("fr");
+  const list=contracts
+    .filter(c=>c.category==="Garantie appareil")
+    .filter(c=>{
+      if(!query)return true;
+      const searchable=[
+        c.name,c.provider,c.warrantyPurchaseDate,c.warrantyEnd,
+        c.warrantyCustomEnd,c.warrantyDuration,c.notes,
+        ...(c.documents||[]).map(d=>d.name)
+      ].join(" ").toLocaleLowerCase("fr");
+      return searchable.includes(query);
+    })
+    .sort((a,b)=>String(a.warrantyEnd||a.warrantyCustomEnd||"").localeCompare(String(b.warrantyEnd||b.warrantyCustomEnd||"")));
+  if(!list.length){
+    const hasWarranty=contracts.some(c=>c.category==="Garantie appareil");
+    root.textContent=hasWarranty?"Aucune garantie ne correspond à cette recherche.":"Aucune garantie enregistrée pour le moment.";
+    return;
+  }
   root.innerHTML="";
   for(const c of list){
     const end=c.warrantyEnd||c.warrantyCustomEnd||"";
@@ -508,6 +527,7 @@ async function renderContracts(){
 }
 
 document.getElementById("search").addEventListener("input",renderContracts);
+document.getElementById("warrantySearch").addEventListener("input",renderWarrantyList);
 const categoryEl=document.getElementById("category");
 categoryEl.addEventListener("change",()=>{toggleWarrantyFields();applyFormMode();});
 document.getElementById("warrantyPurchaseDate").addEventListener("change",updateWarrantyPreview);
