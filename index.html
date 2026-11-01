@@ -146,7 +146,7 @@ input[type="file"]{display:none}
 body { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important; }
 .app-switcher {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 99999;
-  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 2px; padding: 7px 4px calc(7px + env(safe-area-inset-bottom, 0px));
   background: rgba(255,255,255,.97); border-top: 1px solid #dfe3eb;
   box-shadow: 0 -4px 18px rgba(20,30,55,.12);
@@ -2355,6 +2355,7 @@ document.addEventListener("DOMContentLoaded",function(){
   <a href="https://dplayvision.github.io/Mes-utilisateurs/" data-app="access" aria-label="Ouvrir Accès"><span class="nav-icon" aria-hidden="true">🔐</span><span>Accès</span></a>
   <a href="https://dplayvision.github.io/Mon-arlarm/" data-app="alarm" aria-label="Ouvrir Alarme"><span class="nav-icon" aria-hidden="true">🚨</span><span>Alarme</span></a>
   <a href="https://dplayvision.github.io/test/" data-app="scan" aria-label="Ouvrir Scan"><span class="nav-icon" aria-hidden="true">🔎</span><span>Scan</span></a>
+  <a href="https://dplayvision.github.io/Repas/" data-app="repas" aria-label="Ouvrir Repas"><span class="nav-icon" aria-hidden="true">🍽️</span><span>Repas</span></a>
 </nav>
 <script>
 (function(){
@@ -2366,6 +2367,7 @@ document.addEventListener("DOMContentLoaded",function(){
   else if (path.indexOf("/mes-utilisateurs/") !== -1) current = "access";
   else if (path.indexOf("/mon-arlarm/") !== -1) current = "alarm";
   else if (path.indexOf("/test/") !== -1) current = "scan";
+  else if (path.indexOf("/repas/") !== -1) current = "repas";
   var active = document.querySelector(".app-switcher a[data-app=\"" + current + "\"]");
   if (active) active.setAttribute("aria-current", "page");
 })();
