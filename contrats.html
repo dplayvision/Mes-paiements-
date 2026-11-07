@@ -390,7 +390,9 @@ function openWarrantyDocument(data,doc){
   const w=window.open("","_blank");
   if(w){
     if(String(doc.type||"").startsWith("image/")){
-      w.document.write('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ticket de garantie</title></head><body style="margin:0;padding:12px;background:#eee;text-align:center"><img src="'+data+'" style="max-width:100%;height:auto"></body></html>');
+      w.document.write('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ticket de garantie</title></head><body style="margin:0;padding:12px;background:#eee;text-align:center"><img src="'+data+'" style="max-width:100%;height:auto"><!-- Activation des notifications automatiques partagées avec Mes paiements -->
+<script src="./notifications-client.js" defer></script>
+</body></html>');
       w.document.close();
     }else{
       const a=w.document.createElement("a");a.href=data;a.download=doc.name||"ticket-garantie.pdf";a.textContent="Ouvrir / télécharger le document";w.document.body.appendChild(a);a.click();
