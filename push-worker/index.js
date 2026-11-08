@@ -112,9 +112,18 @@ function collect(root, today) {
   };
 
   const add = (type, id, name, due, offset, url) => {
-    if (!dateParts(due) || plusDays(due, -offset) !== today) return;
+    if (!dateParts(due)) {
+      if (due) {
+        console.log(`[DATE INVALIDE] ${type} | ${name || 'Élément'} | valeur reçue: ${due}`);
+      }
+      return;
+    }
 
-    jobs.push({
+    const reminderDate = plusDays(due, -offset);
+
+    if (reminderDate !== today) return;
+
+    const job = {
       key: reminderKey(type, id, due, offset),
       title: offset === 7
         ? '🛡️ Garantie bientôt terminée'
@@ -124,7 +133,13 @@ function collect(root, today) {
       body: `${name || 'Élément'} — ${due.split('-').reverse().join('/')}`,
       url,
       tag: reminderKey(type, id, due, offset)
-    });
+    };
+
+    jobs.push(job);
+
+    console.log(
+      `[RAPPEL DÉTECTÉ] ${type} | ${name || 'Élément'} | échéance ${due} | J-${offset}`
+    );
   };
 
   // PAIEMENTS
@@ -248,10 +263,13 @@ async function main() {
   const jobs = collect(rootSnap.data(), today);
 
   console.log(
-    `Date Bruxelles ${today}, ${jobs.length} rappel(s), ${subs.length} appareil(s).`
+    `Date Bruxelles ${today}, ${jobs.length} rappel(s) détecté(s), ${subs.length} appareil(s) enregistré(s).`
   );
 
-  if (!subs.length) return;
+  if (!subs.length) {
+    console.log('[ARRÊT] Aucun appareil avec une souscription active.');
+    return;
+  }
 
   const sentRef = rootRef
     .collection('apps')
@@ -259,10 +277,15 @@ async function main() {
     .collection('sentReminders');
 
   for (const job of jobs) {
+    console.log(`[TRAITEMENT] ${job.body} | ${job.title}`);
+
     const ref = sentRef.doc(job.key);
     const already = await ref.get();
 
-    if (already.exists) continue;
+    if (already.exists) {
+      console.log(`[DÉJÀ ENVOYÉ] ${job.body} | rappel déjà enregistré dans Firebase.`);
+      continue;
+    }
 
     let successes = 0;
 
@@ -275,17 +298,18 @@ async function main() {
         );
 
         successes++;
+        console.log(`[ENVOI RÉUSSI] ${job.body} | appareil ${sub.id}`);
 
       } catch (e) {
         console.error(
-          'Envoi impossible',
-          sub.id,
+          `[ÉCHEC ENVOI] ${job.body} | appareil ${sub.id} |`,
           e.statusCode || '',
           e.message
         );
 
         if ([404, 410].includes(e.statusCode)) {
           await sub.ref.delete();
+          console.log(`[APPAREIL SUPPRIMÉ] ${sub.id} | abonnement expiré.`);
         }
       }
     }
@@ -298,8 +322,16 @@ async function main() {
         successes,
         kind: job.title
       });
+
+      console.log(
+        `[BILAN ENVOI] ${job.body} | ${successes}/${subs.length} appareil(s) accepté(s) par le service push.`
+      );
+    } else {
+      console.log(`[NON ENREGISTRÉ] ${job.body} | aucun envoi réussi, le rappel pourra être retenté.`);
     }
   }
+
+  console.log('[TERMINÉ] Vérification des rappels terminée.');
 }
 
 main().catch(e => {
