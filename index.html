@@ -233,10 +233,6 @@ body { padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
       <span>Domiciliations permanentes <span class="small" style="display:block;font-weight:400">3 jours avant et le jour de l’échéance</span></span>
       <input id="remindPermanent" type="checkbox" checked style="width:22px;height:22px">
     </label>
-    <label style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-      <span>Garanties appareils <span class="small" style="display:block;font-weight:400">7 jours avant la fin de garantie</span></span>
-      <input id="remindWarranties" type="checkbox" checked style="width:22px;height:22px">
-    </label>
     <button type="button" class="primary" id="saveReminderSettings" style="margin-top:12px">Enregistrer mes préférences</button>
     <div id="reminderSettingsStatus" class="small" style="margin-top:9px" aria-live="polite"></div>
   </div>
@@ -1698,6 +1694,7 @@ function render(){
  });
  updateSelectionBar();
   renderSyntheses();
+ if(window.renderUpcomingReminders)window.renderUpcomingReminders();
 }
 function createPaymentCard(payment){
  const card=document.createElement("div");card.className="paymentCard";
@@ -2087,6 +2084,7 @@ function renderDomiciliations(){
   actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
  });
  renderSyntheses();
+ if(window.renderUpcomingReminders)window.renderUpcomingReminders();
 }
 function toggleDomiciliationSchedule(id){
  const key=String(id);if(openedDomiciliationSchedules.has(key))openedDomiciliationSchedules.delete(key);else openedDomiciliationSchedules.add(key);renderDomiciliations();
@@ -2436,6 +2434,7 @@ function renderPermanentDomiciliations(){
   actions.appendChild(edit);actions.appendChild(del);card.appendChild(actions);container.appendChild(card);
  });
  renderSyntheses();
+ if(window.renderUpcomingReminders)window.renderUpcomingReminders();
 }
 
 /* ==================================================
@@ -2655,30 +2654,20 @@ document.addEventListener("DOMContentLoaded",function(){
 
 
 <script>
-/* Préférences et aperçu des rappels Mes paiements */
+/* Préférences et tableau des notifications à venir */
 (function () {
   "use strict";
   const SETTINGS_KEY = "mesPaiementsNotificationSettings";
-  const defaults = {
-    payments: true,
-    domiciliations: true,
-    permanentDomiciliations: true,
-    warranties: true
-  };
+  const defaults = { payments: true, domiciliations: true, permanentDomiciliations: true };
   const ids = {
     payments: "remindPayments",
     domiciliations: "remindDomiciliations",
-    permanentDomiciliations: "remindPermanent",
-    warranties: "remindWarranties"
+    permanentDomiciliations: "remindPermanent"
   };
 
   function getSettings() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-      return { ...defaults, ...saved };
-    } catch (_) {
-      return { ...defaults };
-    }
+    try { return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") }; }
+    catch (_) { return { ...defaults }; }
   }
 
   function writeSettingsToForm() {
@@ -2696,18 +2685,14 @@ document.addEventListener("DOMContentLoaded",function(){
       settings[key] = !!input && input.checked;
     });
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-
     const status = document.getElementById("reminderSettingsStatus");
     try {
-      if (window.firebase && firebase.apps && firebase.apps.length &&
-          firebase.auth && firebase.firestore &&
-          firebase.auth().currentUser) {
-        await firebase.firestore().collection("users")
-          .doc(firebase.auth().currentUser.uid)
+      if (window.firebase && firebase.apps && firebase.apps.length && firebase.auth && firebase.firestore && firebase.auth().currentUser) {
+        await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid)
           .set({ notificationSettings: settings }, { merge: true });
         if (status) status.textContent = "Préférences enregistrées sur cet appareil et dans Firebase.";
-      } else {
-        if (status) status.textContent = "Préférences enregistrées sur cet appareil. Connecte-toi à Google puis enregistre-les à nouveau pour les synchroniser.";
+      } else if (status) {
+        status.textContent = "Préférences enregistrées sur cet appareil. Connecte-toi à Google pour les synchroniser.";
       }
     } catch (error) {
       console.error("Enregistrement des préférences de notification :", error);
@@ -2716,51 +2701,119 @@ document.addEventListener("DOMContentLoaded",function(){
     renderUpcomingReminders();
   }
 
-  function dateFrom(value) {
+  function parseDate(value) {
     if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return null;
-    const d = new Date(value + "T12:00:00");
+    const d = new Date(String(value) + "T12:00:00");
     return Number.isNaN(d.getTime()) ? null : d;
   }
-
-  function addMonths(dateString, months) {
-    const start = dateFrom(dateString);
-    if (!start) return "";
-    const day = start.getDate();
-    const result = new Date(start.getFullYear(), start.getMonth() + months, 1, 12);
-    const last = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
-    result.setDate(Math.min(day, last));
-    return [
-      result.getFullYear(),
-      String(result.getMonth() + 1).padStart(2, "0"),
-      String(result.getDate()).padStart(2, "0")
-    ].join("-");
+  function isoDate(d) {
+    return [d.getFullYear(), String(d.getMonth()+1).padStart(2,"0"), String(d.getDate()).padStart(2,"0")].join("-");
   }
-
-  function dayDiff(dateString) {
-    const due = dateFrom(dateString);
+  function addDays(value, days) {
+    const d = parseDate(value);
+    if (!d) return "";
+    d.setDate(d.getDate()+days);
+    return isoDate(d);
+  }
+  function dayDiff(value) {
+    const due = parseDate(value);
     if (!due) return null;
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
-    return Math.round((due - today) / 86400000);
+    return Math.round((due-today)/86400000);
   }
-
   function displayDate(value) {
-    const d = dateFrom(value);
-    return d ? d.toLocaleDateString("fr-BE") : value;
+    const d = parseDate(value);
+    return d ? d.toLocaleDateString("fr-BE") : "—";
+  }
+  function money(value) {
+    try { return typeof euro === "function" ? euro(Number(value)||0) : (Number(value)||0).toFixed(2)+" €"; }
+    catch (_) { return (Number(value)||0).toFixed(2)+" €"; }
   }
 
   function renderUpcomingReminders() {
     const target = document.getElementById("upcomingReminders");
     if (!target) return;
     const settings = getSettings();
-    const items = [];
-    const add = (name, due, lead, type) => {
-      const diff = dayDiff(due);
-      if (diff === null || diff < 0 || diff > 30) return;
-      if (diff !== lead && diff !== 0) return;
-      items.push({ name, due, diff, type });
+    const notifications = [];
+    const addDue = (name, due, amount, category, paid) => {
+      if (paid || !parseDate(due)) return;
+      const dueDiff = dayDiff(due);
+      if (dueDiff === null || dueDiff < 0 || dueDiff > 45) return;
+      // Les alertes prévues sont générées 3 jours avant et le jour de l'échéance.
+      [3, 0].forEach(offset => {
+        const notificationDate = addDays(due, -offset);
+        const notificationDiff = dayDiff(notificationDate);
+        if (notificationDiff !== null && notificationDiff >= 0 && notificationDiff <= 45) {
+          notifications.push({ notificationDate, due, name, amount, category,
+            label: offset === 0 ? "Jour de l’échéance" : "3 jours avant" });
+        }
+      });
     };
 
-    let localPayments = [];
-    let localDomiciliations = [];
-    let localPermanent = [];
+    if (settings.payments && Array.isArray(data)) {
+      data.forEach(payment => (payment.installments || []).forEach(inst => {
+        addDue(payment.alias || payment.beneficiary || "Paiement", inst.date, inst.amount, "Paiement", !!inst.paid);
+      }));
+    }
+    if (settings.domiciliations && Array.isArray(domiciliations)) {
+      domiciliations.forEach(dom => {
+        const count = Math.max(0, Number(dom.months)||0);
+        for (let i=0; i<count; i++) {
+          const due = typeof addMonthsSafe === "function" ? addMonthsSafe(dom.startDate, i) : "";
+          const paid = Array.isArray(dom.monthsPaid) && dom.monthsPaid.includes(i+1);
+          const amount = typeof getDomiciliationInstallmentAmount === "function" ? getDomiciliationInstallmentAmount(dom, i) : (Number(dom.monthlyPayment)||0);
+          addDue(dom.alias || dom.beneficiary || "Domiciliation", due, amount, "Domiciliation", paid);
+        }
+      });
+    }
+    if (settings.permanentDomiciliations && Array.isArray(permanentDomiciliations)) {
+      const today = new Date();
+      const lastYear = today.getFullYear()+1;
+      permanentDomiciliations.forEach(dom => {
+        if (typeof getPermanentDueDatesForYear !== "function") return;
+        for (let year=today.getFullYear(); year<=lastYear; year++) {
+          getPermanentDueDatesForYear(dom, year).forEach(due => {
+            const paid = Array.isArray(dom.monthsPaid) && dom.monthsPaid.includes(due.key);
+            addDue(dom.alias || dom.beneficiary || "Domiciliation permanente", due.date, dom.amount, "Domiciliation permanente", paid);
+          });
+        }
+      });
+    }
+
+    notifications.sort((a,b) => a.notificationDate.localeCompare(b.notificationDate) || a.due.localeCompare(b.due) || a.name.localeCompare(b.name));
+    if (!notifications.length) {
+      target.innerHTML = '<div class="small" style="padding:10px 0">Aucune notification prévue dans les 45 prochains jours avec les préférences sélectionnées.</div>';
+      return;
+    }
+    const rows = notifications.map(item => {
+      const diff = dayDiff(item.notificationDate);
+      const when = diff === 0 ? "Aujourd’hui" : diff === 1 ? "Demain" : "Dans "+diff+" jours";
+      return `<tr>
+        <td>${displayDate(item.notificationDate)}<div class="small">${when}</div></td>
+        <td><strong>${escapeHtml(item.name)}</strong><div class="small">${item.category} • ${item.label}</div></td>
+        <td style="text-align:right;white-space:nowrap">${money(item.amount)}</td>
+        <td style="white-space:nowrap">${displayDate(item.due)}</td>
+      </tr>`;
+    }).join("");
+    target.innerHTML = `<div class="small" style="margin-bottom:8px">${notifications.length} notification(s) prévues • 45 prochains jours</div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:540px">
+      <thead><tr style="text-align:left;border-bottom:1px solid #ddd"><th style="padding:9px 6px">Notification</th><th style="padding:9px 6px">Paiement</th><th style="padding:9px 6px;text-align:right">Montant</th><th style="padding:9px 6px">Échéance</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`;
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  window.renderUpcomingReminders = renderUpcomingReminders;
+  document.addEventListener("DOMContentLoaded", () => {
+    writeSettingsToForm();
+    const save = document.getElementById("saveReminderSettings");
+    if (save) save.addEventListener("click", saveSettings);
+    renderUpcomingReminders();
+    // Rafraîchit l'aperçu après les modifications faites dans les autres sections de l'application.
+    window.setInterval(renderUpcomingReminders, 60000);
+  });
+})();
+</script>
