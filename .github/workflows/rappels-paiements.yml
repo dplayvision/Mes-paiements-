@@ -1,4 +1,3 @@
-
 name: Rappels Mes paiements
 
 on:
@@ -9,9 +8,15 @@ on:
 permissions:
   contents: read
 
+# Évite deux workers simultanés (cron + lancement manuel).
+concurrency:
+  group: rappels-mes-paiements
+  cancel-in-progress: false
+
 jobs:
   envoyer-rappels:
     runs-on: ubuntu-latest
+    timeout-minutes: 4
 
     steps:
       - name: Récupérer le projet
@@ -37,4 +42,3 @@ jobs:
         run: |
           cd push-worker
           node index.js
-
