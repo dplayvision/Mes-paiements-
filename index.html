@@ -823,6 +823,91 @@ async function migrateRootArraysToCollections(cloud={}) {
     }
   }
 }
+
+const PARTIAL_QUEUE_KEY = "mesPaiementsPartialQueueV1";
+function partialComparable(row, kind) {
+  const x = JSON.parse(JSON.stringify(row || {}));
+  if (kind === "payments") x.photo = "";
+  if (kind === "domiciliations" || kind === "permanentDomiciliations") x.photos = ["", ""];
+  return JSON.stringify(x);
+}
+function queueChangedRows(collectionName, oldRows, newRows, kind) {
+  if (applyingRemoteSnapshot || !cloudUser || cloudUser.uid !== OWNER_UID) return;
+  const oldMap = new Map((Array.isArray(oldRows)?oldRows:[]).map(x=>[String(x.id),x]));
+  const newMap = new Map((Array.isArray(newRows)?newRows:[]).map(x=>[String(x.id),x]));
+  let queue={}; try{queue=JSON.parse(localStorage.getItem(PARTIAL_QUEUE_KEY)||"{}")||{};}catch{}
+  queue[collectionName]=queue[collectionName]||{upserts:{},deletes:[]};
+  const q=queue[collectionName];
+  for(const [id,row] of newMap){
+    if(!oldMap.has(id)||partialComparable(oldMap.get(id),kind)!==partialComparable(row,kind)){
+      q.upserts[id]=cloudSafeRow(row,kind); q.deletes=q.deletes.filter(x=>String(x)!==id);
+    }
+  }
+  for(const id of oldMap.keys()){
+    if(!newMap.has(id)){
+      delete q.upserts[id]; if(!q.deletes.includes(id))q.deletes.push(id);
+    }
+  }
+  localStorage.setItem(PARTIAL_QUEUE_KEY,JSON.stringify(queue));
+}
+async function cloudDeleteMedia(mediaId){
+  const base=cloudMediaCollection().doc(String(mediaId)),snap=await base.collection("chunks").get();
+  const batch=firebase.firestore().batch();snap.forEach(d=>batch.delete(d.ref));batch.delete(base);await batch.commit();
+}
+async function syncChangedPhotosForRow(name,row){
+  if(!row)return;
+  if(name==="payments"){
+    const photo=await getPhotoDB(paymentPhotoKey(row.id)); if(photo)await cloudUploadMedia("payment_"+row.id,photo); else await cloudDeleteMedia("payment_"+row.id);
+  }else if(name==="domiciliations"||name==="permanentDomiciliations"){
+    const prefix=name==="domiciliations"?"dom_":"permanent_";
+    for(let i=0;i<2;i++){const key=name==="domiciliations"?domiciliationPhotoKey(row.id,i):permanentPhotoKey(row.id,i);const photo=await getPhotoDB(key);if(photo)await cloudUploadMedia(prefix+row.id+"_"+i,photo);else await cloudDeleteMedia(prefix+row.id+"_"+i);}
+  }
+}
+async function syncPartialChanges(){
+  if(cloudSyncBusy)return;
+  if(!firebase.auth().currentUser){setCloudStatus("Modifications enregistrées localement. Connexion Google nécessaire.",true);return;}
+  cloudUser=firebase.auth().currentUser;
+  if(cloudUser.uid!==OWNER_UID)return;
+  let queue={};try{queue=JSON.parse(localStorage.getItem(PARTIAL_QUEUE_KEY)||"{}")||{};}catch{}
+  if(!Object.keys(queue).length){setCloudStatus("Déjà synchronisé.");return;}
+  cloudSyncBusy=true;setCloudStatus("Synchronisation des éléments modifiés…");
+  try{
+    const db=firebase.firestore(),batchLimit=400;
+    for(const name of Object.keys(queue)){
+      const q=queue[name]||{},col=appCollection(name),rows=Object.values(q.upserts||{});
+      for(let i=0;i<rows.length;i+=batchLimit){
+        const batch=db.batch();
+        rows.slice(i,i+batchLimit).forEach(row=>batch.set(col.doc(String(row.id)),cloudSafeRow(row,name==="permanentDomiciliations"?"permanentDomiciliations":name),{merge:true}));
+        await batch.commit();
+      }
+      for(let i=0;i<(q.deletes||[]).length;i+=batchLimit){
+        const batch=db.batch();q.deletes.slice(i,i+batchLimit).forEach(id=>batch.delete(col.doc(String(id))));await batch.commit();
+      }
+      for(const row of rows)await syncChangedPhotosForRow(name,row);
+      for(const id of (q.deletes||[])){
+        if(name==="payments")await cloudDeleteMedia("payment_"+id);
+        else if(name==="domiciliations")for(let i=0;i<2;i++)await cloudDeleteMedia("dom_"+id+"_"+i);
+        else if(name==="permanentDomiciliations")for(let i=0;i<2;i++)await cloudDeleteMedia("permanent_"+id+"_"+i);
+      }
+    }
+    // Publier les marqueurs de suppression sans réécrire les grands tableaux historiques.
+    const root= db.collection("users").doc(cloudUser.uid);
+    await root.set({...deletionTombstonesForCloud(),updatedAt:Date.now()},{merge:true});
+    localStorage.removeItem(PARTIAL_QUEUE_KEY);
+    setCloudStatus("Modifications synchronisées sur les autres appareils.");
+  }catch(e){
+    console.error("Synchronisation partielle",e);
+    setCloudStatus("Synchronisation partielle en attente : "+(e.message||e),true);
+    throw e;
+  }finally{
+    cloudSyncBusy=false;
+    if(localStorage.getItem(PARTIAL_QUEUE_KEY)){
+      clearTimeout(collectionSyncTimer);
+      collectionSyncTimer=setTimeout(()=>syncPartialChanges().catch(()=>{}),5000);
+    }
+  }
+}
+
 function stopCollectionListeners(){ collectionUnsubs.forEach(fn=>{try{fn();}catch{}}); collectionUnsubs=[]; collectionListenersStarted=false; }
 function startCollectionListeners(){
   if (collectionListenersStarted || !cloudUser || cloudUser.uid !== OWNER_UID) return;
@@ -860,7 +945,7 @@ function scheduleCollectionSync(){
   if(cloudSyncBusy){ cloudSyncRequestedDuringRun=true; return; }
   clearTimeout(collectionSyncTimer);
   setCloudStatus("Enregistré sur cet appareil. Synchronisation avec les autres appareils…");
-  collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),100);
+  collectionSyncTimer=setTimeout(()=>syncPartialChanges().catch(e=>console.error(e)),100);
 }
 
 async function syncAllToCloud() {
@@ -966,7 +1051,7 @@ async function syncAllToCloud() {
       // Une erreur réseau ne supprime pas la demande : nouvelle tentative différée.
       try { localStorage.setItem(CLOUD_PENDING_KEY, "1"); } catch(e) { console.warn(e); }
       clearTimeout(collectionSyncTimer);
-      collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),5000);
+      collectionSyncTimer=setTimeout(()=>syncPartialChanges().catch(e=>console.error(e)),5000);
     }
   }
 }
@@ -1280,11 +1365,14 @@ async function loadAllPhotos(){
 ================================================== */
 async function saveData(){
  try{
+  const oldRows=JSON.parse(localStorage.getItem("mesPaiements")||"[]");
   for(const p of data){
    const key=paymentPhotoKey(p.id);
    if(p.photo)await savePhotoDB(key,p.photo);else await deletePhotoDB(key);
   }
-  localStorage.setItem("mesPaiements",JSON.stringify(getCleanDataForStorage()));
+  const cleanRows=getCleanDataForStorage();
+  queueChangedRows("payments",oldRows,data,"payments");
+  localStorage.setItem("mesPaiements",JSON.stringify(cleanRows));
   scheduleCollectionSync();
   return true;
  }catch(e){console.error(e);alert("Impossible de sauvegarder les données.");return false;}
@@ -1311,6 +1399,7 @@ async function saveDomiciliations(){
 }
 async function savePermanentDomiciliations(){
  try{
+  const oldRows=JSON.parse(localStorage.getItem("mesDomiciliationsPermanentes")||"[]");
   for(const dom of permanentDomiciliations){
    if(!dom.id)dom.id=generateId();
    dom.frequency=[1,3,6,12].includes(Number(dom.frequency))?Number(dom.frequency):1;
