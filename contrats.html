@@ -463,7 +463,7 @@ async function saveContract(){
     if(cloudUser&&cloudUser.uid===OWNER_UID){await pushContractsCollection();status("Contrat enregistré et envoyé aux autres appareils.");}
     if(wasWarranty){switchView("warranties");document.getElementById("formCard").classList.add("hidden");}
     else{switchView("contracts");document.getElementById("formCard").classList.remove("hidden");}
-    status((wasWarranty?"Garantie":"Contrat")+" enregistré localement. Lance Synchroniser pour l’envoyer sur tes autres appareils.");
+    if(!(cloudUser&&cloudUser.uid===OWNER_UID)) status((wasWarranty?"Garantie":"Contrat")+" enregistré localement. Connecte-toi à Google puis synchronise pour l’envoyer sur tes autres appareils.");
   }catch(e){console.error(e);alert("Impossible d'enregistrer. "+(e.message||"Vérifie ta connexion et réessaie."));}
 }
 function resetForm(){
