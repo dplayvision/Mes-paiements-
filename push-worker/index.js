@@ -112,18 +112,9 @@ function collect(root, today) {
   };
 
   const add = (type, id, name, due, offset, url) => {
-    if (!dateParts(due)) {
-      if (due) {
-        console.log(`[DATE INVALIDE] ${type} | ${name || 'Élément'} | valeur reçue: ${due}`);
-      }
-      return;
-    }
+    if (!dateParts(due) || plusDays(due, -offset) !== today) return;
 
-    const reminderDate = plusDays(due, -offset);
-
-    if (reminderDate !== today) return;
-
-    const job = {
+    jobs.push({
       key: reminderKey(type, id, due, offset),
       title: offset === 7
         ? '🛡️ Garantie bientôt terminée'
@@ -133,13 +124,7 @@ function collect(root, today) {
       body: `${name || 'Élément'} — ${due.split('-').reverse().join('/')}`,
       url,
       tag: reminderKey(type, id, due, offset)
-    };
-
-    jobs.push(job);
-
-    console.log(
-      `[RAPPEL DÉTECTÉ] ${type} | ${name || 'Élément'} | échéance ${due} | J-${offset}`
-    );
+    });
   };
 
   // PAIEMENTS
@@ -260,16 +245,43 @@ async function main() {
     d.data().subscription?.endpoint
   );
 
-  const jobs = collect(rootSnap.data(), today);
+  // Les collections individuelles sont la source prioritaire. Les tableaux du document racine
+  // restent utilisés comme compatibilité pendant et après la migration.
+  const rootData = rootSnap.data() || {};
+  const appRef = rootRef.collection('apps').doc('mes-paiements');
+  async function readCollection(name, fallback) {
+    const snap = await appRef.collection(name).get();
+    if (!snap.empty) return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return Array.isArray(fallback) ? fallback : [];
+  }
+  const [payments, domiciliations, permanentDomiciliations, contracts] = await Promise.all([
+    readCollection('payments', rootData.payments),
+    readCollection('domiciliations', rootData.domiciliations),
+    readCollection('permanentDomiciliations', rootData.permanentDomiciliations),
+    readCollection('contracts', rootData.contracts)
+  ]);
+  const deletedPayments = new Set((rootData.deletedPaymentIds || []).map(String));
+  const deletedDoms = new Set((rootData.deletedDomiciliationIds || []).map(String));
+  const deletedPermanent = new Set((rootData.deletedPermanentDomiciliationIds || []).map(String));
+  const deletedContracts = new Set((rootData.deletedContractIds || []).map(String));
+  const deletedInstallments = new Set((rootData.deletedInstallmentIds || []).map(String));
+  const livePayments = payments.filter(p => !deletedPayments.has(String(p.id))).map(p => ({...p, installments:(p.installments||[]).filter(i => !deletedInstallments.has(String(p.id)+'::'+String(i.id)))}));
+  const liveDoms = domiciliations.filter(d => !deletedDoms.has(String(d.id)));
+  const livePermanent = permanentDomiciliations.filter(d => !deletedPermanent.has(String(d.id)));
+  const liveContracts = contracts.filter(c => !deletedContracts.has(String(c.id)));
+  const jobs = collect({
+    ...rootData,
+    payments: livePayments,
+    domiciliations: liveDoms,
+    permanentDomiciliations: livePermanent,
+    contracts: liveContracts
+  }, today);
 
   console.log(
-    `Date Bruxelles ${today}, ${jobs.length} rappel(s) détecté(s), ${subs.length} appareil(s) enregistré(s).`
+    `Date Bruxelles ${today}, ${jobs.length} rappel(s), ${subs.length} appareil(s).`
   );
 
-  if (!subs.length) {
-    console.log('[ARRÊT] Aucun appareil avec une souscription active.');
-    return;
-  }
+  if (!subs.length) return;
 
   const sentRef = rootRef
     .collection('apps')
@@ -277,15 +289,10 @@ async function main() {
     .collection('sentReminders');
 
   for (const job of jobs) {
-    console.log(`[TRAITEMENT] ${job.body} | ${job.title}`);
-
     const ref = sentRef.doc(job.key);
     const already = await ref.get();
 
-    if (already.exists) {
-      console.log(`[DÉJÀ ENVOYÉ] ${job.body} | rappel déjà enregistré dans Firebase.`);
-      continue;
-    }
+    if (already.exists) continue;
 
     let successes = 0;
 
@@ -298,18 +305,17 @@ async function main() {
         );
 
         successes++;
-        console.log(`[ENVOI RÉUSSI] ${job.body} | appareil ${sub.id}`);
 
       } catch (e) {
         console.error(
-          `[ÉCHEC ENVOI] ${job.body} | appareil ${sub.id} |`,
+          'Envoi impossible',
+          sub.id,
           e.statusCode || '',
           e.message
         );
 
         if ([404, 410].includes(e.statusCode)) {
           await sub.ref.delete();
-          console.log(`[APPAREIL SUPPRIMÉ] ${sub.id} | abonnement expiré.`);
         }
       }
     }
@@ -322,16 +328,8 @@ async function main() {
         successes,
         kind: job.title
       });
-
-      console.log(
-        `[BILAN ENVOI] ${job.body} | ${successes}/${subs.length} appareil(s) accepté(s) par le service push.`
-      );
-    } else {
-      console.log(`[NON ENREGISTRÉ] ${job.body} | aucun envoi réussi, le rappel pourra être retenté.`);
     }
   }
-
-  console.log('[TERMINÉ] Vérification des rappels terminée.');
 }
 
 main().catch(e => {
