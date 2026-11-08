@@ -4,335 +4,130 @@ const admin = require('firebase-admin');
 const webpush = require('web-push');
 const crypto = require('node:crypto');
 
-const OWNER = 'pLAvsCmVU1e8SXjy77nNR5DnmpN2';
+const OWNER = (process.env.OWNER_UID || 'pLAvsCmVU1e8SXjy77nNR5DnmpN2').trim();
 const BASE = 'https://dplayvision.github.io/Mes-paiements-/';
 
 function cleanSecret(name) {
-  return (process.env[name] || '')
-    .trim()
-    .replace(/^["']|["']$/g, '');
+  return (process.env[name] || '').trim().replace(/^['"]|['"]$/g, '');
 }
 
 const SERVICE_ACCOUNT = cleanSecret('FIREBASE_SERVICE_ACCOUNT');
 const VAPID_PUBLIC_KEY = cleanSecret('VAPID_PUBLIC_KEY');
 const VAPID_PRIVATE_KEY = cleanSecret('VAPID_PRIVATE_KEY');
-const VAPID_SUBJECT =
-  cleanSecret('VAPID_SUBJECT') || 'mailto:admin@example.com';
+const VAPID_SUBJECT = cleanSecret('VAPID_SUBJECT') || 'mailto:admin@example.com';
 
-if (!SERVICE_ACCOUNT || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
-  throw new Error('Un secret GitHub est manquant.');
+if (!OWNER || !SERVICE_ACCOUNT || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
+  throw new Error('Un paramètre requis (OWNER_UID ou secret Firebase/VAPID) est manquant.');
 }
 
 console.log('Longueur clé publique VAPID :', VAPID_PUBLIC_KEY.length);
-console.log(
-  'Format clé publique VAPID :',
-  /^[A-Za-z0-9_-]+$/.test(VAPID_PUBLIC_KEY)
-);
+console.log('Format clé publique VAPID :', /^[A-Za-z0-9_-]+$/.test(VAPID_PUBLIC_KEY));
 
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(SERVICE_ACCOUNT))
-});
-
-webpush.setVapidDetails(
-  VAPID_SUBJECT,
-  VAPID_PUBLIC_KEY,
-  VAPID_PRIVATE_KEY
-);
-
+admin.initializeApp({ credential: admin.credential.cert(JSON.parse(SERVICE_ACCOUNT)) });
+webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 const db = admin.firestore();
 
 const dateParts = date => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(date || ''))) return null;
-
   const [y, m, d] = date.split('-').map(Number);
   const check = new Date(Date.UTC(y, m - 1, d));
-
-  return check.getUTCFullYear() === y &&
-    check.getUTCMonth() === m - 1 &&
-    check.getUTCDate() === d ? check : null;
+  return check.getUTCFullYear() === y && check.getUTCMonth() === m - 1 && check.getUTCDate() === d ? check : null;
 };
-
 const ymd = d => d.toISOString().slice(0, 10);
-
-const plusDays = (date, n) => {
-  const d = dateParts(date);
-  if (!d) return '';
-
-  d.setUTCDate(d.getUTCDate() + n);
-  return ymd(d);
-};
-
+const plusDays = (date, n) => { const d = dateParts(date); if (!d) return ''; d.setUTCDate(d.getUTCDate() + n); return ymd(d); };
 function addMonthsSafe(date, months) {
-  const d = dateParts(date);
-  if (!d) return '';
-
-  const year = d.getUTCFullYear();
-  const month = d.getUTCMonth();
-  const day = d.getUTCDate();
-
-  const total = month + months;
-  const y = year + Math.floor(total / 12);
-  const m = ((total % 12) + 12) % 12;
-
-  return ymd(new Date(Date.UTC(
-    y,
-    m,
-    Math.min(day, new Date(Date.UTC(y, m + 1, 0)).getUTCDate())
-  )));
+  const d = dateParts(date); if (!d) return '';
+  const year=d.getUTCFullYear(), month=d.getUTCMonth(), day=d.getUTCDate();
+  const total=month+months, y=year+Math.floor(total/12), m=((total%12)+12)%12;
+  return ymd(new Date(Date.UTC(y,m,Math.min(day,new Date(Date.UTC(y,m+1,0)).getUTCDate()))));
 }
-
 function localDate() {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Europe/Brussels',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).formatToParts(new Date());
-
-  const obj = Object.fromEntries(parts.map(p => [p.type, p.value]));
-
-  return `${obj.year}-${obj.month}-${obj.day}`;
+  const parts = new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Brussels',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const obj=Object.fromEntries(parts.map(p=>[p.type,p.value])); return `${obj.year}-${obj.month}-${obj.day}`;
 }
-
-function reminderKey(type, id, due, offset) {
-  return crypto.createHash('sha256')
-    .update([type, id, due, offset].join('|'))
-    .digest('hex');
-}
-
-function collect(root, today) {
-  const jobs = [];
-
-  const settings = {
-    payments: true,
-    domiciliations: true,
-    permanentDomiciliations: true,
-    warranties: true,
-    ...(root.notificationSettings || {})
+function reminderKey(type,id,due,offset) { return crypto.createHash('sha256').update([type,id,due,offset].join('|')).digest('hex'); }
+function collect(root,today) {
+  const jobs=[];
+  const settings={payments:true,domiciliations:true,permanentDomiciliations:true,warranties:true,...(root.notificationSettings||{})};
+  const add=(type,id,name,due,offset,url)=>{
+    if(!dateParts(due)||plusDays(due,-offset)!==today)return;
+    const key=reminderKey(type,id,due,offset);
+    jobs.push({key,title:offset===7?'🛡️ Garantie bientôt terminée':offset===3?'📅 Échéance dans 3 jours':'💳 Échéance aujourd’hui',body:`${name||'Élément'} — ${due.split('-').reverse().join('/')}`,url,tag:key});
   };
-
-  const add = (type, id, name, due, offset, url) => {
-    if (!dateParts(due) || plusDays(due, -offset) !== today) return;
-
-    jobs.push({
-      key: reminderKey(type, id, due, offset),
-      title: offset === 7
-        ? '🛡️ Garantie bientôt terminée'
-        : offset === 3
-          ? '📅 Échéance dans 3 jours'
-          : '💳 Échéance aujourd’hui',
-      body: `${name || 'Élément'} — ${due.split('-').reverse().join('/')}`,
-      url,
-      tag: reminderKey(type, id, due, offset)
-    });
-  };
-
-  // PAIEMENTS
-  if (settings.payments !== false) for (const p of root.payments || []) {
-    for (const i of p.installments || []) {
-      if (i.paid === true) continue;
-
-      const id = `${p.id || ''}:${i.id || i.date}`;
-
-      add(
-        'payment', id,
-        p.name || p.title || p.alias || 'Paiement',
-        i.date, 3, BASE
-      );
-
-      add(
-        'payment', id,
-        p.name || p.title || p.alias || 'Paiement',
-        i.date, 0, BASE
-      );
-    }
+  if(settings.payments!==false) for(const p of root.payments||[]) for(const i of p.installments||[]) {
+    if(i.paid===true)continue; const id=`${p.id||''}:${i.id||i.date}`;
+    add('payment',id,p.name||p.title||p.alias||'Paiement',i.date,3,BASE);
+    add('payment',id,p.name||p.title||p.alias||'Paiement',i.date,0,BASE);
   }
-
-  // DOMICILIATIONS
-  if (settings.domiciliations !== false) for (const d of root.domiciliations || []) {
-    const count = Math.min(1200, Math.max(0, Number(d.months) || 0));
-    const paid = new Set((d.monthsPaid || []).map(Number));
-
-    for (let i = 0; i < count; i++) {
-      if (paid.has(i + 1)) continue;
-
-      const due = addMonthsSafe(d.startDate, i);
-
-      add(
-        'dom', `${d.id}:${i + 1}`,
-        d.alias || d.beneficiary || 'Domiciliation',
-        due, 3, BASE
-      );
-
-      add(
-        'dom', `${d.id}:${i + 1}`,
-        d.alias || d.beneficiary || 'Domiciliation',
-        due, 0, BASE
-      );
-    }
+  if(settings.domiciliations!==false) for(const d of root.domiciliations||[]) {
+    const count=Math.min(1200,Math.max(0,Number(d.months)||0)),paid=new Set((d.monthsPaid||[]).map(Number));
+    for(let i=0;i<count;i++){if(paid.has(i+1))continue;const due=addMonthsSafe(d.startDate,i);const id=`${d.id}:${i+1}`;add('dom',id,d.alias||d.beneficiary||'Domiciliation',due,3,BASE);add('dom',id,d.alias||d.beneficiary||'Domiciliation',due,0,BASE);}
   }
-
-  // DOMICILIATIONS PERMANENTES
-  if (settings.permanentDomiciliations !== false) for (const d of root.permanentDomiciliations || []) {
-    const freq = [1, 3, 6, 12].includes(Number(d.frequency))
-      ? Number(d.frequency)
-      : 1;
-
-    const start = dateParts(d.startDate);
-    if (!start) continue;
-
-    const paid = new Set((d.monthsPaid || []).map(String));
-
-    for (let i = 0; i < 1200; i += freq) {
-      const due = addMonthsSafe(d.startDate, i);
-
-      if (due > plusDays(today, 3)) break;
-
-      const key = due.slice(0, 7);
-      if (paid.has(key)) continue;
-
-      add(
-        'permanent', `${d.id}:${key}`,
-        d.alias || d.beneficiary || 'Prélèvement permanent',
-        due, 3, BASE
-      );
-
-      add(
-        'permanent', `${d.id}:${key}`,
-        d.alias || d.beneficiary || 'Prélèvement permanent',
-        due, 0, BASE
-      );
-    }
+  if(settings.permanentDomiciliations!==false) for(const d of root.permanentDomiciliations||[]) {
+    const freq=[1,3,6,12].includes(Number(d.frequency))?Number(d.frequency):1,start=dateParts(d.startDate);if(!start)continue;
+    const paid=new Set((d.monthsPaid||[]).map(String));
+    for(let i=0;i<1200;i+=freq){const due=addMonthsSafe(d.startDate,i);if(due>plusDays(today,3))break;const key=due.slice(0,7);if(paid.has(key))continue;const id=`${d.id}:${key}`;add('permanent',id,d.alias||d.beneficiary||'Prélèvement permanent',due,3,BASE);add('permanent',id,d.alias||d.beneficiary||'Prélèvement permanent',due,0,BASE);}
   }
-
-  // GARANTIES APPAREILS
-  if (settings.warranties !== false) for (const c of root.contracts || []) {
-    if (c.category !== 'Garantie appareil') continue;
-
-    const end = c.warrantyEnd || c.warrantyCustomEnd;
-
-    add(
-      'warranty',
-      c.id,
-      c.name || 'Appareil',
-      end,
-      7,
-      BASE + 'contrats.html?view=warranties&warranty=' +
-        encodeURIComponent(c.id || '')
-    );
+  if(settings.warranties!==false) for(const c of root.contracts||[]) if(c.category==='Garantie appareil') {
+    const end=c.warrantyEnd||c.warrantyCustomEnd;
+    add('warranty',c.id,c.name||'Appareil',end,7,BASE+'contrats.html?view=warranties&warranty='+encodeURIComponent(c.id||''));
   }
-
   return jobs;
 }
 
-async function main() {
-  const today = localDate();
-
-  const rootRef = db.collection('users').doc(OWNER);
-  const rootSnap = await rootRef.get();
-
-  if (!rootSnap.exists) {
-    throw new Error('Document utilisateur introuvable');
-  }
-
-  const subsRef = rootRef
-    .collection('apps')
-    .doc('mes-paiements')
-    .collection('pushSubscriptions');
-
-  const subs = (await subsRef.get()).docs.filter(d =>
-    d.data().enabled !== false &&
-    d.data().subscription?.endpoint
-  );
-
-  // Les collections individuelles sont la source prioritaire. Les tableaux du document racine
-  // restent utilisés comme compatibilité pendant et après la migration.
-  const rootData = rootSnap.data() || {};
-  const appRef = rootRef.collection('apps').doc('mes-paiements');
-  async function readCollection(name, fallback) {
-    const snap = await appRef.collection(name).get();
-    if (!snap.empty) return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    return Array.isArray(fallback) ? fallback : [];
-  }
-  const [payments, domiciliations, permanentDomiciliations, contracts] = await Promise.all([
-    readCollection('payments', rootData.payments),
-    readCollection('domiciliations', rootData.domiciliations),
-    readCollection('permanentDomiciliations', rootData.permanentDomiciliations),
-    readCollection('contracts', rootData.contracts)
-  ]);
-  const deletedPayments = new Set((rootData.deletedPaymentIds || []).map(String));
-  const deletedDoms = new Set((rootData.deletedDomiciliationIds || []).map(String));
-  const deletedPermanent = new Set((rootData.deletedPermanentDomiciliationIds || []).map(String));
-  const deletedContracts = new Set((rootData.deletedContractIds || []).map(String));
-  const deletedInstallments = new Set((rootData.deletedInstallmentIds || []).map(String));
-  const livePayments = payments.filter(p => !deletedPayments.has(String(p.id))).map(p => ({...p, installments:(p.installments||[]).filter(i => !deletedInstallments.has(String(p.id)+'::'+String(i.id)))}));
-  const liveDoms = domiciliations.filter(d => !deletedDoms.has(String(d.id)));
-  const livePermanent = permanentDomiciliations.filter(d => !deletedPermanent.has(String(d.id)));
-  const liveContracts = contracts.filter(c => !deletedContracts.has(String(c.id)));
-  const jobs = collect({
-    ...rootData,
-    payments: livePayments,
-    domiciliations: liveDoms,
-    permanentDomiciliations: livePermanent,
-    contracts: liveContracts
-  }, today);
-
-  console.log(
-    `Date Bruxelles ${today}, ${jobs.length} rappel(s), ${subs.length} appareil(s).`
-  );
-
-  if (!subs.length) return;
-
-  const sentRef = rootRef
-    .collection('apps')
-    .doc('mes-paiements')
-    .collection('sentReminders');
-
-  for (const job of jobs) {
-    const ref = sentRef.doc(job.key);
-    const already = await ref.get();
-
-    if (already.exists) continue;
-
-    let successes = 0;
-
-    for (const sub of subs) {
-      try {
-        await webpush.sendNotification(
-          sub.data().subscription,
-          JSON.stringify(job),
-          { TTL: 86400 }
-        );
-
-        successes++;
-
-      } catch (e) {
-        console.error(
-          'Envoi impossible',
-          sub.id,
-          e.statusCode || '',
-          e.message
-        );
-
-        if ([404, 410].includes(e.statusCode)) {
-          await sub.ref.delete();
-        }
-      }
-    }
-
-    // Ne pas marquer envoyé si aucun appareil n'a reçu le push.
-    if (successes) {
-      await ref.create({
-        sentAt: admin.firestore.FieldValue.serverTimestamp(),
-        date: today,
-        successes,
-        kind: job.title
-      });
-    }
-  }
+async function readCollection(appRef,name,fallback) {
+  const snap=await appRef.collection(name).get();
+  return snap.empty?(Array.isArray(fallback)?fallback:[]):snap.docs.map(d=>({id:d.id,...d.data()}));
 }
 
-main().catch(e => {
-  console.error(e);
-  process.exitCode = 1;
-});
+async function sendJob(job,subs,sentRef,today) {
+  const ref=sentRef.doc(job.key);
+  // Persist progress per device: a later 5-minute run retries only devices not yet successful.
+  const stateSnap=await ref.get();
+  const state=stateSnap.exists?(stateSnap.data()||{}):{};
+  if(state.complete===true){console.log(`Déjà envoyé : ${job.title} (${job.key.slice(0,10)}).`);return;}
+  const delivered=new Set(Array.isArray(state.deliveredDeviceIds)?state.deliveredDeviceIds.map(String):[]);
+  let success=0,failed=0,skipped=0;
+  for(const sub of subs) {
+    const deviceId=String(sub.id);
+    if(delivered.has(deviceId)){skipped++;continue;}
+    try {
+      const result=await webpush.sendNotification(sub.data().subscription,JSON.stringify(job),{TTL:86400});
+      delivered.add(deviceId);success++;
+      await ref.set({date:today,kind:job.title,deliveredDeviceIds:[...delivered],lastAttemptAt:admin.firestore.FieldValue.serverTimestamp(),lastStatusCode:result?.statusCode||201,complete:false},{merge:true});
+      console.log(`Push accepté par le service pour l'appareil ${deviceId}.`);
+    } catch(e) {
+      failed++;
+      console.error(`Échec appareil ${deviceId} [${e.statusCode||'sans code'}] : ${e.message||e}`);
+      if([404,410].includes(Number(e.statusCode))) {
+        await sub.ref.delete();
+        console.log(`Inscription expirée supprimée : ${deviceId}.`);
+      }
+    }
+  }
+  const activeIds=subs.filter(s=>s.data().enabled!==false&&s.data().subscription?.endpoint).map(s=>String(s.id)).filter(id=>!delivered.has(id));
+  const complete=activeIds.length===0;
+  await ref.set({date:today,kind:job.title,deliveredDeviceIds:[...delivered],successesTotal:delivered.size,failedLastAttempt:failed,complete,sentAt:complete?admin.firestore.FieldValue.serverTimestamp():null,lastAttemptAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});
+  console.log(`Bilan ${job.key.slice(0,10)} : ${success} nouvel(aux) succès, ${skipped} déjà servis, ${failed} échec(s), ${complete?'terminé':'à réessayer'}.`);
+}
+
+async function main() {
+  const today=localDate(),rootRef=db.collection('users').doc(OWNER),rootSnap=await rootRef.get();
+  if(!rootSnap.exists)throw new Error('Document utilisateur introuvable');
+  const rootData=rootSnap.data()||{},appRef=rootRef.collection('apps').doc('mes-paiements');
+  const subs=(await appRef.collection('pushSubscriptions').get()).docs.filter(d=>d.data().enabled!==false&&d.data().subscription?.endpoint);
+  const [payments,domiciliations,permanentDomiciliations,contracts]=await Promise.all([
+    readCollection(appRef,'payments',rootData.payments),readCollection(appRef,'domiciliations',rootData.domiciliations),
+    readCollection(appRef,'permanentDomiciliations',rootData.permanentDomiciliations),readCollection(appRef,'contracts',rootData.contracts)
+  ]);
+  const deletedPayments=new Set((rootData.deletedPaymentIds||[]).map(String)),deletedDoms=new Set((rootData.deletedDomiciliationIds||[]).map(String));
+  const deletedPermanent=new Set((rootData.deletedPermanentDomiciliationIds||[]).map(String)),deletedContracts=new Set((rootData.deletedContractIds||[]).map(String));
+  const deletedInstallments=new Set((rootData.deletedInstallmentIds||[]).map(String));
+  const livePayments=payments.filter(p=>!deletedPayments.has(String(p.id))).map(p=>({...p,installments:(p.installments||[]).filter(i=>!deletedInstallments.has(String(p.id)+'::'+String(i.id)))}));
+  const jobs=collect({...rootData,payments:livePayments,domiciliations:domiciliations.filter(d=>!deletedDoms.has(String(d.id))),permanentDomiciliations:permanentDomiciliations.filter(d=>!deletedPermanent.has(String(d.id))),contracts:contracts.filter(c=>!deletedContracts.has(String(c.id)))},today);
+  console.log(`Date Bruxelles ${today}, ${jobs.length} rappel(s), ${subs.length} appareil(s) actif(s).`);
+  if(!subs.length){console.log('Aucun appareil actif : aucun rappel envoyé.');return;}
+  const sentRef=appRef.collection('sentReminders');
+  for(const job of jobs)await sendJob(job,subs,sentRef,today);
+}
+main().catch(e=>{console.error('Échec du worker :',e);process.exitCode=1;});
