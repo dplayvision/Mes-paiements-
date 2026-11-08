@@ -539,10 +539,12 @@ function initFirebase() {
     });
     firebase.auth().onAuthStateChanged(async user => {
       cloudUser = user || null;
+      if (!user) stopCollectionListeners();
       const btn = document.getElementById("googleLoginButton");
       if (btn) btn.textContent = user ? "Compte Google connecté" : "Se connecter avec Google";
       if (user) {
-        setCloudStatus("Connecté : " + (user.email || "compte Google") + ". Entre le PIN pour ouvrir l’application.");
+        setCloudStatus("Connecté : " + (user.email || "compte Google") + ". Synchronisation initiale…");
+        setTimeout(() => { if (cloudUser && cloudUser.uid === OWNER_UID) syncAllToCloud(); }, 700);
       } else {
         setCloudStatus("Connexion Google requise pour synchroniser les appareils.");
       }
@@ -767,6 +769,92 @@ async function restorePhotosFromCloud() {
   await loadAllPhotos();
 }
 
+
+// Synchronisation multi-appareils par document individuel (modèle Ma Pharmacie).
+// Les tableaux racines restent maintenus temporairement pour compatibilité du worker.
+let collectionUnsubs = [], applyingRemoteSnapshot = false, collectionSyncTimer = null, collectionListenersStarted = false;
+const COLLECTION_NAMES = { payments:"payments", domiciliations:"domiciliations", permanent:"permanentDomiciliations", contracts:"contracts" };
+function appCollection(name) {
+  if (!cloudUser || cloudUser.uid !== OWNER_UID) throw new Error("Compte Google non autorisé.");
+  return firebase.firestore().collection("users").doc(cloudUser.uid).collection("apps").doc("mes-paiements").collection(name);
+}
+function cloudSafeRow(row, kind) {
+  const x = JSON.parse(JSON.stringify(row || {}));
+  if (kind === "payments") x.photo = "";
+  if (kind === "domiciliations" || kind === "permanentDomiciliations") x.photos = ["", ""];
+  if (kind === "contracts" && Array.isArray(x.documents)) x.documents = x.documents.map(d => ({...d, data:""}));
+  x.id = String(x.id);
+  x._syncUpdatedAt = Number(x._syncUpdatedAt) || Date.now();
+  return x;
+}
+async function writeCollectionRows(name, rows, kind) {
+  const col = appCollection(name); let batch = firebase.firestore().batch(); let count = 0;
+  for (const row of (Array.isArray(rows) ? rows : [])) {
+    if (!row || row.id == null || String(row.id) === "") continue;
+    const clean = cloudSafeRow(row, kind);
+    batch.set(col.doc(String(row.id)), clean, {merge:true}); count++;
+    if (count % 400 === 0) { await batch.commit(); batch = firebase.firestore().batch(); }
+  }
+  if (count % 400) await batch.commit();
+}
+async function readCollectionRows(name) { const snap = await appCollection(name).get(); return snap.docs.map(d => ({id:d.id,...d.data()})); }
+async function migrateRootArraysToCollections(cloud={}) {
+  const sets = [
+    ["payments", "payments", Array.isArray(cloud.payments)?cloud.payments:data],
+    ["domiciliations", "domiciliations", Array.isArray(cloud.domiciliations)?cloud.domiciliations:domiciliations],
+    ["permanentDomiciliations", "permanentDomiciliations", Array.isArray(cloud.permanentDomiciliations)?cloud.permanentDomiciliations:permanentDomiciliations],
+    ["contracts", "contracts", JSON.parse(localStorage.getItem("mesContrats")||"[]")]
+  ];
+  for (const [collection, kind, rows] of sets) await writeCollectionRows(collection, rows, kind);
+  // Purger physiquement les documents supprimés après avoir publié les tombstones racine.
+  const deletions = [
+    ["payments", readDeletedIds(DELETE_KEYS.payments)],
+    ["domiciliations", readDeletedIds(DELETE_KEYS.domiciliations)],
+    ["permanentDomiciliations", readDeletedIds(DELETE_KEYS.permanent)]
+  ];
+  for (const [name, ids] of deletions) {
+    for (let i=0; i<ids.length; i+=400) {
+      const batch=firebase.firestore().batch();
+      ids.slice(i,i+400).forEach(id=>batch.delete(appCollection(name).doc(String(id))));
+      if (ids.length) await batch.commit();
+    }
+  }
+}
+function stopCollectionListeners(){ collectionUnsubs.forEach(fn=>{try{fn();}catch{}}); collectionUnsubs=[]; collectionListenersStarted=false; }
+function startCollectionListeners(){
+  if (collectionListenersStarted || !cloudUser || cloudUser.uid !== OWNER_UID) return;
+  collectionListenersStarted=true;
+  const names=["payments","domiciliations","permanentDomiciliations","contracts"];
+  const received={};
+  names.forEach(name=>{
+    const unsub=appCollection(name).onSnapshot(async snap=>{
+      received[name]=snap.docs.map(d=>({id:d.id,...d.data()}));
+      // Wait for the first snapshot from each collection before applying a complete state.
+      if (Object.keys(received).length < names.length) return;
+      applyingRemoteSnapshot=true;
+      try {
+        const deleted = new Set(readDeletedIds(DELETE_KEYS.contracts));
+        data=(received.payments||[]).filter(x=>!readDeletedIds(DELETE_KEYS.payments).includes(String(x.id))).map(x=>({...x,photo:""}));
+        domiciliations=(received.domiciliations||[]).filter(x=>!readDeletedIds(DELETE_KEYS.domiciliations).includes(String(x.id))).map(x=>({...x,photos:["",""]}));
+        permanentDomiciliations=(received.permanentDomiciliations||[]).filter(x=>!readDeletedIds(DELETE_KEYS.permanent).includes(String(x.id))).map(x=>({...x,photos:["",""]}));
+        const contractRows=(received.contracts||[]).filter(x=>!deleted.has(String(x.id)));
+        await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
+        localStorage.setItem("mesContrats",JSON.stringify(contractRows));
+        await restorePhotosFromCloud();
+        if(typeof render==="function")render(); if(typeof renderDomiciliations==="function")renderDomiciliations(); if(typeof renderPermanentDomiciliations==="function")renderPermanentDomiciliations();
+        setCloudStatus("Synchronisé en temps réel sur cet appareil.");
+      } catch(e){console.error("Réception cloud",e);setCloudStatus("Erreur de réception cloud : "+e.message,true);}
+      finally{applyingRemoteSnapshot=false;}
+    },e=>{console.error(e);setCloudStatus("Erreur de synchronisation temps réel : "+e.message,true);});
+    collectionUnsubs.push(unsub);
+  });
+}
+function scheduleCollectionSync(){
+  if(applyingRemoteSnapshot || cloudSyncBusy || !cloudUser || cloudUser.uid!==OWNER_UID) return;
+  clearTimeout(collectionSyncTimer);
+  collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),1200);
+}
+
 async function syncAllToCloud() {
   if (cloudSyncBusy) return;
   if (!initFirebase() || !firebase.auth().currentUser) {
@@ -784,14 +872,27 @@ async function syncAllToCloud() {
     const db = firebase.firestore();
     const userRef = db.collection("users").doc(cloudUser.uid);
     const snap = await userRef.get();
-    const cloudHasData = snap.exists && snap.data() && snap.data().snapshotVersion === 1;
-    if (cloudHasData) mergeDeletionTombstones(snap.data());
+    const cloud = snap.exists ? (snap.data() || {}) : {};
+    // Lire les collections avant toute fusion : elles sont prioritaires sur les anciens tableaux.
+    const [individualPayments, individualDoms, individualPermanent, individualContracts] = await Promise.all([
+      readCollectionRows("payments"), readCollectionRows("domiciliations"),
+      readCollectionRows("permanentDomiciliations"), readCollectionRows("contracts")
+    ]);
+    if (individualPayments.length) cloud.payments = individualPayments;
+    if (individualDoms.length) cloud.domiciliations = individualDoms;
+    if (individualPermanent.length) cloud.permanentDomiciliations = individualPermanent;
+    if (individualContracts.length) cloud.contracts = individualContracts;
+    const hasCollections = individualPayments.length + individualDoms.length + individualPermanent.length + individualContracts.length > 0;
+    const cloudHasData = (snap.exists && cloud.snapshotVersion === 1) || hasCollections;
+    if (cloudHasData) mergeDeletionTombstones(cloud);
 
     // Première synchronisation : ne jamais remplacer le cloud ou le local sans sauvegarde.
     if (!cloudHasData) {
       await syncPhotosToCloud();
       await uploadCurrentLocalState(userRef);
-      setCloudStatus("Données et photos enregistrées dans Firestore.");
+      await migrateRootArraysToCollections({payments:data,domiciliations,permanentDomiciliations});
+      startCollectionListeners();
+      setCloudStatus("Données enregistrées. Synchronisation automatique activée.");
       return;
     }
 
@@ -802,8 +903,10 @@ async function syncAllToCloud() {
       localStorage.getItem("mesDomiciliationsPermanentes") !== null ||
       localStorage.getItem("mesContrats") !== null;
     if (!localHasData) {
-      await restoreCloudState(snap.data());
+      await restoreCloudState(cloud);
       await restorePhotosFromCloud();
+      await migrateRootArraysToCollections(cloud);
+      startCollectionListeners();
       await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
       render(); renderDomiciliations(); renderPermanentDomiciliations();
       setCloudStatus("Données et photos récupérées depuis le cloud.");
@@ -812,7 +915,6 @@ async function syncAllToCloud() {
 
     // Fusion prudente : on ajoute les éléments manquants du cloud sans remplacer
     // les éléments locaux de même identifiant. Les documents restent locaux.
-    const cloud = snap.data();
     data = mergeRowsById(data, Array.isArray(cloud.payments) ? cloud.payments : []);
     domiciliations = mergeRowsById(domiciliations, Array.isArray(cloud.domiciliations) ? cloud.domiciliations : []);
     permanentDomiciliations = mergeRowsById(permanentDomiciliations, Array.isArray(cloud.permanentDomiciliations) ? cloud.permanentDomiciliations : []);
@@ -826,6 +928,8 @@ async function syncAllToCloud() {
     localStorage.setItem("mesContrats", JSON.stringify(mergedContracts));
     await syncPhotosToCloud();
     await uploadCurrentLocalState(userRef);
+    await migrateRootArraysToCollections({payments:data,domiciliations,permanentDomiciliations});
+    startCollectionListeners();
     await restorePhotosFromCloud();
     await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
     render(); renderDomiciliations(); renderPermanentDomiciliations();
@@ -843,6 +947,7 @@ async function saveDataLocalOnly() {
     if (p.photo) await savePhotoDB(key, p.photo);
   }
   localStorage.setItem("mesPaiements", JSON.stringify(getCleanDataForStorage()));
+  scheduleCollectionSync();
 }
 async function saveDomiciliationsLocalOnly() {
   for (const d of domiciliations) {
@@ -851,6 +956,7 @@ async function saveDomiciliationsLocalOnly() {
     for (let i = 0; i < 2; i++) if (d.photos[i]) await savePhotoDB(domiciliationPhotoKey(d.id, i), d.photos[i]);
   }
   localStorage.setItem("mesDomiciliations", JSON.stringify(getCleanDomiciliationsForStorage()));
+  scheduleCollectionSync();
 }
 async function savePermanentDomiciliationsLocalOnly() {
   for (const d of permanentDomiciliations) {
@@ -859,6 +965,7 @@ async function savePermanentDomiciliationsLocalOnly() {
     for (let i = 0; i < 2; i++) if (d.photos[i]) await savePhotoDB(permanentPhotoKey(d.id, i), d.photos[i]);
   }
   localStorage.setItem("mesDomiciliationsPermanentes", JSON.stringify(getCleanPermanentDomiciliationsForStorage()));
+  scheduleCollectionSync();
 }
 async function uploadCurrentLocalState(userRef) {
   const paymentRows = cleanForCloud(data, "photo");
@@ -881,7 +988,7 @@ async function uploadCurrentLocalState(userRef) {
     contracts: contractRows,
     ...deletionTombstonesForCloud(),
     updatedAt: Date.now()
-  }, { merge: true });
+  }, {merge:true});
   localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Date.now()));
 }
 async function restoreCloudState(cloud) {
