@@ -203,15 +203,61 @@ async function restoreDocs(list){let total=0;for(const c of list)for(const d of 
 function mergeContracts(local,remote,deletedIds=[]){const deleted=new Set((deletedIds||[]).map(String));const map=new Map();for(const c of remote||[])if(c&&c.id&&!deleted.has(String(c.id)))map.set(String(c.id),JSON.parse(JSON.stringify(c)));for(const c of local||[]){if(!c||!c.id||deleted.has(String(c.id)))continue;const old=map.get(String(c.id));if(!old){map.set(String(c.id),JSON.parse(JSON.stringify(c)));continue;}const docs=new Map();for(const d of old.documents||[])docs.set(String(d.key),d);for(const d of c.documents||[])docs.set(String(d.key),{...docs.get(String(d.key)),...d});map.set(String(c.id),{...old,...c,documents:[...docs.values()]});}return [...map.values()];}
 
 
-let contractsUnsub=null, contractsApplyingRemote=false;
+let contractsUnsub=null, contractsApplyingRemote=false, contractsSyncRequested=false, contractsSyncTimer=null;
 function contractsCollection(){return cloudRoot().collection("apps").doc(CLOUD_APP).collection("contracts");}
 function cleanContractDoc(c){const x=JSON.parse(JSON.stringify(c));x.documents=(x.documents||[]).map(d=>({key:d.key,name:d.name,type:d.type}));x.id=String(x.id);x._syncUpdatedAt=Number(x._syncUpdatedAt)||Date.now();return x;}
 async function writeContractsCollection(list){const col=contractsCollection();let batch=firebase.firestore().batch(),n=0;for(const c of list||[]){if(!c||c.id==null)continue;batch.set(col.doc(String(c.id)),cleanContractDoc(c),{merge:true});n++;if(n%400===0){await batch.commit();batch=firebase.firestore().batch();}}if(n%400)await batch.commit();}
-function listenContractsCollection(){if(contractsUnsub||!cloudUser||cloudUser.uid!==OWNER_UID)return;contractsUnsub=contractsCollection().onSnapshot(async snap=>{if(contractsApplyingRemote)return;contractsApplyingRemote=true;try{const deleted=new Set(localDeletedIds());const remote=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>!deleted.has(String(c.id)));contracts=remote;localStorage.setItem("mesContrats",JSON.stringify(contracts));await restoreDocs(contracts);await renderContracts();await renderWarrantyList();status("Contrats synchronisés automatiquement.");}catch(e){console.error(e);status("Erreur de réception des contrats : "+e.message,true);}finally{contractsApplyingRemote=false;}},e=>status("Erreur de synchronisation contrats : "+e.message,true));}
-async function pushContractsCollection(){if(!cloudUser||cloudUser.uid!==OWNER_UID||contractsApplyingRemote)return;await uploadAllDocs(contracts);await writeContractsCollection(contracts);}
+function scheduleContractsSync(delay=250){
+  if(!cloudUser||cloudUser.uid!==OWNER_UID)return;
+  contractsSyncRequested=true;
+  clearTimeout(contractsSyncTimer);
+  contractsSyncTimer=setTimeout(async()=>{
+    if(syncing||contractsApplyingRemote){return;}
+    contractsSyncRequested=false;
+    try{await syncContracts();}
+    catch(e){console.error("Synchronisation différée impossible :",e);status("Synchronisation différée impossible : "+e.message,true);}
+  },delay);
+}
+function listenContractsCollection(){
+  if(contractsUnsub||!cloudUser||cloudUser.uid!==OWNER_UID)return;
+  contractsUnsub=contractsCollection().onSnapshot(async snap=>{
+    if(contractsApplyingRemote)return;
+    contractsApplyingRemote=true;
+    try{
+      const rootSnap=await cloudRoot().get();
+      const cloud=rootSnap.exists?(rootSnap.data()||{}):{};
+      const deleted=[...new Set([...localDeletedIds(),...(Array.isArray(cloud.deletedContractIds)?cloud.deletedContractIds.map(String):[])])];
+      const remote=snap.docs.map(d=>({id:d.id,...d.data()}));
+      const local=localContracts();
+      const merged=mergeContracts(local,remote,deleted);
+      const localIds=new Set(local.map(c=>String(c.id)));
+      const remoteIds=new Set(remote.map(c=>String(c.id)));
+      const hasLocalOnly=merged.some(c=>localIds.has(String(c.id))&&!remoteIds.has(String(c.id)));
+      contracts=merged;
+      localStorage.setItem("mesContrats",JSON.stringify(contracts));
+      saveDeletedIds(deleted);
+      await restoreDocs(contracts);
+      await renderContracts();
+      await renderWarrantyList();
+      status("Contrats synchronisés automatiquement.");
+      if(hasLocalOnly)scheduleContractsSync(300);
+    }catch(e){console.error(e);status("Erreur de réception des contrats : "+e.message,true);}
+    finally{
+      contractsApplyingRemote=false;
+      if(contractsSyncRequested)scheduleContractsSync(300);
+    }
+  },e=>status("Erreur de synchronisation contrats : "+e.message,true));
+}
+async function pushContractsCollection(){
+  if(!cloudUser||cloudUser.uid!==OWNER_UID)return false;
+  if(contractsApplyingRemote||syncing){contractsSyncRequested=true;return false;}
+  await uploadAllDocs(contracts);
+  await writeContractsCollection(contracts);
+  return true;
+}
 
 async function syncContracts(){
-  if(syncing){status("Synchronisation déjà en cours…");return;}
+  if(syncing){contractsSyncRequested=true;status("Synchronisation en cours : une nouvelle synchronisation sera lancée ensuite.");return;}
   if(!cloudUser){status("Aucun compte Google connecté. Appuie d’abord sur Connexion Google.",true);return;}
   if(cloudUser.uid!==OWNER_UID){status("Compte Google connecté mais non autorisé. Vérifie que tu utilises le même compte que Mes paiements.",true);return;}
   syncing=true;const btn=document.getElementById("syncBtn");btn.disabled=true;
@@ -231,7 +277,13 @@ async function syncContracts(){
     contracts=merged;localStorage.setItem("mesContrats",JSON.stringify(contracts));saveDeletedIds(deleted);
     await renderContracts();status("✅ Synchronisation terminée : "+contracts.length+" contrat(s).");
   }catch(e){console.error("Erreur synchronisation Mes contrats :",e);const code=e&&e.code?" ["+e.code+"]":"";status("❌ Échec de synchronisation"+code+" : "+(e&&e.message?e.message:String(e))+"\nTes contrats locaux n’ont pas été remplacés.",true);}
-  finally{syncing=false;btn.disabled=false;}
+  finally{
+    syncing=false;btn.disabled=false;
+    if(contractsSyncRequested){
+      contractsSyncRequested=false;
+      scheduleContractsSync(300);
+    }
+  }
 }
 
 async function initFirebase(){
@@ -416,7 +468,10 @@ function downloadWarrantyDocument(data,doc){
 }
 
 function loadContracts(){contracts=localContracts();renderContracts();renderWarrantyList();}
-function saveList(){localStorage.setItem("mesContrats",JSON.stringify(contracts));if(!contractsApplyingRemote&&cloudUser&&cloudUser.uid===OWNER_UID){clearTimeout(window.__contractsSyncTimer);window.__contractsSyncTimer=setTimeout(()=>pushContractsCollection().catch(e=>status("Envoi cloud impossible : "+e.message,true)),1000);}}
+function saveList(){
+  localStorage.setItem("mesContrats",JSON.stringify(contracts));
+  if(!contractsApplyingRemote&&cloudUser&&cloudUser.uid===OWNER_UID)scheduleContractsSync(300);
+}
 function addPendingFiles(files){
   for(const file of files){
     if(!file)continue;
@@ -460,7 +515,10 @@ async function saveContract(){
     Object.assign(c,values);if(!Array.isArray(c.documents))c.documents=[];
     for(const d of pendingDocs){const key="contract_"+c.id+"_"+id();await putDoc(key,d.data);c.documents.push({key,name:d.name,type:d.type});}
     saveList();await renderContracts();resetForm();
-    if(cloudUser&&cloudUser.uid===OWNER_UID){await pushContractsCollection();status("Contrat enregistré et envoyé aux autres appareils.");}
+    if(cloudUser&&cloudUser.uid===OWNER_UID){
+      const sent=await pushContractsCollection();
+      status(sent?"Contrat enregistré et envoyé aux autres appareils.":"Contrat enregistré sur cet appareil. Synchronisation en attente…");
+    }
     if(wasWarranty){switchView("warranties");document.getElementById("formCard").classList.add("hidden");}
     else{switchView("contracts");document.getElementById("formCard").classList.remove("hidden");}
     if(!(cloudUser&&cloudUser.uid===OWNER_UID)) status((wasWarranty?"Garantie":"Contrat")+" enregistré localement. Connecte-toi à Google puis synchronise pour l’envoyer sur tes autres appareils.");
@@ -502,8 +560,13 @@ async function deleteContract(contractId){
   const c=contracts.find(x=>String(x.id)===String(contractId));if(!c||!confirm("Supprimer ce contrat et ses documents ?"))return;
   const deleted=localDeletedIds();deleted.push(String(contractId));saveDeletedIds(deleted);
   contracts=contracts.filter(x=>String(x.id)!==String(contractId));saveList();renderContracts();
-  if(cloudUser&&cloudUser.uid===OWNER_UID){try{await cloudRoot().set({deletedContractIds:firebase.firestore.FieldValue.arrayUnion(String(contractId)),updatedAt:Date.now()},{merge:true});await contractsCollection().doc(String(contractId)).delete();}catch(e){status("Suppression locale faite, envoi cloud impossible : "+e.message,true);return;}}
-  status("Contrat supprimé et synchronisé.");
+  if(cloudUser&&cloudUser.uid===OWNER_UID){
+    try{
+      await cloudRoot().set({deletedContractIds:firebase.firestore.FieldValue.arrayUnion(String(contractId)),updatedAt:Date.now()},{merge:true});
+      await contractsCollection().doc(String(contractId)).delete();
+      status("Contrat supprimé et synchronisé.");
+    }catch(e){status("Suppression locale effectuée. Synchronisation cloud à réessayer : "+e.message,true);return;}
+  }else status("Contrat supprimé de cet appareil. Connecte-toi pour synchroniser la suppression.");
 }
 async function renderContracts(){
   const root=document.getElementById("contractList");if(!root)return;
@@ -646,6 +709,10 @@ async function importBackupFile(file){
 document.getElementById("exportBackupBtn").onclick=exportBackup;
 document.getElementById("importBackupBtn").onclick=()=>document.getElementById("backupInput").click();
 document.getElementById("backupInput").addEventListener("change",function(){const f=this.files&&this.files[0];if(f)importBackupFile(f);});
+
+
+window.addEventListener("online",()=>{if(cloudUser&&cloudUser.uid===OWNER_UID)scheduleContractsSync(500);});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&cloudUser&&cloudUser.uid===OWNER_UID&&contractsSyncRequested)scheduleContractsSync(300);});
 
 loadContracts();
 initFirebase();
