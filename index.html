@@ -881,7 +881,7 @@ async function uploadCurrentLocalState(userRef) {
     contracts: contractRows,
     ...deletionTombstonesForCloud(),
     updatedAt: Date.now()
-  });
+  }, { merge: true });
   localStorage.setItem("mesPaiementsCloudUpdatedAt", String(Date.now()));
 }
 async function restoreCloudState(cloud) {
