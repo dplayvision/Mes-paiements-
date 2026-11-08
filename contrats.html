@@ -214,7 +214,7 @@ function scheduleContractsSync(delay=250){
   contractsSyncTimer=setTimeout(async()=>{
     if(syncing||contractsApplyingRemote){return;}
     contractsSyncRequested=false;
-    try{await syncContracts();}
+    try{await syncPartialContracts();status("Modifications synchronisées sur les autres appareils.");}
     catch(e){console.error("Synchronisation différée impossible :",e);status("Synchronisation différée impossible : "+e.message,true);}
   },delay);
 }
@@ -468,9 +468,44 @@ function downloadWarrantyDocument(data,doc){
 }
 
 function loadContracts(){contracts=localContracts();renderContracts();renderWarrantyList();}
+const CONTRACT_PARTIAL_QUEUE_KEY="mesContratsPartialQueueV1";
 function saveList(){
+  const oldRows=(()=>{try{return JSON.parse(localStorage.getItem("mesContrats")||"[]");}catch{return [];}})();
   localStorage.setItem("mesContrats",JSON.stringify(contracts));
-  if(!contractsApplyingRemote&&cloudUser&&cloudUser.uid===OWNER_UID)scheduleContractsSync(300);
+  if(!contractsApplyingRemote&&cloudUser&&cloudUser.uid===OWNER_UID){
+    const oldMap=new Map((oldRows||[]).map(c=>[String(c.id),c]));
+    let queue={};try{queue=JSON.parse(localStorage.getItem(CONTRACT_PARTIAL_QUEUE_KEY)||"{}")||{};}catch{}
+    for(const c of contracts){
+      const old=oldMap.get(String(c.id));
+      const clean=x=>JSON.stringify({...x,documents:(x.documents||[]).map(d=>({key:d.key,name:d.name,type:d.type}))});
+      if(!old||clean(old)!==clean(c))queue[String(c.id)]={...cleanContractDoc(c),_previousDocumentKeys:(old?.documents||[]).map(d=>String(d.key))};
+    }
+    localStorage.setItem(CONTRACT_PARTIAL_QUEUE_KEY,JSON.stringify(queue));
+    scheduleContractsSync(300);
+  }
+}
+async function syncPartialContracts(){
+  if(!cloudUser||cloudUser.uid!==OWNER_UID)return false;
+  const queue=(()=>{try{return JSON.parse(localStorage.getItem(CONTRACT_PARTIAL_QUEUE_KEY)||"{}")||{};}catch{return {};}})();
+  const ids=Object.keys(queue);let deletes=[];try{deletes=JSON.parse(localStorage.getItem("mesContratsPartialDeletesV1")||"[]");}catch{};if(!ids.length&&!deletes.length)return true;
+  for(const id of ids){
+    const row=queue[id];
+    // Les documents déjà présents ne sont pas retransférés : seuls les documents ajoutés/modifiés le sont.
+    const current=contracts.find(c=>String(c.id)===String(id));
+    if(current){
+      const previousKeys=new Set((row._previousDocumentKeys||[]).map(String));
+      for(const d of current.documents||[]){
+        if(!d.key||previousKeys.has(String(d.key)))continue;
+        const content=await getDoc(d.key);
+        if(content)await cloudUploadMedia("contract_"+d.key,content);
+      }
+      await contractsCollection().doc(String(id)).set(cleanContractDoc(current),{merge:true});
+    }
+  }
+  for(const id of deletes){await cloudRoot().set({deletedContractIds:firebase.firestore.FieldValue.arrayUnion(String(id)),updatedAt:Date.now()},{merge:true});await contractsCollection().doc(String(id)).delete();}
+  localStorage.removeItem("mesContratsPartialDeletesV1");
+  localStorage.removeItem(CONTRACT_PARTIAL_QUEUE_KEY);
+  return true;
 }
 function addPendingFiles(files){
   for(const file of files){
@@ -516,7 +551,7 @@ async function saveContract(){
     for(const d of pendingDocs){const key="contract_"+c.id+"_"+id();await putDoc(key,d.data);c.documents.push({key,name:d.name,type:d.type});}
     saveList();await renderContracts();resetForm();
     if(cloudUser&&cloudUser.uid===OWNER_UID){
-      const sent=await pushContractsCollection();
+      const sent=await syncPartialContracts();
       status(sent?"Contrat enregistré et envoyé aux autres appareils.":"Contrat enregistré sur cet appareil. Synchronisation en attente…");
     }
     if(wasWarranty){switchView("warranties");document.getElementById("formCard").classList.add("hidden");}
@@ -559,6 +594,7 @@ function editContract(contractId){
 async function deleteContract(contractId){
   const c=contracts.find(x=>String(x.id)===String(contractId));if(!c||!confirm("Supprimer ce contrat et ses documents ?"))return;
   const deleted=localDeletedIds();deleted.push(String(contractId));saveDeletedIds(deleted);
+  let pendingDeletes=[];try{pendingDeletes=JSON.parse(localStorage.getItem("mesContratsPartialDeletesV1")||"[]");}catch{};pendingDeletes.push(String(contractId));localStorage.setItem("mesContratsPartialDeletesV1",JSON.stringify([...new Set(pendingDeletes)]));
   contracts=contracts.filter(x=>String(x.id)!==String(contractId));saveList();renderContracts();
   if(cloudUser&&cloudUser.uid===OWNER_UID){
     try{
