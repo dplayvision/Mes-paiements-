@@ -197,6 +197,36 @@ body { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
   <a href="contrats.html" style="display:block;text-align:center;text-decoration:none;background:#5856d6;color:#fff;font-weight:700;padding:13px 14px;border-radius:11px">📄 Mes contrats</a>
 </div>
 
+<div class="card" id="reminderSettingsCard">
+  <h2>🔔 Notifications automatiques</h2>
+  <div id="reminderPushStatus" class="small" style="margin-bottom:12px">
+    Les notifications de cet appareil sont gérées dans le panneau de notifications.
+  </div>
+  <div class="manualInfo">
+    <strong>Choisir les rappels à recevoir</strong>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <span>Paiements <span class="small" style="display:block;font-weight:400">3 jours avant et le jour de l’échéance</span></span>
+      <input id="remindPayments" type="checkbox" checked style="width:22px;height:22px">
+    </label>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <span>Domiciliations <span class="small" style="display:block;font-weight:400">3 jours avant et le jour de l’échéance</span></span>
+      <input id="remindDomiciliations" type="checkbox" checked style="width:22px;height:22px">
+    </label>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <span>Domiciliations permanentes <span class="small" style="display:block;font-weight:400">3 jours avant et le jour de l’échéance</span></span>
+      <input id="remindPermanent" type="checkbox" checked style="width:22px;height:22px">
+    </label>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <span>Garanties appareils <span class="small" style="display:block;font-weight:400">7 jours avant la fin de garantie</span></span>
+      <input id="remindWarranties" type="checkbox" checked style="width:22px;height:22px">
+    </label>
+    <button type="button" class="primary" id="saveReminderSettings" style="margin-top:12px">Enregistrer mes préférences</button>
+    <div id="reminderSettingsStatus" class="small" style="margin-top:9px" aria-live="polite"></div>
+  </div>
+  <strong>📅 Prochains rappels</strong>
+  <div id="upcomingReminders" class="paymentDetails" style="margin-top:8px">Chargement…</div>
+</div>
+
 <div class="summary">
 <div class="summaryBox"><div class="summaryTitle">Total</div><div id="totalValue" class="summaryValue">0,00 €</div></div>
 <div class="summaryBox"><div class="summaryTitle">Payé</div><div id="paidValue" class="summaryValue">0,00 €</div></div>
@@ -2370,6 +2400,228 @@ document.addEventListener("DOMContentLoaded",function(){
   else if (path.indexOf("/repas/") !== -1) current = "repas";
   var active = document.querySelector(".app-switcher a[data-app=\"" + current + "\"]");
   if (active) active.setAttribute("aria-current", "page");
+})();
+</script>
+
+
+<script>
+/* Préférences et aperçu des rappels Mes paiements */
+(function () {
+  "use strict";
+  const SETTINGS_KEY = "mesPaiementsNotificationSettings";
+  const defaults = {
+    payments: true,
+    domiciliations: true,
+    permanentDomiciliations: true,
+    warranties: true
+  };
+  const ids = {
+    payments: "remindPayments",
+    domiciliations: "remindDomiciliations",
+    permanentDomiciliations: "remindPermanent",
+    warranties: "remindWarranties"
+  };
+
+  function getSettings() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+      return { ...defaults, ...saved };
+    } catch (_) {
+      return { ...defaults };
+    }
+  }
+
+  function writeSettingsToForm() {
+    const settings = getSettings();
+    Object.entries(ids).forEach(([key, id]) => {
+      const input = document.getElementById(id);
+      if (input) input.checked = settings[key] !== false;
+    });
+  }
+
+  async function saveSettings() {
+    const settings = {};
+    Object.entries(ids).forEach(([key, id]) => {
+      const input = document.getElementById(id);
+      settings[key] = !!input && input.checked;
+    });
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+
+    const status = document.getElementById("reminderSettingsStatus");
+    try {
+      if (window.firebase && firebase.apps && firebase.apps.length &&
+          firebase.auth && firebase.firestore &&
+          firebase.auth().currentUser) {
+        await firebase.firestore().collection("users")
+          .doc(firebase.auth().currentUser.uid)
+          .set({ notificationSettings: settings }, { merge: true });
+        if (status) status.textContent = "Préférences enregistrées sur cet appareil et dans Firebase.";
+      } else {
+        if (status) status.textContent = "Préférences enregistrées sur cet appareil. Connecte-toi à Google puis enregistre-les à nouveau pour les synchroniser.";
+      }
+    } catch (error) {
+      console.error("Enregistrement des préférences de notification :", error);
+      if (status) status.textContent = "Enregistrement local effectué, mais la synchronisation Firebase a échoué.";
+    }
+    renderUpcomingReminders();
+  }
+
+  function dateFrom(value) {
+    if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return null;
+    const d = new Date(value + "T12:00:00");
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function addMonths(dateString, months) {
+    const start = dateFrom(dateString);
+    if (!start) return "";
+    const day = start.getDate();
+    const result = new Date(start.getFullYear(), start.getMonth() + months, 1, 12);
+    const last = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+    result.setDate(Math.min(day, last));
+    return [
+      result.getFullYear(),
+      String(result.getMonth() + 1).padStart(2, "0"),
+      String(result.getDate()).padStart(2, "0")
+    ].join("-");
+  }
+
+  function dayDiff(dateString) {
+    const due = dateFrom(dateString);
+    if (!due) return null;
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
+    return Math.round((due - today) / 86400000);
+  }
+
+  function displayDate(value) {
+    const d = dateFrom(value);
+    return d ? d.toLocaleDateString("fr-BE") : value;
+  }
+
+  function renderUpcomingReminders() {
+    const target = document.getElementById("upcomingReminders");
+    if (!target) return;
+    const settings = getSettings();
+    const items = [];
+    const add = (name, due, lead, type) => {
+      const diff = dayDiff(due);
+      if (diff === null || diff < 0 || diff > 30) return;
+      if (diff !== lead && diff !== 0) return;
+      items.push({ name, due, diff, type });
+    };
+
+    let localPayments = [];
+    let localDomiciliations = [];
+    let localPermanent = [];
+    try {
+      localPayments = JSON.parse(localStorage.getItem("mesPaiements") || "[]");
+      localDomiciliations = JSON.parse(localStorage.getItem("mesDomiciliations") || "[]");
+      localPermanent = JSON.parse(localStorage.getItem("mesDomiciliationsPermanentes") || "[]");
+    } catch (_) {}
+    if (settings.payments && Array.isArray(localPayments)) {
+      localPayments.forEach(payment => {
+        (payment.installments || []).forEach(inst => {
+          if (inst.paid === true) return;
+          const name = payment.alias || payment.beneficiary || "Paiement";
+          add(name, inst.date, 3, "Paiement");
+          add(name, inst.date, 0, "Paiement");
+        });
+      });
+    }
+
+    if (settings.domiciliations && Array.isArray(localDomiciliations)) {
+      localDomiciliations.forEach(dom => {
+        const count = Math.min(1200, Math.max(0, Number(dom.months) || 0));
+        const paid = new Set((dom.monthsPaid || []).map(Number));
+        for (let i = 0; i < count; i++) {
+          if (paid.has(i + 1)) continue;
+          const due = addMonths(dom.startDate, i);
+          const name = dom.alias || dom.beneficiary || "Domiciliation";
+          add(name, due, 3, "Domiciliation");
+          add(name, due, 0, "Domiciliation");
+        }
+      });
+    }
+
+    if (settings.permanentDomiciliations && Array.isArray(localPermanent)) {
+      localPermanent.forEach(dom => {
+        const frequency = [1, 3, 6, 12].includes(Number(dom.frequency)) ? Number(dom.frequency) : 1;
+        const paid = new Set((dom.monthsPaid || []).map(String));
+        for (let i = 0; i < 1200; i += frequency) {
+          const due = addMonths(dom.startDate, i);
+          if (!due || due > new Date(Date.now() + 31 * 86400000).toISOString().slice(0, 10)) break;
+          if (paid.has(due.slice(0, 7))) continue;
+          const name = dom.alias || dom.beneficiary || "Domiciliation permanente";
+          add(name, due, 3, "Domiciliation permanente");
+          add(name, due, 0, "Domiciliation permanente");
+        }
+      });
+    }
+
+    if (settings.warranties) {
+      try {
+        const contracts = JSON.parse(localStorage.getItem("mesContrats") || "[]");
+        contracts.forEach(contract => {
+          if (contract.category !== "Garantie appareil") return;
+          const due = contract.warrantyEnd || contract.warrantyCustomEnd;
+          add(contract.name || "Garantie appareil", due, 7, "Garantie");
+        });
+      } catch (error) {
+        console.warn("Lecture des garanties impossible", error);
+      }
+    }
+
+    items.sort((a, b) => a.due.localeCompare(b.due));
+    const unique = [];
+    const seen = new Set();
+    items.forEach(item => {
+      const key = [item.type, item.name, item.due, item.diff].join("|");
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(item);
+      }
+    });
+
+    if (!unique.length) {
+      target.textContent = "Aucun rappel prévu dans les 30 prochains jours pour les catégories activées.";
+      return;
+    }
+
+    target.innerHTML = unique.slice(0, 12).map(item => {
+      const timing = item.diff === 0 ? "Aujourd’hui" :
+        item.diff === 1 ? "Demain" : "Dans " + item.diff + " jours";
+      return '<div style="padding:9px 0;border-bottom:1px solid #e5e5ea">' +
+        '<strong>' + escapeHtml(item.name) + '</strong>' +
+        '<div class="small">' + escapeHtml(item.type) + " · " +
+        escapeHtml(displayDate(item.due)) + " · " + escapeHtml(timing) + '</div></div>';
+    }).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    writeSettingsToForm();
+    const save = document.getElementById("saveReminderSettings");
+    if (save) save.addEventListener("click", saveSettings);
+    const status = document.getElementById("reminderPushStatus");
+    if (status && "serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistration("./").then(reg => {
+        if (reg && reg.pushManager) {
+          status.textContent = "Cet appareil peut recevoir les notifications push. Vérifie aussi que les notifications sont autorisées dans les réglages de l’iPhone.";
+        }
+      }).catch(() => {});
+    }
+    renderUpcomingReminders();
+    setTimeout(renderUpcomingReminders, 1200);
+  });
+
+  window.refreshReminderPreview = renderUpcomingReminders;
 })();
 </script>
 
