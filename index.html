@@ -2820,44 +2820,73 @@ document.addEventListener("DOMContentLoaded",function(){
 
 
 <style>
-/* Commandes de taille indépendantes pour chaque rubrique */
-.section-size-tools{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin:0 0 9px;padding:5px 0;border-bottom:1px solid #e7e9ee}
-.section-size-tools .size-label{font-size:11px;color:#737782;margin-right:auto}
-.section-size-tools button{min-width:34px;min-height:32px;padding:5px 9px;border:1px solid #d5d9e2;border-radius:8px;background:#f6f7f9;color:#252a34;font-weight:700;font-size:15px;line-height:1}
-.section-size-tools button:active{background:#e5e8ef}
-.resize-body{zoom:var(--section-zoom,1);min-width:0}
+/* Rubriques repliables : affichent seulement leur titre quand elles sont fermées */
+.fold-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;min-width:0}
+.fold-heading h2{margin:0;flex:1}
+.fold-heading .fold-title{font-size:16px;font-weight:750;min-width:0}
+.fold-toggle{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border-radius:10px;background:#eef2f7;color:#202633;font-size:18px;line-height:1}
+.fold-content.fold-closed{display:none!important}
+.fold-heading:focus-visible{outline:2px solid #007aff;outline-offset:3px;border-radius:8px}
 </style>
 <script>
-/* Agrandir/rétrécir chaque bloc séparément, avec mémorisation sur l'appareil */
+/* Ouverture/fermeture indépendante des rubriques, mémorisée sur cet appareil */
 (function(){
   'use strict';
-  const KEY='mesPaiementsSectionSizesV1';
-  const MIN=0.7, MAX=1.5, STEP=0.1;
+  const KEY='mesPaiementsFoldedSectionsV1';
   function read(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(_){return {};}}
-  function write(values){try{localStorage.setItem(KEY,JSON.stringify(values));}catch(_){}}
+  function save(state){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(_){}}
+  function makeFold(section, heading, key, titleText){
+    if(!section||!heading||section.dataset.foldReady==='1')return;
+    const state=read();
+    const content=document.createElement('div');
+    content.className='fold-content';
+    const nodes=[];
+    let node=heading.nextSibling;
+    while(node){const next=node.nextSibling;nodes.push(node);content.appendChild(node);node=next;}
+    const control=document.createElement('button');
+    control.type='button';control.className='fold-toggle';control.setAttribute('aria-label','Fermer '+titleText);
+    control.textContent='⌄';
+    if(heading.classList.contains('fold-heading')){
+      heading.appendChild(control);
+    }else{
+      heading.classList.add('fold-heading');
+      heading.appendChild(control);
+    }
+    section.appendChild(content);
+    let closed=state[key]===true;
+    function render(){
+      content.classList.toggle('fold-closed',closed);
+      control.textContent=closed?'›':'⌄';
+      control.setAttribute('aria-label',(closed?'Ouvrir ':'Fermer ')+titleText);
+      control.setAttribute('aria-expanded',String(!closed));
+      save({...read(),[key]:closed});
+    }
+    control.addEventListener('click',e=>{e.stopPropagation();closed=!closed;render();});
+    heading.addEventListener('click',e=>{if(e.target===control||e.target.closest('button,input,select,a'))return;closed=!closed;render();});
+    section.dataset.foldReady='1';
+    render();
+  }
   function init(){
-    const selectors=['.card','.summary','.tabs','#unpaidList','#paidList','.manualInfo'];
-    const nodes=[...document.querySelectorAll(selectors.join(','))];
-    const values=read();
-    nodes.forEach((section,index)=>{
-      if(section.dataset.sizeControls==='ready')return;
-      section.dataset.sizeControls='ready';
-      const key=section.id||('section-'+index);
-      const bar=document.createElement('div');bar.className='section-size-tools';bar.setAttribute('aria-label','Taille de cette rubrique');
-      const label=document.createElement('span');label.className='size-label';label.textContent='Taille de cette rubrique';
-      const minus=document.createElement('button');minus.type='button';minus.textContent='−';minus.title='Rétrécir';minus.setAttribute('aria-label','Rétrécir cette rubrique');
-      const percent=document.createElement('span');percent.style.cssText='font-size:11px;color:#555;min-width:38px;text-align:center';
-      const plus=document.createElement('button');plus.type='button';plus.textContent='+';plus.title='Agrandir';plus.setAttribute('aria-label','Agrandir cette rubrique');
-      const reset=document.createElement('button');reset.type='button';reset.textContent='↺';reset.title='Taille normale';reset.setAttribute('aria-label','Remettre la taille normale');
-      const body=document.createElement('div');body.className='resize-body';
-      while(section.firstChild)body.appendChild(section.firstChild);
-      section.appendChild(bar);section.appendChild(body);bar.append(label,minus,percent,plus,reset);
-      let scale=Number(values[key]);if(!Number.isFinite(scale))scale=1;
-      function apply(){scale=Math.max(MIN,Math.min(MAX,Math.round(scale*10)/10));body.style.setProperty('--section-zoom',String(scale));percent.textContent=Math.round(scale*100)+'%';minus.disabled=scale<=MIN;plus.disabled=scale>=MAX;values[key]=scale;write(values);}
-      minus.addEventListener('click',()=>{scale-=STEP;apply();});
-      plus.addEventListener('click',()=>{scale+=STEP;apply();});
-      reset.addEventListener('click',()=>{scale=1;apply();});
-      apply();
+    // Rubriques principales
+    const byId=(id)=>document.getElementById(id);
+    const reminder=byId('reminderSettingsCard');
+    if(reminder)makeFold(reminder,reminder.querySelector('h2'),'notifications','Notifications automatiques');
+    const synthesis=byId('synthesisCard');
+    if(synthesis)makeFold(synthesis,synthesis.querySelector('h2'),'syntheses','Synthèses');
+    // Formulaire d'ajout de paiement
+    document.querySelectorAll('.container > .card').forEach((el)=>{
+      const h=el.querySelector(':scope > h2');
+      if(h&&/Ajouter un paiement/i.test(h.textContent))makeFold(el,h,'ajout-paiement','Ajouter un paiement');
+    });
+    // Domiciliations et domiciliations permanentes : les boutons Ajouter restent visibles.
+    const dom= document.querySelector('.domiciliationCard');
+    if(dom)makeFold(dom,dom.querySelector('.domiciliationHeader'),'domiciliations','Domiciliations');
+    const perm=document.querySelector('.permanentCard');
+    if(perm)makeFold(perm,perm.querySelector('.permanentHeader'),'domiciliations-permanentes','Domiciliations permanentes');
+    // Chaque fiche de paiement/domiciliation peut aussi être repliée individuellement.
+    document.querySelectorAll('.paymentCard,.domiciliationItem,.permanentCard .permanentItem').forEach((el,i)=>{
+      const h=el.querySelector('.paymentHeader,.domiciliationHeader,.permanentHeader');
+      if(h)makeFold(el,h,'fiche-'+(el.id||i),'cette fiche');
     });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
