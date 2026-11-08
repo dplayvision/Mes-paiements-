@@ -774,6 +774,8 @@ async function restorePhotosFromCloud() {
 // Synchronisation multi-appareils par document individuel (modèle Ma Pharmacie).
 // Les tableaux racines restent maintenus temporairement pour compatibilité du worker.
 let collectionUnsubs = [], applyingRemoteSnapshot = false, collectionSyncTimer = null, collectionListenersStarted = false;
+const CLOUD_PENDING_KEY = "mesPaiementsCloudSyncPending";
+let cloudSyncRequestedDuringRun = false;
 const COLLECTION_NAMES = { payments:"payments", domiciliations:"domiciliations", permanent:"permanentDomiciliations", contracts:"contracts" };
 function appCollection(name) {
   if (!cloudUser || cloudUser.uid !== OWNER_UID) throw new Error("Compte Google non autorisé.");
@@ -851,19 +853,27 @@ function startCollectionListeners(){
   });
 }
 function scheduleCollectionSync(){
-  if(applyingRemoteSnapshot || cloudSyncBusy || !cloudUser || cloudUser.uid!==OWNER_UID) return;
+  if(applyingRemoteSnapshot || !cloudUser || cloudUser.uid!==OWNER_UID) return;
+  // Le changement est déjà sauvegardé localement. On conserve un marqueur
+  // jusqu'à confirmation de Firebase, même si l'application est fermée.
+  try { localStorage.setItem(CLOUD_PENDING_KEY, "1"); } catch(e) { console.warn(e); }
+  if(cloudSyncBusy){ cloudSyncRequestedDuringRun=true; return; }
   clearTimeout(collectionSyncTimer);
-  collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),1200);
+  setCloudStatus("Enregistré sur cet appareil. Synchronisation avec les autres appareils…");
+  collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),100);
 }
 
 async function syncAllToCloud() {
-  if (cloudSyncBusy) return;
+  if (cloudSyncBusy) { cloudSyncRequestedDuringRun=true; return; }
   if (!initFirebase() || !firebase.auth().currentUser) {
-    setCloudStatus("Connecte-toi à Google avant de synchroniser.", true);
+    setCloudStatus("Enregistré sur cet appareil. Connexion Google nécessaire pour synchroniser.", true);
     return;
   }
+  clearTimeout(collectionSyncTimer);
   cloudUser = firebase.auth().currentUser;
   cloudSyncBusy = true;
+  cloudSyncRequestedDuringRun = false;
+  let syncSucceeded = false;
   setCloudStatus("Synchronisation en cours…");
   try {
     await saveDataLocalOnly();
@@ -894,7 +904,8 @@ async function syncAllToCloud() {
       await uploadCurrentLocalState(userRef);
       await migrateRootArraysToCollections({payments:data,domiciliations,permanentDomiciliations});
       startCollectionListeners();
-      setCloudStatus("Données enregistrées. Synchronisation automatique activée.");
+      setCloudStatus("Synchronisé sur le cloud et les autres appareils.");
+      syncSucceeded = true;
       return;
     }
 
@@ -912,6 +923,7 @@ async function syncAllToCloud() {
       await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
       render(); renderDomiciliations(); renderPermanentDomiciliations();
       setCloudStatus("Données et photos récupérées depuis le cloud.");
+      syncSucceeded = true;
       return;
     }
 
@@ -935,21 +947,43 @@ async function syncAllToCloud() {
     await restorePhotosFromCloud();
     await saveDataLocalOnly(); await saveDomiciliationsLocalOnly(); await savePermanentDomiciliationsLocalOnly();
     render(); renderDomiciliations(); renderPermanentDomiciliations();
-    setCloudStatus("Fusion terminée : données et photos synchronisées.");
+    setCloudStatus("Synchronisé sur le cloud et les autres appareils.");
+    syncSucceeded = true;
   } catch (e) {
     console.error(e);
     setCloudStatus("Échec de synchronisation : " + (e.message || e), true);
   } finally {
     cloudSyncBusy = false;
+    if(syncSucceeded && !cloudSyncRequestedDuringRun){
+      try { localStorage.removeItem(CLOUD_PENDING_KEY); } catch(e) { console.warn(e); }
+    }
+    if(cloudSyncRequestedDuringRun){
+      cloudSyncRequestedDuringRun=false;
+      try { localStorage.setItem(CLOUD_PENDING_KEY, "1"); } catch(e) { console.warn(e); }
+      clearTimeout(collectionSyncTimer);
+      collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),100);
+    } else if(!syncSucceeded && cloudUser && cloudUser.uid===OWNER_UID){
+      // Une erreur réseau ne supprime pas la demande : nouvelle tentative différée.
+      try { localStorage.setItem(CLOUD_PENDING_KEY, "1"); } catch(e) { console.warn(e); }
+      clearTimeout(collectionSyncTimer);
+      collectionSyncTimer=setTimeout(()=>syncAllToCloud().catch(e=>console.error(e)),5000);
+    }
   }
 }
+// Si iOS suspend l'application ou si le réseau revient, on reprend la demande
+// enregistrée localement au prochain événement disponible.
+window.addEventListener("online",()=>{
+  if(localStorage.getItem(CLOUD_PENDING_KEY)==="1" && cloudUser && cloudUser.uid===OWNER_UID) scheduleCollectionSync();
+});
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible" && localStorage.getItem(CLOUD_PENDING_KEY)==="1" && cloudUser && cloudUser.uid===OWNER_UID) scheduleCollectionSync();
+});
 async function saveDataLocalOnly() {
   for (const p of data) {
     const key = paymentPhotoKey(p.id);
     if (p.photo) await savePhotoDB(key, p.photo);
   }
   localStorage.setItem("mesPaiements", JSON.stringify(getCleanDataForStorage()));
-  scheduleCollectionSync();
 }
 async function saveDomiciliationsLocalOnly() {
   for (const d of domiciliations) {
@@ -958,7 +992,6 @@ async function saveDomiciliationsLocalOnly() {
     for (let i = 0; i < 2; i++) if (d.photos[i]) await savePhotoDB(domiciliationPhotoKey(d.id, i), d.photos[i]);
   }
   localStorage.setItem("mesDomiciliations", JSON.stringify(getCleanDomiciliationsForStorage()));
-  scheduleCollectionSync();
 }
 async function savePermanentDomiciliationsLocalOnly() {
   for (const d of permanentDomiciliations) {
@@ -967,7 +1000,6 @@ async function savePermanentDomiciliationsLocalOnly() {
     for (let i = 0; i < 2; i++) if (d.photos[i]) await savePhotoDB(permanentPhotoKey(d.id, i), d.photos[i]);
   }
   localStorage.setItem("mesDomiciliationsPermanentes", JSON.stringify(getCleanPermanentDomiciliationsForStorage()));
-  scheduleCollectionSync();
 }
 async function uploadCurrentLocalState(userRef) {
   const paymentRows = cleanForCloud(data, "photo");
