@@ -506,6 +506,7 @@ body { padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
    FIREBASE — CONNEXION GOOGLE ET SYNCHRONISATION
    Les données locales restent intactes en cas d'erreur réseau.
 ================================================== */
+const OWNER_UID = "pLAvsCmVU1e8SXjy77nNR5DnmpN2";
 const firebaseConfig = {
   apiKey: "AIzaSyD8FfX9uljCWJi1fg3hE5poocXOCAH-H9A",
   authDomain: "mes-paiements-jeremy.firebaseapp.com",
@@ -883,7 +884,8 @@ async function syncAllToCloud() {
     if (individualPermanent.length) cloud.permanentDomiciliations = individualPermanent;
     if (individualContracts.length) cloud.contracts = individualContracts;
     const hasCollections = individualPayments.length + individualDoms.length + individualPermanent.length + individualContracts.length > 0;
-    const cloudHasData = (snap.exists && cloud.snapshotVersion === 1) || hasCollections;
+    const hasLegacyRootData = [cloud.payments, cloud.domiciliations, cloud.permanentDomiciliations, cloud.contracts].some(v => Array.isArray(v) && v.length > 0);
+    const cloudHasData = (snap.exists && (cloud.snapshotVersion === 1 || hasLegacyRootData)) || hasCollections;
     if (cloudHasData) mergeDeletionTombstones(cloud);
 
     // Première synchronisation : ne jamais remplacer le cloud ou le local sans sauvegarde.
@@ -1251,6 +1253,7 @@ async function saveData(){
    if(p.photo)await savePhotoDB(key,p.photo);else await deletePhotoDB(key);
   }
   localStorage.setItem("mesPaiements",JSON.stringify(getCleanDataForStorage()));
+  scheduleCollectionSync();
   return true;
  }catch(e){console.error(e);alert("Impossible de sauvegarder les données.");return false;}
 }
@@ -1266,6 +1269,7 @@ async function saveDomiciliations(){
    }
   }
   localStorage.setItem("mesDomiciliations",JSON.stringify(getCleanDomiciliationsForStorage()));
+  scheduleCollectionSync();
   return true;
  }catch(e){
   console.error("ERREUR saveDomiciliations :",e);
@@ -1286,6 +1290,7 @@ async function savePermanentDomiciliations(){
    }
   }
   localStorage.setItem("mesDomiciliationsPermanentes",JSON.stringify(getCleanPermanentDomiciliationsForStorage()));
+  scheduleCollectionSync();
   return true;
  }catch(e){
   console.error(e);
