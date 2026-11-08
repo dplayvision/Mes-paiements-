@@ -46,6 +46,30 @@ function localDate() {
   const obj=Object.fromEntries(parts.map(p=>[p.type,p.value])); return `${obj.year}-${obj.month}-${obj.day}`;
 }
 function reminderKey(type,id,due,offset) { return crypto.createHash('sha256').update([type,id,due,offset].join('|')).digest('hex'); }
+
+function stableReminderValue(value) {
+  if (Array.isArray(value)) return value.map(stableReminderValue);
+  if (value && typeof value === 'object') {
+    const out = {};
+    for (const key of Object.keys(value).sort()) {
+      // Ignore synchronization bookkeeping: it is not a user-visible edit.
+      if (['_syncUpdatedAt','syncUpdatedAt','updatedAt','createdAt','lastSyncedAt'].includes(key)) continue;
+      out[key] = stableReminderValue(value[key]);
+    }
+    return out;
+  }
+  return value;
+}
+function paymentFingerprint(payment, installment) {
+  const payload = {
+    payment: {...payment, installments:undefined},
+    installment
+  };
+  return crypto.createHash('sha256').update(JSON.stringify(stableReminderValue(payload))).digest('hex');
+}
+function paymentStateId(paymentId, installmentId) {
+  return crypto.createHash('sha256').update([String(paymentId),String(installmentId)].join('|')).digest('hex');
+}
 function collect(root,today) {
   const jobs=[];
   const settings={payments:true,domiciliations:true,permanentDomiciliations:true,warranties:true,...(root.notificationSettings||{})};
@@ -92,7 +116,8 @@ async function sendJob(job,subs,sentRef,today) {
     const deviceId=String(sub.id);
     if(delivered.has(deviceId)){skipped++;continue;}
     try {
-      const result=await webpush.sendNotification(sub.data().subscription,JSON.stringify(job),{TTL:86400});
+      const payload=Object.fromEntries(Object.entries(job).filter(([key])=>!key.startsWith('_')));
+      const result=await webpush.sendNotification(sub.data().subscription,JSON.stringify(payload),{TTL:86400});
       delivered.add(deviceId);success++;
       await ref.set({date:today,kind:job.title,deliveredDeviceIds:[...delivered],lastAttemptAt:admin.firestore.FieldValue.serverTimestamp(),lastStatusCode:result?.statusCode||201,complete:false},{merge:true});
       console.log(`Push accepté par le service pour l'appareil ${deviceId}.`);
@@ -111,6 +136,51 @@ async function sendJob(job,subs,sentRef,today) {
   console.log(`Bilan ${job.key.slice(0,10)} : ${success} nouvel(aux) succès, ${skipped} déjà servis, ${failed} échec(s), ${complete?'terminé':'à réessayer'}.`);
 }
 
+
+async function collectChangedPaymentJobs(payments, today, stateRef) {
+  const jobs = [];
+  const todayDate = dateParts(today);
+  const windowEnd = plusDays(today, 3);
+  for (const payment of payments || []) {
+    for (const installment of payment.installments || []) {
+      if (installment.paid === true) continue;
+      const due = installment.date;
+      if (!dateParts(due)) continue;
+      const paymentId = String(payment.id || '');
+      const installmentId = String(installment.id || installment.date || '');
+      const stateDoc = stateRef.doc(paymentStateId(paymentId, installmentId));
+      const fingerprint = paymentFingerprint(payment, installment);
+      const stateSnap = await stateDoc.get();
+      if (!stateSnap.exists) {
+        // First run after enabling change detection: establish a baseline without
+        // sending duplicate notifications for existing payments.
+        await stateDoc.set({paymentId, installmentId, fingerprint, initializedAt:admin.firestore.FieldValue.serverTimestamp()});
+        continue;
+      }
+      const previous = stateSnap.data() || {};
+      if (previous.fingerprint === fingerprint) continue;
+
+      // Always refresh the baseline outside the reminder window, so an old edit
+      // does not unexpectedly trigger a notification days or weeks later.
+      if (due >= today && due <= windowEnd) {
+        const id = `${paymentId}:${installmentId}`;
+        const key = crypto.createHash('sha256').update(['payment-change',id,due,fingerprint].join('|')).digest('hex');
+        jobs.push({
+          key,
+          title:'🔔 Paiement modifié',
+          body:`${payment.name||payment.title||payment.alias||'Paiement'} — ${due.split('-').reverse().join('/')} — montant : ${Number(installment.amount ?? payment.amount ?? 0).toLocaleString('fr-BE',{style:'currency',currency:'EUR'})}`,
+          url:BASE,
+          tag:key,
+          _paymentStateRef:stateDoc,
+          _fingerprint:fingerprint
+        });
+      } else {
+        await stateDoc.set({fingerprint,updatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});
+      }
+    }
+  }
+  return jobs;
+}
 async function main() {
   const today=localDate(),rootRef=db.collection('users').doc(OWNER),rootSnap=await rootRef.get();
   if(!rootSnap.exists)throw new Error('Document utilisateur introuvable');
@@ -125,9 +195,20 @@ async function main() {
   const deletedInstallments=new Set((rootData.deletedInstallmentIds||[]).map(String));
   const livePayments=payments.filter(p=>!deletedPayments.has(String(p.id))).map(p=>({...p,installments:(p.installments||[]).filter(i=>!deletedInstallments.has(String(p.id)+'::'+String(i.id)))}));
   const jobs=collect({...rootData,payments:livePayments,domiciliations:domiciliations.filter(d=>!deletedDoms.has(String(d.id))),permanentDomiciliations:permanentDomiciliations.filter(d=>!deletedPermanent.has(String(d.id))),contracts:contracts.filter(c=>!deletedContracts.has(String(c.id)))},today);
-  console.log(`Date Bruxelles ${today}, ${jobs.length} rappel(s), ${subs.length} appareil(s) actif(s).`);
+  const paymentStateRef=appRef.collection('paymentReminderState');
+  const changedPaymentJobs=await collectChangedPaymentJobs(livePayments,today,paymentStateRef);
+  jobs.push(...changedPaymentJobs);
+  console.log(`Date Bruxelles ${today}, ${jobs.length} rappel(s) dont ${changedPaymentJobs.length} modification(s) de paiement, ${subs.length} appareil(s) actif(s).`);
   if(!subs.length){console.log('Aucun appareil actif : aucun rappel envoyé.');return;}
   const sentRef=appRef.collection('sentReminders');
-  for(const job of jobs)await sendJob(job,subs,sentRef,today);
+  for(const job of jobs) {
+    await sendJob(job,subs,sentRef,today);
+    if(job._paymentStateRef) {
+      const delivery=await sentRef.doc(job.key).get();
+      if(delivery.exists && delivery.data()?.complete===true) {
+        await job._paymentStateRef.set({fingerprint:job._fingerprint,updatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});
+      }
+    }
+  }
 }
 main().catch(e=>{console.error('Échec du worker :',e);process.exitCode=1;});
