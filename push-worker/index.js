@@ -1,4 +1,3 @@
-
 'use strict';
 
 const admin = require('firebase-admin');
@@ -104,6 +103,14 @@ function reminderKey(type, id, due, offset) {
 function collect(root, today) {
   const jobs = [];
 
+  const settings = {
+    payments: true,
+    domiciliations: true,
+    permanentDomiciliations: true,
+    warranties: true,
+    ...(root.notificationSettings || {})
+  };
+
   const add = (type, id, name, due, offset, url) => {
     if (!dateParts(due) || plusDays(due, -offset) !== today) return;
 
@@ -121,7 +128,7 @@ function collect(root, today) {
   };
 
   // PAIEMENTS
-  for (const p of root.payments || []) {
+  if (settings.payments !== false) for (const p of root.payments || []) {
     for (const i of p.installments || []) {
       if (i.paid === true) continue;
 
@@ -142,7 +149,7 @@ function collect(root, today) {
   }
 
   // DOMICILIATIONS
-  for (const d of root.domiciliations || []) {
+  if (settings.domiciliations !== false) for (const d of root.domiciliations || []) {
     const count = Math.min(1200, Math.max(0, Number(d.months) || 0));
     const paid = new Set((d.monthsPaid || []).map(Number));
 
@@ -166,7 +173,7 @@ function collect(root, today) {
   }
 
   // DOMICILIATIONS PERMANENTES
-  for (const d of root.permanentDomiciliations || []) {
+  if (settings.permanentDomiciliations !== false) for (const d of root.permanentDomiciliations || []) {
     const freq = [1, 3, 6, 12].includes(Number(d.frequency))
       ? Number(d.frequency)
       : 1;
@@ -199,7 +206,7 @@ function collect(root, today) {
   }
 
   // GARANTIES APPAREILS
-  for (const c of root.contracts || []) {
+  if (settings.warranties !== false) for (const c of root.contracts || []) {
     if (c.category !== 'Garantie appareil') continue;
 
     const end = c.warrantyEnd || c.warrantyCustomEnd;
