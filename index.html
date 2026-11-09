@@ -220,6 +220,12 @@ body { padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
     Les notifications de cet appareil sont gérées dans le panneau de notifications.
   </div>
   <div class="manualInfo">
+    <strong>Heure de réception des notifications</strong>
+    <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0 14px">
+      <span>Recevoir les notifications à</span>
+      <input id="reminderHour" type="time" value="08:00" style="width:115px;padding:9px;border:1px solid #ccc;border-radius:9px;font:inherit">
+    </label>
+    <div class="small" style="margin:-5px 0 14px">Par défaut : 08:00 (heure de Belgique). Ce réglage s’applique à tous les rappels de l’application.</div>
     <strong>Choisir les rappels à recevoir</strong>
     <label style="display:flex;align-items:center;justify-content:space-between;gap:12px">
       <span>Paiements <span class="small" style="display:block;font-weight:400">3 jours avant et le jour de l’échéance</span></span>
@@ -2658,7 +2664,7 @@ document.addEventListener("DOMContentLoaded",function(){
 (function () {
   "use strict";
   const SETTINGS_KEY = "mesPaiementsNotificationSettings";
-  const defaults = { payments: true, domiciliations: true, permanentDomiciliations: true };
+  const defaults = { payments: true, domiciliations: true, permanentDomiciliations: true, hour: "08:00" };
   const ids = {
     payments: "remindPayments",
     domiciliations: "remindDomiciliations",
@@ -2676,6 +2682,8 @@ document.addEventListener("DOMContentLoaded",function(){
       const input = document.getElementById(id);
       if (input) input.checked = settings[key] !== false;
     });
+    const hourInput = document.getElementById("reminderHour");
+    if (hourInput) hourInput.value = /^([01]\d|2[0-3]):[0-5]\d$/.test(settings.hour || "") ? settings.hour : "08:00";
   }
 
   async function saveSettings() {
@@ -2684,13 +2692,15 @@ document.addEventListener("DOMContentLoaded",function(){
       const input = document.getElementById(id);
       settings[key] = !!input && input.checked;
     });
+    const hourInput = document.getElementById("reminderHour");
+    settings.hour = hourInput && /^([01]\d|2[0-3]):[0-5]\d$/.test(hourInput.value) ? hourInput.value : "08:00";
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     const status = document.getElementById("reminderSettingsStatus");
     try {
       if (window.firebase && firebase.apps && firebase.apps.length && firebase.auth && firebase.firestore && firebase.auth().currentUser) {
         await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid)
           .set({ notificationSettings: settings }, { merge: true });
-        if (status) status.textContent = "Préférences enregistrées sur cet appareil et dans Firebase.";
+        if (status) status.textContent = "Préférences enregistrées. Notifications prévues à " + settings.hour + " (heure de Belgique).";
       } else if (status) {
         status.textContent = "Préférences enregistrées sur cet appareil. Connecte-toi à Google pour les synchroniser.";
       }
@@ -2790,7 +2800,7 @@ document.addEventListener("DOMContentLoaded",function(){
       const diff = dayDiff(item.notificationDate);
       const when = diff === 0 ? "Aujourd’hui" : diff === 1 ? "Demain" : "Dans "+diff+" jours";
       return `<tr>
-        <td>${displayDate(item.notificationDate)}<div class="small">${when}</div></td>
+        <td>${displayDate(item.notificationDate)}<div class="small">${when} • ${getSettings().hour || "08:00"}</div></td>
         <td><strong>${escapeHtml(item.name)}</strong><div class="small">${item.category} • ${item.label}</div></td>
         <td style="text-align:right;white-space:nowrap">${money(item.amount)}</td>
         <td style="white-space:nowrap">${displayDate(item.due)}</td>
@@ -2812,6 +2822,26 @@ document.addEventListener("DOMContentLoaded",function(){
     const save = document.getElementById("saveReminderSettings");
     if (save) save.addEventListener("click", saveSettings);
     renderUpcomingReminders();
+    // Recharge le réglage général depuis Firebase pour qu'il soit identique sur les appareils connectés.
+    const loadCloudSettings = async (user) => {
+      if (!user || !window.firebase || !firebase.firestore) return;
+      try {
+        const snap = await firebase.firestore().collection("users").doc(user.uid).get();
+        const cloudSettings = snap.exists && snap.data() ? snap.data().notificationSettings : null;
+        if (cloudSettings && typeof cloudSettings === "object") {
+          const merged = { ...defaults, ...cloudSettings };
+          if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(merged.hour || "")) merged.hour = defaults.hour;
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
+          writeSettingsToForm();
+          renderUpcomingReminders();
+        }
+      } catch (error) {
+        console.warn("Impossible de charger les préférences de notification depuis Firebase :", error);
+      }
+    };
+    if (window.firebase && firebase.apps && firebase.apps.length && firebase.auth) {
+      firebase.auth().onAuthStateChanged(loadCloudSettings);
+    }
     // Rafraîchit l'aperçu après les modifications faites dans les autres sections de l'application.
     window.setInterval(renderUpcomingReminders, 60000);
   });
